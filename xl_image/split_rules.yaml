@@ -1,0 +1,376 @@
+# ============================================================
+# xl_image  —  Split Candidate Detection Rules  (v1.6.0)
+# ============================================================
+#
+# This file drives the deterministic split-candidate scoring
+# engine in features/rule_engine.py.  Edit rules / weights /
+# thresholds here — no Python changes needed.
+#
+# Repo3 only *proposes* cut points; Repo5 accepts/rejects.
+#
+# ── v1.6.0 changes (from v1.5.0) ─────────────────────────
+#   - blank_separator: complete rewrite as two-tier rule:
+#     * blank_separator_hard — absolute trigger: blank_ratio
+#       >= 0.985 AND component_density <= 0.01 AND
+#       line_strength <= 0.02.  Catches pure-blank rows
+#       regardless of sheet profile.
+#     * blank_separator_soft — percentile trigger:
+#       blank_ratio > T_blank_soft (max(p90, 0.95)) AND
+#       component_density <= T_density_soft (min(p25, 0.03))
+#       AND brightness_mean > T_bright_soft (max(p90, 0.92)).
+#       Stricter than v1.5.0 (was p75/0.85).
+#     * Neighbor contrast is optional bonus on soft trigger
+#       only (+0.03).
+#     * Old single blank_separator rule removed.
+#   - New adaptive threshold types: percentile_max (takes the
+#     max of floor and percentile) and percentile_min (takes
+#     the min of ceiling and percentile).
+#   - Weight rebalance: blank_separator_hard 0.10 +
+#     blank_separator_soft 0.10 = 0.20 total (was 0.18).
+#     strong_line 0.14→0.13, pattern_reset 0.13→0.12.
+#
+# ── v1.5.0 changes (from v1.4.0) ─────────────────────────
+#   - NEW Rule 9: valley_gap
+#   - component_boundary: removed blank_ratio>0.70 gate
+#   - Weight rebalance for valley_gap
+#
+# ── v1.4.0 changes (from v1.3.0) ─────────────────────────
+#   - blank_separator v1.4 changes (now superseded by v1.6.0)
+#   - component_boundary: scalar gate has_strong_valley
+#   - extractor: y-axis density projection + valley detection
+# ────────────────────────────────────────────────────────────
+
+version: "1.6.0"
+
+# ── Adaptive threshold definitions ─────────────────────────
+
+thresholds:
+  T_blank:
+    signal: blank_ratio
+    floor: 0.85
+    adaptive: percentile
+    percentile: 75
+
+  T_blank_soft:
+    signal: blank_ratio
+    floor: 0.95
+    adaptive: percentile_max
+    percentile: 90
+
+  T_density_soft:
+    signal: component_density
+    ceiling: 0.03
+    adaptive: percentile_min
+    percentile: 25
+
+  T_bright_soft:
+    signal: brightness_mean
+    floor: 0.92
+    adaptive: percentile_max
+    percentile: 90
+
+  T_line:
+    signal: line_strength
+    floor: 0.30
+    adaptive: percentile
+    percentile: 75
+
+  T_bright:
+    signal: brightness_mean
+    floor: 0.88
+    adaptive: fixed
+
+  T_db:
+    signal: delta_brightness
+    floor: 0.10
+    adaptive: std_mult
+    multiplier: 1.0
+    source_signal: brightness_mean
+
+  T_dl:
+    signal: delta_line_strength
+    floor: 0.10
+    adaptive: std_mult
+    multiplier: 1.0
+    source_signal: line_strength
+
+  T_sat:
+    signal: saturation_mean
+    floor: 0.10
+    adaptive: percentile
+    percentile: 80
+
+  T_comp_low:
+    signal: component_density
+    floor: 0.10
+    adaptive: percentile
+    percentile: 25
+
+  T_line_cov:
+    signal: line_coverage
+    floor: 0.50
+    adaptive: percentile
+    percentile: 85
+
+  T_sym_break:
+    signal: symmetry_break
+    floor: 0.55
+    adaptive: std_mult
+    multiplier: 2.0
+    source_signal: symmetry_break
+
+  T_delta_border:
+    signal: delta_border_score
+    floor: 0.15               # lowered from 0.50 — border_score is now continuous
+    adaptive: fixed
+
+
+# ── Post-scoring parameters ────────────────────────────────
+
+post_scoring:
+  near_edge_score_gate: 0.85
+  top_k: 5
+  min_gap: 1
+  min_score_gate: 0.12        # lowered from 0.20 — let weak-but-real candidates through
+
+
+# ── Rule definitions ───────────────────────────────────────
+#
+# Weight budget = 1.0
+# near_edge_exempt: rules where we do NOT penalise positions
+#   at row 0/1/n-2/n-1 (pattern shifts and symmetry resets
+#   can legitimately occur near edges)
+#
+# optional: true on a condition means it does NOT gate the
+#   rule (the rule fires if all non-optional conditions pass)
+#   but contributes optional_bonus_weight to the score when
+#   it does fire.
+#
+# extreme_bypass_floor_signal / extreme_bypass_floor_value:
+#   if this signal >= value AND the ceiling signal <= ceiling
+#   value, the rule fires unconditionally regardless of all
+#   required conditions.
+
+rules:
+
+  # ── Rule 1a: Blank separator — HARD trigger ────────────
+  # v1.6.0: absolute trigger for pure-blank rows.
+  #   Fires when ALL of:
+  #     blank_ratio >= 0.985 (very strict; true blank row)
+  #     component_density <= 0.01 (almost no ink)
+  #     line_strength <= 0.02 (not a thick border line)
+  #   No adaptive thresholds — catches pure blanks even when
+  #   neighbors are also blank.  Same reason tag as soft rule
+  #   so downstream sees a single "blank_separator" reason.
+  - name: blank_separator_hard
+    axis: both
+    reason_tag_row: blank_separator
+    reason_tag_col: blank_separator
+    conditions:
+      - type: fixed_gte
+        signal: blank_ratio
+        value: 0.985
+      - type: fixed_lte
+        signal: component_density
+        value: 0.01
+      - type: fixed_lte
+        signal: line_strength
+        value: 0.02
+    weight: 0.10
+    score_expr: "blank_ratio"
+
+  # ── Rule 1b: Blank separator — SOFT trigger ────────────
+  # v1.6.0: percentile-adaptive trigger for near-blank rows.
+  #   Fires when ALL of:
+  #     blank_ratio > T_blank_soft (max(p90, 0.95))
+  #     component_density < T_density_soft (min(p25, 0.03))
+  #     brightness_mean > T_bright_soft (max(p90, 0.92))
+  #   Neighbor contrast is optional bonus (+0.03).
+  - name: blank_separator_soft
+    axis: both
+    reason_tag_row: blank_separator
+    reason_tag_col: blank_separator
+    optional_bonus_weight: 0.03
+    conditions:
+      - type: threshold
+        signal: blank_ratio
+        threshold: T_blank_soft
+      - type: threshold_lte
+        signal: component_density
+        threshold: T_density_soft
+      - type: threshold
+        signal: brightness_mean
+        threshold: T_bright_soft
+      - type: neighbor
+        signal: blank_ratio
+        margin: 0.10
+        optional: true
+    weight: 0.10
+    score_expr: "blank_ratio * brightness_mean"
+
+  # ── Rule 2: Strong line ─────────────────────────────────
+  # v1.6.0: weight 0.14 → 0.13 (rebalance for two-tier blank)
+  - name: strong_line
+    axis: both
+    reason_tag_row: strong_hline
+    reason_tag_col: strong_vline
+    conditions:
+      - type: threshold
+        signal: line_strength
+        threshold: T_line
+    weight: 0.13
+    score_expr: "line_strength"
+
+  # ── Rule 3: Pattern reset ───────────────────────────────
+  #   near_edge_exempt: pattern resets at the top/bottom of
+  #   a bbox are valid (e.g. header row at row 0)
+  # v1.6.0: weight 0.13 → 0.12 (rebalance for two-tier blank)
+  - name: pattern_reset
+    axis: both
+    min_index: 1
+    near_edge_exempt: true
+    conditions:
+      - type: any_of
+        sub_conditions:
+          - type: threshold
+            signal: delta_brightness
+            threshold: T_db
+          - type: threshold
+            signal: delta_line_strength
+            threshold: T_dl
+    weight: 0.12
+    score_expr: "max(delta_brightness / norm_delta_brightness, delta_line_strength / norm_delta_line_strength)"
+
+  # ── Rule 4: Header color change ─────────────────────────
+  - name: header_color_change
+    axis: both
+    min_index: 1
+    conditions:
+      - type: threshold
+        signal: saturation_mean
+        threshold: T_sat
+      - type: prev_below
+        signal: saturation_mean
+        threshold: T_sat
+    weight: 0.10
+    score_expr: "saturation_mean / norm_saturation_mean"
+
+  # ── Rule 5: Component boundary ──────────────────────────
+  # v1.4.0: requires has_strong_valley scalar gate so the rule
+  #   is only attempted when a y-density valley was found.
+  # v1.5.0: removed blank_ratio>0.70 required condition —
+  #   valley IS the separator evidence, blank_ratio was
+  #   incorrectly rejecting real valleys in dense sheets.
+  #   Score expression now uses valley_score directly.
+  #   Extreme bypass: valley_score >= 0.50 fires regardless.
+  #   Weight 0.15 → 0.10 (rebalance for valley_gap).
+  - name: component_boundary
+    axis: both
+    min_index: 1
+    extreme_bypass_floor_signal: valley_score
+    extreme_bypass_floor_value: 0.50
+    scalar_gates:
+      - field: n_components
+        op: gte
+        value: 2
+      - field: has_strong_valley
+        op: gte
+        value: 1
+    conditions:
+      - type: fixed
+        signal: component_density
+        value: -0.01
+      - type: neighbor
+        signal: component_density
+        margin: -0.15
+        optional: true
+      - type: fixed
+        signal: valley_score
+        value: 0.0
+    weight: 0.10
+    score_expr: "valley_score * (1.0 - component_density)"
+
+  # ── Rule 6: Continuous border line ──────────────────────
+  - name: continuous_border_line
+    axis: both
+    reason_tag_row: continuous_hline
+    reason_tag_col: continuous_vline
+    conditions:
+      - type: threshold
+        signal: line_coverage
+        threshold: T_line_cov
+      - type: fixed
+        signal: line_strength
+        value: 0.15
+    weight: 0.10
+    score_expr: "line_coverage"
+
+  # ── Rule 7: Border discontinuity ────────────────────────
+  #   Uses continuous delta_border_score (coverage change).
+  #   T_delta_border at 0.15 works because border_score is
+  #   now a continuous 0–1 value.
+  #   Weight bumped to 0.10 so a single-rule fire can pass min_score.
+  - name: border_discontinuity
+    axis: both
+    min_index: 2
+    conditions:
+      - type: threshold
+        signal: delta_border_score
+        threshold: T_delta_border
+      - type: any_of
+        sub_conditions:
+          - type: fixed
+            signal: blank_ratio
+            value: 0.50
+          - type: threshold
+            signal: line_strength
+            threshold: T_line
+    weight: 0.10
+    score_expr: "delta_border_score"
+
+  # ── Rule 8: Symmetry reset ─────────────────────────────
+  #   near_edge_exempt: symmetry breaks near the top/bottom
+  #   of a bbox are valid (e.g. title row before data rows)
+  - name: symmetry_reset
+    axis: both
+    min_index: 3
+    near_edge_exempt: true
+    conditions:
+      - type: threshold
+        signal: symmetry_break
+        threshold: T_sym_break
+      - type: fixed
+        signal: symmetry_break
+        value: 0.50
+      - type: neighbor
+        signal: symmetry_break
+        margin: 0.10
+    weight: 0.05
+    score_expr: "symmetry_break"
+
+  # ── Rule 9: Valley gap (v1.5.0) ───────────────────────
+  #   Dedicated rule that promotes valley rows directly to
+  #   candidates.  Gates ONLY on has_strong_valley (scalar)
+  #   + valley_score > 0.0 (per-band).  No blank_ratio or
+  #   component_density gate — the valley IS the evidence.
+  #   near_edge_exempt: valleys near bbox edges are valid
+  #   (e.g. gap before first sub-table).
+  #   Extreme bypass: valley_score >= 0.50 fires regardless
+  #   of other conditions.
+  - name: valley_gap
+    axis: row
+    reason_tag_row: valley_gap
+    min_index: 2
+    near_edge_exempt: true
+    extreme_bypass_floor_signal: valley_score
+    extreme_bypass_floor_value: 0.50
+    scalar_gates:
+      - field: has_strong_valley
+        op: gte
+        value: 1
+    conditions:
+      - type: fixed
+        signal: valley_score
+        value: 0.0
+    weight: 0.10
+    score_expr: "valley_score"

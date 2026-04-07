@@ -1,0 +1,376 @@
+# Plan v5: Migrate xlgen_v2 to xlgen_v3
+
+## Context
+
+xlgen_v2 is a 4-stage Excel-to-structural-table pipeline (xl_init -> xl_parse -> xl_image -> xl_kg). xlgen_v3 is a clean monorepo refactor that renames xl_kg -> xl_table, centralizes output paths, separates Streamlit UI from business logic, and standardizes stage entry points. The spec lives in `xlgen_v3/Claude Code Prompt — Build xlgen_v3 from.ini`.
+
+xlgen_v3 contains the migrated monorepo implementation (see repo root). xlgen_v2 must NOT be modified.
+
+---
+
+## Phase 0: Skeleton & Infrastructure
+
+Create the full directory tree and core modules. No business logic yet.
+
+### 0.1 Create directory structure
+All directories from the target layout:
+```
+xlgen_v3/
+  apps/orchestrator/
+  scripts/
+  xl_init/tools/
+  xl_parse/parse_tools/
+  xl_table/tests/fixtures/
+  xl_image/render/ features/ io/ qc/ utils/ adaptive/ tests/
+  core/
+  data/input/ data/output/
+  config/
+  tests/
+  docs/
+```
+
+### 0.2 Create `core/__init__.py` (empty)
+
+### 0.3 Create `core/paths.py`
+Functions: `get_run_root()`, `get_init_output_path()`, `get_parse_output_path()`, `get_table_output_path()`, `get_image_output_path()`, `get_log_path()`. All rooted at `data/output/<run_id>/`.
+
+### 0.4 Two-file configuration layout (YAML) + `core/config.py`
+
+**Requirement:** After xlgen_v3 exists, all tunable pipeline settings MUST be sourced from exactly **two** YAML files under `config/` (plus the Python loader below — not a third “config file” in the sense of editable knobs):
+
+| File | Contents |
+|------|----------|
+| `config/stages.yaml` | Nested sections: `xl_init`, `xl_parse`, `xl_table`, `xl_image`. Defaults are migrated from: `xl_init/config.py` (dataclass fields), `xl_parse/parse_tools/models.py` (`Config`), former xl_kg `config_default.yaml` → `xl_table`, and `xl_image/config.py` / image tunables → `xl_image`. Single place on disk for stage-specific parameters. |
+| `config/general.yaml` | Cross-cutting / orchestrator settings: default logging level, run-id naming hints, optional feature flags that are not owned by one stage alone, orchestrator/Streamlit defaults (e.g. default paths shown in UI), and any other global options. |
+
+`core/config.py` loads **both** YAML files (general merged with stage tree), validates, and exposes a `PipelineConfig` (or equivalent) with sub-configs per stage plus `general`. Stage packages may keep thin typed wrappers that read from the merged structure (no duplicate competing defaults outside these two files).
+
+**Streamlit (Phase 6):** The orchestrator app MUST let the user **view and change** overrides for **`xl_parse`** and **`xl_table`** (sidebar widgets and/or YAML `st.text_area` that merges with loaded defaults — same effective knobs as `stages.yaml`). The user MUST also be able to view and change **`general.yaml`**-backed options in the UI (a “General” section). Saving: write-through to the two YAML files **or** session-only overrides applied for the next run (implementation choice; document which in README).
+
+---
+
+### 0.5 Create `core/config.py`
+Thin wrapper implementing the two-file load described in 0.4, exposing `PipelineConfig` with sub-configs per stage and `general`.
+
+### 0.6 Create `core/logging_utils.py`
+Centralized logging setup (file + stderr, log to `get_log_path(run_id)`).
+
+### 0.7 Create `core/visual_types.py`
+Copy from `xlgen_v2/xl_shared/visual_types.py` (shared types used by xl_table and xl_image).
+
+### 0.8 Create root `conftest.py`
+Adds xlgen_v3 root to `sys.path`.
+
+---
+
+## Phase 1: Migrate xl_init (cleanest stage -- uses relative imports already)
+
+### Files to copy (from `xlgen_v2/xl_init/`):
+| Source | Dest | Action |
+|---|---|---|
+| `api.py` | `xl_init/api.py` | Refactor: accept `output_path` param, route via `core.paths` |
+| `pipeline.py` | `xl_init/pipeline.py` | Refactor: remove hard-coded `runs/` default |
+| `config.py` | `xl_init/config.py` | Preserve as-is |
+| `types_data.py` | `xl_init/types_data.py` | Preserve as-is |
+| `excel_parser.py` | `xl_init/excel_parser.py` | Preserve as-is |
+| `sheet_triage.py` | `xl_init/sheet_triage.py` | Preserve as-is |
+| `remove_shapes.vba` | `xl_init/remove_shapes.vba` | Preserve as-is |
+| `tools/*.py` (6 files) | `xl_init/tools/*.py` | Preserve as-is |
+
+### Skip: `main.py` (Streamlit), `run_full.py` (superseded), `requirements.txt` (merged to root), `data/`, `runs/`, `.git/`
+
+### Wire entry point:
+`xl_init/__init__.py` exposes `run_init(input_path, output_path, config=None)` wrapping `api.run_xl_init()`.
+
+---
+
+## Phase 2: Migrate xl_parse (requires import refactoring)
+
+**Critical:** xl_parse uses bare imports (`from parse_tools.models import ...`, `from block_generation import ...`). All must become relative imports.
+
+### Files to copy (from `xlgen_v2/xl_parse/`):
+| Source | Dest | Action |
+|---|---|---|
+| `pipeline.py` | `xl_parse/pipeline.py` | **Refactor all 10+ bare imports to relative** |
+| `block_generation.py` | `xl_parse/block_generation.py` | Refactor imports |
+| `table_framing_heuristics.py` | `xl_parse/table_framing_heuristics.py` | Refactor imports |
+| `grammar_heuristics.py` | `xl_parse/grammar_heuristics.py` | Refactor imports |
+| `post_split_qc_gate.py` | `xl_parse/post_split_qc_gate.py` | Refactor imports |
+| `final_candidates.py` | `xl_parse/final_candidates.py` | Refactor imports |
+| `ml_export.py` | `xl_parse/ml_export.py` | Refactor imports |
+| `run_export.py` | `xl_parse/run_export.py` | Refactor imports + remove `base_dir="runs"` default |
+| `consolidation.py` | `xl_parse/consolidation.py` | Refactor imports |
+| `parse_tools/*.py` (7 files) | `xl_parse/parse_tools/*.py` | Preserve (internal imports are relative to parse_tools) |
+
+### Import transform pattern:
+- `from parse_tools.models import ...` -> `from .parse_tools.models import ...`
+- `from block_generation import ...` -> `from .block_generation import ...`
+- (same pattern for all bare imports)
+
+### Skip: `main.py`, `data/`, `.git/`, `.xlsm` files, `SYLLABUS.md`
+
+### Wire entry point:
+`xl_parse/__init__.py` exposes `run_parse(input_path, output_path, config=None)` that calls `pipeline.parse_workbook()` + `run_export.export_run()`.
+
+---
+
+## Phase 3: Migrate xl_kg as xl_table (rename + import rewrite)
+
+**Non-negotiable:** Every `xl_kg` reference becomes `xl_table`.
+
+### Files to copy (from `xlgen_v2/xl_kg/`):
+| Source | Dest | Action |
+|---|---|---|
+| `agent.py` | `xl_table/agent.py` | Replace all `from xl_kg.` -> `from xl_table.` (17+ lines) |
+| `run.py` | `xl_table/run.py` | Rename xl_kg refs |
+| `config.py` | `xl_table/config.py` | Rename xl_kg + `from xl_shared.` -> `from core.visual_types` |
+| `schemas.py` | `xl_table/schemas.py` | Preserve (no xl_kg imports) |
+| `kg_builder.py` | `xl_table/table_builder.py` | Rename file + all xl_kg refs |
+| `loader.py` | `xl_table/loader.py` | Rename xl_kg refs |
+| `splitter.py` | `xl_table/splitter.py` | Rename xl_kg refs |
+| `metrics.py` | `xl_table/metrics.py` | Preserve |
+| `qc.py` | `xl_table/qc.py` | Preserve |
+| `prioritizer.py` | `xl_table/prioritizer.py` | Preserve |
+| `sheet_accessor.py` | `xl_table/sheet_accessor.py` | Preserve |
+| `logger.py` | `xl_table/logger.py` | Rename xl_kg refs |
+| `coords.py` | `xl_table/coords.py` | Preserve |
+| `block_scan.py` | `xl_table/block_scan.py` | Rename xl_kg refs |
+| `confirmation.py` | `xl_table/confirmation.py` | Rename xl_kg refs |
+| `config_default.yaml` | `config/stages.yaml` under key `xl_table` | Merge into two-file layout (0.4); do not use a lone `default_config.yaml` as the only YAML |
+| `tests/*.py` | `xl_table/tests/*.py` | Rename xl_kg refs in imports |
+| `tests/fixtures/*` | `xl_table/tests/fixtures/*` | Preserve as-is |
+
+### Skip: `main.py`, `.git/`, `__pycache__/`, spec/assumption docs (content goes into new docs)
+
+### Wire entry point:
+`xl_table/__init__.py` exposes `run_table(parse_output_path, output_path, config=None)` wrapping `agent.run_xl_table()`.
+
+---
+
+## Phase 4: Migrate xl_image
+
+### Files to copy (from `xlgen_v2/xl_image/`):
+| Source | Dest | Action |
+|---|---|---|
+| `run.py` | `xl_image/run.py` | Refactor output paths |
+| `config.py` | `xl_image/config.py` | Preserve |
+| `on_demand.py` | `xl_image/on_demand.py` | `from xl_shared.` -> `from core.visual_types` |
+| `render/*.py` (3) | `xl_image/render/*.py` | Preserve |
+| `features/*.py` (4) | `xl_image/features/*.py` | Preserve |
+| `io/*.py` (2) | `xl_image/io/*.py` | Preserve |
+| `qc/*.py` (2) | `xl_image/qc/*.py` | Preserve |
+| `utils/*.py` (2) | `xl_image/utils/*.py` | Preserve |
+| `adaptive/*.py` (2) | `xl_image/adaptive/*.py` | Preserve |
+| `tests/*.py` | `xl_image/tests/*.py` | Preserve |
+
+### Skip: `main.py`, `.git/`
+
+### Wire entry point:
+`xl_image/__init__.py` exposes `run_image(parse_output_path, output_path, config=None)`.
+
+---
+
+## Phase 5: CLI Scripts
+
+Create 5 scripts in `scripts/`:
+
+| Script | Args | Calls |
+|---|---|---|
+| `run_init.py` | `--input`, `--run-id` | `xl_init.run_init()` |
+| `run_parse.py` | `--init-dir`, `--run-id` | `xl_parse.run_parse()` |
+| `run_table.py` | `--parse-dir`, `--workbook`, `--run-id` | `xl_table.run_table()` |
+| `run_image.py` | `--parse-dir`, `--workbook`, `--run-id` | `xl_image.run_image()` |
+| `run_pipeline.py` | `--input`, `--run-id`, `--with-image` | Chains all stages, writes `pipeline_summary.json` |
+
+Each script: parse args with argparse, compute paths via `core.paths`, create dirs, call stage, print artifact path.
+
+`pipeline_summary.json` must include:
+- input workbook path
+- run ID
+- stage timings
+- artifact paths
+- whether VBA cleaning ran
+- whether LLM triage was skipped
+- whether image stage ran
+- warnings/failures if any
+
+---
+
+## Phase 6: Streamlit Orchestrator
+
+Create `apps/orchestrator/app.py` with structure **aligned to** `xlgen_v2/xl_kg/main.py` (same structural patterns, adapted for multi-stage):
+
+**Structural parity with xl_kg `main.py`:**
+- `st.set_page_config`, title, **sidebar** for inputs and config overrides
+- **`concurrent.futures.ThreadPoolExecutor` (max_workers=1)** + **Future** stored in `st.session_state`; poll with `future.done()`, `time.sleep(1)` + `st.rerun()` while running (no double-submit, no unsafe concurrent mutation)
+- Clear **session state** keys per stage or per long-running operation (e.g. `init_future`, `parse_future`, …)
+- **Tabs** for summary / explorer / logs where applicable (mirror xl_kg’s tab pattern for xl_table results; other stages borrow from their v2 `main.py` flows)
+- **No business logic in the UI** — only calls public entry points and renders artifacts
+
+**Imports:** only public entry points (`run_init`, `run_parse`, `run_table`, `run_image`); **`core.paths`** for output routing; **`core.config`** for merged two-file YAML (0.4).
+
+**Config in UI (mandatory):** User can **click and change** effective settings for **`xl_parse`** and **`xl_table`** (and **`general`** from `config/general.yaml`). Prefer the same pattern as xl_kg’s `_build_config_from_ui` (load defaults from `core.config`, patch from widgets). Optionally expose raw YAML fragments for power users.
+
+**Execution: CLI / pipe vs in-app (xl_init → xl_parse focus):**
+- **Documented CLI (pipe-friendly):** In-sidebar or help panel, show exact commands equivalent to in-app runs, e.g.  
+  `python scripts/run_init.py --input <xlsx> --run-id <id>`  
+  then  
+  `python scripts/run_parse.py --init-dir <dir> --run-id <id>`  
+  so users can run the same steps in a terminal or shell pipeline.
+- **In-app buttons:** **“Run xl_init”** and **“Run xl_parse”** (sequential workflow: parse consumes init output paths from `core.paths`), calling the same functions/scripts use internally. Optional: **“Run full pipeline”** chaining all stages (may reuse Phase 5 `run_pipeline.py` logic).
+
+Reference material from:
+- `xl_init/main.py`: upload flow, VBA cleaning toggle, sheet review UI
+- `xl_parse/main.py`: parameter controls, candidate visualization
+- `xl_kg/main.py`: **primary template** — executor, polling, sidebar config build, tabs, decision log
+- `xl_image/main.py`: full pipeline orchestration, results browsing
+
+---
+
+## Phase 7: Documentation
+
+| File | Contents |
+|---|---|
+| `MIGRATION.md` | xl_kg -> xl_table rationale, complete file mapping table, import changes, backward compat notes |
+| `ASSUMPTIONS.md` | Nested .git locations (xl_init, xl_parse, xl_kg, xl_image), hard-coded paths replaced, Streamlit status, deferred features, ambiguous files |
+| `README.md` | What xlgen_v3 is, pipeline stages, how to run (CLI + pipeline + Streamlit), `config/stages.yaml` + `config/general.yaml`, output structure, future work |
+| `docs/architecture.md` | Stage roles, artifact contracts (per stage), output flow, provenance, core.paths policy |
+| `requirements.txt` | Merged from all stages: openpyxl, pandas, openai, python-dotenv, xlwings, opencv-python, Pillow, numpy, matplotlib, scikit-image, scipy, pyyaml, streamlit (for apps/ only) |
+
+### Artifact Contracts to document:
+
+**xl_init artifacts:**
+- cleaned_workbook.xlsx
+- approved_sheets.json
+- sheet_summaries.jsonl
+- sheet_classification.jsonl or stub equivalent
+- sheet_metadata/
+- shapes_manifest.jsonl
+
+**xl_parse artifacts:**
+- final_candidates.jsonl
+- features.csv
+- qc_events.jsonl
+- cut_scores.jsonl
+- run_meta.json
+- rejected_blocks.jsonl
+- coverage_report.json
+- dedupe_report.jsonl
+
+**xl_table artifacts:**
+- final structural table objects
+- table assembly outputs / traces
+- decisions.jsonl
+
+**xl_image artifacts:**
+- bbox images (PNG)
+- visual feature artifacts (JSON)
+- image QC artifacts (coverage_report.json, failures.jsonl)
+
+---
+
+## Phase 8: Smoke Test & Validation
+
+1. Verify all 4 entry points importable: `from xl_init import run_init` etc.
+2. Grep for zero `xl_kg` hits in `.py` files (excluding docs)
+3. Verify `core.paths` returns correct paths
+4. Run `scripts/run_pipeline.py` with a minimal fixture (or document gap)
+5. Verify stage-to-stage data contract continuity:
+   - xl_init emits approved workbook/sheet artifacts
+   - xl_parse emits candidate artifacts
+   - xl_table consumes parse outputs successfully
+
+---
+
+## Track B: Carry-Forward Features
+
+These are real improvements from xlgen_v2 that must be preserved or documented:
+
+| Feature | Source | Migration Status |
+|---|---|---|
+| `skip_llm_triage` | xl_init/config.py | Carried forward (preserve as-is) |
+| `approve_all_sheets` | xl_init/config.py | Carried forward |
+| `sheet_metadata/` extraction | xl_init/pipeline.py | Carried forward |
+| `shapes_manifest.jsonl` | xl_init/pipeline.py | Carried forward |
+| Merged-cell inflation | xl_parse/parse_tools/presence.py | Carried forward |
+| Density trim / sparse tail rescue | xl_parse (check grammar_heuristics/framing) | Document gap if missing |
+| `rejected_blocks.jsonl` | xl_parse/run_export.py + models.py | Carried forward |
+| `coverage_report.json` | Not in xl_parse (exists in xl_image) | Document as deferred |
+| `dedupe_report.jsonl` | xl_parse/consolidation.py (check) | Carried forward if present |
+
+---
+
+## Known Disadvantages & Mitigations
+
+### 1. xl_parse import refactor is the highest execution risk
+Many files (9+), each with 10+ bare imports. Easy to miss one and get a runtime `ImportError` that only surfaces when that code path runs.
+
+**Mitigation:** After Phase 2, immediately run a dedicated import smoke test: `python -c "from xl_parse.pipeline import parse_workbook"` and grep every `.py` file under `xl_parse/` for any remaining bare `from parse_tools` or `from block_generation`-style imports. Add a CI-style check script (`tests/test_imports.py`) that imports every public module.
+
+### 2. xl_kg → xl_table rename touches many lines; bad replace breaks runtime subtly
+A naive find-replace could mangle string literals, logger names, or comments in ways that don't cause `ImportError` but produce wrong log output, broken decision trails, or misnamed artifacts.
+
+**Mitigation:** Do the rename in two passes: (a) imports only (`from xl_kg.` → `from xl_table.`), (b) string literals/comments/logger names separately with manual review. After both passes, grep for any remaining `xl_kg` in `.py` files — zero hits required. Add a test assertion: `assert "xl_kg" not in open(f).read()` for every `.py` under `xl_table/`.
+
+### 3. Two YAML files + existing dataclasses can drift
+`config/stages.yaml` and `config/general.yaml` define defaults, but each stage also has a Python dataclass with its own defaults. Until migration is complete, duplicated defaults can silently diverge.
+
+**Mitigation:** The Python dataclass constructors must NOT define default values for any field that is in `stages.yaml`. Instead, `core/config.py` loads YAML first, then constructs the dataclass from the loaded dict. If a YAML key is missing, the loader raises an error (not a silent Python default). This enforces YAML as the single source of truth from day one. Document this contract in `docs/architecture.md` under "Configuration Authority."
+
+### 4. Large Streamlit orchestrator risks bloat
+Mixing four legacy UIs into one `app.py` can easily become a monolithic file with business logic leaking in, especially under time pressure.
+
+**Mitigation:** Structure `apps/orchestrator/` as multiple files from the start: `app.py` (top-level router + tabs), `ui_init.py`, `ui_parse.py`, `ui_table.py`, `ui_image.py` (one per stage, each under 200 lines). Each UI file imports only its stage's public entry point and `core.paths`/`core.config`. Enforce a rule: no `openpyxl`, `numpy`, or stage-internal imports in any `apps/` file.
+
+### 5. ThreadPoolExecutor + Streamlit adds complexity (session state bugs, rerun loops)
+The xl_kg/main.py polling pattern (`future.done()` + `time.sleep(1)` + `st.rerun()`) works but is fragile — double-submits, stale session state, and rerun storms are common Streamlit pitfalls.
+
+**Mitigation:** Follow the exact xl_kg/main.py pattern (proven working): one future per stage stored in `st.session_state`, guard submit button with `if not st.session_state.get("running")`, clear state keys on completion. Add a visible "Cancel" button that calls `future.cancel()`. Document the pattern in `docs/architecture.md` so future maintainers don't reinvent it.
+
+### 6. No changes to xlgen_v2 means no shared regression harness
+Validation is manual or new tests only in v3. There's no way to run both v2 and v3 on the same workbook and diff outputs automatically.
+
+**Mitigation:** Create `tests/test_regression.py` in xlgen_v3 that (a) runs a known workbook through `run_pipeline.py`, (b) compares key artifact shapes (row counts in `final_candidates.jsonl`, number of `decisions.jsonl` entries) against expected baselines stored in `tests/fixtures/baselines/`. This is not a full regression suite but catches gross breakage. Document in ASSUMPTIONS.md that full v2-vs-v3 parity testing is deferred.
+
+### 7. Phases 1–4 in parallel increases integration risk
+If two stages are migrated concurrently and both touch `core/config.py` or `core/paths.py` contracts, they can diverge.
+
+**Mitigation:** Phase 0 must fully lock down `core/paths.py` and `core/config.py` interfaces before any stage migration begins. Phases 1–4 consume these interfaces but do not modify them. If a stage migration discovers a missing `core/` function, it is added to a documented backlog and implemented before Phase 5 (CLI scripts), not ad-hoc during parallel work.
+
+### 8. "Document gaps" leaves known holes open
+Features like `coverage_report.json` in xl_parse are marked "document as deferred" — this is honest but means the v3 artifact contract is incomplete on day one.
+
+**Mitigation:** Every deferred feature gets a tracked entry in ASSUMPTIONS.md with: (a) what it is, (b) why it's deferred, (c) which stage owns it, (d) the specific function/file where it should be added. This turns vague "document the gap" into an actionable backlog. Priority: features that affect downstream consumers (xl_table reading xl_parse output) are escalated; purely informational outputs (coverage reports) can wait.
+
+### 9. Smoke test with "minimal fixture or document gap" may leave real-workbook paths unverified
+A synthetic 2-sheet fixture exercises the happy path but won't catch issues with merged cells, VBA shapes, multi-table blocks, or complex grammar cuts.
+
+**Mitigation:** The minimal fixture is the import/path smoke test only. For real validation, the plan requires running at least one actual workbook from `xlgen_v2/inputs/Example of simple BIM.xlsm` through the full pipeline. If that file is unavailable at migration time, document it as a blocking validation gap in ASSUMPTIONS.md (not a "nice to have"). The first real-workbook run after migration is a gate before declaring v3 ready.
+
+### 10. YAML edits in Streamlit: session-only vs write-through
+The plan (Phase 6) says this is an implementation choice. Leaving it unspecified risks inconsistent behavior.
+
+**Decision:** Default to **session-only overrides** — the UI patches the loaded config in memory for the current run but does NOT write back to `config/stages.yaml` or `config/general.yaml`. Rationale: write-through from a UI is dangerous (concurrent users, partial writes, git-unfriendly diffs). Power users who want persistent changes edit YAML directly. Document this in README.md under "Configuration."
+
+---
+
+## Key Risks (Summary)
+
+1. **xl_parse import refactoring** (9 files, 10+ bare imports each) -- highest risk; test imports immediately after Phase 2
+2. **xl_kg -> xl_table rename** (17+ import lines in agent.py alone) -- systematic find-replace then grep verify
+3. **xl_shared consolidation** -- affects 2 consumers (xl_table/config.py, xl_image/on_demand.py); do in Phase 0
+
+## Hard Constraints (from spec)
+
+- xl_kg becomes xl_table (non-negotiable)
+- Do NOT scaffold fake KG modules (no dep_graph.py, formula_tracer.py, model_tree.py, symbol_table.py)
+- Do NOT copy nested .git directories
+- Do NOT modify or delete xlgen_v2
+- Do NOT invent business logic not present in repo
+- Do NOT leave stage modules dependent on Streamlit
+- Do NOT allow stage-specific output roots outside core.paths
+- If something is ambiguous, preserve it in-stage and document in ASSUMPTIONS.md
+
+## Execution Order
+
+Phases 0 -> 1,2,3,4 (can partially parallelize) -> 5 -> 6 -> 7 -> 8

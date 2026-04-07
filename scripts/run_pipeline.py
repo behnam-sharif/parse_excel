@@ -1,0 +1,199 @@
+#!/usr/bin/env python
+"""CLI wrapper for the full xlgen_v3 pipeline: init -> parse -> table [-> image]."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from dataclasses import replace
+from pathlib import Path
+
+# Add project root to path
+_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_ROOT))
+
+from core.config import load_config
+from core.stage_config import parse_config_from_pipeline, xl_init_config_from_pipeline
+
+from core.paths import (
+    get_run_root,
+    get_init_output_path,
+    get_parse_output_path,
+    get_table_output_path,
+    get_image_output_path,
+    get_log_path,
+)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="xlgen_v3 full pipeline")
+    parser.add_argument("--input", required=True, help="Path to the input Excel workbook")
+    parser.add_argument("--run-id", required=True, help="Run identifier")
+    parser.add_argument("--output-base", default="data/output", help="Base output directory")
+    parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
+    parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
+    parser.add_argument("--skip-llm-triage", action="store_true", help="Skip LLM classification")
+    parser.add_argument("--approve-all-sheets", action="store_true", help="Auto-approve all sheets")
+
+    args = parser.parse_args()
+
+    base = args.output_base
+    run_id = args.run_id
+
+    # Ensure run root exists
+    run_root = get_run_root(run_id, base)
+    run_root.mkdir(parents=True, exist_ok=True)
+    log_dir = get_log_path(run_id, base)
+    log_dir.mkdir(parents=True, exist_ok=True)
+
+    summary = {
+        "input_workbook": str(Path(args.input).resolve()),
+        "run_id": run_id,
+        "stages": {},
+        "vba_cleaning_ran": not args.no_vba_cleaning,
+        "llm_triage_skipped": args.skip_llm_triage,
+        "image_stage_ran": args.with_image,
+        "warnings": [],
+    }
+
+    # -- Stage 1: xl_init --
+    print("=" * 60)
+    print("Stage 1: xl_init")
+    print("=" * 60)
+    t0 = time.time()
+    try:
+        from xl_init import run_init
+
+        init_out = get_init_output_path(run_id, base)
+        init_out.mkdir(parents=True, exist_ok=True)
+
+        pc = load_config()
+        init_base = xl_init_config_from_pipeline(pc)
+        init_config = replace(
+            init_base,
+            run_vba_cleaning=not args.no_vba_cleaning,
+            skip_llm_triage=args.skip_llm_triage,
+            approve_all_sheets=args.approve_all_sheets,
+            interactive=False,
+        )
+        init_result = run_init(args.input, str(init_out), config=init_config)
+
+        summary["stages"]["xl_init"] = {
+            "duration_s": round(time.time() - t0, 2),
+            "output_path": str(init_out),
+            "cleaned_workbook": init_result.cleaned_workbook_path,
+            "approved_sheets": init_result.table_sheets,
+        }
+        print(f"  Done in {summary['stages']['xl_init']['duration_s']}s")
+        print(f"  Approved sheets: {len(init_result.table_sheets)}")
+    except Exception as exc:
+        summary["stages"]["xl_init"] = {"error": str(exc)}
+        summary["warnings"].append(f"xl_init failed: {exc}")
+        print(f"  FAILED: {exc}")
+        # Write summary and exit
+        _write_summary(summary, log_dir)
+        sys.exit(1)
+
+    # -- Stage 2: xl_parse --
+    print("\n" + "=" * 60)
+    print("Stage 2: xl_parse")
+    print("=" * 60)
+    t0 = time.time()
+    try:
+        from xl_parse import run_parse
+
+        parse_out = get_parse_output_path(run_id, base)
+        parse_out.mkdir(parents=True, exist_ok=True)
+
+        workbook_path = init_result.cleaned_workbook_path
+        parse_cfg = parse_config_from_pipeline(load_config())
+        parse_results = run_parse(workbook_path, str(parse_out), config=parse_cfg)
+
+        summary["stages"]["xl_parse"] = {
+            "duration_s": round(time.time() - t0, 2),
+            "output_path": str(parse_out),
+            "sheets_processed": len(parse_results),
+        }
+        print(f"  Done in {summary['stages']['xl_parse']['duration_s']}s")
+        print(f"  Sheets processed: {len(parse_results)}")
+    except Exception as exc:
+        summary["stages"]["xl_parse"] = {"error": str(exc)}
+        summary["warnings"].append(f"xl_parse failed: {exc}")
+        print(f"  FAILED: {exc}")
+        _write_summary(summary, log_dir)
+        sys.exit(1)
+
+    # -- Stage 3: xl_table --
+    print("\n" + "=" * 60)
+    print("Stage 3: xl_table")
+    print("=" * 60)
+    t0 = time.time()
+    try:
+        from xl_table import run_table
+
+        table_out = get_table_output_path(run_id, base)
+        table_out.mkdir(parents=True, exist_ok=True)
+
+        kg = run_table(str(parse_out), str(table_out))
+
+        n_tables = sum(len(tree.tables) for tree in kg.sheets) if kg else 0
+        summary["stages"]["xl_table"] = {
+            "duration_s": round(time.time() - t0, 2),
+            "output_path": str(table_out),
+            "tables_detected": n_tables,
+        }
+        print(f"  Done in {summary['stages']['xl_table']['duration_s']}s")
+        print(f"  Tables detected: {n_tables}")
+    except Exception as exc:
+        summary["stages"]["xl_table"] = {"error": str(exc)}
+        summary["warnings"].append(f"xl_table failed: {exc}")
+        print(f"  FAILED: {exc}")
+
+    # -- Stage 4: xl_image (optional) --
+    if args.with_image:
+        print("\n" + "=" * 60)
+        print("Stage 4: xl_image (optional)")
+        print("=" * 60)
+        t0 = time.time()
+        try:
+            from xl_image import run_image
+
+            image_out = get_image_output_path(run_id, base)
+            image_out.mkdir(parents=True, exist_ok=True)
+
+            run_image(str(parse_out), str(image_out))
+
+            summary["stages"]["xl_image"] = {
+                "duration_s": round(time.time() - t0, 2),
+                "output_path": str(image_out),
+            }
+            print(f"  Done in {summary['stages']['xl_image']['duration_s']}s")
+        except Exception as exc:
+            summary["stages"]["xl_image"] = {"error": str(exc)}
+            summary["warnings"].append(f"xl_image failed: {exc}")
+            print(f"  FAILED: {exc}")
+
+    # -- Write summary --
+    _write_summary(summary, log_dir)
+
+    print("\n" + "=" * 60)
+    print("Pipeline complete.")
+    print(f"  Run root: {run_root}")
+    print(f"  Summary:  {log_dir / 'pipeline_summary.json'}")
+    if summary["warnings"]:
+        print(f"  Warnings: {len(summary['warnings'])}")
+        for w in summary["warnings"]:
+            print(f"    - {w}")
+
+
+def _write_summary(summary: dict, log_dir: Path) -> None:
+    log_dir.mkdir(parents=True, exist_ok=True)
+    summary_path = log_dir / "pipeline_summary.json"
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, default=str)
+
+
+if __name__ == "__main__":
+    main()
