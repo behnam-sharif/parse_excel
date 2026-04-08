@@ -10,14 +10,11 @@ from __future__ import annotations
 import json
 import logging
 import os
-from pathlib import Path
 from typing import Dict, List, Tuple
 
-from dotenv import load_dotenv
-_ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(dotenv_path=str(_ROOT / ".env"))
-
 from openai import OpenAI
+
+from core.env_bootstrap import load_project_dotenv
 
 from .types_data import SheetSummary, SheetClassification
 
@@ -98,7 +95,15 @@ def classify_sheets(
     table_sheets    : list[str]   -- sheets labelled "table"
     excluded_sheets : list[str]   -- all other sheets
     """
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    load_project_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "OPENAI_API_KEY is not set. Add it to .env in this repo, or to a sibling "
+            "xlgen_v2/.env, or set xl_init.skip_llm_triage=true in config/stages.yaml "
+            "to run without LLM."
+        )
+    client = OpenAI(api_key=api_key)
     classifications: Dict[str, SheetClassification] = {}
     total_prompt_tokens = 0
     total_completion_tokens = 0

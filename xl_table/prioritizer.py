@@ -15,7 +15,7 @@ from typing import List
 
 import numpy as np
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput
 
 
@@ -29,7 +29,7 @@ def compute_bbox_priority(
     size_norm_denom: int,           # max area of initial xl_parse set (fixed at init)
     sep_norm_denom: float,          # max separator score in initial set (fixed at init)
     density_var_norm_denom: float,  # max std(row_density) in initial set (fixed at init)
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> float:
     """
     Compute a [0, 1] priority score for a BBoxInput.

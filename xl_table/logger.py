@@ -10,7 +10,7 @@ One line per event:
   - finalize
   - error
 
-get_stats() returns aggregate counts for RunSummary / StructuralKG assembly.
+get_stats() returns aggregate counts for RunSummary / StructuralTables assembly.
 
 Log-line format spec: REVISED_SPEC Section 17.
 """

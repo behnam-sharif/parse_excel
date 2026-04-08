@@ -17,7 +17,7 @@ Subfolders:
 
 - `init_output/` — cleaned workbook, `approved_sheets.json`, summaries, metadata.
 - `parse_output/` — candidates, features, QC, cut scores, etc.
-- `table_output/` — table assembly, `decisions.jsonl`, `structural_kg.json`, …
+- `table_output/` — table assembly, `accepted_tables.json` / `accepted_tables.txt` (ranges per sheet), `decisions.jsonl`, `structural_tables.json`, …
 - `image_output/` — renders and image QC when enabled.
 - `logs/` — `pipeline_summary.json`, stage logs.
 

@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from typing import List, Optional, Tuple
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput, MetricsResult, QCResult, SplitProposal
 
 logger = logging.getLogger(__name__)
@@ -57,7 +57,7 @@ def qc_gate(
     top: BBoxInput,
     bottom: BBoxInput,
     path: str,                      # "structural" or "visual"
-    cfg: KGConfig,
+    cfg: XlTableConfig,
     visual_score: float = 0.0,
     # Optional row-level arrays for H3 / H4 evaluation.
     # When not provided: H3 falls back to body-row count only; H4 is skipped.

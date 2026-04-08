@@ -1,0 +1,2130 @@
+{
+  "workbook_path": "data\\output\\streamlit_run_enco\\init_output\\cleaned_workbook.xlsx",
+  "workbook_id": "8018279055de31f7a44fc52bc3f9101c2328a7a5b75f9cb5ab1dbc1537579e87",
+  "xl_table_version": "3.1.0",
+  "run_ts": "2026-04-08T17:38:36.271036+00:00",
+  "sheets": {
+    "Adverse events": [
+      {
+        "table_id": "88163c1a17b2494d_t10",
+        "range": "C7:I16"
+      },
+      {
+        "table_id": "88163c1a17b2494d_b10",
+        "range": "C17:I28"
+      }
+    ],
+    "BI calculation_Alberta": [
+      {
+        "table_id": "a6ccdaf330b06725_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "a6ccdaf330b06725_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "10090677d8851370",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "0a8c4f37f9c9f23c_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "0a8c4f37f9c9f23c_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "5f1f297a5df7c953_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "5f1f297a5df7c953_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "eec1912982fee766_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "eec1912982fee766_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "eec1912982fee766_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "8c7ea0b7c24ea4ab_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "8c7ea0b7c24ea4ab_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "e2d8a30be49a61ee_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "e2d8a30be49a61ee_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "e2d8a30be49a61ee_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "3168df94a78e429e",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "52c6e0ddd77e6286_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "52c6e0ddd77e6286_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "c305c74f1d8a9e1b",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "005b8e9b7cdcdb40_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "005b8e9b7cdcdb40_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "0e37933e743f26ee",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "8e829851077a8655_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "8e829851077a8655_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "d3785b75fb89758a",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "009e837c03d15d0f_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "009e837c03d15d0f_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "cd7b546503a32d7d",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "65788a758263e855",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "0c00b5f9151eee1c",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "0f895e90735c2654_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "0f895e90735c2654_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_BC": [
+      {
+        "table_id": "9134150380486f67_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "9134150380486f67_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "9134150380486f67_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "9134150380486f67_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "9134150380486f67_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "9134150380486f67_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "9134150380486f67_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "96b612bf9f6c7f3b",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "86702b279a35f373_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "86702b279a35f373_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "ebe588620df92d23_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "ebe588620df92d23_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "15d334f39e726438_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "15d334f39e726438_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "15d334f39e726438_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "01fc3035ff6da185_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "01fc3035ff6da185_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "a9728cce6815d35f_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "a9728cce6815d35f_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "a9728cce6815d35f_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "6c30a777e5a44efe",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "f8494b3b29f212a5_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "f8494b3b29f212a5_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "ccd459e8aa60b02f",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "d1dc7cded0b7b1a1_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "d1dc7cded0b7b1a1_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "e3715c293809e7db",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "73e89deb5e363c71_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "73e89deb5e363c71_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "c5344794278da323",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "335aec5ea6f11988_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "335aec5ea6f11988_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "cc11ad590a8c3f6e",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "95c14a070cf04b48",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "f45fb7c18b33f2a2",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "191049347dafc752_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "191049347dafc752_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_Manitoba": [
+      {
+        "table_id": "047b65706ebe602f_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "047b65706ebe602f_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "047b65706ebe602f_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "047b65706ebe602f_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "0417afe00ffb14b3",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "f531fa14ef2b267e_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "f531fa14ef2b267e_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "143cd05a3d1269fc_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "143cd05a3d1269fc_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "93b1f6a6224a6854_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "93b1f6a6224a6854_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "93b1f6a6224a6854_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "30a10df1a18fbe85_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "30a10df1a18fbe85_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "95fc1cc71ca9ea3b_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "95fc1cc71ca9ea3b_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "95fc1cc71ca9ea3b_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "0987584400ac2818",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "20da09442419abcb_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "20da09442419abcb_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "0333845dd7913aa9",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "794f83cf7e7f58d9_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "794f83cf7e7f58d9_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "b1056a1a09f9d4f4",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "dca5f3b8a92d3774_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "dca5f3b8a92d3774_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "d3c93fc4618aae98",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "e12cacc441b042b1_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "e12cacc441b042b1_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "a27bbda877e9031f",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "2fb9dc50974ea92b",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "fd89ae5d0e3889a2",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "410cb5d0badb1a22_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "410cb5d0badb1a22_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_NIHB": [
+      {
+        "table_id": "9185d4ca67c74e93_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "9185d4ca67c74e93_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "6163565dcc8b80fb",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "a080aa46462f7ce8_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "a080aa46462f7ce8_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "40aed9675f870f0c_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "40aed9675f870f0c_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "50acd06eaa1583ff_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "50acd06eaa1583ff_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "50acd06eaa1583ff_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "f619f3b2d01e1f88_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "f619f3b2d01e1f88_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "c0bc68f5bbd34ecb_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "c0bc68f5bbd34ecb_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "c0bc68f5bbd34ecb_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "ce4903378769278b",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "404e0d4672809e18_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "404e0d4672809e18_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "281c39620656310c",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "33885f3978249295_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "33885f3978249295_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "4293fa80a6e366c4",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "c2b5c9a49d0de71d_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "c2b5c9a49d0de71d_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "9982e215820f2b9a",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "dd4180a9198875c9_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "dd4180a9198875c9_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "a4d91c17b6adeb5d",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "7bd4bc5c6bf3d5d8",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "b7eda3d73d5db279",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "57a313279ddc945b_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "57a313279ddc945b_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_New Brunswick ": [
+      {
+        "table_id": "83ce6e9c7552ad69_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "83ce6e9c7552ad69_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "65ae9e6b7054c699",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "74a765da4760b457_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "74a765da4760b457_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "9c222331e5771768_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "9c222331e5771768_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "6593e9544396910f_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "6593e9544396910f_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "6593e9544396910f_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "3ee74d233896f700_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "3ee74d233896f700_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "4eb6d9b6320f26f7_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "4eb6d9b6320f26f7_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "4eb6d9b6320f26f7_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "74808c5fec5325a8",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "47d76d756c6e6fa6_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "47d76d756c6e6fa6_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "cc2abeb9942c250f",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "483f0a062a21fdce_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "483f0a062a21fdce_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "0fe52420f67ab74a",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "bb58f1469cda1269_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "bb58f1469cda1269_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "25f786134d3aec52",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "324d74e1e79754db_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "324d74e1e79754db_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "ae71c890bc219584",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "3fd11a99ef800252",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "9d6c8ea5df844407",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "80a5048db5a1ef54_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "80a5048db5a1ef54_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_Newfoundland": [
+      {
+        "table_id": "3f6cc813126aa3ac_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "3f6cc813126aa3ac_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "a15a4863843d5a90",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "24cf484f00af026e_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "24cf484f00af026e_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "82f792cd66f511aa_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "82f792cd66f511aa_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "e3ae2c6e1115dd01_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "e3ae2c6e1115dd01_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "e3ae2c6e1115dd01_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "aff1f1b3d6067dbb_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "aff1f1b3d6067dbb_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "089b667b439c3cbf_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "089b667b439c3cbf_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "089b667b439c3cbf_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "ad1790750943a648",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "dcc926866fba61e7_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "dcc926866fba61e7_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "dbee88cad2a1f619",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "c22eb5062c4bfdf7_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "c22eb5062c4bfdf7_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "a629adf8f3c30c58",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "bd7bd321fa3a2119_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "bd7bd321fa3a2119_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "3822a4e78473d8e8",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "7a85b9b9d11de067_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "7a85b9b9d11de067_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "a603c6d57a4b516d",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "8488f2dd0b26acb8",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "cb1f8a5b0dbf6a75",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "a2d60015cf5fd276_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "a2d60015cf5fd276_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_Nova Scotia": [
+      {
+        "table_id": "dabd127b9f4a1325_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "dabd127b9f4a1325_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "753369e14aa17cfa",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "99a1d7bbbdaf1d4d_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "99a1d7bbbdaf1d4d_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "ee02a390ded9d39e_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "ee02a390ded9d39e_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "93bbf254a6016e3c_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "93bbf254a6016e3c_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "93bbf254a6016e3c_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "44155645e8dc9420_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "44155645e8dc9420_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "1aabae943ecb8d48_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "1aabae943ecb8d48_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "1aabae943ecb8d48_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "afbab88ef86bfc49",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "3e740112053a2e3d_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "3e740112053a2e3d_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "4ec2d93d5b6988bb",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "fac7fb3f8c4476f9_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "fac7fb3f8c4476f9_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "be8fbbb47b5c8c81",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "d922d396a252937b_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "d922d396a252937b_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "373a1034889e09ed",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "ba969244946149c7_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "ba969244946149c7_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "a6054a6971d36094",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "bfa93ef070f64a00",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "8156d92623dae26f",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "b0adfe70e9f94129_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "b0adfe70e9f94129_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_Ontario": [
+      {
+        "table_id": "9162b2803e03f751_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "9162b2803e03f751_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "9162b2803e03f751_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "9162b2803e03f751_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "9162b2803e03f751_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "9162b2803e03f751_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "9162b2803e03f751_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "911557f24ac27d41",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "41ce8fcb44e72602_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "41ce8fcb44e72602_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "4031bf582586dae3_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "4031bf582586dae3_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "b62de0c212f7e4b1_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "b62de0c212f7e4b1_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "b62de0c212f7e4b1_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "6e3f106faf6b0b6e_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "6e3f106faf6b0b6e_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "722f6b29228d89b4_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "722f6b29228d89b4_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "722f6b29228d89b4_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "fcc1a9031a3c94f7",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "058ffb1f90d4ed69_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "058ffb1f90d4ed69_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "38593fb1f08c59ef",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "83d3e76535754981_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "83d3e76535754981_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "aa37f189029b9b2e",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "fb1481cd0832a4e7_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "fb1481cd0832a4e7_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "86b3e9e4a053e459",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "e58ede7e85829a0a_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "e58ede7e85829a0a_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "6e0c636c27c4d44c",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "2df081d925003051",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "3b7076107d5bf11e",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "0cbf580d51120652_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "0cbf580d51120652_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_PEI": [
+      {
+        "table_id": "d0c887e8e934593d_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "d0c887e8e934593d_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "d0c887e8e934593d_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "d0c887e8e934593d_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "d0c887e8e934593d_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "d0c887e8e934593d_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "d0c887e8e934593d_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "d821dacd76b0046f",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "f250ea6713655cd7_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "f250ea6713655cd7_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "16c986e6751263df_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "16c986e6751263df_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "34c7a83525d0e0cc_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "34c7a83525d0e0cc_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "34c7a83525d0e0cc_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "607501ecc255e650_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "607501ecc255e650_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "64a8ee0b0bb4a436_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "64a8ee0b0bb4a436_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "64a8ee0b0bb4a436_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "a0055f2d71689a23",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "9e00733605ba5b34_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "9e00733605ba5b34_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "8469cca9b93fcb5f",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "2e8d537e1d5b63d4_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "2e8d537e1d5b63d4_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "302bcf7d43e80896",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "d6b8af3d146dac21_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "d6b8af3d146dac21_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "d83a68ebd9d88154",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "89d768ee359ee50b_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "89d768ee359ee50b_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "fb033394fd273f2f",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "9902f7bf88a9371b",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "428bc535bd46b145",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "f48427f9d173d092_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "f48427f9d173d092_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_Sask.": [
+      {
+        "table_id": "0d8fc9158b3e45a8_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "0d8fc9158b3e45a8_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "c0ba5754a5b47c1e",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "30ce7d2c694b5abe_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "30ce7d2c694b5abe_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "bb00f860e309c451_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "bb00f860e309c451_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "7312c13b6778bbdf_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "7312c13b6778bbdf_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "7312c13b6778bbdf_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "28c1ceeb0e6f706c_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "28c1ceeb0e6f706c_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "d7f99c3a2fa285ad_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "d7f99c3a2fa285ad_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "d7f99c3a2fa285ad_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "c403c7211c430dd3",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "fd3387f9318dfea1_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "fd3387f9318dfea1_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "ec278ba089188aa5",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "45063698668415d9_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "45063698668415d9_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "e27adb290924de2e",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "93b7c55b781e1c08_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "93b7c55b781e1c08_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "6926ea48039a434e",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "e1bcb5672b08ebaa_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "e1bcb5672b08ebaa_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "2182b1cb4bffff89",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "b889fbc29a79afbc",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "29b776ffcf3d21e7",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "c918b67c6e5c954c_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "c918b67c6e5c954c_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "BI calculation_YK": [
+      {
+        "table_id": "d9b6d93917dfb659_t17_t9_t4_t1",
+        "range": "C3:I4"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_t17_t9_t4_b1",
+        "range": "C5:I7"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_t17_t9_b4",
+        "range": "C8:I11"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_t17_b9",
+        "range": "C12:I20"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_b17_t19_t8",
+        "range": "C21:I29"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_b17_t19_b8",
+        "range": "C30:I39"
+      },
+      {
+        "table_id": "d9b6d93917dfb659_b17_b19",
+        "range": "C40:I42"
+      },
+      {
+        "table_id": "59a753ffa8f388c8",
+        "range": "D47:I52"
+      },
+      {
+        "table_id": "951040d558cdc524_t7",
+        "range": "C55:H61"
+      },
+      {
+        "table_id": "951040d558cdc524_b7",
+        "range": "C62:H69"
+      },
+      {
+        "table_id": "bead34c5fd1cf90b_t12",
+        "range": "C73:H85"
+      },
+      {
+        "table_id": "bead34c5fd1cf90b_b12",
+        "range": "C86:H98"
+      },
+      {
+        "table_id": "6ed810f365004da3_t13",
+        "range": "D103:H115"
+      },
+      {
+        "table_id": "6ed810f365004da3_b13_t2",
+        "range": "D116:H117"
+      },
+      {
+        "table_id": "6ed810f365004da3_b13_b2",
+        "range": "D118:H119"
+      },
+      {
+        "table_id": "d78db4a173e5fb2a_t6",
+        "range": "D124:I129"
+      },
+      {
+        "table_id": "d78db4a173e5fb2a_b6",
+        "range": "D130:I133"
+      },
+      {
+        "table_id": "ee74f02fcc7a2960_t14_t1",
+        "range": "C135:V136"
+      },
+      {
+        "table_id": "ee74f02fcc7a2960_t14_b1",
+        "range": "C137:V148"
+      },
+      {
+        "table_id": "ee74f02fcc7a2960_b14",
+        "range": "C149:V161"
+      },
+      {
+        "table_id": "f5e9549c10350b57",
+        "range": "D165:I168"
+      },
+      {
+        "table_id": "640b37709a362091_t12",
+        "range": "C172:V183"
+      },
+      {
+        "table_id": "640b37709a362091_b12",
+        "range": "C184:V196"
+      },
+      {
+        "table_id": "44bfeb2bd845167c",
+        "range": "D200:I203"
+      },
+      {
+        "table_id": "11ee973a06befe39_t12",
+        "range": "C209:V220"
+      },
+      {
+        "table_id": "11ee973a06befe39_b12",
+        "range": "C221:V233"
+      },
+      {
+        "table_id": "ab84f7a39b6d11cf",
+        "range": "D237:I240"
+      },
+      {
+        "table_id": "741eaf55de19fe37_t12",
+        "range": "C248:V259"
+      },
+      {
+        "table_id": "741eaf55de19fe37_b12",
+        "range": "C260:V272"
+      },
+      {
+        "table_id": "5c2ac500f0f6d573",
+        "range": "D276:I279"
+      },
+      {
+        "table_id": "ca96cc03b0b46048_t6",
+        "range": "C284:V290"
+      },
+      {
+        "table_id": "ca96cc03b0b46048_b6",
+        "range": "C291:V296"
+      },
+      {
+        "table_id": "aa9a9e5d9eb3b27b",
+        "range": "D300:I303"
+      },
+      {
+        "table_id": "86541fb468b92249",
+        "range": "D308:L313"
+      },
+      {
+        "table_id": "af5317440fb529f8",
+        "range": "D318:I321"
+      },
+      {
+        "table_id": "d26d4320d59c63ec_t6",
+        "range": "D328:H333"
+      },
+      {
+        "table_id": "d26d4320d59c63ec_b6",
+        "range": "D334:H335"
+      }
+    ],
+    "Control": [
+      {
+        "table_id": "ac5fb794850fe74e_t24_t8_t1",
+        "range": "A1:G2"
+      },
+      {
+        "table_id": "ac5fb794850fe74e_t24_t8_b1",
+        "range": "A3:G9"
+      },
+      {
+        "table_id": "ac5fb794850fe74e_t24_b8",
+        "range": "A10:G24"
+      },
+      {
+        "table_id": "ac5fb794850fe74e_b24_t6",
+        "range": "A25:G30"
+      },
+      {
+        "table_id": "ac5fb794850fe74e_b24_b6",
+        "range": "A31:G34"
+      },
+      {
+        "table_id": "cbc593ddf9f8815e_t7",
+        "range": "A37:C44"
+      },
+      {
+        "table_id": "cbc593ddf9f8815e_b7",
+        "range": "A45:C52"
+      },
+      {
+        "table_id": "a8f4b3591ebf3c1d",
+        "range": "A57:B59"
+      },
+      {
+        "table_id": "0775f54ff1675a0f_t34_t21",
+        "range": "A64:E84"
+      },
+      {
+        "table_id": "0775f54ff1675a0f_t34_b21_t8",
+        "range": "A85:E92"
+      },
+      {
+        "table_id": "0775f54ff1675a0f_t34_b21_b8",
+        "range": "A93:E98"
+      },
+      {
+        "table_id": "0775f54ff1675a0f_b34",
+        "range": "A99:E105"
+      },
+      {
+        "table_id": "87ffa78459b597ce",
+        "range": "A108:B115"
+      },
+      {
+        "table_id": "defeadb11443787b",
+        "range": "A118:C120"
+      }
+    ],
+    "Cost calculations": [
+      {
+        "table_id": "d4f96ecbb0fe7314_t33",
+        "range": "D5:S37"
+      },
+      {
+        "table_id": "d4f96ecbb0fe7314_b33",
+        "range": "D38:S52"
+      },
+      {
+        "table_id": "6122ef6b4bd54d1f",
+        "range": "D56:P68"
+      },
+      {
+        "table_id": "885e91d1fbad8dc3_t14",
+        "range": "D72:P86"
+      },
+      {
+        "table_id": "885e91d1fbad8dc3_b14",
+        "range": "D87:P99"
+      }
+    ],
+    "Cover": [
+      {
+        "table_id": "a345e30a9e72f004",
+        "range": "B2:C7"
+      }
+    ],
+    "Defaults": [
+      {
+        "table_id": "b21afdaf10344a04_t2",
+        "range": "A1:E3"
+      },
+      {
+        "table_id": "b21afdaf10344a04_b2_t5",
+        "range": "A4:E8"
+      },
+      {
+        "table_id": "b21afdaf10344a04_b2_b5",
+        "range": "A9:E10"
+      },
+      {
+        "table_id": "b227843ae4eee10a_t1",
+        "range": "A12:I13"
+      },
+      {
+        "table_id": "b227843ae4eee10a_b1",
+        "range": "A14:I25"
+      },
+      {
+        "table_id": "2d56143f5dc53d56_t4",
+        "range": "A29:B32"
+      },
+      {
+        "table_id": "2d56143f5dc53d56_b4",
+        "range": "A33:B34"
+      },
+      {
+        "table_id": "a70592118f626908_t4",
+        "range": "G36:H40"
+      },
+      {
+        "table_id": "a70592118f626908_b4_t5",
+        "range": "G41:H45"
+      },
+      {
+        "table_id": "a70592118f626908_b4_b5",
+        "range": "G46:H51"
+      },
+      {
+        "table_id": "95bd291d7b8d1b54_t1",
+        "range": "A54:G55"
+      },
+      {
+        "table_id": "95bd291d7b8d1b54_b1",
+        "range": "A56:G64"
+      }
+    ],
+    "Epidemiology": [
+      {
+        "table_id": "e89c621c8278e44b_t17_t4_t1",
+        "range": "I7:M8"
+      },
+      {
+        "table_id": "e89c621c8278e44b_t17_t4_b1",
+        "range": "I9:M11"
+      },
+      {
+        "table_id": "e89c621c8278e44b_t17_b4_t4",
+        "range": "I12:M16"
+      },
+      {
+        "table_id": "e89c621c8278e44b_t17_b4_b4",
+        "range": "I17:M24"
+      },
+      {
+        "table_id": "e89c621c8278e44b_b17_t19_t8",
+        "range": "I25:M33"
+      },
+      {
+        "table_id": "e89c621c8278e44b_b17_t19_b8",
+        "range": "I34:M44"
+      },
+      {
+        "table_id": "e89c621c8278e44b_b17_b19",
+        "range": "I45:M46"
+      }
+    ],
+    "Ex summary": [
+      {
+        "table_id": "ae84a19626f5e6f5",
+        "range": "C4:D7"
+      },
+      {
+        "table_id": "1b0d12a7ed371533_t6",
+        "range": "C11:G16"
+      },
+      {
+        "table_id": "1b0d12a7ed371533_b6",
+        "range": "C17:G31"
+      },
+      {
+        "table_id": "a09b20265c5c1dcd",
+        "range": "E37:G43"
+      }
+    ],
+    "Introduction": [
+      {
+        "table_id": "d67800da8cd4e348",
+        "range": "D4:Q6"
+      },
+      {
+        "table_id": "9437910f73790651_t2",
+        "range": "D24:R25"
+      },
+      {
+        "table_id": "9437910f73790651_b2",
+        "range": "D26:R34"
+      },
+      {
+        "table_id": "bd482c3062a0926c_t2",
+        "range": "D49:J51"
+      },
+      {
+        "table_id": "bd482c3062a0926c_b2",
+        "range": "D52:J65"
+      },
+      {
+        "table_id": "c6db525c0ed82c3d_t1",
+        "range": "D76:J77"
+      },
+      {
+        "table_id": "c6db525c0ed82c3d_b1",
+        "range": "D78:J91"
+      }
+    ],
+    "Market shares": [
+      {
+        "table_id": "fe16602c7715dbe8_t16_t7",
+        "range": "D5:K12"
+      },
+      {
+        "table_id": "61a17568c26801dd_t7",
+        "range": "Q5:Z12"
+      },
+      {
+        "table_id": "fe16602c7715dbe8_t16_b7",
+        "range": "D13:K20"
+      },
+      {
+        "table_id": "61a17568c26801dd_b7",
+        "range": "Q13:Z20"
+      },
+      {
+        "table_id": "fe16602c7715dbe8_b16_t7",
+        "range": "D21:K28"
+      },
+      {
+        "table_id": "fe16602c7715dbe8_b16_b7",
+        "range": "D29:K35"
+      }
+    ],
+    "OWSA - Input list": [
+      {
+        "table_id": "80c5c0e6426a79a2",
+        "range": "D2:G5"
+      },
+      {
+        "table_id": "10cbce237222d03d",
+        "range": "C37:L51"
+      }
+    ],
+    "Population by province ": [
+      {
+        "table_id": "a9f916bc0a3ee753_t19_t5",
+        "range": "D5:P9"
+      },
+      {
+        "table_id": "a9f916bc0a3ee753_t19_b5",
+        "range": "D10:P23"
+      },
+      {
+        "table_id": "a9f916bc0a3ee753_b19",
+        "range": "D24:P29"
+      }
+    ],
+    "Results ": [
+      {
+        "table_id": "d08c86edd9f56be0_t13_t5_t1",
+        "range": "C3:H4"
+      },
+      {
+        "table_id": "d08c86edd9f56be0_t13_t5_b1",
+        "range": "C5:H8"
+      },
+      {
+        "table_id": "d08c86edd9f56be0_t13_b5",
+        "range": "C9:H15"
+      },
+      {
+        "table_id": "d08c86edd9f56be0_b13",
+        "range": "C16:H23"
+      },
+      {
+        "table_id": "d9bd91ff37ad6208_t12",
+        "range": "C27:H39"
+      },
+      {
+        "table_id": "d9bd91ff37ad6208_b12",
+        "range": "C40:H52"
+      },
+      {
+        "table_id": "a3d0d945390e1851_t13",
+        "range": "D57:H69"
+      },
+      {
+        "table_id": "a3d0d945390e1851_b13_t2",
+        "range": "D70:H71"
+      },
+      {
+        "table_id": "a3d0d945390e1851_b13_b2",
+        "range": "D72:H73"
+      },
+      {
+        "table_id": "cc5ddfa4f0cffb99_t6",
+        "range": "D78:I83"
+      },
+      {
+        "table_id": "cc5ddfa4f0cffb99_b6",
+        "range": "D84:I87"
+      },
+      {
+        "table_id": "59b70c50f67ffe51_t16_t1",
+        "range": "C89:V90"
+      },
+      {
+        "table_id": "59b70c50f67ffe51_t16_b1",
+        "range": "C91:V105"
+      },
+      {
+        "table_id": "59b70c50f67ffe51_b16",
+        "range": "C106:V117"
+      },
+      {
+        "table_id": "232e43ee99d9f687",
+        "range": "D121:I124"
+      },
+      {
+        "table_id": "37b18312b8780ed3_t14",
+        "range": "C128:V141"
+      },
+      {
+        "table_id": "37b18312b8780ed3_b14",
+        "range": "C142:V154"
+      },
+      {
+        "table_id": "9e2ac469f3ca4fc9",
+        "range": "D158:I161"
+      },
+      {
+        "table_id": "d866435a1bf0e944_t14",
+        "range": "C167:V180"
+      },
+      {
+        "table_id": "d866435a1bf0e944_b14",
+        "range": "C181:V193"
+      },
+      {
+        "table_id": "1154ad8afd1bf45b",
+        "range": "D197:I200"
+      },
+      {
+        "table_id": "881167c1f5985fe3_t14",
+        "range": "C208:V221"
+      },
+      {
+        "table_id": "881167c1f5985fe3_b14",
+        "range": "C222:V234"
+      },
+      {
+        "table_id": "5a52a1531632c34c",
+        "range": "D238:I241"
+      },
+      {
+        "table_id": "3cae79cfe24d1a66_t8",
+        "range": "C246:V254"
+      },
+      {
+        "table_id": "3cae79cfe24d1a66_b8",
+        "range": "C255:V260"
+      },
+      {
+        "table_id": "50de82afb8240295",
+        "range": "D264:I267"
+      },
+      {
+        "table_id": "0377597e02803162",
+        "range": "D272:L277"
+      },
+      {
+        "table_id": "b2946e12aad4970f",
+        "range": "D282:I285"
+      },
+      {
+        "table_id": "bef2dfb9c7d2b697_t7",
+        "range": "D292:H298"
+      },
+      {
+        "table_id": "bef2dfb9c7d2b697_b7",
+        "range": "D299:H300"
+      }
+    ],
+    "Subsequent tx": [
+      {
+        "table_id": "885c4707ba8c9363_t8",
+        "range": "C7:U15"
+      },
+      {
+        "table_id": "885c4707ba8c9363_b8",
+        "range": "C16:U38"
+      },
+      {
+        "table_id": "530c698ab2e34097",
+        "range": "C44:D47"
+      },
+      {
+        "table_id": "422012c87f0daeec_t15",
+        "range": "C50:AC65"
+      },
+      {
+        "table_id": "422012c87f0daeec_b15",
+        "range": "C66:AC92"
+      }
+    ],
+    "Time on treatment": [
+      {
+        "table_id": "c35ca62247b25515_t1",
+        "range": "C5:H6"
+      },
+      {
+        "table_id": "c35ca62247b25515_b1",
+        "range": "C7:H12"
+      },
+      {
+        "table_id": "09dcf011d9b34a37_t1",
+        "range": "C17:H18"
+      },
+      {
+        "table_id": "09dcf011d9b34a37_b1",
+        "range": "C19:H23"
+      }
+    ],
+    "Treatment costs": [
+      {
+        "table_id": "b57c564ff564a5a4_t9",
+        "range": "D6:O14"
+      },
+      {
+        "table_id": "b57c564ff564a5a4_b9",
+        "range": "D15:O24"
+      },
+      {
+        "table_id": "fb4df83b50ae254c_t1",
+        "range": "D28:G29"
+      },
+      {
+        "table_id": "fb4df83b50ae254c_b1",
+        "range": "D30:G31"
+      }
+    ],
+    "Treatment doses": [
+      {
+        "table_id": "94f6909ecd7ce31f_t16",
+        "range": "D4:V20"
+      },
+      {
+        "table_id": "94f6909ecd7ce31f_b16_t10",
+        "range": "D21:V31"
+      },
+      {
+        "table_id": "94f6909ecd7ce31f_b16_b10",
+        "range": "D32:V53"
+      }
+    ]
+  }
+}

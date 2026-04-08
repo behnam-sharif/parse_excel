@@ -9,9 +9,9 @@ v3.1: Main-path visual fallback and block-scan removed.
 
 Public API
 ----------
-run_xl_table(workbook_path, parse_dir, out_dir, cfg) → StructuralKG
+run_xl_table(workbook_path, parse_dir, out_dir, cfg) → StructuralTables
 finalize(bbox, reason, finalized_tables, decision_logger, last_split_qc) → None
-write_outputs(out_dir, kg, decision_logger, cfg) → None
+write_outputs(out_dir, struct_tables, decision_logger, cfg) → None
 
 Internal
 --------
@@ -34,9 +34,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .coords import bbox_to_excel_range
-from .table_builder import build_structural_kg
+from .table_builder import build_structural_tables
 from .loader import attach_cuts, load_candidates, load_cuts, match_cuts_to_candidates
 from .logger import DecisionLogger
 from .metrics import compute_all_metrics
@@ -46,7 +46,7 @@ from .schemas import (
     BBoxInput,
     QCSummary,
     SplitProposal,
-    StructuralKG,
+    StructuralTables,
     TableObject,
 )
 from .sheet_accessor import SheetAccessor, WorkbookLoadError
@@ -153,7 +153,7 @@ def _run_structural_pass(
     size_norm_denom: int,
     sep_norm_denom: float,
     density_var_norm_denom: float,
-    cfg: KGConfig,
+    cfg: XlTableConfig,
     decision_logger: DecisionLogger,
     split_qc_map: Dict[str, QCSummary],
 ) -> None:
@@ -247,15 +247,15 @@ def run_xl_table(
     workbook_path: str,
     parse_dir: str,
     out_dir: str,
-    cfg: KGConfig,
-) -> StructuralKG:
+    cfg: XlTableConfig,
+) -> StructuralTables:
     """
     Main xl_table orchestrator (v3.1).
 
     Pass 1: Structural splitting heap (no visual, no block-scan).
     Pass 2 (optional): Confirmation layer for ambiguous decisions (stubs in Phase 1).
 
-    Returns a StructuralKG; also writes output files to out_dir.
+    Returns StructuralTables; also writes output files to out_dir.
     """
     t0 = time.time()
     os.makedirs(out_dir, exist_ok=True)
@@ -270,13 +270,16 @@ def run_xl_table(
         raise
 
     # -----------------------------------------------------------------------
-    # Load inputs
+    # Load inputs (xl_parse copies candidate_rows.jsonl + cut_scores.jsonl to parse root)
     # -----------------------------------------------------------------------
     cand_path = os.path.join(parse_dir, "candidate_rows.jsonl")
-    if not os.path.exists(cand_path):
+    if not os.path.isfile(cand_path):
         decision_logger.close()
         sheet_accessor.close()
-        raise FileNotFoundError(f"candidate_rows.jsonl not found: {cand_path!r}")
+        raise FileNotFoundError(
+            f"candidate_rows.jsonl not found: {cand_path!r} — run xl_parse first "
+            "(artifacts must exist in the parse output directory)."
+        )
 
     candidates = load_candidates(cand_path)
 
@@ -379,7 +382,7 @@ def run_xl_table(
     sheet_accessor.close()
 
     # -----------------------------------------------------------------------
-    # Build per-sheet stats dict for kg_builder
+    # Build per-sheet stats dict for table_builder
     # -----------------------------------------------------------------------
     decision_stats = decision_logger.get_stats()
     per_sheet_stats: Dict[str, Dict[str, int]] = {
@@ -388,10 +391,10 @@ def run_xl_table(
     }
 
     # -----------------------------------------------------------------------
-    # Assemble KG — v3.1: xl_image_available=False, visual_calls=0
+    # Assemble structural tables — v3.1: xl_image_available=False, visual_calls=0
     # -----------------------------------------------------------------------
     elapsed = time.time() - t0
-    kg = build_structural_kg(
+    struct_tables = build_structural_tables(
         workbook_path=workbook_path,
         workbook_id=workbook_id,
         finalized_tables=finalized_tables,
@@ -406,9 +409,9 @@ def run_xl_table(
         visual_calls_used=0,
     )
 
-    write_outputs(out_dir, kg, decision_logger, cfg)
+    write_outputs(out_dir, struct_tables, decision_logger, cfg)
     decision_logger.close()
-    return kg
+    return struct_tables
 
 
 # ---------------------------------------------------------------------------
@@ -429,16 +432,17 @@ def _to_serializable(obj: Any) -> Any:
 
 def write_outputs(
     out_dir: str,
-    kg: StructuralKG,
+    struct_tables: StructuralTables,
     decision_logger: DecisionLogger,
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> None:
     """
     Serialize xl_table outputs to out_dir.
 
     Files written:
-    - structural_kg.json
+    - structural_tables.json
     - tables_per_sheet.json
+    - accepted_tables.json / accepted_tables.txt — finalized tables only, Excel ranges per sheet
     - run_summary.json
     - qc_report.json
 
@@ -451,20 +455,54 @@ def write_outputs(
         with open(path, "w", encoding="utf-8") as f:
             json.dump(_to_serializable(data), f, indent=2, default=str)
 
-    _write_json("structural_kg.json", kg)
+    _write_json("structural_tables.json", struct_tables)
 
     # tables_per_sheet.json — {sheet_name: [TableObject dicts]}
     tables_by_sheet = {
         tree.sheet_name: [_to_serializable(t) for t in tree.tables]
-        for tree in kg.sheets
+        for tree in struct_tables.sheets
     }
     _write_json("tables_per_sheet.json", tables_by_sheet)
 
-    _write_json("run_summary.json", kg.run_summary)
+    # Accepted finalized tables only — Excel ranges per sheet (no split/decision history)
+    sheets_accepted: Dict[str, List[Dict[str, str]]] = {}
+    lines_txt: List[str] = [
+        f"workbook: {struct_tables.workbook_path}",
+        f"run_ts: {struct_tables.run_ts}",
+        "",
+    ]
+    for tree in sorted(struct_tables.sheets, key=lambda tr: tr.sheet_name):
+        rows = [
+            {"table_id": t.table_id, "range": t.bbox_excel}
+            for t in sorted(tree.tables, key=lambda x: (x.r_top, x.c_left, x.r_bot, x.c_right))
+        ]
+        sheets_accepted[tree.sheet_name] = rows
+        lines_txt.append(f"Sheet: {tree.sheet_name}")
+        if not rows:
+            lines_txt.append("  (no tables)")
+        else:
+            for entry in rows:
+                lines_txt.append(f"  {entry['range']}")
+        lines_txt.append("")
+    _write_json(
+        "accepted_tables.json",
+        {
+            "workbook_path": struct_tables.workbook_path,
+            "workbook_id": struct_tables.workbook_id,
+            "xl_table_version": struct_tables.xl_table_version,
+            "run_ts": struct_tables.run_ts,
+            "sheets": sheets_accepted,
+        },
+    )
+    accepted_txt_path = os.path.join(out_dir, "accepted_tables.txt")
+    with open(accepted_txt_path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines_txt).rstrip() + "\n")
+
+    _write_json("run_summary.json", struct_tables.run_summary)
 
     # qc_report.json — compact per-table QC summary
     qc_entries = []
-    for tree in kg.sheets:
+    for tree in struct_tables.sheets:
         for t in tree.tables:
             qc_entries.append({
                 "table_id":           t.table_id,

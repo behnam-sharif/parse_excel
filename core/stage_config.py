@@ -61,9 +61,9 @@ def parse_config_from_mapping(d: Mapping[str, Any]):
     return Config(**data)
 
 
-def kg_config_from_mapping(d: Mapping[str, Any]):
+def xl_table_config_from_mapping(d: Mapping[str, Any]):
     from core.visual_types import VisualSplitConfig
-    from xl_table.config import KGConfig
+    from xl_table.config import XlTableConfig
 
     raw = dict(d)
     visual_raw = raw.pop("visual", None)
@@ -75,9 +75,9 @@ def kg_config_from_mapping(d: Mapping[str, Any]):
     visual = VisualSplitConfig(**vdata)
 
     data = _require_exact_keys(
-        KGConfig, raw, "stages.yaml xl_table", exclude=frozenset({"visual"})
+        XlTableConfig, raw, "stages.yaml xl_table", exclude=frozenset({"visual"})
     )
-    return KGConfig(visual=visual, **data)
+    return XlTableConfig(visual=visual, **data)
 
 
 def xl_init_config_from_pipeline(
@@ -94,11 +94,11 @@ def parse_config_from_pipeline(
     return parse_config_from_mapping(merge_stage_dict(pc.xl_parse, overrides))
 
 
-def kg_config_from_pipeline(
+def xl_table_config_from_pipeline(
     pc: PipelineConfig,
     overrides: Optional[Dict[str, Any]] = None,
 ):
-    return kg_config_from_mapping(merge_stage_dict(pc.xl_table, overrides))
+    return xl_table_config_from_mapping(merge_stage_dict(pc.xl_table, overrides))
 
 
 def xl_image_config_from_mapping(d: Mapping[str, Any]):

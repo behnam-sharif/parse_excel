@@ -8,8 +8,8 @@ xl_init:
   llm_max_tokens: 1024
   cell_limit: 50
   interactive: true
-  skip_llm_triage: false
-  approve_all_sheets: false
+  skip_llm_triage: true
+  approve_all_sheets: true
 
 xl_parse:
   # Block generation
@@ -61,7 +61,7 @@ xl_parse:
 
   # Export flags
   export_training_data: false
-  export_cut_candidates: false
+  export_cut_candidates: true
 
   # QC gate
   qc_min_height: 2

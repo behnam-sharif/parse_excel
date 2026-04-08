@@ -15,5 +15,5 @@ class XlInitConfig:
     llm_max_tokens: int = 1024
     cell_limit: int = 50                # Max cells per sheet sent to LLM
     interactive: bool = True            # Enable user review step
-    skip_llm_triage: bool = False       # Skip LLM classification (pipeline mode)
-    approve_all_sheets: bool = False    # Auto-approve all sheets (pipeline mode)
+    skip_llm_triage: bool = True        # Skip OpenAI (sheet descriptions + triage)
+    approve_all_sheets: bool = True     # Auto-approve all sheets (pipeline mode)

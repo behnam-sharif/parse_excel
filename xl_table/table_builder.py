@@ -1,12 +1,12 @@
 """
 xl_table/table_builder.py
 
-Assemble SheetObjectTree and StructuralKG from finalized TableObjects.
+Assemble SheetObjectTree and StructuralTables from finalized TableObjects.
 
 Public API
 ----------
 build_sheet_object_tree()  — sort tables by position, compute per-sheet counts
-build_structural_kg()      — group by sheet → SheetObjectTree; assemble StructuralKG
+build_structural_tables()  — group by sheet → SheetObjectTree; assemble StructuralTables
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from .schemas import (
     BBoxInput,
     RunSummary,
     SheetObjectTree,
-    StructuralKG,
+    StructuralTables,
     TableObject,
 )
 
@@ -55,26 +55,26 @@ def build_sheet_object_tree(
 
 
 # ---------------------------------------------------------------------------
-# build_structural_kg
+# build_structural_tables
 # ---------------------------------------------------------------------------
 
-def build_structural_kg(
+def build_structural_tables(
     workbook_path: str,
     workbook_id: str,
     finalized_tables: List[TableObject],
     skipped_bboxes: List[BBoxInput],
     decision_stats: Dict[str, int],
     elapsed_seconds: float,
-    cfg: Any,                            # KGConfig — Any to avoid circular import in tests
+    cfg: Any,                            # XlTableConfig — Any to avoid circular import in tests
     xl_image_available: bool,
     cut_scores_available: bool,
     n_input_bboxes: int = 0,
     per_sheet_stats: Optional[Dict[str, Dict[str, int]]] = None,
     visual_calls_used: int = 0,      # v1.2 Change 10
-) -> StructuralKG:
+) -> StructuralTables:
     """
     Group finalized_tables by sheet → one SheetObjectTree per sheet.
-    Build RunSummary. Assemble StructuralKG.
+    Build RunSummary. Assemble StructuralTables.
 
     Parameters
     ----------
@@ -135,7 +135,7 @@ def build_structural_kg(
         visual_calls_budget=getattr(cfg, "max_visual_calls_per_run", 0),  # v1.2 Change 10
     )
 
-    return StructuralKG(
+    return StructuralTables(
         workbook_path=workbook_path,
         workbook_id=workbook_id,
         xl_table_version=XL_TABLE_VERSION,

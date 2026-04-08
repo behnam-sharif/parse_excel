@@ -10,10 +10,11 @@ __pycache__/
 dist/
 build/
 
-# Virtual environments
+# Virtual environments (this repo: py -3 -m venv .venv)
 .venv/
 venv/
 env/
+ENV/
 
 # ----------------------------
 # IDE / OS

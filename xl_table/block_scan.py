@@ -16,7 +16,7 @@ from __future__ import annotations
 import math
 from typing import List, Tuple
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput, SplitProposal
 
 
@@ -62,7 +62,7 @@ def propose_splits_block_scan(
     bbox: BBoxInput,
     row_density: List[float],
     row_type_dist: List[Tuple[float, float, float, float]],
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> List[SplitProposal]:
     """
     Generate split proposals by scanning block-level type-pattern deltas.

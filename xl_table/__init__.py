@@ -1,27 +1,24 @@
 """
-xl_table --- Stage 2: Structural table detection and assembly.
-
-This stage is structural table detection over parse artifacts, not a general knowledge graph.
-It is a structural table detection and assembly module over parse candidates.
+xl_table — Structural table detection and assembly over xl_parse candidates.
 
 Public API
 ----------
-run_table(parse_output_path, output_path, config=None) -> StructuralKG
+run_table(parse_output_path, output_path, config=None) -> StructuralTables
 """
 
-from .schemas import StructuralKG
+from .schemas import StructuralTables
 
 
-def run_table(parse_output_path: str, output_path: str, config=None) -> StructuralKG:
+def run_table(parse_output_path: str, output_path: str, config=None) -> StructuralTables:
     """Public entry point for the xl_table stage.
 
     Parameters
     ----------
     parse_output_path : str
-        Directory containing xl_parse outputs (candidate_rows.jsonl, cut_scores.jsonl).
+        Directory containing xl_parse outputs (``candidate_rows.jsonl``, ``cut_scores.jsonl`` at root).
     output_path : str
         Directory where table artifacts will be written.
-    config : KGConfig, optional
+    config : XlTableConfig, optional
         Stage configuration. Uses defaults if not provided.
     """
     import os
@@ -51,5 +48,5 @@ def run_table(parse_output_path: str, output_path: str, config=None) -> Structur
     os.makedirs(output_path, exist_ok=True)
 
     from .agent import run_xl_table
-    kg = run_xl_table(workbook_path, parse_output_path, output_path, config)
-    return kg
+    struct_tables = run_xl_table(workbook_path, parse_output_path, output_path, config)
+    return struct_tables

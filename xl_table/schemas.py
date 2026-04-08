@@ -237,7 +237,7 @@ class QCSummary:
 
 @dataclass
 class TableObject:
-    """A finalized table in the Structural KG."""
+    """A finalized table produced by xl_table."""
     table_id: str
     candidate_id: str
     sheet_name: str
@@ -305,18 +305,18 @@ class RunSummary:
     per_sheet: Dict[str, Dict[str, int]]
 
     # v1.2 — Global visual budget tracking (Change 10)
-    # Defaulted so existing build_structural_kg() callers still work until Phase 7 updates them.
+    # Defaulted so existing build_structural_tables() callers still work until Phase 7 updates them.
     visual_calls_used: int = 0    # total get_visual_split_candidates() calls this run
     visual_calls_budget: int = 0  # cfg.max_visual_calls_per_run
 
 
 # ---------------------------------------------------------------------------
-# 4.12  StructuralKG
+# 4.12  StructuralTables
 # ---------------------------------------------------------------------------
 
 @dataclass
-class StructuralKG:
-    """Top-level output of the xl_table pipeline run."""
+class StructuralTables:
+    """Top-level output of the xl_table pipeline run (all sheets + run summary)."""
     workbook_path: str
     workbook_id: str
     xl_table_version: str    # e.g. "3.1.0"

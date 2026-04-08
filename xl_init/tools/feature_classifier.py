@@ -1,15 +1,13 @@
 # === feature_classifier.py ===
 
-import os
 import json
-from pathlib import Path
+import os
+
 from openai import OpenAI
-from dotenv import load_dotenv
 from openpyxl.utils import range_boundaries
 
-_ROOT = Path(__file__).resolve().parent.parent.parent
-load_dotenv(dotenv_path=str(_ROOT / ".env"))
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+from core.env_bootstrap import load_project_dotenv
+
 
 def format_text_prompt(feature_data: dict, content: dict) -> str:
     """
@@ -36,10 +34,11 @@ def format_text_prompt(feature_data: dict, content: dict) -> str:
 
     user_prompt = {
         "block_info": feature_data,
-        "content": content
+        "content": content,
     }
 
     return f"{system_prompt}\n\nInput Data:\n{json.dumps(user_prompt, indent=2)}"
+
 
 def classify_feature_llm(feature_data: dict, content: dict) -> str:
     """
@@ -53,6 +52,15 @@ def classify_feature_llm(feature_data: dict, content: dict) -> str:
     Returns:
         str: GPT's description of the feature with structured feature ranges
     """
+    load_project_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "OPENAI_API_KEY is not set. Add it to .env in this repo, or to a sibling "
+            "xlgen_v2/.env, or keep xl_init.skip_llm_triage=true in config/stages.yaml."
+        )
+    client = OpenAI(api_key=api_key)
+
     # Get the target range
     target_range = feature_data.get("box")
     if not target_range:
@@ -63,15 +71,17 @@ def classify_feature_llm(feature_data: dict, content: dict) -> str:
 
     # Filter cell data to only include cells within the target range
     min_col, min_row, max_col, max_row = range_boundaries(target_range)
-    print(f"Range boundaries: min_col={min_col}, min_row={min_row}, max_col={max_col}, max_row={max_row}")
+    print(
+        f"Range boundaries: min_col={min_col}, min_row={min_row}, max_col={max_col}, max_row={max_row}"
+    )
 
     filtered_cell_data = []
     original_cell_count = len(content.get("cell_data", []))
 
     for cell in content.get("cell_data", []):
         coord = cell["cell"]
-        col = ord(coord[0]) - ord('A') + 1
-        row = int(''.join(filter(str.isdigit, coord)))
+        col = ord(coord[0]) - ord("A") + 1
+        row = int("".join(filter(str.isdigit, coord)))
 
         if min_col <= col <= max_col and min_row <= row <= max_row:
             filtered_cell_data.append(cell)
@@ -100,7 +110,7 @@ def classify_feature_llm(feature_data: dict, content: dict) -> str:
                 current_feature = {
                     "name": value,
                     "start_cell": cell["cell"],
-                    "end_cell": None
+                    "end_cell": None,
                 }
 
     # Add last feature if exists
@@ -109,10 +119,12 @@ def classify_feature_llm(feature_data: dict, content: dict) -> str:
         features.append(current_feature)
 
     # Format the prompt with feature information
-    feature_info = "\n".join([
-        f"{i+1}. {feature['name']} ({feature['start_cell']}:{feature['end_cell']})"
-        for i, feature in enumerate(features)
-    ])
+    feature_info = "\n".join(
+        [
+            f"{i + 1}. {feature['name']} ({feature['start_cell']}:{feature['end_cell']})"
+            for i, feature in enumerate(features)
+        ]
+    )
 
     prompt = f"""
     Analyze the following Excel sheet data and provide a detailed description.
@@ -144,14 +156,8 @@ def classify_feature_llm(feature_data: dict, content: dict) -> str:
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
-        max_tokens=2000
+        max_tokens=2000,
     )
 
-    usage = response.usage
-    token_info = {
-        "prompt_tokens": usage.prompt_tokens if usage else 0,
-        "completion_tokens": usage.completion_tokens if usage else 0,
-        "total_tokens": usage.total_tokens if usage else 0,
-    }
-
-    return response.choices[0].message.content, token_info
+    text = response.choices[0].message.content
+    return text if text is not None else ""

@@ -4,8 +4,9 @@ pipeline.py — Internal stage orchestration for the xl_init pipeline.
 Handles:
   - Stage 1: workbook validation
   - Stage 2: VBA cleaning
-  - Stage 3: sheet summary generation
-  - Stage 5: interactive user review
+  - Stage 3+: sheet summaries / LLM triage / interactive review — **not used** by
+    :func:`xl_init.api.run_xl_init` (kept below commented or for reference only).
+  - Metadata extraction, approved_sheets.json helpers for the minimal pipeline.
 """
 
 from __future__ import annotations
@@ -18,7 +19,6 @@ from dataclasses import asdict
 from typing import Dict, List
 
 from .types_data import SheetSummary, SheetClassification
-from .config import XlInitConfig
 
 logger = logging.getLogger(__name__)
 
@@ -76,11 +76,59 @@ def _run_vba_cleaning(workbook_path: str, out_dir: str) -> str:
     return cleaned_dst
 
 
-# -- Stage 3: Sheet Summaries --
+# ---------------------------------------------------------------------------
+# Minimal xl_init path (used by api.run_xl_init): VBA clean + metadata + approve all sheets
+# ---------------------------------------------------------------------------
+
+
+def _list_data_sheet_names(workbook_path: str) -> List[str]:
+    """Return workbook sheet names excluding ``Shape_Info``."""
+    from openpyxl import load_workbook
+
+    wb = load_workbook(workbook_path, read_only=True)
+    try:
+        return [n for n in wb.sheetnames if n != "Shape_Info"]
+    finally:
+        wb.close()
+
+
+def _write_minimal_classification_and_approved(out_dir: str, sheet_names: List[str]) -> tuple[str, List[str]]:
+    """Stub ``sheet_classification.jsonl`` and ``approved_sheets.json`` (all data sheets)."""
+    classification_path = os.path.join(out_dir, "sheet_classification.jsonl")
+    approved_path = os.path.join(out_dir, "approved_sheets.json")
+    stub = {
+        "sheet_name": "",
+        "class_label": "unknown",
+        "confidence": 0.0,
+        "rationale_short": "xl_init minimal pipeline (no LLM / summaries)",
+    }
+    with open(classification_path, "w", encoding="utf-8") as f:
+        for sn in sheet_names:
+            row = dict(stub)
+            row["sheet_name"] = sn
+            f.write(json.dumps(row) + "\n")
+    payload = {
+        "approved_sheets": sheet_names,
+        "removed_sheets": [],
+        "added_sheets": [],
+        "source": "all_data_sheets",
+    }
+    with open(approved_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+    logger.info(
+        "Wrote %s (%d sheets) and stub sheet_classification.jsonl",
+        os.path.basename(approved_path),
+        len(sheet_names),
+    )
+    return classification_path, sheet_names
+
+
+# -- Stage 3: Sheet Summaries (legacy — not invoked by run_xl_init) --
 
 def _build_sheet_summaries(
     workbook_path: str,
     cell_limit: int = 50,
+    use_llm_descriptions: bool = False,
 ) -> Dict[str, SheetSummary]:
     """
     For each sheet (except Shape_Info):
@@ -88,7 +136,7 @@ def _build_sheet_summaries(
       2. Build cell matrix via build_cell_matrix(df)
       3. Get bounding box via get_bounding_cell_range(matrix)
       4. Call parse_range() with ["cell_data"] to get first N cells
-      5. Call classify_feature_llm() for GPT description
+      5. If use_llm_descriptions, call classify_feature_llm(); else a placeholder
     Return dict keyed by sheet_name.
     """
     import pandas as pd
@@ -96,7 +144,6 @@ def _build_sheet_summaries(
     from .tools.cell_matrix_builder import build_cell_matrix
     from .tools.cell_bounding_box import get_bounding_cell_range
     from .excel_parser import parse_range
-    from .tools.feature_classifier import classify_feature_llm
 
     logger.info("Stage 3: Building sheet summaries for %s", workbook_path)
 
@@ -123,10 +170,14 @@ def _build_sheet_summaries(
             rows_meta = parsed.get("rows", {})
             cols_meta = parsed.get("cols", {})
 
-            # Get GPT description via feature_classifier
-            feature_data = {"box": bbox_range}
-            content = {"cell_data": cell_sample}
-            description = classify_feature_llm(feature_data, content)
+            if use_llm_descriptions:
+                from .tools.feature_classifier import classify_feature_llm
+
+                feature_data = {"box": bbox_range}
+                content = {"cell_data": cell_sample}
+                description = classify_feature_llm(feature_data, content)
+            else:
+                description = "(LLM sheet descriptions disabled; set skip_llm_triage=false to enable)"
 
             summaries[sn] = SheetSummary(
                 sheet_name=sn,

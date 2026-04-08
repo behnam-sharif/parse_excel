@@ -142,7 +142,7 @@ class Config:
 
     # Export flags (off by default)
     export_training_data: bool = False
-    export_cut_candidates: bool = False
+    export_cut_candidates: bool = True
 
     # --- QC gate ---
     qc_min_height: int = 2

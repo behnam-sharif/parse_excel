@@ -1,7 +1,8 @@
 """
 xl_table/loader.py
 
-Load candidate_rows.jsonl and cut_scores.jsonl; match cuts to candidates.
+Load candidate_rows.jsonl and cut_scores.jsonl;
+match cuts to candidates.
 
 Public API
 ----------
@@ -109,14 +110,15 @@ def _parse_cut_row(raw: dict) -> RawCutEntry:
 
 def load_candidates(jsonl_path: str) -> List[BBoxInput]:
     """
-    Load candidate_rows.jsonl. Normalize Format A and Format B to r_top/c_left/r_bot/c_right.
+    Load xl_parse ``candidate_rows.jsonl``.
+    Normalize Format A and Format B to r_top/c_left/r_bot/c_right.
     Does NOT skip small candidates — that is done in agent.py pre-validation.
     Does NOT attach matched_cuts — call attach_cuts() separately.
 
     Raises FileNotFoundError if the file does not exist.
     """
     if not os.path.isfile(jsonl_path):
-        raise FileNotFoundError(f"candidate_rows.jsonl not found: {jsonl_path!r}")
+        raise FileNotFoundError(f"candidates JSONL not found: {jsonl_path!r}")
 
     candidates: List[BBoxInput] = []
     with open(jsonl_path, "r", encoding="utf-8") as fh:

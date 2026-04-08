@@ -48,7 +48,7 @@ def main(
     Parameters
     ----------
     workbook_path : path to cleaned_workbook.xlsx (xl_init output)
-    parse_dir     : directory containing candidate_rows.jsonl (xl_parse output)
+    parse_dir     : xl_parse output directory (``candidate_rows.jsonl`` at root)
     out_dir       : directory where xl_table writes its outputs
     config_path   : optional path to a YAML config file
 
@@ -66,8 +66,8 @@ def main(
             "xl_table starting | workbook=%s parse_dir=%s out_dir=%s",
             workbook_path, parse_dir, out_dir,
         )
-        kg = run_xl_table(workbook_path, parse_dir, out_dir, cfg)
-        rs = kg.run_summary
+        struct_tables = run_xl_table(workbook_path, parse_dir, out_dir, cfg)
+        rs = struct_tables.run_summary
         _log.info(
             "xl_table finished | "
             "input_bboxes=%d  skipped=%d  final_tables=%d  "
@@ -115,7 +115,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--parse_dir", required=True,
         metavar="DIR",
-        help="Directory containing candidate_rows.jsonl (xl_parse output).",
+        help="xl_parse output directory (candidate_rows.jsonl and cut_scores.jsonl at root).",
     )
     p.add_argument(
         "--out_dir", required=True,

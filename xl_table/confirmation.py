@@ -18,7 +18,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput, MetricsResult, QCResult, SplitProposal
 
 _log = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ class ConfirmationResult:
 
 def detect_ambiguous(
     decisions: List[Tuple[BBoxInput, SplitProposal, QCResult, MetricsResult]],
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> List[AmbiguousDecision]:
     """
     Scan Pass 1 decisions for the 4 trigger situations.
@@ -134,7 +134,7 @@ def build_context_payload(
 def confirm_single(
     ambiguous: AmbiguousDecision,
     context: Dict[str, Any],
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> ConfirmationResult:
     """
     Call Other Tools for a single ambiguous decision.
@@ -154,7 +154,7 @@ def confirm_single(
 def confirm_batch(
     ambiguous_group: List[AmbiguousDecision],
     sheet_accessor: Any,
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> List[ConfirmationResult]:
     """
     Batch confirm for consistency within a bbox.
@@ -173,7 +173,7 @@ def confirm_batch(
 def run_confirmation_pass(
     decision_logger: Any,
     sheet_accessor: Any,
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> None:
     """
     Run the confirmation pass after Pass 1 structural.

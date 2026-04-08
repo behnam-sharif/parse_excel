@@ -20,8 +20,8 @@ In xlgen_v2, the package **`xl_kg`** was **not** a general-purpose knowledge gra
 
 ## Backward compatibility
 
-- Older artifact names (e.g. `candidate_rows.jsonl` vs `final_candidates.jsonl`) may still be read where the code supported both; standardize new runs on `docs/architecture.md`.
-- JSON field rename: `xl_kg_version` → `xl_table_version` on `StructuralKG`.
+- xl_parse writes per-run artifacts under a timestamped subfolder and **copies** ``candidate_rows.jsonl`` and ``cut_scores.jsonl`` to the parse output root for xl_table (canonical on-disk name: ``candidate_rows.jsonl`` only).
+- JSON field rename: `xl_kg_version` → `xl_table_version` on serialized xl_table output (`StructuralTables`).
 
 ## Manual review
 

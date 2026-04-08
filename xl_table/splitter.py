@@ -14,7 +14,7 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput, MatchedCut, SplitProposal
 
 _log = logging.getLogger(__name__)
@@ -80,7 +80,7 @@ def _dedup_within_1_row(candidates: List[_RawCandidate]) -> List[_RawCandidate]:
 
 def _compute_adaptive_scan_threshold(
     row_density: List[float],
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> Tuple[float, int]:
     """
     Compute per-bbox adaptive scan threshold from row densities.
@@ -104,7 +104,7 @@ def _compute_adaptive_scan_threshold(
 def propose_splits_structural(
     bbox: BBoxInput,
     row_density: List[float],
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> List[SplitProposal]:
     """
     Generate ranked structural split proposals for a BBoxInput.

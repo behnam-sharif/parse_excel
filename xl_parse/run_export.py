@@ -2,8 +2,11 @@
 run_export.py — File I/O writer for run directory output.
 
 Writes the complete set of output files expected by downstream stages:
-  final_candidates.jsonl, features.csv, qc_events.jsonl,
+  candidate_rows.jsonl, features.csv, qc_events.jsonl,
   cut_scores.jsonl, and run_meta.json.
+
+After each run, ``candidate_rows.jsonl`` and ``cut_scores.jsonl`` are copied to
+``base_dir`` (parse output root) so xl_table reads flat paths without subfolder logic.
 """
 
 from __future__ import annotations
@@ -11,6 +14,7 @@ import csv
 import json
 import logging
 import os
+import shutil
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
@@ -106,8 +110,8 @@ def export_run(
             export_final_candidate(fc, workbook_id=workbook_id, rank=rank)
         )
 
-    # 4. Write final_candidates.jsonl
-    _write_jsonl(os.path.join(output_dir, "final_candidates.jsonl"), all_final_rows)
+    # 4. Write candidate_rows.jsonl
+    _write_jsonl(os.path.join(output_dir, "candidate_rows.jsonl"), all_final_rows)
 
     # 5. Write features.csv
     _write_csv(os.path.join(output_dir, "features.csv"), all_training_rows)
@@ -117,6 +121,15 @@ def export_run(
 
     # 7. Write cut_scores.jsonl
     _write_jsonl(os.path.join(output_dir, "cut_scores.jsonl"), all_cut_rows)
+
+    # 7b. Copy latest run files to parse output root (downstream expects flat paths)
+    os.makedirs(base_dir, exist_ok=True)
+    for fname in ("candidate_rows.jsonl", "cut_scores.jsonl"):
+        src = os.path.join(output_dir, fname)
+        dst = os.path.join(base_dir, fname)
+        if os.path.isfile(src):
+            shutil.copy2(src, dst)
+            logger.info("Copied %s to parse root: %s", fname, dst)
 
     # 8. Write dedupe_report.jsonl (Part D)
     if dedupe_events:

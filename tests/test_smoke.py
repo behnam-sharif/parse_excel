@@ -28,7 +28,7 @@ class TestConfig(unittest.TestCase):
     def test_load_yaml_maps_to_dataclasses(self) -> None:
         from core.config import load_config
         from core.stage_config import (
-            kg_config_from_pipeline,
+            xl_table_config_from_pipeline,
             parse_config_from_pipeline,
             xl_image_config_from_pipeline,
             xl_init_config_from_pipeline,
@@ -37,7 +37,7 @@ class TestConfig(unittest.TestCase):
         pc = load_config()
         xl_init_config_from_pipeline(pc)
         parse_config_from_pipeline(pc)
-        kg_config_from_pipeline(pc)
+        xl_table_config_from_pipeline(pc)
         xl_image_config_from_pipeline(pc)
 
 

@@ -20,16 +20,14 @@ from xl_init import run_init
 
 
 def main():
-    parser = argparse.ArgumentParser(description="xl_init — Workbook ingest, cleaning, and sheet approval")
+    parser = argparse.ArgumentParser(
+        description="xl_init — VBA cleaning, metadata, approve all data sheets (no LLM/summaries)"
+    )
     parser.add_argument("--input", required=True, help="Path to the input Excel workbook")
     parser.add_argument("--run-id", required=True, help="Run identifier")
     parser.add_argument("--output-base", default="data/output", help="Base output directory")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
-    parser.add_argument("--skip-llm-triage", action="store_true", help="Skip LLM classification")
-    parser.add_argument("--approve-all-sheets", action="store_true", help="Auto-approve all sheets")
-    parser.add_argument("--no-interactive", action="store_true", help="Non-interactive mode")
-    parser.add_argument("--llm-model", default="gpt-3.5-turbo", help="LLM model for triage")
-    parser.add_argument("--cell-limit", type=int, default=50, help="Max cells per sheet sent to LLM")
+    parser.add_argument("--no-interactive", action="store_true", help="Non-interactive mode (reserved)")
 
     args = parser.parse_args()
 
@@ -40,19 +38,14 @@ def main():
     config = replace(
         base,
         run_vba_cleaning=not args.no_vba_cleaning,
-        llm_model=args.llm_model,
-        llm_max_tokens=1024,
-        cell_limit=args.cell_limit,
         interactive=not args.no_interactive,
-        skip_llm_triage=args.skip_llm_triage,
-        approve_all_sheets=args.approve_all_sheets,
     )
 
     result = run_init(args.input, str(output_path), config=config)
 
     print(f"\nxl_init complete.")
     print(f"  Cleaned workbook: {result.cleaned_workbook_path}")
-    print(f"  Approved sheets ({len(result.table_sheets)}): {', '.join(result.table_sheets)}")
+    print(f"  Sheets ({len(result.table_sheets)}): {', '.join(result.table_sheets)}")
     print(f"  Output: {output_path}")
 
 

@@ -387,7 +387,7 @@ def export_final_candidates_batch(
     candidates: List[FinalCandidate],
     workbook_id: str = "",
 ) -> List[Dict[str, Any]]:
-    """Export a batch of FinalCandidates for candidate_rows.jsonl."""
+    """Export a batch of FinalCandidates as rows for candidate_rows.jsonl."""
     return [
         export_final_candidate(c, workbook_id=workbook_id, rank=i)
         for i, c in enumerate(candidates)

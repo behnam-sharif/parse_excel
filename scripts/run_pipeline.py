@@ -34,8 +34,6 @@ def main():
     parser.add_argument("--output-base", default="data/output", help="Base output directory")
     parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
-    parser.add_argument("--skip-llm-triage", action="store_true", help="Skip LLM classification")
-    parser.add_argument("--approve-all-sheets", action="store_true", help="Auto-approve all sheets")
 
     args = parser.parse_args()
 
@@ -53,7 +51,7 @@ def main():
         "run_id": run_id,
         "stages": {},
         "vba_cleaning_ran": not args.no_vba_cleaning,
-        "llm_triage_skipped": args.skip_llm_triage,
+        "xl_init_mode": "minimal",
         "image_stage_ran": args.with_image,
         "warnings": [],
     }
@@ -74,8 +72,6 @@ def main():
         init_config = replace(
             init_base,
             run_vba_cleaning=not args.no_vba_cleaning,
-            skip_llm_triage=args.skip_llm_triage,
-            approve_all_sheets=args.approve_all_sheets,
             interactive=False,
         )
         init_result = run_init(args.input, str(init_out), config=init_config)
@@ -136,9 +132,11 @@ def main():
         table_out = get_table_output_path(run_id, base)
         table_out.mkdir(parents=True, exist_ok=True)
 
-        kg = run_table(str(parse_out), str(table_out))
+        struct_tables = run_table(str(parse_out), str(table_out))
 
-        n_tables = sum(len(tree.tables) for tree in kg.sheets) if kg else 0
+        n_tables = (
+            sum(len(tree.tables) for tree in struct_tables.sheets) if struct_tables else 0
+        )
         summary["stages"]["xl_table"] = {
             "duration_s": round(time.time() - t0, 2),
             "output_path": str(table_out),

@@ -15,7 +15,7 @@ DO NOT use the Bash tool. Use Write/Edit tools only, or write scripts for the us
 
 | Stage | Package | Entry Point | Purpose |
 |-------|---------|-------------|---------|
-| 0-1 | `xl_init` | `run_init()` | VBA cleaning, sheet triage/approval |
+| 0-1 | `xl_init` | `run_init()` | VBA cleaning, sheet metadata, approve all data sheets |
 | 2 | `xl_parse` | `run_parse()` | Deterministic table candidate extraction |
 | 3 | `xl_table` | `run_table()` | Structural table assembly via split/merge |
 | 4 | `xl_image` | `run_image()` | Visual rendering and image features (optional) |
@@ -72,7 +72,7 @@ Cross-package shared types use absolute imports from core: `from core.visual_typ
 
 ### Key Invariants
 
-- **All thresholds in config dataclasses** — no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `KGConfig` (in `config.py`), `xl_image` uses `XlImageConfig`.
+- **All thresholds in config dataclasses** — no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `XlTableConfig` (in `config.py`), `xl_image` uses `XlImageConfig`.
 - **BBox convention**: All bounding boxes use 0-indexed inclusive coordinates. xl_parse: `(r1, c1, r2, c2)` via `BBox`. xl_table: `(r_top, c_left, r_bot, c_right)` via `BBoxInput`.
 - **Thread safety**: `SheetAccessor` (in both xl_parse and xl_table) opens a separate openpyxl workbook per thread. Never share workbook objects across threads.
 - **Provenance tracking**: `BlockCandidate.provenance` records the transformation chain (e.g., `"cc+bridge+expand+shrink"`). Append when mutating blocks.

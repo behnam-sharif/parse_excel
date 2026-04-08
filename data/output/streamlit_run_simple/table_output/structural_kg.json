@@ -1,0 +1,1428 @@
+{
+  "workbook_path": "data\\output\\streamlit_run_simple\\init_output\\cleaned_workbook.xlsx",
+  "workbook_id": "751cf60eea8787e011bd866641a7a6a6f224c5ca1115a6b3f27b879600850727",
+  "xl_table_version": "3.1.0",
+  "run_ts": "2026-04-08T16:54:04.763435+00:00",
+  "sheets": [
+    {
+      "sheet_name": "Calculations",
+      "tables": [
+        {
+          "table_id": "ad02762a0504301e_t103",
+          "candidate_id": "ad02762a0504301e_t103",
+          "sheet_name": "Calculations",
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 104,
+          "c_right": 7,
+          "bbox_excel": "B3:H105",
+          "header_row_indices": [
+            0,
+            1
+          ],
+          "header_confidence": 0.7214285714285715,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 103,
+          "n_cols": 7,
+          "density": 0.8876560332871015,
+          "split_depth": 1,
+          "parent_table_id": "ad02762a0504301e",
+          "split_lineage": [
+            "row:105"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.0017276289603812556,
+            "H_type_delta": -3.3306690738754696e-16,
+            "S_boundary_JSD": 0.0813933464465802,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.27355333116049846
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_t25_t17_t8",
+          "candidate_id": "68f4d5e299a26c7f_t57_t25_t17_t8",
+          "sheet_name": "Calculations",
+          "r_top": 11,
+          "c_left": 12,
+          "r_bot": 18,
+          "c_right": 27,
+          "bbox_excel": "M12:AB19",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.71875,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_t57_t25_t17",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:28",
+            "row:19"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.0087469910433573,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.09893921089216084,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.26789762830386055
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_t25_t17_b8",
+          "candidate_id": "68f4d5e299a26c7f_t57_t25_t17_b8",
+          "sheet_name": "Calculations",
+          "r_top": 19,
+          "c_left": 12,
+          "r_bot": 27,
+          "c_right": 27,
+          "bbox_excel": "M20:AB28",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.4166666666666667,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_t57_t25_t17",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:28",
+            "row:19"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.0087469910433573,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.09893921089216084,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.26789762830386055
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_t25_b17",
+          "candidate_id": "68f4d5e299a26c7f_t57_t25_b17",
+          "sheet_name": "Calculations",
+          "r_top": 28,
+          "c_left": 12,
+          "r_bot": 36,
+          "c_right": 27,
+          "bbox_excel": "M29:AB37",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.4097222222222222,
+          "split_depth": 3,
+          "parent_table_id": "68f4d5e299a26c7f_t57_t25",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:28"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019111897757441487,
+            "H_type_delta": 1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.28408375465333596
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_b25_t23_t15_t7",
+          "candidate_id": "68f4d5e299a26c7f_t57_b25_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "r_top": 37,
+          "c_left": 12,
+          "r_bot": 43,
+          "c_right": 27,
+          "bbox_excel": "M38:AB44",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 16,
+          "density": 0.5357142857142857,
+          "split_depth": 5,
+          "parent_table_id": "68f4d5e299a26c7f_t57_b25_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:60",
+            "row:52",
+            "row:44"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_b25_t23_t15_b7",
+          "candidate_id": "68f4d5e299a26c7f_t57_b25_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "r_top": 44,
+          "c_left": 12,
+          "r_bot": 51,
+          "c_right": 27,
+          "bbox_excel": "M45:AB52",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 5,
+          "parent_table_id": "68f4d5e299a26c7f_t57_b25_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:60",
+            "row:52",
+            "row:44"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_b25_t23_b15",
+          "candidate_id": "68f4d5e299a26c7f_t57_b25_t23_b15",
+          "sheet_name": "Calculations",
+          "r_top": 52,
+          "c_left": 12,
+          "r_bot": 59,
+          "c_right": 27,
+          "bbox_excel": "M53:AB60",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_t57_b25_t23",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:60",
+            "row:52"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.01838787368888639,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04760379478758145,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.28333725899998596
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_t57_b25_b23",
+          "candidate_id": "68f4d5e299a26c7f_t57_b25_b23",
+          "sheet_name": "Calculations",
+          "r_top": 60,
+          "c_left": 12,
+          "r_bot": 67,
+          "c_right": 27,
+          "bbox_excel": "M61:AB68",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 3,
+          "parent_table_id": "68f4d5e299a26c7f_t57_b25",
+          "split_lineage": [
+            "row:68",
+            "row:36",
+            "row:60"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.014815835969414493,
+            "H_type_delta": 2.220446049250313e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.258693149828376
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_t16_t8",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_t16_t8",
+          "sheet_name": "Calculations",
+          "r_top": 68,
+          "c_left": 12,
+          "r_bot": 75,
+          "c_right": 27,
+          "bbox_excel": "M69:AB76",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_t16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:76"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.032139280789602265,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.318122134996638
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_t16_b8",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_t16_b8",
+          "sheet_name": "Calculations",
+          "r_top": 76,
+          "c_left": 12,
+          "r_bot": 84,
+          "c_right": 27,
+          "bbox_excel": "M77:AB85",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.4097222222222222,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_t16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:76"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.032139280789602265,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.318122134996638
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15_t7",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "r_top": 85,
+          "c_left": 12,
+          "r_bot": 91,
+          "c_right": 27,
+          "bbox_excel": "M86:AB92",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 16,
+          "density": 0.5357142857142857,
+          "split_depth": 6,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:108",
+            "row:100",
+            "row:92"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15_b7",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "r_top": 92,
+          "c_left": 12,
+          "r_bot": 99,
+          "c_right": 27,
+          "bbox_excel": "M93:AB100",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 6,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_b16_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:108",
+            "row:100",
+            "row:92"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_b16_t23_b15",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_b16_t23_b15",
+          "sheet_name": "Calculations",
+          "r_top": 100,
+          "c_left": 12,
+          "r_bot": 107,
+          "c_right": 27,
+          "bbox_excel": "M101:AB108",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 5,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_b16_t23",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:108",
+            "row:100"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.01838787368888639,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04760379478758145,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.28333725899998596
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "ad02762a0504301e_b103",
+          "candidate_id": "ad02762a0504301e_b103",
+          "sheet_name": "Calculations",
+          "r_top": 105,
+          "c_left": 1,
+          "r_bot": 205,
+          "c_right": 7,
+          "bbox_excel": "B106:H206",
+          "header_row_indices": [
+            0,
+            1
+          ],
+          "header_confidence": 0.7214285714285715,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 101,
+          "n_cols": 7,
+          "density": 0.8868458274398869,
+          "split_depth": 1,
+          "parent_table_id": "ad02762a0504301e",
+          "split_lineage": [
+            "row:105"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.0017276289603812556,
+            "H_type_delta": -3.3306690738754696e-16,
+            "S_boundary_JSD": 0.0813933464465802,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.27355333116049846
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_t48_b16_b23",
+          "candidate_id": "68f4d5e299a26c7f_b57_t48_b16_b23",
+          "sheet_name": "Calculations",
+          "r_top": 108,
+          "c_left": 12,
+          "r_bot": 115,
+          "c_right": 27,
+          "bbox_excel": "M109:AB116",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_t48_b16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:84",
+            "row:108"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.014815835969414493,
+            "H_type_delta": 2.220446049250313e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.258693149828376
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_t16_t8",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_t16_t8",
+          "sheet_name": "Calculations",
+          "r_top": 116,
+          "c_left": 12,
+          "r_bot": 123,
+          "c_right": 27,
+          "bbox_excel": "M117:AB124",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_t16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:124"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.032139280789602265,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.318122134996638
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_t16_b8",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_t16_b8",
+          "sheet_name": "Calculations",
+          "r_top": 124,
+          "c_left": 12,
+          "r_bot": 132,
+          "c_right": 27,
+          "bbox_excel": "M125:AB133",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.4097222222222222,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_t16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:124"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.032139280789602265,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.318122134996638
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15_t7",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "r_top": 133,
+          "c_left": 12,
+          "r_bot": 139,
+          "c_right": 27,
+          "bbox_excel": "M134:AB140",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 16,
+          "density": 0.5357142857142857,
+          "split_depth": 6,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:156",
+            "row:148",
+            "row:140"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15_b7",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "r_top": 140,
+          "c_left": 12,
+          "r_bot": 147,
+          "c_right": 27,
+          "bbox_excel": "M141:AB148",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 6,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_b16_t23_t15",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:156",
+            "row:148",
+            "row:140"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_b16_t23_b15",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_b16_t23_b15",
+          "sheet_name": "Calculations",
+          "r_top": 148,
+          "c_left": 12,
+          "r_bot": 155,
+          "c_right": 27,
+          "bbox_excel": "M149:AB156",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 5,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_b16_t23",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:156",
+            "row:148"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.01838787368888639,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04760379478758145,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.28333725899998596
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "68f4d5e299a26c7f_b57_b48_b16_b23",
+          "candidate_id": "68f4d5e299a26c7f_b57_b48_b16_b23",
+          "sheet_name": "Calculations",
+          "r_top": 156,
+          "c_left": 12,
+          "r_bot": 162,
+          "c_right": 27,
+          "bbox_excel": "M157:AB163",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 16,
+          "density": 0.41964285714285715,
+          "split_depth": 4,
+          "parent_table_id": "68f4d5e299a26c7f_b57_b48_b16",
+          "split_lineage": [
+            "row:68",
+            "row:116",
+            "row:132",
+            "row:156"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.015148779257628142,
+            "H_type_delta": 1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.2562454581632152
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_t17_t9",
+          "candidate_id": "d609dbbba958573a_t17_t9",
+          "sheet_name": "Calculations",
+          "r_top": 177,
+          "c_left": 12,
+          "r_bot": 185,
+          "c_right": 27,
+          "bbox_excel": "M178:AB186",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.5,
+          "split_depth": 2,
+          "parent_table_id": "d609dbbba958573a_t17",
+          "split_lineage": [
+            "row:194",
+            "row:186"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.028105415556302082,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.32464605317476125
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_t17_b9",
+          "candidate_id": "d609dbbba958573a_t17_b9",
+          "sheet_name": "Calculations",
+          "r_top": 186,
+          "c_left": 12,
+          "r_bot": 194,
+          "c_right": 27,
+          "bbox_excel": "M187:AB195",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 9,
+          "n_cols": 16,
+          "density": 0.4097222222222222,
+          "split_depth": 2,
+          "parent_table_id": "d609dbbba958573a_t17",
+          "split_lineage": [
+            "row:194",
+            "row:186"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.028105415556302082,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.32464605317476125
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_b17_t23_t15_t7",
+          "candidate_id": "d609dbbba958573a_b17_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "r_top": 195,
+          "c_left": 12,
+          "r_bot": 201,
+          "c_right": 27,
+          "bbox_excel": "M196:AB202",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 16,
+          "density": 0.5357142857142857,
+          "split_depth": 4,
+          "parent_table_id": "d609dbbba958573a_b17_t23_t15",
+          "split_lineage": [
+            "row:194",
+            "row:218",
+            "row:210",
+            "row:202"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_b17_t23_t15_b7",
+          "candidate_id": "d609dbbba958573a_b17_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "r_top": 202,
+          "c_left": 12,
+          "r_bot": 209,
+          "c_right": 27,
+          "bbox_excel": "M203:AB210",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 4,
+          "parent_table_id": "d609dbbba958573a_b17_t23_t15",
+          "split_lineage": [
+            "row:194",
+            "row:218",
+            "row:210",
+            "row:202"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.019266899630783096,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31875681209071316
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_b17_t23_b15",
+          "candidate_id": "d609dbbba958573a_b17_t23_b15",
+          "sheet_name": "Calculations",
+          "r_top": 210,
+          "c_left": 12,
+          "r_bot": 217,
+          "c_right": 27,
+          "bbox_excel": "M211:AB218",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.46875,
+          "split_depth": 3,
+          "parent_table_id": "d609dbbba958573a_b17_t23",
+          "split_lineage": [
+            "row:194",
+            "row:218",
+            "row:210"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.01838787368888639,
+            "H_type_delta": -1.1102230246251565e-16,
+            "S_boundary_JSD": 0.04760379478758145,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.28333725899998596
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "d609dbbba958573a_b17_b23",
+          "candidate_id": "d609dbbba958573a_b17_b23",
+          "sheet_name": "Calculations",
+          "r_top": 218,
+          "c_left": 12,
+          "r_bot": 225,
+          "c_right": 27,
+          "bbox_excel": "M219:AB226",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.35000000000000003,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 8,
+          "n_cols": 16,
+          "density": 0.4609375,
+          "split_depth": 2,
+          "parent_table_id": "d609dbbba958573a_b17",
+          "split_lineage": [
+            "row:194",
+            "row:218"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.014815835969414493,
+            "H_type_delta": 2.220446049250313e-16,
+            "S_boundary_JSD": 0.04425977801306022,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.258693149828376
+          },
+          "finalize_reason": "no_structural_split"
+        }
+      ],
+      "n_original_bboxes": 3,
+      "n_final_tables": 27,
+      "n_structural_splits_accepted": 0,
+      "n_structural_splits_rejected": 0,
+      "n_visual_fallback_calls": 0,
+      "n_visual_splits_accepted": 0
+    },
+    {
+      "sheet_name": "Inputs",
+      "tables": [
+        {
+          "table_id": "5fc4d9fe13b51187_t118_t70_t45",
+          "candidate_id": "5fc4d9fe13b51187_t118_t70_t45",
+          "sheet_name": "Inputs",
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 47,
+          "c_right": 13,
+          "bbox_excel": "B3:N48",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "mixed",
+          "provenance": "cc+bridge",
+          "n_rows": 46,
+          "n_cols": 13,
+          "density": 0.2742474916387961,
+          "split_depth": 3,
+          "parent_table_id": "5fc4d9fe13b51187_t118_t70",
+          "split_lineage": [
+            "row:120",
+            "row:72",
+            "row:47"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": -0.013091457338923251,
+            "H_type_delta": 4.440892098500626e-16,
+            "S_boundary_JSD": 0.23772848989830495,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.3140930784300262
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "5fc4d9fe13b51187_t118_t70_b45",
+          "candidate_id": "5fc4d9fe13b51187_t118_t70_b45",
+          "sheet_name": "Inputs",
+          "r_top": 48,
+          "c_left": 1,
+          "r_bot": 71,
+          "c_right": 13,
+          "bbox_excel": "B49:N72",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "mixed",
+          "provenance": "cc+bridge",
+          "n_rows": 24,
+          "n_cols": 13,
+          "density": 0.6442307692307692,
+          "split_depth": 3,
+          "parent_table_id": "5fc4d9fe13b51187_t118_t70",
+          "split_lineage": [
+            "row:120",
+            "row:72",
+            "row:47"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": -0.013091457338923251,
+            "H_type_delta": 4.440892098500626e-16,
+            "S_boundary_JSD": 0.23772848989830495,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.3140930784300262
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "5fc4d9fe13b51187_t118_b70_t46",
+          "candidate_id": "5fc4d9fe13b51187_t118_b70_t46",
+          "sheet_name": "Inputs",
+          "r_top": 72,
+          "c_left": 1,
+          "r_bot": 117,
+          "c_right": 13,
+          "bbox_excel": "B73:N118",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "mixed",
+          "provenance": "cc+bridge",
+          "n_rows": 46,
+          "n_cols": 13,
+          "density": 0.4214046822742474,
+          "split_depth": 3,
+          "parent_table_id": "5fc4d9fe13b51187_t118_b70",
+          "split_lineage": [
+            "row:120",
+            "row:72",
+            "row:118"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.010656986428037474,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.0463976685872976,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.14746321391348569
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "5fc4d9fe13b51187_t118_b70_b46",
+          "candidate_id": "5fc4d9fe13b51187_t118_b70_b46",
+          "sheet_name": "Inputs",
+          "r_top": 118,
+          "c_left": 1,
+          "r_bot": 119,
+          "c_right": 13,
+          "bbox_excel": "B119:N120",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "mixed",
+          "provenance": "cc+bridge",
+          "n_rows": 2,
+          "n_cols": 13,
+          "density": 0.15384615384615385,
+          "split_depth": 3,
+          "parent_table_id": "5fc4d9fe13b51187_t118_b70",
+          "split_lineage": [
+            "row:120",
+            "row:72",
+            "row:118"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.010656986428037474,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.0463976685872976,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.14746321391348569
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "5fc4d9fe13b51187_b118",
+          "candidate_id": "5fc4d9fe13b51187_b118",
+          "sheet_name": "Inputs",
+          "r_top": 120,
+          "c_left": 1,
+          "r_bot": 121,
+          "c_right": 13,
+          "bbox_excel": "B121:N122",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "mixed",
+          "provenance": "cc+bridge",
+          "n_rows": 2,
+          "n_cols": 13,
+          "density": 0.15384615384615385,
+          "split_depth": 1,
+          "parent_table_id": "5fc4d9fe13b51187",
+          "split_lineage": [
+            "row:120"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.004767283567922664,
+            "H_type_delta": 1.1102230246251565e-16,
+            "S_boundary_JSD": 0.041981290562770814,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.14430411718876954
+          },
+          "finalize_reason": "no_structural_split"
+        }
+      ],
+      "n_original_bboxes": 1,
+      "n_final_tables": 5,
+      "n_structural_splits_accepted": 0,
+      "n_structural_splits_rejected": 0,
+      "n_visual_fallback_calls": 0,
+      "n_visual_splits_accepted": 0
+    },
+    {
+      "sheet_name": "Introduction",
+      "tables": [
+        {
+          "table_id": "2c8e7cafe84735ef_t3",
+          "candidate_id": "2c8e7cafe84735ef_t3",
+          "sheet_name": "Introduction",
+          "r_top": 10,
+          "c_left": 2,
+          "r_bot": 12,
+          "c_right": 4,
+          "bbox_excel": "C11:E13",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.6333333333333333,
+          "structural_type": "lookup",
+          "provenance": "cc+bridge",
+          "n_rows": 3,
+          "n_cols": 3,
+          "density": 0.4444444444444444,
+          "split_depth": 1,
+          "parent_table_id": "2c8e7cafe84735ef",
+          "split_lineage": [
+            "row:13"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.2619863587716803,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.006510605218470495,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31999630455505523
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "2c8e7cafe84735ef_b3",
+          "candidate_id": "2c8e7cafe84735ef_b3",
+          "sheet_name": "Introduction",
+          "r_top": 13,
+          "c_left": 2,
+          "r_bot": 14,
+          "c_right": 4,
+          "bbox_excel": "C14:E15",
+          "header_row_indices": [
+            0
+          ],
+          "header_confidence": 0.6333333333333333,
+          "structural_type": "lookup",
+          "provenance": "cc+bridge",
+          "n_rows": 2,
+          "n_cols": 3,
+          "density": 0.3333333333333333,
+          "split_depth": 1,
+          "parent_table_id": "2c8e7cafe84735ef",
+          "split_lineage": [
+            "row:13"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": 0.2619863587716803,
+            "H_type_delta": 0.0,
+            "S_boundary_JSD": 0.006510605218470495,
+            "soft_criteria_passed": 1,
+            "bonus_score": 0.31999630455505523
+          },
+          "finalize_reason": "no_structural_split"
+        }
+      ],
+      "n_original_bboxes": 1,
+      "n_final_tables": 2,
+      "n_structural_splits_accepted": 0,
+      "n_structural_splits_rejected": 0,
+      "n_visual_fallback_calls": 0,
+      "n_visual_splits_accepted": 0
+    },
+    {
+      "sheet_name": "Results",
+      "tables": [
+        {
+          "table_id": "c9c4032ddedae542",
+          "candidate_id": "c9c4032ddedae542",
+          "sheet_name": "Results",
+          "r_top": 3,
+          "c_left": 1,
+          "r_bot": 9,
+          "c_right": 4,
+          "bbox_excel": "B4:E10",
+          "header_row_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "header_confidence": 0.475,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 4,
+          "density": 1.0,
+          "split_depth": 0,
+          "parent_table_id": null,
+          "split_lineage": [],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": null,
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "a9b45e99264b388b_t10",
+          "candidate_id": "a9b45e99264b388b_t10",
+          "sheet_name": "Results",
+          "r_top": 47,
+          "c_left": 1,
+          "r_bot": 56,
+          "c_right": 11,
+          "bbox_excel": "B48:L57",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 10,
+          "n_cols": 11,
+          "density": 0.8636363636363635,
+          "split_depth": 1,
+          "parent_table_id": "a9b45e99264b388b",
+          "split_lineage": [
+            "row:57"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": -0.0038534378344309284,
+            "H_type_delta": 2.220446049250313e-16,
+            "S_boundary_JSD": 0.09508986326066664,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.3386270167268215
+          },
+          "finalize_reason": "no_structural_split"
+        },
+        {
+          "table_id": "a9b45e99264b388b_b10",
+          "candidate_id": "a9b45e99264b388b_b10",
+          "sheet_name": "Results",
+          "r_top": 57,
+          "c_left": 1,
+          "r_bot": 63,
+          "c_right": 11,
+          "bbox_excel": "B58:L64",
+          "header_row_indices": [],
+          "header_confidence": 0.0,
+          "structural_type": "calc",
+          "provenance": "cc+bridge",
+          "n_rows": 7,
+          "n_cols": 11,
+          "density": 0.4675324675324675,
+          "split_depth": 1,
+          "parent_table_id": "a9b45e99264b388b",
+          "split_lineage": [
+            "row:57"
+          ],
+          "signal_sources_used": [
+            "structural"
+          ],
+          "last_split_qc": {
+            "H_presence_norm_delta": -0.0038534378344309284,
+            "H_type_delta": 2.220446049250313e-16,
+            "S_boundary_JSD": 0.09508986326066664,
+            "soft_criteria_passed": 2,
+            "bonus_score": 0.3386270167268215
+          },
+          "finalize_reason": "no_structural_split"
+        }
+      ],
+      "n_original_bboxes": 2,
+      "n_final_tables": 3,
+      "n_structural_splits_accepted": 0,
+      "n_structural_splits_rejected": 0,
+      "n_visual_fallback_calls": 0,
+      "n_visual_splits_accepted": 0
+    }
+  ],
+  "run_summary": {
+    "workbook_id": "751cf60eea8787e011bd866641a7a6a6f224c5ca1115a6b3f27b879600850727",
+    "workbook_path": "data\\output\\streamlit_run_simple\\init_output\\cleaned_workbook.xlsx",
+    "total_input_bboxes": 7,
+    "skipped_bboxes_too_small": 0,
+    "total_structural_splits_accepted": 101,
+    "total_structural_splits_rejected": 46,
+    "total_visual_fallback_calls": 0,
+    "total_visual_splits_accepted": 0,
+    "total_final_tables": 37,
+    "xl_image_available": false,
+    "cut_scores_available": true,
+    "elapsed_seconds": 0.9881880283355713,
+    "per_sheet": {
+      "Calculations": {
+        "n_original_bboxes": 3,
+        "n_final_tables": 27,
+        "n_structural_splits_accepted": 0,
+        "n_structural_splits_rejected": 0,
+        "n_visual_fallback_calls": 0,
+        "n_visual_splits_accepted": 0
+      },
+      "Inputs": {
+        "n_original_bboxes": 1,
+        "n_final_tables": 5,
+        "n_structural_splits_accepted": 0,
+        "n_structural_splits_rejected": 0,
+        "n_visual_fallback_calls": 0,
+        "n_visual_splits_accepted": 0
+      },
+      "Introduction": {
+        "n_original_bboxes": 1,
+        "n_final_tables": 2,
+        "n_structural_splits_accepted": 0,
+        "n_structural_splits_rejected": 0,
+        "n_visual_fallback_calls": 0,
+        "n_visual_splits_accepted": 0
+      },
+      "Results": {
+        "n_original_bboxes": 2,
+        "n_final_tables": 3,
+        "n_structural_splits_accepted": 0,
+        "n_structural_splits_rejected": 0,
+        "n_visual_fallback_calls": 0,
+        "n_visual_splits_accepted": 0
+      }
+    },
+    "visual_calls_used": 0,
+    "visual_calls_budget": 100
+  }
+}

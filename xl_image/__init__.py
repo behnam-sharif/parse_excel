@@ -15,14 +15,13 @@ def run_image(parse_output_path: str, output_path: str, config=None):
     Parameters
     ----------
     parse_output_path : str
-        Directory containing xl_parse outputs (candidate_rows.jsonl).
+        Directory containing xl_parse outputs (``candidate_rows.jsonl`` at root).
     output_path : str
         Directory where image artifacts will be written.
     config : XlImageConfig, optional
         Stage configuration. Uses defaults if not provided.
     """
     import os
-    import glob
 
     if config is None:
         from core.config import load_config
@@ -41,14 +40,14 @@ def run_image(parse_output_path: str, output_path: str, config=None):
             workbook_path = candidate
             break
 
-    candidates_path = os.path.join(parse_output_path, "final_candidates.jsonl")
-    if not os.path.isfile(candidates_path):
-        candidates_path = os.path.join(parse_output_path, "candidate_rows.jsonl")
-
     if workbook_path is None:
         raise FileNotFoundError("cleaned_workbook.xlsx not found")
+
+    candidates_path = os.path.join(parse_output_path, "candidate_rows.jsonl")
     if not os.path.isfile(candidates_path):
-        raise FileNotFoundError("candidate_rows.jsonl / final_candidates.jsonl not found")
+        raise FileNotFoundError(
+            f"candidate_rows.jsonl not found at {candidates_path!r}. Run xl_parse first."
+        )
 
     os.makedirs(output_path, exist_ok=True)
 

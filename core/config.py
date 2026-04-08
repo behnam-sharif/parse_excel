@@ -16,6 +16,8 @@ from typing import Any, Dict, Optional
 
 import yaml
 
+from .env_bootstrap import load_project_dotenv
+
 
 # ---------------------------------------------------------------------------
 # Typed sub-configs (populated only from general.yaml — required keys)
@@ -91,6 +93,7 @@ def load_config(
     general_path: Optional[Path] = None,
 ) -> PipelineConfig:
     """Load both YAML files into a PipelineConfig."""
+    load_project_dotenv()
     stages = _load_yaml(stages_path or _DEFAULT_STAGES)
     general_raw = _load_yaml(general_path or _DEFAULT_GENERAL)
 

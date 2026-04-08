@@ -1,7 +1,7 @@
 """
 xl_table/config.py
 
-KGConfig dataclass with all thresholds + load_config() helper.
+XlTableConfig dataclass with all thresholds + load_config() helper.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from core.visual_types import VisualSplitConfig
 
 
 @dataclass
-class KGConfig:
+class XlTableConfig:
     """All configuration thresholds for the xl_table pipeline."""
 
     # Size gates
@@ -148,26 +148,26 @@ class KGConfig:
     # (defaults here are superseded by config/stages.yaml at runtime.)
 
 
-def load_table_config(yaml_path: Optional[str] = None) -> KGConfig:
+def load_table_config(yaml_path: Optional[str] = None) -> XlTableConfig:
     """
-    Load KGConfig from ``config/stages.yaml`` (``xl_table`` section), or from a
+    Load XlTableConfig from ``config/stages.yaml`` (``xl_table`` section), or from a
     standalone YAML file with the same shape as that section.
     """
     if yaml_path is None:
         from core.config import load_config
-        from core.stage_config import kg_config_from_pipeline
+        from core.stage_config import xl_table_config_from_pipeline
 
-        return kg_config_from_pipeline(load_config())
+        return xl_table_config_from_pipeline(load_config())
 
     import yaml
 
-    from core.stage_config import kg_config_from_mapping
+    from core.stage_config import xl_table_config_from_mapping
 
     with open(yaml_path, "r", encoding="utf-8") as fh:
         raw = yaml.safe_load(fh) or {}
-    return kg_config_from_mapping(raw)
+    return xl_table_config_from_mapping(raw)
 
 
-def load_config(yaml_path: Optional[str] = None) -> KGConfig:
+def load_config(yaml_path: Optional[str] = None) -> XlTableConfig:
     """Alias for :func:`load_table_config`."""
     return load_table_config(yaml_path)

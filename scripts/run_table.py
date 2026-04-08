@@ -39,9 +39,11 @@ def main():
 
         config = load_table_config(args.config)
 
-    kg = run_table(parse_dir, str(output_path), config=config)
+    struct_tables = run_table(parse_dir, str(output_path), config=config)
 
-    n_tables = sum(len(tree.tables) for tree in kg.sheets) if kg else 0
+    n_tables = (
+        sum(len(tree.tables) for tree in struct_tables.sheets) if struct_tables else 0
+    )
     print(f"\nxl_table complete.")
     print(f"  Tables detected: {n_tables}")
     print(f"  Output: {output_path}")

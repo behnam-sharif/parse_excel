@@ -26,7 +26,7 @@ from scipy.spatial.distance import jensenshannon
 from scipy.stats import kurtosis as scipy_kurtosis
 from scipy.stats import skew as scipy_skew
 
-from .config import KGConfig
+from .config import XlTableConfig
 from .schemas import BBoxInput, MetricsResult
 
 
@@ -228,7 +228,7 @@ def compute_jsd_local(
 # C9 — Bimodality
 # ---------------------------------------------------------------------------
 
-def compute_bimodality(row_density: List[float], cfg: KGConfig) -> float:
+def compute_bimodality(row_density: List[float], cfg: XlTableConfig) -> float:
     """
     Bimodality coefficient = (skewness^2 + 1) / (excess_kurtosis + 3)
 
@@ -358,7 +358,7 @@ def compute_all_metrics(
     bot_row_density: List[float],
     bot_row_type_dist: List[Tuple[float, float, float, float]],
     local_row: int,
-    cfg: KGConfig,
+    cfg: XlTableConfig,
 ) -> MetricsResult:
     """Compute all C1–C10 metrics for a proposed split. Pure function."""
 

@@ -14,6 +14,7 @@ import concurrent.futures
 import os
 import sys
 import time
+import uuid
 from dataclasses import replace
 from pathlib import Path
 from typing import Dict, Optional
@@ -31,7 +32,7 @@ from core.paths import (
     get_table_output_path,
 )
 from core.stage_config import (
-    kg_config_from_mapping,
+    xl_table_config_from_mapping,
     merge_stage_dict,
     parse_config_from_mapping,
     xl_init_config_from_mapping,
@@ -61,6 +62,8 @@ def _default_session() -> None:
         st.session_state["stage_error"] = None
     if "stage_op" not in st.session_state:
         st.session_state["stage_op"] = None
+    if "pipeline_started_at" not in st.session_state:
+        st.session_state["pipeline_started_at"] = None
 
 
 def _effective_init_config():
@@ -79,7 +82,7 @@ def _effective_parse_config():
 def _effective_table_config():
     pc = load_config()
     merged = merge_stage_dict(pc.xl_table, st.session_state["cfg_ov"]["xl_table"])
-    return kg_config_from_mapping(merged)
+    return xl_table_config_from_mapping(merged)
 
 
 def _poll_future() -> bool:
@@ -100,12 +103,14 @@ def _harvest_future() -> None:
         st.session_state["stage_result"] = None
     finally:
         st.session_state["pipeline_future"] = None
+        st.session_state["pipeline_started_at"] = None
 
 
 def app() -> None:
     st.set_page_config(page_title="xlgen_v3 — Orchestrator", layout="wide")
     st.title("xlgen_v3 — Excel pipeline orchestrator")
     _default_session()
+    _harvest_future()
 
     # --- Sidebar: run + upload + CLI + config --------------------------------
     st.sidebar.header("Run")
@@ -123,10 +128,33 @@ def app() -> None:
     if up is not None:
         inp = _ROOT / "data" / "input"
         inp.mkdir(parents=True, exist_ok=True)
-        dest = inp / up.name
-        dest.write_bytes(up.getbuffer())
-        st.session_state["uploaded_path"] = str(dest)
-        st.sidebar.success(f"Saved: {dest}")
+        buf = up.getbuffer()
+        upload_sig = getattr(up, "file_id", None)
+        if upload_sig is None:
+            upload_sig = (up.name, buf.nbytes)
+        prev_path = st.session_state.get("uploaded_path")
+        need_save = st.session_state.get("_upload_sig") != upload_sig or not (
+            prev_path and Path(prev_path).is_file()
+        )
+        if need_save:
+            src = Path(up.name)
+            stem = src.stem or "workbook"
+            suffix = src.suffix.lower()
+            if suffix not in (".xlsx", ".xlsm"):
+                suffix = ".xlsx"
+            # Unique path avoids Windows PermissionError when the same filename is open in Excel.
+            dest = inp / f"{stem}_{uuid.uuid4().hex[:10]}{suffix}"
+            try:
+                dest.write_bytes(buf)
+            except PermissionError as exc:
+                st.sidebar.error(
+                    f"Could not save upload ({exc}). Close the file in Excel if it is open, "
+                    "or check folder permissions for data/input."
+                )
+            else:
+                st.session_state["uploaded_path"] = str(dest)
+                st.session_state["_upload_sig"] = upload_sig
+                st.sidebar.success(f"Saved: {dest}")
 
     input_path = st.session_state["uploaded_path"] or ""
     st.sidebar.text_input("Input path (upload or paste)", input_path, disabled=True)
@@ -150,17 +178,6 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
             "Overrides merge on top of config/stages.yaml for this browser session only."
         )
         pc = load_config()
-        st.markdown("**xl_init**")
-        st.session_state["cfg_ov"]["xl_init"]["skip_llm_triage"] = st.checkbox(
-            "skip_llm_triage",
-            value=bool(pc.xl_init.get("skip_llm_triage", False)),
-            key="ov_init_skip_llm",
-        )
-        st.session_state["cfg_ov"]["xl_init"]["approve_all_sheets"] = st.checkbox(
-            "approve_all_sheets",
-            value=bool(pc.xl_init.get("approve_all_sheets", False)),
-            key="ov_init_approve_all",
-        )
         st.markdown("**xl_parse**")
         st.session_state["cfg_ov"]["xl_parse"]["max_workers"] = st.number_input(
             "max_workers",
@@ -171,7 +188,7 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         )
         st.session_state["cfg_ov"]["xl_parse"]["export_cut_candidates"] = st.checkbox(
             "export_cut_candidates",
-            value=bool(pc.xl_parse.get("export_cut_candidates", False)),
+            value=bool(pc.xl_parse.get("export_cut_candidates", True)),
             key="ov_parse_export_cuts",
         )
         st.markdown("**xl_table**")
@@ -203,11 +220,17 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
 
     busy = _poll_future()
     if busy:
-        st.sidebar.info(f"Running {st.session_state.get('stage_op', 'stage')}…")
+        op = st.session_state.get("stage_op", "stage")
+        t0 = st.session_state.get("pipeline_started_at")
+        elapsed = (time.time() - float(t0)) if t0 is not None else 0.0
+        lines = [f"Running **{op}** — {elapsed:.0f}s elapsed"]
+        if op == "xl_init":
+            lines.append(
+                "xl_init runs VBA cleaning, then sheet metadata extraction (short vs. old LLM/summary path)."
+            )
+        st.sidebar.info("\n\n".join(lines))
         time.sleep(1)
         st.rerun()
-
-    _harvest_future()
 
     def _clear_for_run(op: str) -> None:
         st.session_state["stage_result"] = None
@@ -220,18 +243,22 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
 
     if init_btn and not busy:
         _clear_for_run("xl_init")
+        # Resolve config on the main thread — worker threads must not read st.session_state.
+        _init_cfg = _effective_init_config()
 
         def _work():
             from xl_init import run_init
 
             init_out.mkdir(parents=True, exist_ok=True)
-            return run_init(input_path, str(init_out), config=_effective_init_config())
+            return run_init(input_path, str(init_out), config=_init_cfg)
 
         st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
     if parse_btn and not busy:
         _clear_for_run("xl_parse")
+        _parse_cfg = _effective_parse_config()
 
         def _work():
             from xl_parse import run_parse
@@ -242,22 +269,25 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                     f"Missing {wb}. Run xl_init first or upload a workbook and run init."
                 )
             parse_out.mkdir(parents=True, exist_ok=True)
-            return run_parse(str(wb), str(parse_out), config=_effective_parse_config())
+            return run_parse(str(wb), str(parse_out), config=_parse_cfg)
 
         st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
     if table_btn and not busy:
         _clear_for_run("xl_table")
+        _table_cfg = _effective_table_config()
 
         def _work():
             from xl_table import run_table
 
             parse_out.mkdir(parents=True, exist_ok=True)
             table_out.mkdir(parents=True, exist_ok=True)
-            return run_table(str(parse_out), str(table_out), config=_effective_table_config())
+            return run_table(str(parse_out), str(table_out), config=_table_cfg)
 
         st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
     # --- Main area -----------------------------------------------------------
@@ -302,8 +332,9 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                 st.info("No per-sheet breakdown.")
         with tab_c:
             st.write(
-                "Full decision log: open `decisions.jsonl` under table_output. "
-                "Structured JSON: `structural_kg.json`."
+                "Final tables by sheet (Excel ranges): `accepted_tables.json` or "
+                "`accepted_tables.txt` under table_output. Full payload: `structural_tables.json`. "
+                "Optional debug log: `decisions.jsonl`."
             )
     elif res is not None and op == "xl_init":
         st.success(
