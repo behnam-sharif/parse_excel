@@ -11,6 +11,7 @@ Future polling with time.sleep + st.rerun while work is in flight.
 from __future__ import annotations
 
 import concurrent.futures
+import importlib.util
 import os
 import sys
 import time
@@ -30,15 +31,35 @@ from core.paths import (
     get_init_output_path,
     get_parse_output_path,
     get_table_output_path,
+    get_sheetagent_output_path,
 )
 from core.stage_config import (
     xl_table_config_from_mapping,
     merge_stage_dict,
     parse_config_from_mapping,
     xl_init_config_from_mapping,
+    sheetagent_config_from_mapping,
 )
 
 _executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+
+
+def _load_v3a_viewer():
+    """Load sibling ``v3a_viewer.py`` by path.
+
+    ``streamlit run apps/orchestrator/app.py`` executes this file as ``__main__``,
+    so ``from .v3a_viewer`` relative imports fail.
+    """
+    path = Path(__file__).resolve().parent / "v3a_viewer.py"
+    spec = importlib.util.spec_from_file_location("orchestrator_v3a_viewer", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load v3a_viewer from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_v3a_viewer = _load_v3a_viewer()
 
 
 def _default_session() -> None:
@@ -53,6 +74,7 @@ def _default_session() -> None:
             "xl_init": {},
             "xl_parse": {},
             "xl_table": {},
+            "xl_sheetagent": {},
         }
     if "pipeline_future" not in st.session_state:
         st.session_state["pipeline_future"] = None
@@ -64,6 +86,12 @@ def _default_session() -> None:
         st.session_state["stage_op"] = None
     if "pipeline_started_at" not in st.session_state:
         st.session_state["pipeline_started_at"] = None
+    if "orchestrator_view_saved_v3a" not in st.session_state:
+        st.session_state["orchestrator_view_saved_v3a"] = False
+    # Older sessions may lack xl_sheetagent overrides
+    _co = st.session_state.get("cfg_ov")
+    if isinstance(_co, dict) and "xl_sheetagent" not in _co:
+        _co["xl_sheetagent"] = {}
 
 
 def _effective_init_config():
@@ -164,6 +192,7 @@ def app() -> None:
     init_out = get_init_output_path(run_id, base)
     parse_out = get_parse_output_path(run_id, base)
     table_out = get_table_output_path(run_id, base)
+    sa_out = get_sheetagent_output_path(run_id, base)
 
     cli = f"""```text
 py -3 scripts/run_init.py --input <workbook.xlsx> --run-id {run_id} --output-base {base} --no-interactive
@@ -217,6 +246,19 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
             value=bool(pc.xl_table.get("use_other_tools", False)),
             key="ov_table_other_tools",
         )
+        st.markdown("**xl_sheetagent (V3A)**")
+        st.caption(
+            "Merged when you click **Run V3A sheetagent**. Set `OPENAI_API_KEY` in `.env` "
+            "when LLM is on."
+        )
+        _sa_ov = st.session_state["cfg_ov"].setdefault("xl_sheetagent", {})
+        _pc_sa = pc.xl_sheetagent
+        _enable_v3a_llm = st.checkbox(
+            "V3A: LLM ownership decisions (sets v3a_skip_llm=false)",
+            value=not bool(_pc_sa.get("v3a_skip_llm", True)),
+            key="ov_xl_sa_v3a_llm",
+        )
+        _sa_ov["v3a_skip_llm"] = not _enable_v3a_llm
 
     busy = _poll_future()
     if busy:
@@ -236,10 +278,12 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["stage_result"] = None
         st.session_state["stage_error"] = None
         st.session_state["stage_op"] = op
+        st.session_state["orchestrator_view_saved_v3a"] = False
 
     init_btn = st.sidebar.button("▶ Run xl_init", disabled=busy or not input_path)
     parse_btn = st.sidebar.button("▶ Run xl_parse", disabled=busy)
     table_btn = st.sidebar.button("▶ Run xl_table", disabled=busy)
+    v3a_btn = st.sidebar.button("▶ Run V3A sheetagent", disabled=busy)
 
     if init_btn and not busy:
         _clear_for_run("xl_init")
@@ -290,12 +334,43 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
+    if v3a_btn and not busy:
+        _clear_for_run("v3a_sheetagent")
+        pc = load_config()
+        _sa_user = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
+        _sa_merged = merge_stage_dict(pc.xl_sheetagent, _sa_user)
+        _sa_merged = merge_stage_dict(_sa_merged, {"v3a_enabled": True})
+        _sa_cfg = sheetagent_config_from_mapping(_sa_merged)
+
+        _run_id_capture = run_id
+        _sa_out_capture = sa_out
+
+        def _work():
+            from xl_sheetagent import run_sheetagent
+
+            _sa_out_capture.mkdir(parents=True, exist_ok=True)
+            return run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg)
+
+        st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
+        st.rerun()
+
+    view_v3a_saved_btn = st.sidebar.button(
+        "📂 View saved V3A results (no re-run)",
+        disabled=busy,
+        help="Loads sheetagent_output/v3a_results.json for the current Run ID — same UI as after Run V3A.",
+    )
+    if view_v3a_saved_btn and not busy:
+        st.session_state["orchestrator_view_saved_v3a"] = True
+        st.rerun()
+
     # --- Main area -----------------------------------------------------------
     st.subheader("Paths")
     st.code(
-        f"init_output:  {init_out}\n"
-        f"parse_output: {parse_out}\n"
-        f"table_output: {table_out}",
+        f"init_output:       {init_out}\n"
+        f"parse_output:      {parse_out}\n"
+        f"table_output:      {table_out}\n"
+        f"sheetagent_output: {sa_out}",
         language="text",
     )
 
@@ -305,7 +380,9 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     res = st.session_state["stage_result"]
     op = st.session_state["stage_op"]
 
-    if res is not None and op == "xl_table":
+    if st.session_state.get("orchestrator_view_saved_v3a"):
+        _v3a_viewer.render_v3a_from_json(str(sa_out))
+    elif res is not None and op == "xl_table":
         rs = res.run_summary
         st.success(
             f"xl_table complete — {rs.total_final_tables} tables "
@@ -336,6 +413,13 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                 "`accepted_tables.txt` under table_output. Full payload: `structural_tables.json`. "
                 "Optional debug log: `decisions.jsonl`."
             )
+    elif res is not None and op == "v3a_sheetagent":
+        # V3ARunResult has a .sheets attribute; enriched table list does not
+        if hasattr(res, "sheets"):
+            _v3a_viewer.render_v3a_results(res)
+        else:
+            # Fallback: load from saved JSON
+            _v3a_viewer.render_v3a_from_json(str(sa_out))
     elif res is not None and op == "xl_init":
         st.success(
             f"xl_init complete — {len(res.table_sheets)} approved sheet(s). "
@@ -344,10 +428,14 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     elif res is not None and op == "xl_parse":
         st.success(f"xl_parse complete — {len(res)} sheet result(s).")
 
-    if res is None and not st.session_state["stage_error"]:
+    if (
+        res is None
+        and not st.session_state["stage_error"]
+        and not st.session_state.get("orchestrator_view_saved_v3a")
+    ):
         st.info(
             "Upload a workbook, then run **xl_init** → **xl_parse** → **xl_table** "
-            "in order (parse expects init output; table expects parse output)."
+            "in order. Then optionally run **V3A sheetagent** to extract semantic pieces."
         )
 
 

@@ -263,6 +263,17 @@ xl_sheetagent:
   coordinator_batch_llm_threshold: 2
   ontology_hint_enabled: true
 
+  # V3A clean redesign (table agents + sheet coordinator)
+  v3a_enabled: false
+  v3a_margin_trim: true
+  v3a_core_numeric_ratio: 0.40
+  v3a_title_scan_rows: 5
+  v3a_footnote_scan_rows: 5
+  v3a_skip_llm: true
+  v3a_llm_model: "gpt-4o-mini"
+  v3a_llm_max_tokens: 512
+  v3a_max_parallel_sheets: 4
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2

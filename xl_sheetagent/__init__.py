@@ -37,9 +37,21 @@ def run_sheetagent(
         from core.stage_config import sheetagent_config_from_pipeline
         config = sheetagent_config_from_pipeline(load_config())
 
+    if getattr(config, "v3a_enabled", False):
+        return _run_sheetagent_v3a(run_id, output_path, config)
     if getattr(config, "v2_enabled", False):
         return _run_sheetagent_v2(run_id, output_path, config)
     return _run_sheetagent_v1(run_id, output_path, config)
+
+
+# ---------------------------------------------------------------------------
+# V3A pipeline (clean redesign: table agents + sheet coordinator)
+# ---------------------------------------------------------------------------
+
+def _run_sheetagent_v3a(run_id, output_path, config):
+    """V3A pipeline — per-table agents with sheet-level coordinator."""
+    from .v3a.runner import run_v3a
+    return run_v3a(run_id, output_path, config)
 
 
 # ---------------------------------------------------------------------------

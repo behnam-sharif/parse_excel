@@ -18,18 +18,32 @@ def main():
     )
     parser.add_argument("--run-id", required=True, help="Run identifier")
     parser.add_argument("--output-base", default="data/output", help="Base output directory")
+    parser.add_argument(
+        "--v3a",
+        action="store_true",
+        help=(
+            "Run the V3A pipeline (writes sheetagent_output/v3a_results.json). "
+            "Without this flag, YAML xl_sheetagent.v3a_enabled controls routing "
+            "(default false → V2 if v2_enabled)."
+        ),
+    )
     args = parser.parse_args()
 
     from core.config import load_config
     from core.stage_config import sheetagent_config_from_pipeline
 
     pc = load_config()
-    cfg = sheetagent_config_from_pipeline(pc)
+    overrides = {"v3a_enabled": True} if args.v3a else None
+    cfg = sheetagent_config_from_pipeline(pc, overrides=overrides)
 
     from xl_sheetagent import run_sheetagent
 
-    enriched = run_sheetagent(args.run_id, config=cfg)
-    print(f"xl_sheetagent: enriched {len(enriched)} tables")
+    out = run_sheetagent(args.run_id, config=cfg)
+    n = getattr(out, "n_tables_processed", None)
+    if n is not None:
+        print(f"xl_sheetagent (V3A): {n} tables — see sheetagent_output/v3a_results.json")
+    else:
+        print(f"xl_sheetagent: enriched {len(out)} tables")
 
 
 if __name__ == "__main__":

@@ -200,11 +200,12 @@
       "children_ids": [
         "Inputs::part_9814fc53f594ba29_t118_b70_t46_0",
         "Inputs::part_9814fc53f594ba29_t118_b70_t46_1",
-        "Inputs::part_9814fc53f594ba29_t118_b70_t46_2"
+        "Inputs::part_9814fc53f594ba29_t118_b70_t46_2",
+        "Inputs::part_9814fc53f594ba29_t118_b70_t46_3"
       ],
       "confidence": 0.4,
       "ambiguity_class": "STRUCTURAL",
-      "title": "Adverse events, frequencies (same as global models)",
+      "title": "none",
       "table_id": "9814fc53f594ba29_t118_b70_t46",
       "section_path": null,
       "shape_subtype": null,
@@ -236,7 +237,7 @@
       "sheet_name": "Inputs",
       "r_top": 85,
       "c_left": 1,
-      "r_bot": 104,
+      "r_bot": 89,
       "c_right": 13,
       "parent_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_t46",
       "children_ids": [],
@@ -251,6 +252,25 @@
     },
     "Inputs::part_9814fc53f594ba29_t118_b70_t46_2": {
       "node_id": "Inputs::part_9814fc53f594ba29_t118_b70_t46_2",
+      "node_type": "table_partition",
+      "sheet_name": "Inputs",
+      "r_top": 90,
+      "c_left": 1,
+      "r_bot": 104,
+      "c_right": 13,
+      "parent_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_t46",
+      "children_ids": [],
+      "confidence": 0.85,
+      "ambiguity_class": "STRUCTURAL",
+      "title": null,
+      "table_id": "9814fc53f594ba29_t118_b70_t46",
+      "section_path": null,
+      "shape_subtype": null,
+      "linked_table_id": null,
+      "text_content": null
+    },
+    "Inputs::part_9814fc53f594ba29_t118_b70_t46_3": {
+      "node_id": "Inputs::part_9814fc53f594ba29_t118_b70_t46_3",
       "node_type": "table_partition",
       "sheet_name": "Inputs",
       "r_top": 105,
@@ -309,7 +329,7 @@
   },
   "n_sections": 0,
   "n_tables": 5,
-  "n_partitions": 10,
+  "n_partitions": 11,
   "n_context_blocks": 0,
   "n_notes": 0,
   "n_shapes": 0

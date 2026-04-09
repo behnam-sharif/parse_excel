@@ -63,3 +63,14 @@ class XlSheetAgentConfig:
     max_parallel_sheets: int
     coordinator_batch_llm_threshold: int
     ontology_hint_enabled: bool
+
+    # V3A clean redesign
+    v3a_enabled: bool
+    v3a_margin_trim: bool
+    v3a_core_numeric_ratio: float
+    v3a_title_scan_rows: int
+    v3a_footnote_scan_rows: int
+    v3a_skip_llm: bool
+    v3a_llm_model: str
+    v3a_llm_max_tokens: int
+    v3a_max_parallel_sheets: int

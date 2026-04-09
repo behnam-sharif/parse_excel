@@ -1,6 +1,6 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-09T05:27:22.228089+00:00",
+  "run_ts": "2026-04-09T18:05:41.130684+00:00",
   "xl_sheetagent_version": "0.5.0",
   "upstream_schema_versions": {
     "xl_parse": "unknown",
@@ -11,7 +11,7 @@
   "n_tables_enriched": 35,
   "n_context_blocks": 2,
   "n_signals_emitted": 2,
-  "elapsed_seconds": 852.59,
+  "elapsed_seconds": 865.77,
   "grammar_patterns_confirmed": 7,
   "guide_sheets_detected": 0,
   "llm_calls_made": 0,

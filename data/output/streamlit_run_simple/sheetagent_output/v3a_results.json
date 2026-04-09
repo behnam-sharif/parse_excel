@@ -1,0 +1,1409 @@
+{
+  "run_id": "streamlit_run_simple",
+  "run_ts": "2026-04-09T18:19:51.698657+00:00",
+  "version": "3a.0.1",
+  "sheets": [
+    {
+      "sheet_name": "Calculations",
+      "table_results": [
+        {
+          "table_id": "94c8c58d611b9e70_t103",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 104,
+            "c_right": 7
+          },
+          "trimmed_bbox": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 104,
+            "c_right": 7
+          },
+          "core_data_region": {
+            "r_top": 91,
+            "c_left": 1,
+            "r_bot": 104,
+            "c_right": 7,
+            "numeric_ratio": 0.8333
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "End-of-life costs",
+              "location": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 90,
+                "c_right": 7
+              },
+              "source_table_id": "94c8c58d611b9e70_t103",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 11,
+            "c_left": 12,
+            "r_bot": 18,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 11,
+            "c_left": 12,
+            "r_bot": 18,
+            "c_right": 24
+          },
+          "core_data_region": {
+            "r_top": 13,
+            "c_left": 12,
+            "r_bot": 18,
+            "c_right": 24,
+            "numeric_ratio": 0.9231
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "% of patients alive",
+              "location": {
+                "r_top": 11,
+                "c_left": 12,
+                "r_bot": 11,
+                "c_right": 24
+              },
+              "source_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Year | INO | FLAG-Ida | FLAG | MXN & Ara-C | HIDAC | DVP-Asp | DVP-Asp+Cyclo | hCVAD+MTX | Blinatumomab | TKI -Ponatinib | TKI + vincristine | Clofarabine",
+              "location": {
+                "r_top": 12,
+                "c_left": 12,
+                "r_bot": 12,
+                "c_right": 24
+              },
+              "source_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 19,
+            "c_left": 12,
+            "r_bot": 27,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 21,
+            "c_left": 12,
+            "r_bot": 27,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 21,
+            "c_left": 12,
+            "r_bot": 27,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_t25_b17",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 28,
+            "c_left": 12,
+            "r_bot": 36,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 29,
+            "c_left": 14,
+            "r_bot": 35,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 29,
+            "c_left": 14,
+            "r_bot": 35,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 37,
+            "c_left": 12,
+            "r_bot": 43,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 37,
+            "c_left": 12,
+            "r_bot": 43,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 37,
+            "c_left": 12,
+            "r_bot": 43,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 44,
+            "c_left": 12,
+            "r_bot": 51,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 45,
+            "c_left": 14,
+            "r_bot": 51,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 45,
+            "c_left": 14,
+            "r_bot": 51,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 52,
+            "c_left": 12,
+            "r_bot": 59,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 53,
+            "c_left": 12,
+            "r_bot": 59,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 53,
+            "c_left": 12,
+            "r_bot": 59,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_b25_b23",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 60,
+            "c_left": 12,
+            "r_bot": 67,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 61,
+            "c_left": 14,
+            "r_bot": 67,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 61,
+            "c_left": 14,
+            "r_bot": 67,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 68,
+            "c_left": 12,
+            "r_bot": 75,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 69,
+            "c_left": 12,
+            "r_bot": 75,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 69,
+            "c_left": 12,
+            "r_bot": 75,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 76,
+            "c_left": 12,
+            "r_bot": 84,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 77,
+            "c_left": 14,
+            "r_bot": 83,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 77,
+            "c_left": 14,
+            "r_bot": 83,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 85,
+            "c_left": 12,
+            "r_bot": 91,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 85,
+            "c_left": 12,
+            "r_bot": 91,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 85,
+            "c_left": 12,
+            "r_bot": 91,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 92,
+            "c_left": 12,
+            "r_bot": 99,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 93,
+            "c_left": 14,
+            "r_bot": 99,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 93,
+            "c_left": 14,
+            "r_bot": 99,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 100,
+            "c_left": 12,
+            "r_bot": 107,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 101,
+            "c_left": 12,
+            "r_bot": 107,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 101,
+            "c_left": 12,
+            "r_bot": 107,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "94c8c58d611b9e70_b103",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 105,
+            "c_left": 1,
+            "r_bot": 205,
+            "c_right": 7
+          },
+          "trimmed_bbox": {
+            "r_top": 106,
+            "c_left": 1,
+            "r_bot": 205,
+            "c_right": 7
+          },
+          "core_data_region": {
+            "r_top": 192,
+            "c_left": 1,
+            "r_bot": 205,
+            "c_right": 7,
+            "numeric_ratio": 0.8434
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "End-of-life costs",
+              "location": {
+                "r_top": 191,
+                "c_left": 1,
+                "r_bot": 191,
+                "c_right": 7
+              },
+              "source_table_id": "94c8c58d611b9e70_b103",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 108,
+            "c_left": 12,
+            "r_bot": 115,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 109,
+            "c_left": 14,
+            "r_bot": 115,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 109,
+            "c_left": 14,
+            "r_bot": 115,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 116,
+            "c_left": 12,
+            "r_bot": 123,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 117,
+            "c_left": 12,
+            "r_bot": 123,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 117,
+            "c_left": 12,
+            "r_bot": 123,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 124,
+            "c_left": 12,
+            "r_bot": 132,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 125,
+            "c_left": 14,
+            "r_bot": 131,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 125,
+            "c_left": 14,
+            "r_bot": 131,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 133,
+            "c_left": 12,
+            "r_bot": 139,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 133,
+            "c_left": 12,
+            "r_bot": 139,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 133,
+            "c_left": 12,
+            "r_bot": 139,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 140,
+            "c_left": 12,
+            "r_bot": 147,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 141,
+            "c_left": 14,
+            "r_bot": 147,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 141,
+            "c_left": 14,
+            "r_bot": 147,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 148,
+            "c_left": 12,
+            "r_bot": 155,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 149,
+            "c_left": 12,
+            "r_bot": 155,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 149,
+            "c_left": 12,
+            "r_bot": 155,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 156,
+            "c_left": 12,
+            "r_bot": 162,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 157,
+            "c_left": 14,
+            "r_bot": 162,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 157,
+            "c_left": 14,
+            "r_bot": 162,
+            "c_right": 27,
+            "numeric_ratio": 0.9362
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_t17_t9",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 177,
+            "c_left": 12,
+            "r_bot": 185,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 177,
+            "c_left": 12,
+            "r_bot": 185,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 179,
+            "c_left": 12,
+            "r_bot": 185,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_t17_b9",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 186,
+            "c_left": 12,
+            "r_bot": 194,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 187,
+            "c_left": 14,
+            "r_bot": 193,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 187,
+            "c_left": 14,
+            "r_bot": 193,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 195,
+            "c_left": 12,
+            "r_bot": 201,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 195,
+            "c_left": 12,
+            "r_bot": 201,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 195,
+            "c_left": 12,
+            "r_bot": 201,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 202,
+            "c_left": 12,
+            "r_bot": 209,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 203,
+            "c_left": 14,
+            "r_bot": 209,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 203,
+            "c_left": 14,
+            "r_bot": 209,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_b17_t23_b15",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 210,
+            "c_left": 12,
+            "r_bot": 217,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 211,
+            "c_left": 12,
+            "r_bot": 217,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 211,
+            "c_left": 12,
+            "r_bot": 217,
+            "c_right": 27,
+            "numeric_ratio": 0.9333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_b17_b23",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 218,
+            "c_left": 12,
+            "r_bot": 225,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 219,
+            "c_left": 14,
+            "r_bot": 225,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 219,
+            "c_left": 14,
+            "r_bot": 225,
+            "c_right": 27,
+            "numeric_ratio": 0.9492
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        }
+      ],
+      "coordinator": {
+        "sheet_name": "Calculations",
+        "pieces_from_tables": [],
+        "leftover_regions": []
+      }
+    },
+    {
+      "sheet_name": "Inputs",
+      "table_results": [
+        {
+          "table_id": "9814fc53f594ba29_t118_t70_t45",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 47,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 46,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 7,
+            "c_left": 1,
+            "r_bot": 19,
+            "c_right": 5,
+            "numeric_ratio": 0.5
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "Patient population",
+              "location": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 5
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            },
+            {
+              "piece_type": "title",
+              "text": "Market shares in world without InO",
+              "location": {
+                "r_top": 6,
+                "c_left": 1,
+                "r_bot": 6,
+                "c_right": 5
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Annual percentage change | 0 | 0 | Assumption - This can be adjusted for different payers",
+              "location": {
+                "r_top": 5,
+                "c_left": 1,
+                "r_bot": 5,
+                "c_right": 5
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            },
+            {
+              "piece_type": "header_row",
+              "text": "Number of patients in the 1st year | 15 | 15 | Number of patients treated in the first year - This can be adjusted for different payers",
+              "location": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 4,
+                "c_right": 5
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [
+            {
+              "piece_type": "footnote",
+              "text": "Market shares in world with InO",
+              "location": {
+                "r_top": 20,
+                "c_left": 1,
+                "r_bot": 20,
+                "c_right": 5
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_t118_t70_b45",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 48,
+            "c_left": 1,
+            "r_bot": 71,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 48,
+            "c_left": 1,
+            "r_bot": 71,
+            "c_right": 13
+          },
+          "core_data_region": {
+            "r_top": 49,
+            "c_left": 1,
+            "r_bot": 59,
+            "c_right": 13,
+            "numeric_ratio": 0.9231
+          },
+          "title_candidates": [],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Adverse events, frequencies (same as global models) | Inotuzumab Ozogamicin | FLAG-Ida | FLAG | Mitoxantrone and cytarabine | HIDAC | DVP-Asp | DVP-Asp+Cyclo | hCVAD+MTX | Blinatumomab | TKI (Ponatinib) | TKI + vincristine | Clofarabine",
+              "location": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 48,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_b45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [
+            {
+              "piece_type": "footnote",
+              "text": "Adverse events, costs",
+              "location": {
+                "r_top": 60,
+                "c_left": 1,
+                "r_bot": 60,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_t70_b45",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_t118_b70_t46",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 72,
+            "c_left": 1,
+            "r_bot": 117,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 73,
+            "c_left": 1,
+            "r_bot": 117,
+            "c_right": 13
+          },
+          "core_data_region": {
+            "r_top": 92,
+            "c_left": 1,
+            "r_bot": 104,
+            "c_right": 5,
+            "numeric_ratio": 0.5
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "Hospitalization",
+              "location": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 90,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            },
+            {
+              "piece_type": "title",
+              "text": "Number of bed days",
+              "location": {
+                "r_top": 91,
+                "c_left": 1,
+                "r_bot": 91,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "TKI (Ponatinib) | 11984.89 | 11984.89 | Detailed calculation in the cost-effectiveness model",
+              "location": {
+                "r_top": 89,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [
+            {
+              "piece_type": "footnote",
+              "text": "SCT rates after induction therapy",
+              "location": {
+                "r_top": 105,
+                "c_left": 1,
+                "r_bot": 105,
+                "c_right": 13
+              },
+              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_t118_b70_b46",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 118,
+            "c_left": 1,
+            "r_bot": 119,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 119,
+            "c_left": 1,
+            "r_bot": 119,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 119,
+            "c_left": 1,
+            "r_bot": 119,
+            "c_right": 5,
+            "numeric_ratio": 0.5
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_b118",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 120,
+            "c_left": 1,
+            "r_bot": 121,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 121,
+            "c_left": 1,
+            "r_bot": 121,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 121,
+            "c_left": 1,
+            "r_bot": 121,
+            "c_right": 5,
+            "numeric_ratio": 0.5
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        }
+      ],
+      "coordinator": {
+        "sheet_name": "Inputs",
+        "pieces_from_tables": [],
+        "leftover_regions": []
+      }
+    },
+    {
+      "sheet_name": "Introduction",
+      "table_results": [
+        {
+          "table_id": "f57ac8d2e4e4931a_t3",
+          "sheet_name": "Introduction",
+          "original_bbox": {
+            "r_top": 10,
+            "c_left": 2,
+            "r_bot": 12,
+            "c_right": 4
+          },
+          "trimmed_bbox": {
+            "r_top": 10,
+            "c_left": 2,
+            "r_bot": 12,
+            "c_right": 4
+          },
+          "core_data_region": {
+            "r_top": 10,
+            "c_left": 2,
+            "r_bot": 12,
+            "c_right": 4,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "f57ac8d2e4e4931a_b3",
+          "sheet_name": "Introduction",
+          "original_bbox": {
+            "r_top": 13,
+            "c_left": 2,
+            "r_bot": 14,
+            "c_right": 4
+          },
+          "trimmed_bbox": {
+            "r_top": 14,
+            "c_left": 2,
+            "r_bot": 14,
+            "c_right": 4
+          },
+          "core_data_region": {
+            "r_top": 14,
+            "c_left": 2,
+            "r_bot": 14,
+            "c_right": 4,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        }
+      ],
+      "coordinator": {
+        "sheet_name": "Introduction",
+        "pieces_from_tables": [],
+        "leftover_regions": []
+      }
+    },
+    {
+      "sheet_name": "Results",
+      "table_results": [
+        {
+          "table_id": "262a4c0f1d47d09d",
+          "sheet_name": "Results",
+          "original_bbox": {
+            "r_top": 3,
+            "c_left": 1,
+            "r_bot": 9,
+            "c_right": 4
+          },
+          "trimmed_bbox": {
+            "r_top": 3,
+            "c_left": 1,
+            "r_bot": 9,
+            "c_right": 4
+          },
+          "core_data_region": {
+            "r_top": 4,
+            "c_left": 1,
+            "r_bot": 9,
+            "c_right": 4,
+            "numeric_ratio": 0.9583
+          },
+          "title_candidates": [],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Year | Without InO | With InO | Budget impact",
+              "location": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 4
+              },
+              "source_table_id": "262a4c0f1d47d09d",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "47ecc07e130eef5f_t10",
+          "sheet_name": "Results",
+          "original_bbox": {
+            "r_top": 47,
+            "c_left": 1,
+            "r_bot": 56,
+            "c_right": 11
+          },
+          "trimmed_bbox": {
+            "r_top": 47,
+            "c_left": 1,
+            "r_bot": 56,
+            "c_right": 11
+          },
+          "core_data_region": {
+            "r_top": 48,
+            "c_left": 1,
+            "r_bot": 56,
+            "c_right": 11,
+            "numeric_ratio": 0.914
+          },
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "Without InO | With InO",
+              "location": {
+                "r_top": 47,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 11
+              },
+              "source_table_id": "47ecc07e130eef5f_t10",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Without InO | With InO",
+              "location": {
+                "r_top": 47,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 11
+              },
+              "source_table_id": "47ecc07e130eef5f_t10",
+              "decision": "kept",
+              "decision_reason": "default (LLM disabled)"
+            }
+          ],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "47ecc07e130eef5f_b10",
+          "sheet_name": "Results",
+          "original_bbox": {
+            "r_top": 57,
+            "c_left": 1,
+            "r_bot": 63,
+            "c_right": 11
+          },
+          "trimmed_bbox": {
+            "r_top": 58,
+            "c_left": 6,
+            "r_bot": 63,
+            "c_right": 11
+          },
+          "core_data_region": {
+            "r_top": 58,
+            "c_left": 6,
+            "r_bot": 63,
+            "c_right": 11,
+            "numeric_ratio": 0.8333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        }
+      ],
+      "coordinator": {
+        "sheet_name": "Results",
+        "pieces_from_tables": [],
+        "leftover_regions": []
+      }
+    }
+  ],
+  "elapsed_seconds": 2.62,
+  "n_tables_processed": 37,
+  "n_llm_calls": 0
+}

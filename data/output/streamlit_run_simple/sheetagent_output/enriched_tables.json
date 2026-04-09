@@ -175,15 +175,16 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Budget impact comparison with and without InO over the years 2020 to 2023.",
+      "embedding_description": "Budget impact of a healthcare intervention with and without indirect costs over multiple years.",
       "key_entities": [
-        "InO"
+        "InO",
+        "Budget impact"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "Table showing budget impact with and without InO for the years 2020-2023.",
-    "llm_summary": "Table showing budget impact with and without InO for the years 2020-2023.",
+    "semantic_hint": "Table showing the budget impact of a healthcare intervention with and without including indirect costs over multiple yea",
+    "llm_summary": "Table showing the budget impact of a healthcare intervention with and without including indirect costs over multiple years.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -270,7 +271,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Cost comparison between treatment with and without InO over 5 years.",
+      "embedding_description": "Cost comparison between treatments with and without InO over 5 years.",
       "key_entities": [
         "InO",
         "Drug costs",
@@ -280,8 +281,8 @@
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "This table compares costs between a treatment without InO and a treatment with InO over a 5-year period.",
-    "llm_summary": "This table compares costs between a treatment without InO and a treatment with InO over a 5-year period.",
+    "semantic_hint": "Cost comparison between a treatment without InO and a treatment with InO over a 5-year period.",
+    "llm_summary": "Cost comparison between a treatment without InO and a treatment with InO over a 5-year period.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -382,7 +383,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Cost breakdown for drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+      "embedding_description": "Costs for drugs, adverse events, subsequent treatment, hospitalization, and SCT in the model.",
       "key_entities": [
         "Drug costs",
         "Adverse events costs",
@@ -393,8 +394,8 @@
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "This table displays costs associated with drug treatment, adverse events, subsequent treatments, hospitalizations, and s",
-    "llm_summary": "This table displays costs associated with drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+    "semantic_hint": "This table presents costs associated with different components of the model.",
+    "llm_summary": "This table presents costs associated with different components of the model.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -595,18 +596,17 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Patient population values for the model including number of patients, annual percentage change, and market shares.",
+      "embedding_description": "Patient population and market share values for the model, including number of patients in the first year and annual percentage change assumptions.",
       "key_entities": [
-        "InO",
-        "Number of patients",
-        "Annual percentage change",
-        "Market shares"
+        "InO (drug)",
+        "patient population",
+        "market shares"
       ],
       "table_category": "input",
       "section_path": ""
     },
-    "semantic_hint": "Table detailing values used in the model for patient population parameters.",
-    "llm_summary": "Table detailing values used in the model for patient population parameters.",
+    "semantic_hint": "The table outlines values used in the model for patient population parameters and market shares.",
+    "llm_summary": "The table outlines values used in the model for patient population parameters and market shares.",
     "llm_table_category": "input",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -737,7 +737,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Frequency table of adverse events for various drugs in the health economic model.",
+      "embedding_description": "Table with frequencies of neutropenia, thrombocytopenia, leukopenia, and febrile neutropenia for various drugs in global models.",
       "key_entities": [
         "Inotuzumab Ozogamicin",
         "FLAG-Ida",
@@ -750,13 +750,17 @@
         "Blinatumomab",
         "TKI (Ponatinib)",
         "TKI + vincristine",
-        "Clofarabine"
+        "Clofarabine",
+        "Neutropenia",
+        "Thrombocytopenia",
+        "Leukopenia",
+        "Febrile neutropenia"
       ],
       "table_category": "input",
       "section_path": ""
     },
-    "semantic_hint": "The table displays frequencies of adverse events for different drugs in a health economic model.",
-    "llm_summary": "The table displays frequencies of adverse events for different drugs in a health economic model.",
+    "semantic_hint": "Table showing frequencies of adverse events for different drugs in the context of global models.",
+    "llm_summary": "Table showing frequencies of adverse events for different drugs in the context of global models.",
     "llm_table_category": "input",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -802,7 +806,7 @@
         "trimmable": true
       }
     ],
-    "title": "Adverse events, frequencies (same as global models)",
+    "title": "none",
     "title_source": "coordinator_batch_llm",
     "column_headers": [
       "Subsequent treatments in world without InO ",
@@ -848,6 +852,24 @@
         "derived_from_table_id": "9814fc53f594ba29_t118_b70_t46",
         "sub_bbox": {
           "r_top": 85,
+          "c_left": 1,
+          "r_bot": 89,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "sub_bbox": {
+          "r_top": 90,
           "c_left": 1,
           "r_bot": 104,
           "c_right": 13
@@ -896,7 +918,7 @@
       {
         "step": "F",
         "action": "split_decision",
-        "n_partitions": 3
+        "n_partitions": 4
       }
     ],
     "shape_attachments": [],
@@ -908,7 +930,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table showing the distribution of subsequent treatments in a scenario without InO and the redistribution of Blinatumomab shares in Lebanon.",
+      "embedding_description": "Calculation table showing the distribution of subsequent treatments in a scenario without InO and the adjustment for the unavailability of Blinatumomab in Lebanon.",
       "key_entities": [
         "Inotuzumab Ozogamicin",
         "Blinatumomab",
@@ -924,8 +946,8 @@
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "This table presents the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the ",
-    "llm_summary": "This table presents the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the impact on the availability of Blinatumomab in Lebanon.",
+    "semantic_hint": "The table shows the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the impa",
+    "llm_summary": "The table shows the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the impact on the availability of Blinatumomab in Lebanon.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1021,15 +1043,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Table detailing the assumed costs of Stem Cell Transplant (SCT).",
+      "embedding_description": "Cost assumption table for Stem Cell Transplant (SCT).",
       "key_entities": [
-        "SCT costs"
+        "Stem Cell Transplant (SCT)"
       ],
       "table_category": "assumption",
       "section_path": ""
     },
-    "semantic_hint": "The table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
-    "llm_summary": "The table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
+    "semantic_hint": "This table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
+    "llm_summary": "This table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
     "llm_table_category": "assumption",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1287,15 +1309,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of patients eligible for treatment with Inotuzumab Ozogamicin over multiple years.",
+      "embedding_description": "Table for calculating BIM with the number of patients eligible for Inotuzumab Ozogamicin treatment over multiple years.",
       "key_entities": [
         "Inotuzumab Ozogamicin"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table presents the calculation of the number of patients eligible for treatment with Inotuzumab Ozogamicin over the ",
-    "llm_summary": "The table presents the calculation of the number of patients eligible for treatment with Inotuzumab Ozogamicin over the years.",
+    "semantic_hint": "The table shows the number of patients eligible for treatment with Inotuzumab Ozogamicin over the years for BIM calculat",
+    "llm_summary": "The table shows the number of patients eligible for treatment with Inotuzumab Ozogamicin over the years for BIM calculation.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1396,11 +1418,10 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Percentage of patients alive over time for different treatment regimens.",
+      "embedding_description": "Percentage of patients alive over time for different treatment options.",
       "key_entities": [
         "INO",
         "FLAG-Ida",
-        "FLAG",
         "MXN & Ara-C",
         "HIDAC",
         "DVP-Asp",
@@ -1414,8 +1435,8 @@
       "table_category": "output",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the percentage of patients alive over different years for various treatment regimens.",
-    "llm_summary": "The table shows the percentage of patients alive over different years for various treatment regimens.",
+    "semantic_hint": "The table shows the percentage of patients alive over different years for various treatment options.",
+    "llm_summary": "The table shows the percentage of patients alive over different years for various treatment options.",
     "llm_table_category": "output",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1513,15 +1534,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table for the number of patients that die each year under the current situation for the drug INO.",
+      "embedding_description": "Calculation table for the number of patients that die annually under the current situation from 2020 to 2024 for INO.",
       "key_entities": [
         "INO"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "Table showing the number of patients that die each year under the current situation for the drug INO.",
-    "llm_summary": "Table showing the number of patients that die each year under the current situation for the drug INO.",
+    "semantic_hint": "Table showing the number of patients that die each year under the current situation for the years 2020 to 2024.",
+    "llm_summary": "Table showing the number of patients that die each year under the current situation for the years 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1585,7 +1606,7 @@
         "trimmable": true
       }
     ],
-    "title": "Treatment Group Comparison",
+    "title": "Treatment Group",
     "title_source": "coordinator_batch_llm",
     "column_headers": [
       "",
@@ -1634,7 +1655,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024.",
+      "embedding_description": "Calculation of annual patient deaths from 2019 to 2024 based on given values.",
       "key_entities": [
         "Number of patients",
         "years",
@@ -1643,8 +1664,8 @@
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
-    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024 based on specific values.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024 based on specific values.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -1837,10 +1858,10 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table for the number of patients that die annually from 2019 to 2024.",
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 based on death rates.",
       "key_entities": [
         "Number of patients",
-        "deaths",
+        "death rate",
         "years"
       ],
       "table_category": "calc",
@@ -1938,17 +1959,16 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "embedding_description": "Calculation table for annual patient mortality rates from 2019 to 2024.",
       "key_entities": [
-        "Number of patients",
-        "years",
-        "death rate"
+        "patients",
+        "deaths"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
-    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "semantic_hint": "Table showing the number of patients that die each year from 2019 to 2024",
+    "llm_summary": "Table showing the number of patients that die each year from 2019 to 2024",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2047,7 +2067,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "embedding_description": "Calculation table for the number of patients that die annually from 2019 to 2024 based on death rates.",
       "key_entities": [
         "Number of patients",
         "death rate",
@@ -2099,7 +2119,7 @@
         "trimmable": true
       }
     ],
-    "title": "Chemotherapy Regimen Comparison",
+    "title": "Response Rate",
     "title_source": "coordinator_batch_llm",
     "column_headers": [
       "MXN & Ara-C ",
@@ -2148,15 +2168,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Number of patients that die each year for MXN & Ara-C under current and projected scenarios.",
+      "embedding_description": "Calculation of the number of patient deaths annually for MXN & Ara-C from 2020 to 2024.",
       "key_entities": [
         "MXN & Ara-C"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year for the drugs MXN & Ara-C under the current situation and proj",
-    "llm_summary": "The table shows the number of patients that die each year for the drugs MXN & Ara-C under the current situation and projected from 2020 to 2024.",
+    "semantic_hint": "The table shows the number of patients that die each year for the drugs MXN & Ara-C from 2020 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year for the drugs MXN & Ara-C from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2355,17 +2375,18 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Table detailing mortality rates for patients on HIDAC treatment over a six-year period.",
+      "embedding_description": "Calculation table for the number of patient deaths annually with the HIDAC intervention from 2020 to 2024.",
       "key_entities": [
         "HIDAC",
-        "mortality rates",
-        "patients"
+        "patients",
+        "intervention",
+        "deaths"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table presents annual mortality rates for patients on HIDAC treatment from 2019 to 2024.",
-    "llm_summary": "The table presents annual mortality rates for patients on HIDAC treatment from 2019 to 2024.",
+    "semantic_hint": "The table shows the number of patients that die each year under the HIDAC intervention from 2020 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year under the HIDAC intervention from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2383,7 +2404,7 @@
         "confidence": 0.5
       }
     },
-    "ontology_hint": "population"
+    "ontology_hint": "comparator"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
@@ -2468,17 +2489,17 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 based on death rates per year.",
+      "embedding_description": "Calculation table showing the annual number of patient deaths from 2019 to 2024 across various scenarios.",
       "key_entities": [
         "Number of patients",
-        "death rate",
-        "years"
+        "years",
+        "scenarios"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
-    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "semantic_hint": "The table presents the number of patients that die each year from 2019 to 2024 under different scenarios.",
+    "llm_summary": "The table presents the number of patients that die each year from 2019 to 2024 under different scenarios.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2569,15 +2590,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of annual patient mortality under DVP-Asp treatment from 2019 to 2024.",
+      "embedding_description": "Table showing mortality rates for DVP-Asp annually from 2019 to 2024 under current and projected scenarios.",
       "key_entities": [
         "DVP-Asp"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year under the DVP-Asp treatment from 2019 to 2024.",
-    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp treatment from 2019 to 2024.",
+    "semantic_hint": "The table presents annual mortality rates for DVP-Asp under the current situation and projections from 2020 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for DVP-Asp under the current situation and projections from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2704,7 +2725,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Table comparing dosages of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in the context of a health economics model.",
+      "embedding_description": "Table comparing the efficacy or cost parameters of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in the model.",
       "key_entities": [
         "Inotuzumab Ozogamicin",
         "FLAG-Ida",
@@ -2713,8 +2734,8 @@
       "table_category": "input",
       "section_path": ""
     },
-    "semantic_hint": "Comparison of different treatments including Inotuzumab Ozogamicin, FLAG-Ida, and FLAG.",
-    "llm_summary": "Comparison of different treatments including Inotuzumab Ozogamicin, FLAG-Ida, and FLAG.",
+    "semantic_hint": "Comparison of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in a health economic model.",
+    "llm_summary": "Comparison of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in a health economic model.",
     "llm_table_category": "input",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -2819,7 +2840,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table for the number of patient deaths annually based on probabilities from 2019 to 2024.",
+      "embedding_description": "Calculation table for patient mortality rates from 2019 to 2024 based on probabilities.",
       "key_entities": [
         "Number of patients",
         "probabilities",
@@ -2871,8 +2892,8 @@
         "trimmable": true
       }
     ],
-    "title": "Drug Combination Comparison",
-    "title_source": "coordinator_batch_llm",
+    "title": null,
+    "title_source": null,
     "column_headers": [
       "DVP-Asp+Cyclo",
       "",
@@ -2920,22 +2941,22 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of annual patient deaths under DVP-Asp+Cyclo treatment versus current situation from 2019 to 2024.",
+      "embedding_description": "Table showing mortality rates per year for patients on DVP-Asp+Cyclo treatment.",
       "key_entities": [
         "DVP-Asp+Cyclo",
-        "patients",
-        "deaths"
+        "mortality rates",
+        "patients"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year under the DVP-Asp+Cyclo treatment compared to the current situ",
-    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp+Cyclo treatment compared to the current situation from 2019 to 2024.",
+    "semantic_hint": "The table presents annual mortality rates for patients on DVP-Asp+Cyclo treatment from 2019 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for patients on DVP-Asp+Cyclo treatment from 2019 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
     "sheet_text_summary": null,
-    "structure_method": "coordinator_batch_llm",
+    "structure_method": "grammar_match",
     "llm_structure_response": null,
     "grammar_match_confidence": 1.0,
     "decision_confidence": {
@@ -3129,15 +3150,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Annual mortality rates for hCVAD+MTX patients from 2020 to 2024.",
+      "embedding_description": "Data on annual patient mortality under hCVAD+MTX treatment from 2020 to 2024.",
       "key_entities": [
         "hCVAD+MTX"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table presents annual mortality rates for patients on hCVAD+MTX treatment from 2020 to 2024.",
-    "llm_summary": "The table presents annual mortality rates for patients on hCVAD+MTX treatment from 2020 to 2024.",
+    "semantic_hint": "The table presents data on the number of patients that die each year under the hCVAD+MTX treatment regimen from 2020 to ",
+    "llm_summary": "The table presents data on the number of patients that die each year under the hCVAD+MTX treatment regimen from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3240,7 +3261,7 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on specific values.",
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024.",
       "key_entities": [
         "Number of patients",
         "years",
@@ -3341,17 +3362,22 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table showing annual mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+      "embedding_description": "Calculation table showing patient mortality with Blinatumomab treatment compared to the current situation over five years.",
       "key_entities": [
         "Blinatumomab",
-        "patients",
-        "mortality rates"
+        "Current situation",
+        "Number of patients",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table presents annual patient mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024",
-    "llm_summary": "The table presents annual patient mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+    "semantic_hint": "This table tracks the number of patients that die each year under the current situation and with Blinatumomab treatment ",
+    "llm_summary": "This table tracks the number of patients that die each year under the current situation and with Blinatumomab treatment from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3450,17 +3476,17 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 using specific rates.",
+      "embedding_description": "Calculation table for annual patient mortality rates from 2019 to 2024.",
       "key_entities": [
         "Number of patients",
-        "rates",
+        "scenarios",
         "years"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024 based on specific rates.",
-    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024 based on specific rates.",
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024 under different scenarios.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024 under different scenarios.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3542,15 +3568,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+      "embedding_description": "Annual data for TKI drug Ponatinib and patient mortality numbers from 2020 to 2024.",
       "key_entities": [
         "TKI - Ponatinib"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "Table showing annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
-    "llm_summary": "Table showing annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+    "semantic_hint": "The table provides annual data for TKI drug Ponatinib from 2020 to 2024, including patient mortality numbers.",
+    "llm_summary": "The table provides annual data for TKI drug Ponatinib from 2020 to 2024, including patient mortality numbers.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3612,7 +3638,7 @@
         "trimmable": true
       }
     ],
-    "title": "Treatment Response",
+    "title": "Treatment Efficacy",
     "title_source": "coordinator_batch_llm",
     "column_headers": [
       "",
@@ -3661,21 +3687,17 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Tracking annual patient mortality from 2020 to 2024.",
+      "embedding_description": "Table calculating the annual number of patient deaths from 2019 to 2024.",
       "key_entities": [
         "Number of patients",
         "patients that die",
-        "2020",
-        "2021",
-        "2022",
-        "2023",
-        "2024"
+        "years"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table tracks the number of patients who die each year from 2020 to 2024.",
-    "llm_summary": "The table tracks the number of patients who die each year from 2020 to 2024.",
+    "semantic_hint": "This table tracks the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "This table tracks the number of patients that die each year from 2019 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3765,8 +3787,8 @@
       "table_category": "output",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year under the treatment of TKI + vincristine from 2019 to 2024.",
-    "llm_summary": "The table shows the number of patients that die each year under the treatment of TKI + vincristine from 2019 to 2024.",
+    "semantic_hint": "The table shows the number of patients that die each year under the treatment regimen of TKI + vincristine from 2019 to ",
+    "llm_summary": "The table shows the number of patients that die each year under the treatment regimen of TKI + vincristine from 2019 to 2024.",
     "llm_table_category": "output",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -3820,8 +3842,8 @@
         "trimmable": true
       }
     ],
-    "title": "Side Effects",
-    "title_source": "coordinator_batch_llm",
+    "title": null,
+    "title_source": null,
     "column_headers": [
       "",
       "",
@@ -3884,7 +3906,7 @@
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
     "sheet_text_summary": null,
-    "structure_method": "coordinator_batch_llm",
+    "structure_method": "grammar_match",
     "llm_structure_response": null,
     "grammar_match_confidence": 1.0,
     "decision_confidence": {
@@ -3970,15 +3992,15 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Table detailing mortality rates per year for patients on Clofarabine from 2019 to 2024.",
+      "embedding_description": "Calculation of the number of patients that die each year for Clofarabine from 2020 to 2024.",
       "key_entities": [
         "Clofarabine"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table presents annual mortality rates for patients on Clofarabine from 2019 to 2024.",
-    "llm_summary": "The table presents annual mortality rates for patients on Clofarabine from 2019 to 2024.",
+    "semantic_hint": "The table shows the number of patients that die each year for Clofarabine in the current situation and projected from 20",
+    "llm_summary": "The table shows the number of patients that die each year for Clofarabine in the current situation and projected from 2020 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
@@ -4028,8 +4050,8 @@
         "trimmable": true
       }
     ],
-    "title": "Treatment Duration",
-    "title_source": "coordinator_batch_llm",
+    "title": null,
+    "title_source": null,
     "column_headers": [
       "",
       "",
@@ -4077,22 +4099,22 @@
     "section_assignment_confidence": 0.0,
     "parent_section_id": null,
     "rag_fields": {
-      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2022.",
+      "embedding_description": "Calculation table for the number of patient deaths annually from 2019 to 2024.",
       "key_entities": [
         "Number of patients",
-        "death",
-        "years"
+        "years",
+        "deaths"
       ],
       "table_category": "calc",
       "section_path": ""
     },
-    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2022.",
-    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2022.",
+    "semantic_hint": "This table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "This table shows the number of patients that die each year from 2019 to 2024.",
     "llm_table_category": "calc",
     "llm_table_category_confidence": 0.85,
     "sheet_level_text_dominant": false,
     "sheet_text_summary": null,
-    "structure_method": "coordinator_batch_llm",
+    "structure_method": "grammar_match",
     "llm_structure_response": null,
     "grammar_match_confidence": 1.0,
     "decision_confidence": {
