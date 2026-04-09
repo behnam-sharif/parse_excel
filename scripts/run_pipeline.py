@@ -33,6 +33,7 @@ def main():
     parser.add_argument("--run-id", required=True, help="Run identifier")
     parser.add_argument("--output-base", default="data/output", help="Base output directory")
     parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
+    parser.add_argument("--with-sheetagent", action="store_true", help="Run optional xl_sheetagent stage")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
 
     args = parser.parse_args()
@@ -171,6 +172,34 @@ def main():
         except Exception as exc:
             summary["stages"]["xl_image"] = {"error": str(exc)}
             summary["warnings"].append(f"xl_image failed: {exc}")
+            print(f"  FAILED: {exc}")
+
+    # -- Stage 5: xl_sheetagent (optional) --
+    if args.with_sheetagent:
+        print("\n" + "=" * 60)
+        print("Stage 5: xl_sheetagent (optional)")
+        print("=" * 60)
+        t0 = time.time()
+        try:
+            from xl_sheetagent import run_sheetagent
+            from core.paths import get_sheetagent_output_path
+
+            sa_out = get_sheetagent_output_path(run_id, base)
+            sa_out.mkdir(parents=True, exist_ok=True)
+
+            enriched = run_sheetagent(run_id, str(sa_out))
+
+            n_enriched = len(enriched) if enriched else 0
+            summary["stages"]["xl_sheetagent"] = {
+                "duration_s": round(time.time() - t0, 2),
+                "output_path": str(sa_out),
+                "tables_enriched": n_enriched,
+            }
+            print(f"  Done in {summary['stages']['xl_sheetagent']['duration_s']}s")
+            print(f"  Tables enriched: {n_enriched}")
+        except Exception as exc:
+            summary["stages"]["xl_sheetagent"] = {"error": str(exc)}
+            summary["warnings"].append(f"xl_sheetagent failed: {exc}")
             print(f"  FAILED: {exc}")
 
     # -- Write summary --

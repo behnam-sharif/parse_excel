@@ -35,6 +35,11 @@ def get_image_output_path(run_id: str, base: str = "data/output") -> Path:
     return get_run_root(run_id, base) / "image_output"
 
 
+def get_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the xl_sheetagent output directory for a given run."""
+    return get_run_root(run_id, base) / "sheetagent_output"
+
+
 def get_log_path(run_id: str, base: str = "data/output") -> Path:
     """Return the logs directory for a given run."""
     return get_run_root(run_id, base) / "logs"

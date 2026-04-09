@@ -1,0 +1,15 @@
+{
+  "run_id": "streamlit_run_simple",
+  "run_ts": "2026-04-08T20:50:50.529734+00:00",
+  "xl_sheetagent_version": "0.2.0",
+  "upstream_schema_versions": {
+    "xl_parse": "unknown",
+    "xl_table": "3.1.0"
+  },
+  "config_snapshot": {},
+  "n_tables_input": 37,
+  "n_tables_enriched": 35,
+  "n_context_blocks": 2,
+  "n_signals_emitted": 60,
+  "elapsed_seconds": 295.67
+}

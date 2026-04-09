@@ -1,0 +1,3721 @@
+[
+  {
+    "table_id": "94c8c58d611b9e70_t103",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 104,
+      "c_right": 7,
+      "bbox_excel": "B3:H105"
+    },
+    "content_bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 104,
+      "c_right": 7
+    },
+    "empty_zones": [],
+    "title": null,
+    "column_headers": [
+      "BIM calculation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "World with InO",
+      "Current treatments used"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 104,
+          "c_right": 7
+        },
+        "content_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 104,
+          "c_right": 7
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": null,
+        "footnotes_count": 2
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 7
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 11,
+      "c_left": 12,
+      "r_bot": 18,
+      "c_right": 27,
+      "bbox_excel": "M12:AB19"
+    },
+    "content_bbox": {
+      "r_top": 11,
+      "c_left": 12,
+      "r_bot": 18,
+      "c_right": 24
+    },
+    "empty_zones": [
+      {
+        "position": "trailing_cols",
+        "r_top": 11,
+        "c_left": 25,
+        "r_bot": 18,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": null,
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "INO"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 11,
+          "c_left": 12,
+          "r_bot": 18,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 11,
+          "c_left": 12,
+          "r_bot": 18,
+          "c_right": 24
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": null,
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 19,
+      "c_left": 12,
+      "r_bot": 27,
+      "c_right": 27,
+      "bbox_excel": "M20:AB28"
+    },
+    "content_bbox": {
+      "r_top": 21,
+      "c_left": 12,
+      "r_bot": 27,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 19,
+        "c_left": 12,
+        "r_bot": 20,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "Year 5",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 19,
+          "c_left": 12,
+          "r_bot": 27,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 21,
+          "c_left": 12,
+          "r_bot": 27,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Year 5",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_b17",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 28,
+      "c_left": 12,
+      "r_bot": 36,
+      "c_right": 27,
+      "bbox_excel": "M29:AB37"
+    },
+    "content_bbox": {
+      "r_top": 29,
+      "c_left": 14,
+      "r_bot": 35,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 28,
+        "c_left": 12,
+        "r_bot": 28,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_rows",
+        "r_top": 36,
+        "c_left": 12,
+        "r_bot": 36,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 29,
+        "c_left": 12,
+        "r_bot": 35,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "FLAG-Ida"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 28,
+          "c_left": 12,
+          "r_bot": 36,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 29,
+          "c_left": 14,
+          "r_bot": 35,
+          "c_right": 27
+        },
+        "empty_zones_count": 3,
+        "trimmable_zones": 3
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 37,
+      "c_left": 12,
+      "r_bot": 43,
+      "c_right": 27,
+      "bbox_excel": "M38:AB44"
+    },
+    "content_bbox": {
+      "r_top": 37,
+      "c_left": 12,
+      "r_bot": 43,
+      "c_right": 27
+    },
+    "empty_zones": [],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 37,
+          "c_left": 12,
+          "r_bot": 43,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 37,
+          "c_left": 12,
+          "r_bot": 43,
+          "c_right": 27
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 44,
+      "c_left": 12,
+      "r_bot": 51,
+      "c_right": 27,
+      "bbox_excel": "M45:AB52"
+    },
+    "content_bbox": {
+      "r_top": 45,
+      "c_left": 14,
+      "r_bot": 51,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 44,
+        "c_left": 12,
+        "r_bot": 44,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 45,
+        "c_left": 12,
+        "r_bot": 51,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "FLAG"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 44,
+          "c_left": 12,
+          "r_bot": 51,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 45,
+          "c_left": 14,
+          "r_bot": 51,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 52,
+      "c_left": 12,
+      "r_bot": 59,
+      "c_right": 27,
+      "bbox_excel": "M53:AB60"
+    },
+    "content_bbox": {
+      "r_top": 53,
+      "c_left": 12,
+      "r_bot": 59,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 52,
+        "c_left": 12,
+        "r_bot": 52,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 52,
+          "c_left": 12,
+          "r_bot": 59,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 53,
+          "c_left": 12,
+          "r_bot": 59,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_b23",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 60,
+      "c_left": 12,
+      "r_bot": 67,
+      "c_right": 27,
+      "bbox_excel": "M61:AB68"
+    },
+    "content_bbox": {
+      "r_top": 61,
+      "c_left": 14,
+      "r_bot": 67,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 60,
+        "c_left": 12,
+        "r_bot": 60,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 61,
+        "c_left": 12,
+        "r_bot": 67,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "MXN & Ara-C"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 60,
+          "c_left": 12,
+          "r_bot": 67,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 61,
+          "c_left": 14,
+          "r_bot": 67,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 68,
+      "c_left": 12,
+      "r_bot": 75,
+      "c_right": 27,
+      "bbox_excel": "M69:AB76"
+    },
+    "content_bbox": {
+      "r_top": 69,
+      "c_left": 12,
+      "r_bot": 75,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 68,
+        "c_left": 12,
+        "r_bot": 68,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 68,
+          "c_left": 12,
+          "r_bot": 75,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 69,
+          "c_left": 12,
+          "r_bot": 75,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 76,
+      "c_left": 12,
+      "r_bot": 84,
+      "c_right": 27,
+      "bbox_excel": "M77:AB85"
+    },
+    "content_bbox": {
+      "r_top": 77,
+      "c_left": 14,
+      "r_bot": 83,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 76,
+        "c_left": 12,
+        "r_bot": 76,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_rows",
+        "r_top": 84,
+        "c_left": 12,
+        "r_bot": 84,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 77,
+        "c_left": 12,
+        "r_bot": 83,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "HIDAC"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 76,
+          "c_left": 12,
+          "r_bot": 84,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 77,
+          "c_left": 14,
+          "r_bot": 83,
+          "c_right": 27
+        },
+        "empty_zones_count": 3,
+        "trimmable_zones": 3
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 85,
+      "c_left": 12,
+      "r_bot": 91,
+      "c_right": 27,
+      "bbox_excel": "M86:AB92"
+    },
+    "content_bbox": {
+      "r_top": 85,
+      "c_left": 12,
+      "r_bot": 91,
+      "c_right": 27
+    },
+    "empty_zones": [],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 85,
+          "c_left": 12,
+          "r_bot": 91,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 85,
+          "c_left": 12,
+          "r_bot": 91,
+          "c_right": 27
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 92,
+      "c_left": 12,
+      "r_bot": 99,
+      "c_right": 27,
+      "bbox_excel": "M93:AB100"
+    },
+    "content_bbox": {
+      "r_top": 93,
+      "c_left": 14,
+      "r_bot": 99,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 92,
+        "c_left": 12,
+        "r_bot": 92,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 93,
+        "c_left": 12,
+        "r_bot": 99,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "DVP-Asp"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 92,
+          "c_left": 12,
+          "r_bot": 99,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 93,
+          "c_left": 14,
+          "r_bot": 99,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 100,
+      "c_left": 12,
+      "r_bot": 107,
+      "c_right": 27,
+      "bbox_excel": "M101:AB108"
+    },
+    "content_bbox": {
+      "r_top": 101,
+      "c_left": 12,
+      "r_bot": 107,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 100,
+        "c_left": 12,
+        "r_bot": 100,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 100,
+          "c_left": 12,
+          "r_bot": 107,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 101,
+          "c_left": 12,
+          "r_bot": 107,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "94c8c58d611b9e70_b103",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 105,
+      "c_left": 1,
+      "r_bot": 205,
+      "c_right": 7,
+      "bbox_excel": "B106:H206"
+    },
+    "content_bbox": {
+      "r_top": 106,
+      "c_left": 1,
+      "r_bot": 205,
+      "c_right": 7
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 105,
+        "c_left": 1,
+        "r_bot": 105,
+        "c_right": 7,
+        "trimmable": true
+      }
+    ],
+    "title": "Total costs in world without InO",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.7214285714285715,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 105,
+          "c_left": 1,
+          "r_bot": 205,
+          "c_right": 7
+        },
+        "content_bbox": {
+          "r_top": 106,
+          "c_left": 1,
+          "r_bot": 205,
+          "c_right": 7
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Total costs in world without InO",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 7
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 108,
+      "c_left": 12,
+      "r_bot": 115,
+      "c_right": 27,
+      "bbox_excel": "M109:AB116"
+    },
+    "content_bbox": {
+      "r_top": 109,
+      "c_left": 14,
+      "r_bot": 115,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 108,
+        "c_left": 12,
+        "r_bot": 108,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 109,
+        "c_left": 12,
+        "r_bot": 115,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "DVP-Asp+Cyclo"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 108,
+          "c_left": 12,
+          "r_bot": 115,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 109,
+          "c_left": 14,
+          "r_bot": 115,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 116,
+      "c_left": 12,
+      "r_bot": 123,
+      "c_right": 27,
+      "bbox_excel": "M117:AB124"
+    },
+    "content_bbox": {
+      "r_top": 117,
+      "c_left": 12,
+      "r_bot": 123,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 116,
+        "c_left": 12,
+        "r_bot": 116,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 116,
+          "c_left": 12,
+          "r_bot": 123,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 117,
+          "c_left": 12,
+          "r_bot": 123,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 124,
+      "c_left": 12,
+      "r_bot": 132,
+      "c_right": 27,
+      "bbox_excel": "M125:AB133"
+    },
+    "content_bbox": {
+      "r_top": 125,
+      "c_left": 14,
+      "r_bot": 131,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 124,
+        "c_left": 12,
+        "r_bot": 124,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_rows",
+        "r_top": 132,
+        "c_left": 12,
+        "r_bot": 132,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 125,
+        "c_left": 12,
+        "r_bot": 131,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "hCVAD+MTX"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 124,
+          "c_left": 12,
+          "r_bot": 132,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 125,
+          "c_left": 14,
+          "r_bot": 131,
+          "c_right": 27
+        },
+        "empty_zones_count": 3,
+        "trimmable_zones": 3
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 133,
+      "c_left": 12,
+      "r_bot": 139,
+      "c_right": 27,
+      "bbox_excel": "M134:AB140"
+    },
+    "content_bbox": {
+      "r_top": 133,
+      "c_left": 12,
+      "r_bot": 139,
+      "c_right": 27
+    },
+    "empty_zones": [],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 133,
+          "c_left": 12,
+          "r_bot": 139,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 133,
+          "c_left": 12,
+          "r_bot": 139,
+          "c_right": 27
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 140,
+      "c_left": 12,
+      "r_bot": 147,
+      "c_right": 27,
+      "bbox_excel": "M141:AB148"
+    },
+    "content_bbox": {
+      "r_top": 141,
+      "c_left": 14,
+      "r_bot": 147,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 140,
+        "c_left": 12,
+        "r_bot": 140,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 141,
+        "c_left": 12,
+        "r_bot": 147,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "Blinatumomab"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 140,
+          "c_left": 12,
+          "r_bot": 147,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 141,
+          "c_left": 14,
+          "r_bot": 147,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 148,
+      "c_left": 12,
+      "r_bot": 155,
+      "c_right": 27,
+      "bbox_excel": "M149:AB156"
+    },
+    "content_bbox": {
+      "r_top": 149,
+      "c_left": 12,
+      "r_bot": 155,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 148,
+        "c_left": 12,
+        "r_bot": 148,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 148,
+          "c_left": 12,
+          "r_bot": 155,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 149,
+          "c_left": 12,
+          "r_bot": 155,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 156,
+      "c_left": 12,
+      "r_bot": 162,
+      "c_right": 27,
+      "bbox_excel": "M157:AB163"
+    },
+    "content_bbox": {
+      "r_top": 157,
+      "c_left": 14,
+      "r_bot": 162,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 156,
+        "c_left": 12,
+        "r_bot": 156,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 157,
+        "c_left": 12,
+        "r_bot": 162,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "INO",
+      "",
+      "Current situation",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 156,
+          "c_left": 12,
+          "r_bot": 162,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 157,
+          "c_left": 14,
+          "r_bot": 162,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_t17_t9",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 177,
+      "c_left": 12,
+      "r_bot": 185,
+      "c_right": 27,
+      "bbox_excel": "M178:AB186"
+    },
+    "content_bbox": {
+      "r_top": 177,
+      "c_left": 12,
+      "r_bot": 185,
+      "c_right": 27
+    },
+    "empty_zones": [],
+    "title": null,
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 177,
+          "c_left": 12,
+          "r_bot": 185,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 177,
+          "c_left": 12,
+          "r_bot": 185,
+          "c_right": 27
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": null,
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_t17_b9",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 186,
+      "c_left": 12,
+      "r_bot": 194,
+      "c_right": 27,
+      "bbox_excel": "M187:AB195"
+    },
+    "content_bbox": {
+      "r_top": 187,
+      "c_left": 14,
+      "r_bot": 193,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 186,
+        "c_left": 12,
+        "r_bot": 186,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_rows",
+        "r_top": 194,
+        "c_left": 12,
+        "r_bot": 194,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 187,
+        "c_left": 12,
+        "r_bot": 193,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "TKI + vincristine"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 186,
+          "c_left": 12,
+          "r_bot": 194,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 187,
+          "c_left": 14,
+          "r_bot": 193,
+          "c_right": 27
+        },
+        "empty_zones_count": 3,
+        "trimmable_zones": 3
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 195,
+      "c_left": 12,
+      "r_bot": 201,
+      "c_right": 27,
+      "bbox_excel": "M196:AB202"
+    },
+    "content_bbox": {
+      "r_top": 195,
+      "c_left": 12,
+      "r_bot": 201,
+      "c_right": 27
+    },
+    "empty_zones": [],
+    "title": "2024",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 195,
+          "c_left": 12,
+          "r_bot": 201,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 195,
+          "c_left": 12,
+          "r_bot": 201,
+          "c_right": 27
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 202,
+      "c_left": 12,
+      "r_bot": 209,
+      "c_right": 27,
+      "bbox_excel": "M203:AB210"
+    },
+    "content_bbox": {
+      "r_top": 203,
+      "c_left": 14,
+      "r_bot": 209,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 202,
+        "c_left": 12,
+        "r_bot": 202,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 203,
+        "c_left": 12,
+        "r_bot": 209,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "Clofarabine"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 202,
+          "c_left": 12,
+          "r_bot": 209,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 203,
+          "c_left": 14,
+          "r_bot": 209,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_b15",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 210,
+      "c_left": 12,
+      "r_bot": 217,
+      "c_right": 27,
+      "bbox_excel": "M211:AB218"
+    },
+    "content_bbox": {
+      "r_top": 211,
+      "c_left": 12,
+      "r_bot": 217,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 210,
+        "c_left": 12,
+        "r_bot": 210,
+        "c_right": 27,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 210,
+          "c_left": 12,
+          "r_bot": 217,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 211,
+          "c_left": 12,
+          "r_bot": 217,
+          "c_right": 27
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_b23",
+    "sheet_name": "Calculations",
+    "bbox": {
+      "r_top": 218,
+      "c_left": 12,
+      "r_bot": 225,
+      "c_right": 27,
+      "bbox_excel": "M219:AB226"
+    },
+    "content_bbox": {
+      "r_top": 219,
+      "c_left": 14,
+      "r_bot": 225,
+      "c_right": 27
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 218,
+        "c_left": 12,
+        "r_bot": 218,
+        "c_right": 27,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 219,
+        "c_left": 12,
+        "r_bot": 225,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "2024",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 218,
+          "c_left": 12,
+          "r_bot": 225,
+          "c_right": 27
+        },
+        "content_bbox": {
+          "r_top": 219,
+          "c_left": 14,
+          "r_bot": 225,
+          "c_right": 27
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "2024",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 16
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_t45",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 47,
+      "c_right": 13,
+      "bbox_excel": "B3:N48"
+    },
+    "content_bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 46,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "trailing_rows",
+        "r_top": 47,
+        "c_left": 1,
+        "r_bot": 47,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 2,
+        "c_left": 6,
+        "r_bot": 46,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": null,
+    "column_headers": [
+      "Adverse events, frequencies (same as global models)",
+      "Inotuzumab Ozogamicin",
+      "FLAG-Ida",
+      "FLAG",
+      "Mitoxantrone and cytarabine",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI (Ponatinib)",
+      "TKI + vincristine",
+      "Clofarabine"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "Adverse events, frequencies (same as global models)",
+      "Neutropenia",
+      "Thrombocytopenia"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 47,
+          "c_right": 13
+        },
+        "content_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 46,
+          "c_right": 5
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": null,
+        "footnotes_count": 3
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 13
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_b45",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 48,
+      "c_left": 1,
+      "r_bot": 71,
+      "c_right": 13,
+      "bbox_excel": "B49:N72"
+    },
+    "content_bbox": {
+      "r_top": 48,
+      "c_left": 1,
+      "r_bot": 71,
+      "c_right": 13
+    },
+    "empty_zones": [],
+    "title": "Clofarabine",
+    "column_headers": [
+      "Adverse events, frequencies (same as global models)",
+      "Inotuzumab Ozogamicin",
+      "FLAG-Ida",
+      "FLAG",
+      "Mitoxantrone and cytarabine",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI (Ponatinib)",
+      "TKI + vincristine",
+      "Clofarabine"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "Subsequent treatments in world without InO"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 48,
+          "c_left": 1,
+          "r_bot": 71,
+          "c_right": 13
+        },
+        "content_bbox": {
+          "r_top": 48,
+          "c_left": 1,
+          "r_bot": 71,
+          "c_right": 13
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Clofarabine",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 13
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_t46",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 72,
+      "c_left": 1,
+      "r_bot": 117,
+      "c_right": 13,
+      "bbox_excel": "B73:N118"
+    },
+    "content_bbox": {
+      "r_top": 73,
+      "c_left": 1,
+      "r_bot": 117,
+      "c_right": 13
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 72,
+        "c_left": 1,
+        "r_bot": 72,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "Graft-versus-host disease after SCT",
+    "column_headers": [
+      "Adverse events, frequencies (same as global models)",
+      "Inotuzumab Ozogamicin",
+      "FLAG-Ida",
+      "FLAG",
+      "Mitoxantrone and cytarabine",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI (Ponatinib)",
+      "TKI + vincristine",
+      "Clofarabine"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "SCT costs"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 72,
+          "c_left": 1,
+          "r_bot": 117,
+          "c_right": 13
+        },
+        "content_bbox": {
+          "r_top": 73,
+          "c_left": 1,
+          "r_bot": 117,
+          "c_right": 13
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Graft-versus-host disease after SCT",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 13
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_b46",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 118,
+      "c_left": 1,
+      "r_bot": 119,
+      "c_right": 13,
+      "bbox_excel": "B119:N120"
+    },
+    "content_bbox": {
+      "r_top": 119,
+      "c_left": 1,
+      "r_bot": 119,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 118,
+        "c_left": 1,
+        "r_bot": 118,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 119,
+        "c_left": 6,
+        "r_bot": 119,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "Clofarabine",
+    "column_headers": [
+      "Adverse events, frequencies (same as global models)",
+      "Inotuzumab Ozogamicin",
+      "FLAG-Ida",
+      "FLAG",
+      "Mitoxantrone and cytarabine",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI (Ponatinib)",
+      "TKI + vincristine",
+      "Clofarabine"
+    ],
+    "row_headers": [],
+    "footnotes": [
+      "End-of-life costs"
+    ],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 118,
+          "c_left": 1,
+          "r_bot": 119,
+          "c_right": 13
+        },
+        "content_bbox": {
+          "r_top": 119,
+          "c_left": 1,
+          "r_bot": 119,
+          "c_right": 5
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Clofarabine",
+        "footnotes_count": 1
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 13
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_b118",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 120,
+      "c_left": 1,
+      "r_bot": 121,
+      "c_right": 13,
+      "bbox_excel": "B121:N122"
+    },
+    "content_bbox": {
+      "r_top": 121,
+      "c_left": 1,
+      "r_bot": 121,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 120,
+        "c_left": 1,
+        "r_bot": 120,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 121,
+        "c_left": 6,
+        "r_bot": 121,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "SCT costs",
+    "column_headers": [
+      "Adverse events, frequencies (same as global models)",
+      "Inotuzumab Ozogamicin",
+      "FLAG-Ida",
+      "FLAG",
+      "Mitoxantrone and cytarabine",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI (Ponatinib)",
+      "TKI + vincristine",
+      "Clofarabine"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 120,
+          "c_left": 1,
+          "r_bot": 121,
+          "c_right": 13
+        },
+        "content_bbox": {
+          "r_top": 121,
+          "c_left": 1,
+          "r_bot": 121,
+          "c_right": 5
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "SCT costs",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 13
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "unknown",
+        "confidence": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "unknown",
+    "table_category_confidence": 0.0,
+    "table_category_reasoning": "insufficient signal",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "f57ac8d2e4e4931a_t3",
+    "sheet_name": "Introduction",
+    "bbox": {
+      "r_top": 10,
+      "c_left": 2,
+      "r_bot": 12,
+      "c_right": 4,
+      "bbox_excel": "C11:E13"
+    },
+    "content_bbox": {
+      "r_top": 10,
+      "c_left": 2,
+      "r_bot": 12,
+      "c_right": 4
+    },
+    "empty_zones": [],
+    "title": null,
+    "column_headers": [],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.7,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 10,
+          "c_left": 2,
+          "r_bot": 12,
+          "c_right": 4
+        },
+        "content_bbox": {
+          "r_top": 10,
+          "c_left": 2,
+          "r_bot": 12,
+          "c_right": 4
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 0,
+        "action": "context_block_routed",
+        "formula_ratio": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "note",
+    "table_category_confidence": 0.7,
+    "table_category_reasoning": "context_block",
+    "is_context_block": true,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "f57ac8d2e4e4931a_b3",
+    "sheet_name": "Introduction",
+    "bbox": {
+      "r_top": 13,
+      "c_left": 2,
+      "r_bot": 14,
+      "c_right": 4,
+      "bbox_excel": "C14:E15"
+    },
+    "content_bbox": {
+      "r_top": 14,
+      "c_left": 2,
+      "r_bot": 14,
+      "c_right": 4
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 13,
+        "c_left": 2,
+        "r_bot": 13,
+        "c_right": 4,
+        "trimmable": true
+      }
+    ],
+    "title": null,
+    "column_headers": [],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.7,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 13,
+          "c_left": 2,
+          "r_bot": 14,
+          "c_right": 4
+        },
+        "content_bbox": {
+          "r_top": 14,
+          "c_left": 2,
+          "r_bot": 14,
+          "c_right": 4
+        },
+        "empty_zones_count": 1,
+        "trimmable_zones": 1
+      },
+      {
+        "step": 0,
+        "action": "context_block_routed",
+        "formula_ratio": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "note",
+    "table_category_confidence": 0.7,
+    "table_category_reasoning": "context_block",
+    "is_context_block": true,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "262a4c0f1d47d09d",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 3,
+      "c_left": 1,
+      "r_bot": 9,
+      "c_right": 4,
+      "bbox_excel": "B4:E10"
+    },
+    "content_bbox": {
+      "r_top": 3,
+      "c_left": 1,
+      "r_bot": 9,
+      "c_right": 4
+    },
+    "empty_zones": [],
+    "title": null,
+    "column_headers": [
+      "Year",
+      "Without InO",
+      "With InO",
+      "Budget impact"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 3,
+          "c_left": 1,
+          "r_bot": 9,
+          "c_right": 4
+        },
+        "content_bbox": {
+          "r_top": 3,
+          "c_left": 1,
+          "r_bot": 9,
+          "c_right": 4
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": null,
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 4
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "47ecc07e130eef5f_t10",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 47,
+      "c_left": 1,
+      "r_bot": 56,
+      "c_right": 11,
+      "bbox_excel": "B48:L57"
+    },
+    "content_bbox": {
+      "r_top": 47,
+      "c_left": 1,
+      "r_bot": 56,
+      "c_right": 11
+    },
+    "empty_zones": [],
+    "title": "Budget impact breakdown by cost component",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Drug costs",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 47,
+          "c_left": 1,
+          "r_bot": 56,
+          "c_right": 11
+        },
+        "content_bbox": {
+          "r_top": 47,
+          "c_left": 1,
+          "r_bot": 56,
+          "c_right": 11
+        },
+        "empty_zones_count": 0,
+        "trimmable_zones": 0
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Budget impact breakdown by cost component",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 11
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  },
+  {
+    "table_id": "47ecc07e130eef5f_b10",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 57,
+      "c_left": 1,
+      "r_bot": 63,
+      "c_right": 11,
+      "bbox_excel": "B58:L64"
+    },
+    "content_bbox": {
+      "r_top": 58,
+      "c_left": 6,
+      "r_bot": 63,
+      "c_right": 11
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 57,
+        "c_left": 1,
+        "r_bot": 57,
+        "c_right": 11,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 58,
+        "c_left": 1,
+        "r_bot": 63,
+        "c_right": 5,
+        "trimmable": true
+      }
+    ],
+    "title": "Annual budget impact",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Drug costs",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "original_bbox": {
+          "r_top": 57,
+          "c_left": 1,
+          "r_bot": 63,
+          "c_right": 11
+        },
+        "content_bbox": {
+          "r_top": 58,
+          "c_left": 6,
+          "r_bot": 63,
+          "c_right": 11
+        },
+        "empty_zones_count": 2,
+        "trimmable_zones": 2
+      },
+      {
+        "step": 1,
+        "action": "boundary_validated",
+        "title": "Annual budget impact",
+        "footnotes_count": 0
+      },
+      {
+        "step": 2,
+        "action": "splits_detected",
+        "partitions_count": 0
+      },
+      {
+        "step": 3,
+        "action": "headers_resolved",
+        "column_headers_count": 11
+      },
+      {
+        "step": 9,
+        "action": "category_inferred",
+        "category": "calc",
+        "confidence": 0.6
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.6,
+    "table_category_reasoning": "high formula ratio",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null
+  }
+]

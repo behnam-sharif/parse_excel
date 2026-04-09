@@ -3,10 +3,10 @@ run_export.py — File I/O writer for run directory output.
 
 Writes the complete set of output files expected by downstream stages:
   candidate_rows.jsonl, features.csv, qc_events.jsonl,
-  cut_scores.jsonl, and run_meta.json.
+  cut_scores.jsonl, rejected_blocks.jsonl, coverage_report.json, run_meta.json.
 
-After each run, ``candidate_rows.jsonl`` and ``cut_scores.jsonl`` are copied to
-``base_dir`` (parse output root) so xl_table reads flat paths without subfolder logic.
+All artifacts are written directly under ``base_dir`` (parse_output/ for the run_id).
+No timestamped subfolder — same single-folder convention as table_output.
 """
 
 from __future__ import annotations
@@ -14,7 +14,6 @@ import csv
 import json
 import logging
 import os
-import shutil
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
@@ -43,10 +42,9 @@ def export_run(
     # 1. Compute workbook ID
     workbook_id = compute_workbook_id(file_path)
 
-    # 2. Create auto-named subdirectory
+    # 2. Write flat under parse output root (no per-export subfolder)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    dir_name = f"{workbook_id[:8]}_{timestamp}"
-    output_dir = os.path.join(base_dir, dir_name)
+    output_dir = base_dir
     os.makedirs(output_dir, exist_ok=True)
 
     # 3. Collect all data across sheets
@@ -121,15 +119,6 @@ def export_run(
 
     # 7. Write cut_scores.jsonl
     _write_jsonl(os.path.join(output_dir, "cut_scores.jsonl"), all_cut_rows)
-
-    # 7b. Copy latest run files to parse output root (downstream expects flat paths)
-    os.makedirs(base_dir, exist_ok=True)
-    for fname in ("candidate_rows.jsonl", "cut_scores.jsonl"):
-        src = os.path.join(output_dir, fname)
-        dst = os.path.join(base_dir, fname)
-        if os.path.isfile(src):
-            shutil.copy2(src, dst)
-            logger.info("Copied %s to parse root: %s", fname, dst)
 
     # 8. Write dedupe_report.jsonl (Part D)
     if dedupe_events:

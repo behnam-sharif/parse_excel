@@ -1,0 +1,34 @@
+{
+  "run_id": "streamlit_run_simple",
+  "sheets": [
+    {
+      "sheet_name": "Calculations",
+      "tree_path": "sheet_object_trees/Calculations_tree.json",
+      "rels_path": "relationship_graphs/Calculations_rels.json",
+      "n_sections": 0,
+      "n_tables": 27
+    },
+    {
+      "sheet_name": "Inputs",
+      "tree_path": "sheet_object_trees/Inputs_tree.json",
+      "rels_path": "relationship_graphs/Inputs_rels.json",
+      "n_sections": 0,
+      "n_tables": 5
+    },
+    {
+      "sheet_name": "Introduction",
+      "tree_path": "sheet_object_trees/Introduction_tree.json",
+      "rels_path": "relationship_graphs/Introduction_rels.json",
+      "n_sections": 0,
+      "n_tables": 0
+    },
+    {
+      "sheet_name": "Results",
+      "tree_path": "sheet_object_trees/Results_tree.json",
+      "rels_path": "relationship_graphs/Results_rels.json",
+      "n_sections": 0,
+      "n_tables": 3
+    }
+  ],
+  "xl_sheetagent_version": "0.2.0"
+}

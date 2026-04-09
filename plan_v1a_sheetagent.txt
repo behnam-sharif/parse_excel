@@ -1,0 +1,693 @@
+xl_sheetagent V1A Implementation Plan
+======================================
+
+0. CONTEXT
+======================================
+
+xl_sheetagent is Stage 4 in the xlgen pipeline (after xl_table, before
+future xl_ontology/xl_ask). Takes structural tables from xl_table, adds
+titles, headers, notes, table categorization, and produces enriched table
+objects for downstream consumption.
+
+V1A = scoring + flat enrichment only. No grammar, no imaging, no section
+skeleton, no tree rendering, no full SheetCoordinator, no LLM Step 4.
+
+Establishes: package scaffold, 5 deterministic scoring functions, upstream
+compatibility, content_bbox/context_block pre-filtering, boundary validation
+(Steps 1-3), deterministic table_category inference.
+
+V1B-V1D are subsequent phases -- V1A lays foundations without over-building.
+
+
+======================================
+1. IMPLEMENTATION ORDER (11 steps)
+======================================
+
+--------------------------------------------
+Step 1: Package scaffold + config
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/__init__.py
+    Public API: run_sheetagent(run_id, output_path=None, config=None)
+    Follow xl_table/__init__.py pattern.
+    When output_path is None (production): resolves via get_sheetagent_output_path(run_id).
+    When output_path is set (tests/overrides): uses it directly, bypassing run-root.
+    Locates init_output, parse_output, table_output from run_id via core/paths.
+
+  xl_sheetagent/config.py
+    @dataclass XlSheetAgentConfig with all thresholds from spec S10:
+      tier_a_sufficient:            0.80
+      tier_b_accept:                0.80
+      header_unresolved_floor:      0.60
+      split_reconsideration_min:    0.70
+      split_confirmation_threshold: 0.75
+      section_assignment_accept:    0.65
+      section_ambiguity_delta:      0.15
+      table_finalization:           0.70
+      grammar_promotion_count:      3
+      grammar_promotion_sheets:     2
+      title_shape_proximity_max:    2
+      context_block_max_rows:       5
+      context_block_formula_ceil:   0.05
+      context_block_adjacency_max:  2
+      text_dominant_sheet_threshold: 0.70
+      structural_threshold:         0.80
+      semantic_threshold:           0.65
+      presentation_threshold:       0.70
+      debug_level:                  "minimal"
+      llm_model:                    "gpt-3.5-turbo"
+      llm_max_tokens:               1024
+      skip_llm_enrichment:          true
+
+MODIFIED FILES:
+  config/stages.yaml
+    Add xl_sheetagent: section with all fields above.
+
+  core/paths.py
+    Add: get_sheetagent_output_path(run_id, base) -> Path
+    Returns: get_run_root(run_id, base) / "sheetagent_output"
+
+  core/config.py
+    Add xl_sheetagent: Dict[str, Any] to PipelineConfig dataclass.
+    Add "xl_sheetagent" to validation in load_config().
+
+  core/stage_config.py
+    Add sheetagent_config_from_mapping(d) and sheetagent_config_from_pipeline(pc, overrides).
+    Follow xl_table_config_from_mapping pattern (exact key matching, no silent defaults).
+
+--------------------------------------------
+Step 2: Schemas
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/schemas/__init__.py
+    Re-export all schema types.
+
+  xl_sheetagent/schemas/enriched_table.py
+    @dataclass EnrichedTableObject:
+      table_id: str
+      sheet_name: str
+      bbox: dict                    # {r_top, c_left, r_bot, c_right, bbox_excel}
+      content_bbox: Optional[dict]
+      empty_zones: List[EmptyZone]
+      title: Optional[str]
+      column_headers: List[str]
+      row_headers: List[str]
+      footnotes: List[str]
+      semantic_partitions: List[SemanticPartition]
+      confidence: float
+      ambiguity_class: str          # STRUCTURAL|SEMANTIC|PRESENTATION
+      step_log: List[dict]          # append-only per-table audit
+      shape_attachments: List[dict]
+      table_category: str           # input|assumption|calc|output|reference|note|summary|unknown
+      table_category_confidence: float
+      table_category_reasoning: str
+      is_context_block: bool
+
+    @dataclass EmptyZone:
+      position: str   # leading_rows|trailing_rows|leading_cols|trailing_cols|internal
+      r_top: int
+      c_left: int
+      r_bot: int
+      c_right: int
+      trimmable: bool  # True for leading/trailing, False for internal
+
+    @dataclass SemanticPartition:
+      partition_type: str = "semantic_overlay"   # always
+      authoritative: bool = False                # always False in V1A
+      derived_from_table_id: str = ""
+      sub_bbox: Optional[dict] = None
+      suggested_title: Optional[str] = None
+      confidence: float = 0.0
+
+  xl_sheetagent/schemas/signals.py
+    @dataclass TableSignal:
+      signal_type: str       # orphan_rows|header_unresolved|shared_note|section_ambiguity
+      ambiguity_class: str   # STRUCTURAL|SEMANTIC|PRESENTATION
+      source_table_id: str
+      confidence: float
+      evidence_summary: dict
+
+  xl_sheetagent/schemas/run_manifest.py
+    @dataclass RunManifest:
+      run_id: str
+      run_ts: str               # ISO 8601
+      xl_sheetagent_version: str
+      upstream_schema_versions: dict   # {xl_parse: str, xl_table: str}
+      config_snapshot: dict
+      n_tables_input: int
+      n_tables_enriched: int
+      n_context_blocks: int
+      n_signals_emitted: int
+      elapsed_seconds: float
+
+--------------------------------------------
+Step 3: upstream_compat.py
+--------------------------------------------
+
+NEW FILE: xl_sheetagent/upstream_compat.py
+
+Single place for loading + normalizing all upstream inputs (spec S3).
+
+  def load_upstream(run_id, base="data/output") -> UpstreamData
+
+  @dataclass UpstreamData:
+    workbook_path: str           # init_output/cleaned_workbook.xlsx  (REQUIRED)
+    approved_sheets: List[str]   # init_output/approved_sheets.json   (REQUIRED)
+    shapes_manifest: List[dict]  # init_output/shapes_manifest.jsonl  (EXPECTED -> empty)
+    candidate_rows: List[dict]   # parse_output/candidate_rows.jsonl  (REQUIRED)
+    rejected_blocks: List[dict]  # parse_output/rejected_blocks.jsonl (EXPECTED -> empty)
+    structural_tables: dict      # table_output/structural_tables.json (REQUIRED)
+    table_objects: List[TableObjectView]   # normalized views
+
+  Normalization logic:
+    provenance: if string -> {"method": <str>, "ancestor_ids": []}
+                if dict missing .method -> set "unknown"
+    header_row_indices:   EXPECTED -> []
+    header_confidence:    EXPECTED -> 0.0
+    separator_scores:     EXPECTED -> []
+    col_separator_scores: OPTIONAL -> []
+    body_bbox:            EXPECTED -> full bbox
+    split_history:        EXPECTED -> {was_split: false}
+    cell_features:        OPTIONAL -> {} (pass-through for V1B; V1A does not read it)
+
+  Field classification:
+    REQUIRED -> fail fast with clear error
+    EXPECTED -> apply fallback + log warning
+    OPTIONAL -> skip gracefully
+
+  Version detection: read xl_table_version from structural_tables.json.
+
+TESTS: xl_sheetagent/tests/test_upstream_compat.py
+  - Missing REQUIRED field raises
+  - EXPECTED field gets fallback
+  - Provenance string-to-object normalization
+  - Missing files (shapes_manifest absent -> empty)
+  - approved_sheets.json loading (not selected_sheets.json)
+
+--------------------------------------------
+Step 4: scoring.py -- THE CORE
+--------------------------------------------
+
+NEW FILE: xl_sheetagent/scoring.py
+
+All 5 functions deterministic, no LLM, independently testable. >=10 tests each.
+
+  4.1 title_attachment_score(
+        spatial_distance, text_match, grammar_match, shape_match,
+        is_merged_full_width, is_bold, has_formula
+      ) -> float [0,1]
+    Logic:
+      base = exponential_decay(spatial_distance): 0->1.0, 1->0.85, 2->0.65, 3->0.40
+      if is_merged_full_width: base *= 1.15
+      if is_bold: base *= 1.05
+      if has_formula: base *= 0.1
+      if grammar_match: base += 0.15
+      if shape_match: base += 0.10
+      if text_match: base += 0.10
+      return clamp(base, 0, 1)
+
+  4.2 section_ownership_score(
+        band_proximity, formatting_match, grammar_confidence,
+        table_count_under, is_full_width, has_merge_span
+      ) -> float [0,1]
+    Logic:
+      if table_count_under == 0: return 0.05
+      base = exponential_decay(band_proximity)
+      if is_full_width: base *= 1.20
+      if has_merge_span: base *= 1.10
+      if formatting_match: base += 0.15
+      base += grammar_confidence * 0.20
+      return clamp(base, 0, 1)
+
+  4.3 header_inheritance_score(
+        column_range_overlap, row_proximity, formatting_similarity,
+        same_section, source_has_headers
+      ) -> float [0,1]
+    Logic:
+      if not source_has_headers: return 0.0
+      if column_range_overlap < 0.50: return 0.05
+      base = column_range_overlap
+      prox_decay = exponential_decay(row_proximity): 0->1.0, 3->0.70, >10->0.10
+      base *= prox_decay
+      if formatting_similarity: base += 0.10
+      if same_section: base += 0.10
+      return clamp(base, 0, 1)
+
+  4.4 note_scope_score(
+        spatial_distance, text_keywords, table_count_nearby,
+        is_after_last_table
+      ) -> (scope: str, confidence: float)
+    Logic:
+      if distance <= 1 and count == 1:        return ('single_table', 0.90)
+      if after_last and 'all' in keywords:    return ('sheet', 0.85)
+      if after_last and no keywords:          return ('sheet', 0.60)
+      if count > 1 and distance <= 3:         return ('section', 0.70)
+      else:                                   return ('ambiguous', 0.40)
+
+  4.5 column_split_score(
+        col_separator_score, formatting_discontinuity,
+        header_group_break, tile_evidence, bbox_width
+      ) -> float [0,1]
+    Logic:
+      base = col_separator_score
+      base += formatting_discontinuity * 0.15
+      if header_group_break: base *= 1.25
+      base += tile_evidence * 0.20   # V1C only, 0 in V1A
+      if bbox_width < 6: base *= 0.5
+      return clamp(base, 0, 1)
+
+TESTS: xl_sheetagent/tests/test_scoring.py (>=50 cases total)
+  - Boundary conditions (0, 1 inputs)
+  - Multiplier stacking
+  - Gate conditions (has_formula kills score; source_has_headers=False gate)
+  - Clamping at 0 and 1
+  - note_scope_score all 5 branches
+
+--------------------------------------------
+Step 5: Synthetic fixtures
+--------------------------------------------
+
+NEW FILES: xl_sheetagent/tests/fixtures/generate_fixtures.py + 10 .xlsx
+
+Generated programmatically with openpyxl:
+
+  fixture_single_table.xlsx        1 table, clear headers (bold row 1), title above.
+  fixture_stacked_tables.xlsx      3 tables sharing columns vertically. Header inheritance.
+  fixture_multi_component.xlsx     1 bbox, 2 logical tables side-by-side. Split detection.
+  fixture_section_bands.xlsx       Blue merged bands grouping tables. (V1B focused.)
+  fixture_no_guide_sheet.xlsx      No guide sheet. (V1C focused.)
+  fixture_shape_titles.xlsx        Titles only in text boxes (shapes).
+  fixture_column_split.xlsx        Multi-comparator column split evidence.
+  fixture_wide_comparator.xlsx     3-group wide table with 2 boundaries.
+  fixture_context_blocks.xlsx      Small zero-formula label blocks adjacent to real tables.
+  fixture_empty_zones.xlsx         Table with leading/trailing empty columns.
+
+Each fixture self-contained and runnable through the full pipeline.
+
+--------------------------------------------
+Step 6: provenance_tools.py + payload_builder.py
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/tools/__init__.py
+  xl_sheetagent/tools/provenance_tools.py
+  xl_sheetagent/tools/payload_builder.py
+
+provenance_tools.py:
+  parse_provenance(raw) -> dict
+    Normalize string/dict to {"method": str, "ancestor_ids": []}
+  grep_provenance(provenance, pattern) -> bool
+    Check provenance chain for pattern (split detection in Step 2)
+  build_provenance_chain(table_object) -> List[str]
+    Reconstruct full chain from split_lineage
+
+payload_builder.py (V1A modes only):
+  build_payload(mode, table, accessor, content_bbox) -> dict
+    ALL LLM-facing text goes through here. Always uses content_bbox, never raw bbox.
+  V1A modes:
+    "top_rows_text_only"          first N rows, text cells only
+    "top_rows_with_formulas"      first N rows including formula strings
+    "bottom_rows_text_only"       last N rows, text cells only
+    "footnote_context"            rows below table bbox
+    "table_pair_boundary_view"    boundary region between two adjacent tables
+  In V1A: used for deterministic text extraction only (no LLM calls).
+
+--------------------------------------------
+Step 7: Step 0 (content_bbox + context_block)
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/steps/__init__.py
+  xl_sheetagent/steps/step0_prefilter.py
+
+Step 0A -- content_bbox:
+  compute_content_bbox(table_object, accessor) -> (content_bbox, empty_zones[])
+    Scan within table bbox for tightest non-empty sub-region.
+    Classify empty zones: leading_rows, trailing_rows, leading_cols, trailing_cols, internal.
+    Leading/trailing -> trimmable=True. Internal -> trimmable=False (split evidence for Step 2).
+    Append to step_log: {"step":0, "action":"content_bbox_computed", ...}
+
+Step 0B -- context_block:
+  check_context_block(table_object, all_tables, cfg) -> bool
+    ALL must be true:
+      formula_ratio < cfg.context_block_formula_ceil (0.05)
+      row_count <= cfg.context_block_max_rows (5)
+      adjacent to (within cfg.context_block_adjacency_max rows) another TableObject
+    If true: is_context_block=True, emit orphan_rows signal (content_type="context_block").
+    Do NOT run Steps 1-3 for context blocks.
+    Append to step_log: {"step":0, "action":"context_block_routed", ...}
+
+  formula_ratio note: xl_table opens data_only=True so formula_ratio may be 0.0.
+  V1A approach: recompute by opening cleaned_workbook.xlsx with data_only=False
+  via a secondary accessor for the table bbox. Cache per-sheet. On failure, fall
+  through to 'unknown' category.
+
+TESTS: xl_sheetagent/tests/test_prefilter.py
+  - content_bbox shrinks correctly with leading/trailing empty zones
+  - Internal empty zones flagged non-trimmable
+  - Context block triggers on small zero-formula blocks adjacent to tables
+  - Context block NOT triggered if not adjacent
+  - Context block NOT triggered if row_count > 5
+
+--------------------------------------------
+Step 8: Steps 1-3 + table_enricher.py
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/steps/step1_boundary.py
+  xl_sheetagent/steps/step2_splits.py
+  xl_sheetagent/steps/step3_headers.py
+  xl_sheetagent/modules/__init__.py
+  xl_sheetagent/modules/table_enricher.py
+
+Step 1 -- Boundary validation (step1_boundary.py):
+  validate_boundaries(table, context_rows, shapes, cfg)
+    -> (title, footnotes, signals[])
+    Scan rows above table (up to cfg.title_shape_proximity_max).
+    Score each candidate with title_attachment_score().
+    >= cfg.tier_a_sufficient (0.80): accept title (Tier A).
+    < tier_a_sufficient: emit orphan_rows signal (Tier B).
+    Scan rows below for footnotes via note_scope_score().
+    Check shapes for text boxes near table.
+    Log every scoring call to debug_log.
+
+Step 2 -- Split detection (step2_splits.py):
+  detect_splits(table, content_bbox, empty_zones, cfg)
+    -> semantic_partitions[]
+    Check internal empty zones from Step 0 as column-split evidence.
+    Score with column_split_score().
+    Grep provenance for split indicators.
+    >= cfg.split_reconsideration_min: create SemanticPartition (advisory only).
+    Log every scoring call.
+
+Step 3 -- Header resolution (step3_headers.py):
+  resolve_headers(table, upstream_data, shapes, rejected_blocks, cfg)
+    -> (column_headers, row_headers, signals[])
+    Level 1: upstream header_row_indices + header_confidence.
+      If confidence >= tier_a_sufficient: accept (Tier A).
+    Level 2: shapes for header text boxes.
+      Score with title_attachment_score (shape_match=True).
+    Level 3: rejected_blocks.jsonl spatial overlap/proximity.
+      Filter by sheet_name, look for header bands.
+    Level 4 (V1C only): LLM fallback -- SKIP in V1A.
+    If unresolved: emit header_unresolved signal.
+
+table_enricher.py -- orchestrates Steps 0-3:
+  enrich_table(table_object, upstream_data, accessor, all_tables, cfg)
+    -> (EnrichedTableObject, signals[])
+    Step 0: content_bbox + context_block
+    If context_block: return early with minimal enrichment
+    Step 1: boundary validation
+    Step 2: split detection
+    Step 3: header resolution
+    Assemble EnrichedTableObject
+    Return enriched table + signals
+
+TESTS:
+  xl_sheetagent/tests/test_boundary.py
+  xl_sheetagent/tests/test_splits.py
+  xl_sheetagent/tests/test_headers.py
+
+--------------------------------------------
+Step 9: table_category partial inference
+--------------------------------------------
+
+Integrated into table_enricher.py (after Steps 1-3, before return).
+
+  infer_table_category(table, content_bbox, is_context_block)
+    -> (category, confidence, reasoning)
+
+  V1A rules (deterministic, no LLM):
+    context_block == True            -> ('note', 0.70, 'context_block')
+    formula_ratio > 0.70             -> ('calc', 0.60, 'high formula ratio')
+    formula_ratio < 0.05 and rows<=5 -> ('note', 0.55, 'small text block')
+    formula_ratio < 0.10 and all text-> ('reference', 0.50, 'text-dominant')
+    otherwise                        -> ('unknown', 0.0, 'insufficient signal')
+
+  formula_ratio: recomputed via data_only=False accessor (see Step 7 note).
+  On failure: fall through to 'unknown'.
+
+--------------------------------------------
+Step 10: exporter.py + SheetCoordinator placeholder
+--------------------------------------------
+
+NEW FILES:
+  xl_sheetagent/assembly/__init__.py
+  xl_sheetagent/assembly/exporter.py
+  xl_sheetagent/modules/sheet_coordinator.py
+
+exporter.py:
+  write_outputs(enriched_tables, signals, manifest, output_path, cfg)
+  Writes to sheetagent_output/:
+    enriched_tables.json     EnrichedTableObject array
+    summaries.json           grounded summaries (V1A: table_id + title + category)
+    run_manifest.json        RunManifest
+    debug_log.jsonl          all scoring calls + step events (append-only)
+
+sheet_coordinator.py (PLACEHOLDER for V1B):
+  coordinate_sheet(enriched_tables, signals, cfg)
+    -> (enriched_tables, signals)
+  V1A: returns inputs unchanged. ZERO LLM calls. Test-enforced.
+
+--------------------------------------------
+Step 11: CLI entry + pipeline integration
+--------------------------------------------
+
+NEW FILE: scripts/run_sheetagent.py
+  Args: --run-id (required), --output-base (default data/output)
+  Follow scripts/run_table.py pattern.
+
+MODIFIED FILES:
+  scripts/run_pipeline.py
+    Add --with-sheetagent flag.
+    After xl_table stage, if flag set, run xl_sheetagent.
+
+  tests/test_smoke.py
+    Add to TestImports: from xl_sheetagent import run_sheetagent
+    Add to TestConfig: sheetagent_config_from_pipeline(pc)
+    Add xl_sheetagent to TestNoLegacyKgSubstring roots list.
+
+
+======================================
+2. COMPLETE FILE LIST
+======================================
+
+NEW FILES (30):
+  xl_sheetagent/__init__.py
+  xl_sheetagent/config.py
+  xl_sheetagent/upstream_compat.py
+  xl_sheetagent/scoring.py
+  xl_sheetagent/schemas/__init__.py
+  xl_sheetagent/schemas/enriched_table.py
+  xl_sheetagent/schemas/signals.py
+  xl_sheetagent/schemas/run_manifest.py
+  xl_sheetagent/steps/__init__.py
+  xl_sheetagent/steps/step0_prefilter.py
+  xl_sheetagent/steps/step1_boundary.py
+  xl_sheetagent/steps/step2_splits.py
+  xl_sheetagent/steps/step3_headers.py
+  xl_sheetagent/modules/__init__.py
+  xl_sheetagent/modules/table_enricher.py
+  xl_sheetagent/modules/sheet_coordinator.py
+  xl_sheetagent/tools/__init__.py
+  xl_sheetagent/tools/provenance_tools.py
+  xl_sheetagent/tools/payload_builder.py
+  xl_sheetagent/assembly/__init__.py
+  xl_sheetagent/assembly/exporter.py
+  xl_sheetagent/tests/__init__.py
+  xl_sheetagent/tests/test_scoring.py
+  xl_sheetagent/tests/test_upstream_compat.py
+  xl_sheetagent/tests/test_prefilter.py
+  xl_sheetagent/tests/test_boundary.py
+  xl_sheetagent/tests/test_splits.py
+  xl_sheetagent/tests/test_headers.py
+  xl_sheetagent/tests/fixtures/generate_fixtures.py
+  scripts/run_sheetagent.py
+
+MODIFIED FILES (6):
+  core/paths.py              add get_sheetagent_output_path()
+  core/config.py             add xl_sheetagent to PipelineConfig + validation
+  core/stage_config.py       add sheetagent_config_from_mapping/pipeline()
+  config/stages.yaml         add xl_sheetagent: section
+  tests/test_smoke.py        add xl_sheetagent to imports + config + legacy tests
+  scripts/run_pipeline.py    add --with-sheetagent stage
+
+
+======================================
+3. KEY DESIGN DECISIONS
+======================================
+
+1. formula_ratio recomputation:
+   Open cleaned_workbook.xlsx with data_only=False via secondary accessor.
+   Compute per-table bbox. Cache per-sheet. Fall through to 'unknown' on failure.
+
+2. debug_log.jsonl:
+   Every scoring function call logged (function name, inputs, output, timestamp).
+   Sheet/run-scope events go here. Table-scope events go to step_log[] on
+   EnrichedTableObject.
+
+3. No LLM in V1A:
+   payload_builder exists for text extraction but no LLM calls made.
+   skip_llm_enrichment defaults to True. SheetCoordinator is pass-through.
+
+4. Workbook access:
+   Use openpyxl directly in xl_sheetagent (lightweight accessor).
+   Do NOT import from xl_table (avoid cross-stage coupling).
+
+5. Relative imports within package:
+   from .scoring import title_attachment_score
+   Cross-package shared types via: from core.visual_types import ...
+
+6. No xl_kg substring:
+   Enforced by existing TestNoLegacyKgSubstring (auto-includes xl_sheetagent).
+
+
+======================================
+4. V1A TARGET BENCHMARKS
+======================================
+
+  >= 90% title rate on fixtures
+  >= 80% column header rate on fixtures
+  >= 1 header inheritance case (fixture_stacked_tables)
+  >= 1 shape-based title case (fixture_shape_titles)
+  >= 1 context_block correctly downgraded (fixture_context_blocks)
+  table_category assigned on every table (even if 'unknown')
+  content_bbox computed for every table
+  debug_log.jsonl records every scoring call
+
+
+======================================
+5. VERIFICATION
+======================================
+
+1. Unit tests (package-level):
+   py -3 -m pytest xl_sheetagent/tests/ -v
+   - test_scoring.py: 50+ cases, all 5 functions
+   - test_upstream_compat.py: field classification + cell_features pass-through
+   - test_prefilter.py: content_bbox + context_block
+   - test_boundary.py, test_splits.py, test_headers.py
+
+2. Smoke tests (repo-level):
+   py -3 -m pytest tests/test_smoke.py -v
+   - xl_sheetagent imports
+   - config loads from YAML
+
+   CI must run both: py -3 -m pytest tests/ xl_sheetagent/tests/ -v
+
+3. Fixture generation:
+   py -3 xl_sheetagent/tests/fixtures/generate_fixtures.py
+
+4. Integration:
+   py -3 scripts/run_pipeline.py \
+     --input xl_sheetagent/tests/fixtures/fixture_single_table.xlsx \
+     --run-id test_sa --with-sheetagent
+   Verify sheetagent_output/ contains:
+     enriched_tables.json, summaries.json, run_manifest.json, debug_log.jsonl
+   Verify every table has table_category + content_bbox.
+
+5. Zero LLM enforcement:
+   No openai calls in xl_sheetagent V1A (skip_llm_enrichment=True).
+   SheetCoordinator always zero LLM (test-enforced).
+
+
+======================================
+6. WHAT V1A DOES NOT INCLUDE
+======================================
+
+V1B adds: Full SheetCoordinator, section skeleton, SheetObjectTree nodes,
+  relationship edges, context_block attachment, chart-to-table linking.
+
+V1C adds: GrammarBuilder, xl_image integration, Step 4 LLM, rag_fields,
+  formula-aware payloads, text-dominant sheet mode.
+
+V1D adds: Tree PNG rendering, Streamlit viewer, full debug output.
+
+V1A creates the infrastructure (placeholder coordinator, signal types,
+payload_builder, debug_log format) so V1B-V1D extend without refactoring.
+
+
+======================================
+7. INTENTIONAL DEVIATIONS FROM SPEC
+======================================
+
+7.1 rejected_blocks vs SheetCoordinator (spec S6.2)
+
+  Spec says SheetCoordinator loads rejected_blocks.jsonl FIRST before other
+  signal resolution. V1A deviation: rejected_blocks used only in TableEnricher
+  Step 3 (header resolution Level 3) -- the coordinator is a no-op pass-through.
+
+  V1B will add the coordinator-first index over rejected_blocks keyed by
+  sheet_name + spatial order (spec S6.2 load order). If duplicate logic exists
+  between Step 3 and the coordinator at that point, consolidate into coordinator
+  and have Step 3 call the coordinator's index. This is an intentional V1A
+  simplification -- documented here so V1B doesn't fight the spec.
+
+7.2 Tests location
+
+  V1A places unit tests under xl_sheetagent/tests/ (co-located with the package).
+  The repo's existing integration/smoke tests live in tests/ (root) with conftest.py.
+
+  Convention for V1A:
+    - xl_sheetagent/tests/   -> package-level unit tests (scoring, upstream_compat,
+      prefilter, boundary, splits, headers). Run: py -3 -m pytest xl_sheetagent/tests/ -v
+    - tests/test_smoke.py    -> import/config smoke tests (extended to include xl_sheetagent).
+      Run: py -3 -m pytest tests/ -v
+    - CI must run BOTH: py -3 -m pytest tests/ xl_sheetagent/tests/ -v
+
+  xl_sheetagent/tests/conftest.py will add the repo root to sys.path (same as
+  the root conftest.py) so imports work consistently from either test location.
+
+7.3 run_sheetagent API and core/paths
+
+  The public API is: run_sheetagent(run_id, output_path=None, config=None)
+
+  Production path: output_path defaults to None. When None, the function resolves
+  output via get_sheetagent_output_path(run_id) from core/paths.py, enforcing the
+  run-root rule.
+
+  output_path is an explicit override for tests and one-off usage ONLY. When
+  provided, it bypasses core/paths resolution. Document this in the function
+  docstring: "output_path overrides the run-root policy; use only for tests."
+
+  Same pattern as xl_table/__init__.py where parse_output_path is passed
+  explicitly but production scripts always derive it from run_id.
+
+7.4 cell_features preservation in upstream_compat
+
+  V1B SheetCoordinator needs cell_features from candidate_rows.jsonl (fill_color
+  groups, font size, border data) for section skeleton detection without xl_image.
+
+  V1A requirement: upstream_compat normalizes candidate_rows lines and MUST retain
+  cell_features as an OPTIONAL pass-through field (empty dict if absent). V1A does
+  not read or interpret cell_features, but the field is preserved on the normalized
+  UpstreamData.candidate_rows dicts so V1B can consume it without a compat break.
+
+  Add to UpstreamData or the per-candidate normalized dict:
+    cell_features: dict    # OPTIONAL -> empty dict if absent; V1A pass-through
+
+7.5 Orchestrator / Streamlit
+
+  V1A is CLI-only. The Streamlit orchestrator (apps/orchestrator/app.py) is NOT
+  updated in V1A. Orchestrator hook is deferred to V1B or later, when the
+  SheetObjectTree and view bundle are available.
+
+  Operators must use the CLI: scripts/run_sheetagent.py or scripts/run_pipeline.py
+  --with-sheetagent.
+
+7.6 summaries.json in V1A
+
+  summaries.json is a stub in V1A: minimal array of {table_id, title, table_category,
+  sheet_name}. No grounded citations or LLM-generated summaries. V1C will populate
+  full summaries with citations and rag_fields.
+
+7.7 section_ownership_score
+
+  Implemented and tested in V1A (spec requires all 5 scorers in scoring.py with
+  >=10 tests each). No caller in V1A -- first used by SheetCoordinator in V1B.
+  This is fine: scoring functions are the algorithmic core and must be implemented
+  first (spec S15 rule 2).
+
+
+End of V1A plan.

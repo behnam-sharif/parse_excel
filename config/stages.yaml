@@ -212,6 +212,43 @@ xl_table:
   include_cut_candidates: true
   use_other_tools: false
 
+xl_sheetagent:
+  # Tier thresholds
+  tier_a_sufficient: 0.80
+  tier_b_accept: 0.80
+  header_unresolved_floor: 0.60
+  split_reconsideration_min: 0.70
+  split_confirmation_threshold: 0.75
+  section_assignment_accept: 0.65
+  section_ambiguity_delta: 0.15
+  table_finalization: 0.70
+
+  # Grammar promotion (V1C)
+  grammar_promotion_count: 3
+  grammar_promotion_sheets: 2
+
+  # Context / spatial
+  title_shape_proximity_max: 2
+  context_block_max_rows: 5
+  context_block_formula_ceil: 0.05
+  context_block_adjacency_max: 2
+
+  # Sheet-level
+  text_dominant_sheet_threshold: 0.70
+
+  # Ambiguity class thresholds
+  structural_threshold: 0.80
+  semantic_threshold: 0.65
+  presentation_threshold: 0.70
+
+  # Debug
+  debug_level: "minimal"
+
+  # LLM (parity with xl_init)
+  llm_model: "gpt-3.5-turbo"
+  llm_max_tokens: 1024
+  skip_llm_enrichment: true
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2

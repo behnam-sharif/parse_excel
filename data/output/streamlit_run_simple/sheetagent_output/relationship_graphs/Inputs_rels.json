@@ -1,0 +1,119 @@
+{
+  "sheet_name": "Inputs",
+  "edges": [
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "target_id": "Inputs::note_0",
+      "edge_type": "contains",
+      "confidence": 0.4,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "target_id": "Inputs::note_1",
+      "edge_type": "contains",
+      "confidence": 0.4,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "target_id": "Inputs::note_2",
+      "edge_type": "contains",
+      "confidence": 0.4,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_b45",
+      "target_id": "Inputs::note_3",
+      "edge_type": "contains",
+      "confidence": 0.5,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_t46",
+      "target_id": "Inputs::note_4",
+      "edge_type": "contains",
+      "confidence": 0.5,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_b46",
+      "target_id": "Inputs::note_5",
+      "edge_type": "contains",
+      "confidence": 0.5,
+      "evidence": {
+        "parent_type": "table",
+        "child_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_0",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_1",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_2",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_t45",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_3",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_t70_b45",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_4",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_t46",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    },
+    {
+      "source_id": "Inputs::note_5",
+      "target_id": "Inputs::tbl_9814fc53f594ba29_t118_b70_b46",
+      "edge_type": "annotates",
+      "confidence": 0.5,
+      "evidence": {
+        "annotation_type": "note"
+      }
+    }
+  ]
+}
