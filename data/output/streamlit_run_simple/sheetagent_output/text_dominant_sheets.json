@@ -1,0 +1,9 @@
+{
+  "Introduction": {
+    "is_text_dominant": true,
+    "text_ratio": 1.0,
+    "classification": "assumptions",
+    "sheet_summary": "Excel sheet containing assumptions for a financial model.",
+    "n_chunks": 2
+  }
+}

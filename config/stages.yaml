@@ -244,10 +244,24 @@ xl_sheetagent:
   # Debug
   debug_level: "minimal"
 
-  # LLM (parity with xl_init)
+  # LLM (parity with xl_init). Set OPENAI_API_KEY; when skip_llm_enrichment is false, Step 4 + V1C confirms run.
   llm_model: "gpt-3.5-turbo"
   llm_max_tokens: 1024
-  skip_llm_enrichment: true
+  skip_llm_enrichment: false
+
+  # V2 agent-based pipeline
+  v2_enabled: true
+  grammar_sample_max_rows: 12
+  grammar_sample_count: 3
+  grammar_sample_attempts: 5
+  grammar_match_threshold: 0.75
+  split_consideration_min_rows: 10
+  split_min_score_floor: 0.3
+  split_top_k: 5
+  split_proximity_dedup: 2
+  max_parallel_sheets: 4
+  coordinator_batch_llm_threshold: 2
+  ontology_hint_enabled: true
 
 xl_image:
   adaptive_enabled: true

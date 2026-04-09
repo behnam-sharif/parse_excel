@@ -10,6 +10,14 @@ from .sheet_object_tree import (
     RelationshipGraph,
 )
 from .grammar_snapshot import GrammarPattern, GrammarSnapshot
+from .grammar_profile import GrammarProfile, RoleFormatting, GrammarObservation
+from .agent_types import (
+    MethodConfidence,
+    EscalationRequest,
+    SplitCandidate,
+    TableAgentResult,
+    SheetProcessingResult,
+)
 
 __all__ = [
     "EmptyZone",
@@ -23,4 +31,12 @@ __all__ = [
     "RelationshipGraph",
     "GrammarPattern",
     "GrammarSnapshot",
+    "GrammarProfile",
+    "RoleFormatting",
+    "GrammarObservation",
+    "MethodConfidence",
+    "EscalationRequest",
+    "SplitCandidate",
+    "TableAgentResult",
+    "SheetProcessingResult",
 ]

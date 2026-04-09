@@ -190,8 +190,10 @@ def render_tree_png(tree, rels, output_path: str, cfg=None) -> str:
         fig_h = min(fig_h, 30)
 
         fig, ax = plt.subplots(1, 1, figsize=(fig_w, fig_h))
-        ax.set_aspect("equal")
+        # Wide flat trees (many siblings) + equal aspect collapse vertical space → “thin line”.
+        ax.set_aspect("auto")
         ax.axis("off")
+        ax.margins(x=0.08, y=0.12)
 
         # Draw edges (parent-child)
         for nid, node in display_nodes.items():

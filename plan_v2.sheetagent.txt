@@ -1,0 +1,2024 @@
+================================================================================
+  xl_sheetagent V2 — Implementation Plan
+  Parallel, Agent-Based, LLM-First Redesign
+  Date: 2026-04-08
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+  1.  Architecture Overview
+  2.  Agent Roles
+  3.  Execution Flow
+  4.  Grammar Workbook Generation Flow
+  5.  Per-Table Agent Workflow
+  6.  Sheet Coordinator Workflow
+  7.  Split-Decision Workflow for Large Tables
+  8.  Parallelization Strategy
+  9.  Required New Files / Modules
+  10. Output Artifacts
+  11. Phased Implementation Plan
+  12. Assumptions / Risks / Open Questions
+  13. V2 Enhancements (Addenda)
+      13.1 Rejected Blocks as First-Class Graph Objects
+      13.2 Strengthened SheetCoordinator (Agentic + Optional Sheet-Level LLM)
+      13.3 Explicit Confidence System (Method vs. Confidence Separation)
+      13.4 Ontology Hook (ontology_hint)
+      13.5 Split Logic: Top-K Candidate Filtering
+  A.  Recommendations: What to Remove
+  B.  Recommendations: What to Retain
+  C.  Recommendations: Where Outputs and Streamlit Stay Unchanged
+  D.  Recommendations: Where Interfaces Must Change
+
+
+================================================================================
+1. ARCHITECTURE OVERVIEW
+================================================================================
+
+V2 replaces the sequential, deterministic-first pipeline with a parallel,
+agent-based, LLM-first architecture organized into four components that
+communicate through shared mutable state.
+
+COMPONENTS
+----------
+
+  1. GrammarWorkbookAgent   (blocking, runs first)
+     Selects sample tables, calls LLM to identify structural roles
+     (title / column-headers / row-names), captures associated formatting,
+     and builds a mutable grammar profile.
+
+  2. TableAgent              (parallel, one per table)
+     LLM-first structural reading of each table, with grammar-assisted
+     shortcutting and LLM-controlled splits for large tables. Falls back
+     to deterministic tools when LLM cannot decide, and escalates to
+     the SheetCoordinator when all methods fail.
+
+  3. SheetCoordinator        (per sheet, after all table agents for that sheet)
+     Resolves escalated decisions (missing title, ambiguous headers,
+     ambiguous row names) using sheet-level consistency and scoring signals.
+     Runs section detection and tree assembly.
+
+  4. AssemblyLayer           (sequential, runs last)
+     Builds trees, relationship graphs, and writes all output files in the
+     same formats as V1. Reuses existing assembly/ code.
+
+SHARED MUTABLE STATE
+--------------------
+
+  GrammarProfile    Thread-safe (threading.Lock). Starts with patterns
+                    learned by GrammarWorkbookAgent. Updated by TableAgents
+                    when new formatting patterns are discovered. Reads are
+                    lock-free (snapshot semantics).
+
+  AgentResultStore  Thread-safe collection of per-table results, signals,
+                    and escalation requests. Each table writes to its own
+                    slot — minimal contention.
+
+DATA FLOW
+---------
+
+  upstream_compat.load_upstream(run_id)
+          |
+          v
+  [GrammarWorkbookAgent]  --------- BLOCKING sequential ----------
+          |
+          v
+     GrammarProfile (mutable, thread-safe)
+          |
+          v
+  [TableAgent per table]  --------- PARALLEL (ThreadPoolExecutor) -
+     Each:
+       grammar pre-check -> LLM structure read -> fallback tools
+       -> escalation -> grammar update -> split decision -> interpretation
+          |
+          v
+     AgentResultStore (enriched tables + signals + escalations)
+          |
+          v
+  [SheetCoordinator per sheet]  --- PARALLEL per sheet ------------
+     Resolves escalations, section assignment, consistency checks
+          |
+          v
+  [AssemblyLayer]  ---------------- SEQUENTIAL --------------------
+     Tree building, relationship graphs, output writing
+
+
+================================================================================
+2. AGENT ROLES
+================================================================================
+
+2.1  GrammarWorkbookAgent
+------------------------------------------------------------------------
+File:      xl_sheetagent/agents/grammar_workbook_agent.py
+
+Purpose:   Learn the workbook's formatting vocabulary from a small set of
+           high-confidence tables using LLM, BEFORE any per-table processing
+           begins.
+
+Inputs:
+  - upstream: UpstreamData (table_objects list from xl_table)
+  - ws_by_sheet: Dict[str, openpyxl.Worksheet] (data_only=True)
+  - ws_formula_by_sheet: Dict[str, openpyxl.Worksheet] (data_only=False)
+  - cfg: XlSheetAgentConfig
+
+Output:
+  GrammarWorkbookResult:
+    - profile: GrammarProfile
+    - sample_tables_used: List[str]  (table_ids)
+    - llm_calls_made: int
+    - debug_events: List[Dict]
+
+Algorithm:
+  1. Score all tables by (row_count <= 12, confidence DESC, density DESC).
+  2. Select top ~3 small, high-confidence tables from different sheets.
+     Require n_rows >= 3 (need title + header + at least 1 body row).
+     Prefer diversity: at most 2 from same sheet.
+  3. For each selected table (up to 5 attempts to get 3 successes):
+     a. Extract first 3 rows: values + formulas (no formatting in prompt).
+     b. Send to LLM: "Identify which row is the title (if any), which
+        row(s) are column headers, and which column contains row names."
+     c. If LLM says "no clear title" -> try next candidate table.
+     d. On success: read the FORMATTING of identified cells via openpyxl:
+        - Title row: font_name, font_size, is_bold, fill_color, text_color,
+          whether there is an empty row above the table.
+        - Column header row(s): font_name, is_bold, fill_color, text_color.
+        - Row-name column: font_name, is_bold, fill_color, text_color.
+  4. Aggregate formatting across 2-3 successful tables into GrammarProfile.
+  5. Save profile; return for use by TableAgents.
+
+Failure mode: If fewer than 2 tables succeed, start with an empty
+GrammarProfile. All tables will use the LLM-first path (no grammar
+shortcutting).
+
+
+2.2  TableAgent
+------------------------------------------------------------------------
+File:      xl_sheetagent/agents/table_agent.py
+
+Purpose:   LLM-first structural reading of a single table, with
+           grammar-assisted shortcutting, fallback tools, escalation,
+           and LLM-controlled splits.
+
+Inputs:
+  - table_view: TableObjectView (from upstream_compat)
+  - upstream: UpstreamData
+  - ws (data_only worksheet), ws_formula (formula worksheet)
+  - grammar: GrammarProfile (shared, mutable)
+  - cfg: XlSheetAgentConfig
+  - recorder: ToolCallRecorder
+  - trace: TraceAccumulator
+
+Output:
+  TableAgentResult:
+    - enriched_table: EnrichedTableObject
+    - signals: List[TableSignal]
+    - escalations: List[EscalationRequest]
+    - grammar_updates: List[GrammarObservation]
+    - debug_events: List[Dict]
+
+Algorithm:   (See Section 5 for full workflow detail)
+
+  Step 0: Content bbox + context block routing (FIRST — returns early
+          if context block, skipping all subsequent steps)
+  Step A: Grammar pre-check
+  Step B: LLM structure read (if grammar did not match)
+  Step C: Fallback tools (if LLM returned "none" for any role)
+  Step D: Escalation (if still unresolved)
+  Step E: Grammar update (if LLM found new pattern)
+  Step F: Split decision (for tables with >10 rows)
+  Step G: LLM interpretation (summary, category, entities, embedding)
+
+
+2.3  SheetCoordinator
+------------------------------------------------------------------------
+File:      xl_sheetagent/agents/sheet_coordinator_agent.py
+
+Purpose:   Resolve escalated table-level decisions using sheet-level
+           consistency and optional batch LLM reasoning. Act as
+           escalation and resolution logic, not duplication of table
+           agent work. May issue ONE optional LLM call per sheet to
+           resolve multiple escalations at once (batch reasoning).
+
+Inputs:
+  - sheet_name: str
+  - table_results: List[TableAgentResult]
+  - upstream: UpstreamData
+  - ws_by_sheet: Dict[str, Worksheet]
+  - grammar: GrammarProfile
+  - cfg: XlSheetAgentConfig
+
+Output:
+  Tuple of:
+    - List[EnrichedTableObject]  (resolved)
+    - List[TableSignal]
+    - SheetObjectTree
+    - RelationshipGraph
+    - Dict  (debug events)
+
+Algorithm:   (See Section 6 for full workflow detail)
+
+
+2.4  AssemblyLayer
+------------------------------------------------------------------------
+Files:     xl_sheetagent/assembly/exporter.py         (modified)
+           xl_sheetagent/assembly/sheet_assembler.py   (extended for rejected block nodes)
+           xl_sheetagent/assembly/relationship_builder.py (extended for belongs_to/labels edges)
+           xl_sheetagent/assembly/tree_renderer.py     (unchanged)
+
+Purpose:   Build trees, relationship graphs, write all outputs.
+           Reuses existing assembly code with minimal changes to handle
+           new V2 grammar profile serialization and manifest fields.
+
+
+================================================================================
+3. EXECUTION FLOW
+================================================================================
+
+  Step  Phase                        Parallelism         Notes
+  ----  -----                        -----------         -----
+  1     load_upstream(run_id)        sequential          Read all input files
+  2     Open workbooks               sequential          data_only + formula
+        (2 openpyxl handles)
+  3     detect_text_dominant_sheets   sequential          Retain V1 logic
+  4     run_grammar_workbook_agent    BLOCKING            Must complete before
+                                     sequential          any TableAgent starts
+                                                         -> GrammarProfile
+  5a    For each sheet:              PARALLEL             ThreadPoolExecutor
+          For each table on sheet:   SEQUENTIAL           Tables within a sheet
+            run_table_agent(...)                          run sequentially so
+          -> TableAgentResult                             grammar updates from
+          -> merge grammar_updates into GrammarProfile    earlier tables benefit
+                                                         later ones. Per-thread
+                                                         workbook handles.
+        (AUTHORITATIVE: Section 8.3 is definitive. Tables within a sheet
+         are sequential in V2 initial release. Intra-sheet parallelism is
+         a future optimization, not part of V2 scope.)
+  5b    Collect all results per sheet
+  5c    run_sheet_coordinator(...)   PARALLEL per sheet   After all table
+                                                         agents for that
+                                                         sheet complete
+  6     Collect all results          sequential
+  7     Assembly:
+          build_tree(...)            sequential per sheet
+          build_relationships(...)   sequential per sheet
+  8     write_outputs(...)           sequential
+  9     Close workbooks              sequential
+        Build manifest, return
+
+SEQUENCING CONSTRAINTS:
+  - Step 4 (grammar) MUST complete before Step 5 begins.
+  - Step 5c (coordinator) MUST wait for all table agents on that sheet.
+  - Step 7-8 (assembly/export) MUST wait for all sheets to complete.
+  - Grammar updates (Step 5a) can happen during table agent execution.
+
+
+================================================================================
+4. GRAMMAR WORKBOOK GENERATION FLOW
+================================================================================
+
+4.1  SAMPLE SELECTION
+---------------------
+
+  def _select_grammar_samples(upstream, max_tables=5, prefer_max_rows=12):
+      """Select small, high-confidence tables for grammar learning."""
+      candidates = [
+          tv for tv in upstream.table_objects
+          if tv.n_rows <= prefer_max_rows
+          and tv.n_rows >= 3
+          and tv.density >= 0.3
+      ]
+      candidates.sort(key=lambda tv: (-tv.confidence, tv.n_rows))
+      # Diversity: at most 2 from same sheet
+      selected, sheet_counts = [], {}
+      for tv in candidates:
+          if sheet_counts.get(tv.sheet_name, 0) >= 2:
+              continue
+          selected.append(tv)
+          sheet_counts[tv.sheet_name] = sheet_counts.get(tv.sheet_name, 0) + 1
+          if len(selected) >= max_tables:
+              break
+      return selected
+
+Config keys:
+  grammar_sample_max_rows: 12      # Max rows for grammar sample tables
+  grammar_sample_count: 3          # Target number of successful samples
+  grammar_sample_attempts: 5       # Max tables to attempt before giving up
+
+
+4.2  LLM CALL FOR STRUCTURE IDENTIFICATION
+------------------------------------------
+
+System prompt:
+  "You are a spreadsheet analyst. Given the first rows of a table
+   (cell values and formulas), identify the structural roles:
+   1. Which row (if any) is the table title? (0-indexed row number
+      relative to the table, or "none")
+   2. Which row(s) are column headers? (list of 0-indexed row numbers,
+      or "none")
+   3. Which column (if any) contains row names/labels? (0-indexed
+      column number, or "none")
+
+   Respond ONLY with JSON:
+   {"title_row": 0, "header_rows": [1], "row_name_column": 0}
+   Use "none" for any role that is not present."
+
+User prompt:
+  "Table from sheet '{sheet_name}', range {bbox_excel}:
+   Row 0: [cell1_value (=formula1), cell2_value, ...]
+   Row 1: [cell1_value (=formula2), cell2_value, ...]
+   Row 2: [cell1_value, cell2_value (=formula3), ...]"
+
+  Values and formulas included. Formatting NOT included.
+
+Retry logic:
+  If LLM says title_row="none", skip this table and try the next
+  candidate. If all header_rows="none" AND row_name_column="none",
+  also skip (the table is too ambiguous to learn from).
+
+
+4.3  FORMATTING CAPTURE
+------------------------
+
+After the LLM identifies roles for a successful table, read formatting
+from the openpyxl data_only=True workbook (which preserves formatting):
+
+  @dataclass
+  class RoleFormatting:
+      role: str              # "title" | "column_header" | "row_name"
+      font_name: str | None
+      font_size: float | None
+      is_bold: bool
+      fill_color: str | None  # hex RGB e.g. "FF0000"
+      text_color: str | None  # hex RGB
+      has_empty_row_above: bool  # for title role only
+
+For each role the LLM identified:
+  - Title: read formatting of all cells in the title row.
+  - Column headers: read formatting of all cells in header rows.
+  - Row names: read formatting of all cells in the row-name column.
+
+Take the MODAL (most common) formatting across cells in that role
+to avoid single-cell anomalies.
+
+
+4.4  PROFILE BUILDING
+---------------------
+
+  @dataclass
+  class GrammarProfile:
+      title_patterns: List[RoleFormatting]
+      header_patterns: List[RoleFormatting]
+      row_name_patterns: List[RoleFormatting]
+      sample_table_ids: List[str]
+      n_observations: int
+      confidence: float       # 0-1, increases with more confirming tables
+      _lock: threading.Lock   # Thread safety for updates
+
+      def matches_title(self, fmt: RoleFormatting) -> Tuple[bool, float]:
+          """Compare formatting against known title patterns.
+          Match requires >= 2 of 3 attributes to agree
+          (bold, fill_color, font_size)."""
+          ...
+
+      def matches_header(self, fmt: RoleFormatting) -> Tuple[bool, float]:
+          ...
+
+      def matches_row_name(self, fmt: RoleFormatting) -> Tuple[bool, float]:
+          ...
+
+      def add_observation(self, obs: GrammarObservation) -> None:
+          """Thread-safe. Acquires lock, appends new patterns,
+          recalculates confidence."""
+          with self._lock:
+              ...
+
+      def to_snapshot_dict(self) -> Dict:
+          """Serialize for grammar_snapshot.json output.
+          Backward compatible with V1 GrammarSnapshot schema.
+          See FROZEN vs RUNTIME distinction below."""
+          ...
+
+The profile aggregates formatting from 2-3 grammar workbook tables.
+Confidence starts at 0.60 with 2 samples, rises to 0.80 with 3+.
+Each subsequent TableAgent observation that confirms a pattern
+increases confidence toward 0.95.
+
+FROZEN-ON-DISK vs RUNTIME-ONLY (GrammarProfile export contract)
+-----------------------------------------------------------------
+  V1's GrammarSnapshot was frozen=True after Phase 0 — immutable
+  once written. V2's GrammarProfile is mutable at runtime (table
+  agents add observations throughout the run). This is a real
+  semantic shift. The export contract is:
+
+  FROZEN ON DISK (written to grammar_snapshot.json at run end):
+    - All patterns that were confirmed by grammar workbook agent
+      (source="grammar_workbook").
+    - All patterns that were confirmed by >= 2 table agent
+      observations (source="table_agent", status="confirmed").
+    - Final confidence scores (as of run end).
+    - frozen=True in the output (snapshot is immutable on disk).
+    - Serialized via to_snapshot_dict(), backward compatible
+      with V1 GrammarSnapshot JSON schema.
+
+  RUNTIME-ONLY (NOT written to grammar_snapshot.json):
+    - Patterns with status="observed" (only 1 observation, not
+      yet promoted to confirmed).
+    - The threading.Lock and internal mutation history.
+    - The n_observations counter and intermediate confidence values.
+
+  EVOLUTION LOG (written to debug/grammar_profile_evolution.jsonl):
+    - Every add_observation() call is logged with timestamp, table_id,
+      sheet_name, pattern delta, and running pattern count.
+    - This is a debug artifact for auditing how grammar evolved
+      during the run. Not loaded by the Streamlit viewer.
+
+  This ensures grammar_snapshot.json is a stable, deterministic
+  artifact that downstream consumers can rely on, while the runtime
+  GrammarProfile is free to evolve during processing.
+
+
+================================================================================
+5. PER-TABLE AGENT WORKFLOW
+================================================================================
+
+For every table in upstream.table_objects, a TableAgent executes:
+
+STEP 0 — CONTENT BBOX + CONTEXT BLOCK ROUTING (runs first)
+-------------------------------------------------------------
+  This step MUST run before any other step, matching V1's execution
+  order (table_enricher.py runs check_context_block immediately after
+  compute_content_bbox, and returns early before boundaries/splits/
+  headers).
+
+  1. Compute content_bbox via step0_prefilter.compute_content_bbox().
+  2. Check context block routing:
+     - If table n_rows <= cfg.context_block_max_rows
+       AND formula_ratio <= cfg.context_block_formula_ceil
+     - Route as context_block: is_context_block=True
+     - RETURN EARLY — skip Steps A through H entirely.
+  3. Otherwise, proceed to Step A.
+
+
+STEP A — GRAMMAR PRE-CHECK
+---------------------------
+  1. Read formatting of the first 3 rows of the table via openpyxl.
+  2. Compare against grammar.matches_title(), grammar.matches_header(),
+     grammar.matches_row_name().
+  3. If ALL THREE match with confidence >= cfg.grammar_match_threshold
+     (default 0.75):
+     - Assign title/headers/row_names from formatting positions.
+     - Record structure_method="grammar_match" in step_log.
+     - Skip Step B (no LLM call).
+  4. Otherwise, proceed to Step B.
+
+  This optimization means LLM call count DECREASES as grammar learns.
+  For a 200-table workbook, the first 3-5 tables use LLM; the rest
+  should mostly be grammar-matched.
+
+
+STEP B — LLM STRUCTURE READ
+----------------------------
+  1. Build payload: first 3 rows with values + formulas (no formatting).
+     Use payload_builder.build_structure_identification_payload().
+  2. Send to LLM with structure-identification prompt (same as grammar
+     workbook but applied to this table).
+  3. Parse JSON: {title_row, header_rows, row_name_column}.
+  4. If LLM returns valid assignments: apply them.
+     Record structure_method="llm_structure" in step_log.
+  5. If LLM returns "none" for any role: proceed to Step C for that role.
+
+
+STEP C — FALLBACK TOOLS
+------------------------
+  Activated only for roles where LLM returned "none" or failed.
+
+  Title fallback:
+    1. Scan rows above the table (up to cfg.title_shape_proximity_max
+       rows, default 2) for non-empty text that is bold or merged.
+    2. Check shapes_manifest for shapes anchored near the table top.
+    3. Use V1's title_attachment_score() for spatial scoring.
+    4. If found: assign title, record title_source="above_bbox" or "shape".
+
+  Header fallback:
+    1. Use upstream header_row_indices if header_confidence >=
+       cfg.tier_a_sufficient (default 0.80).
+    2. Check rejected blocks overlapping the bbox interior.
+    3. If found: assign column_headers from those rows.
+
+  Row-name fallback:
+    1. Use V1's first-nonempty-column scan (deterministic):
+       scan body columns left-to-right, pick first where >= 1 cell
+       is non-empty.
+    2. If found: assign row_headers from that column.
+
+
+STEP D — ESCALATION
+--------------------
+  For any role STILL unresolved after Steps B-C:
+
+  @dataclass
+  class EscalationRequest:
+      table_id: str
+      sheet_name: str
+      role: str               # "title" | "column_headers" | "row_names"
+      attempted_methods: List[str]   # e.g. ["llm_structure", "above_bbox"]
+      context: Dict[str, Any]        # bbox, nearby tables, etc.
+
+  The SheetCoordinator will receive this and attempt resolution using
+  sheet-level context (see Section 6).
+
+
+STEP E — GRAMMAR UPDATE
+------------------------
+  If the LLM provided a definitive answer in Step B AND this table's
+  formatting differs from existing grammar patterns:
+
+  @dataclass
+  class GrammarObservation:
+      table_id: str
+      sheet_name: str
+      title_formatting: RoleFormatting | None
+      header_formatting: RoleFormatting | None
+      row_name_formatting: RoleFormatting | None
+
+  The orchestrator merges this into GrammarProfile under lock.
+  This means later tables on OTHER sheets (processed in parallel)
+  can benefit from patterns discovered on earlier-processed sheets.
+
+
+STEP F — SPLIT DECISION (tables with n_rows > split_consideration_min_rows)
+----------------------------------------------------------------------------
+  See Section 7 for full workflow.
+
+  Only tables with more than cfg.split_consideration_min_rows (default 10)
+  are considered for splitting. The decision is made entirely by LLM
+  based on cut_scores and xl_table decision context.
+
+
+  (Step G removed — context block routing moved to Step 0 above,
+   matching V1's execution order where it runs first and returns
+   early before any enrichment steps.)
+
+
+STEP G — LLM INTERPRETATION
+----------------------------
+  After structure is resolved (title, headers, row_names assigned):
+
+  1. Build interpretation payload via payload_builder:
+     - If table has authoritative partitions: build per-partition payloads.
+     - Otherwise: build whole-table payload.
+  2. Call LLM with interpretation prompt:
+     System: "You are a financial spreadsheet analyst specialising in
+              health economics and outcomes research (HEOR) models..."
+     (Same system prompt as V1's step4_interpretation.)
+  3. Parse JSON: {summary, table_category, key_entities,
+     embedding_description, ontology_hint}.
+  4. Apply to enriched_table: llm_summary, llm_table_category,
+     rag_fields, ontology_hint.
+     ontology_hint is a stable, enumerable label derived from
+     table_category + LLM context. See Section 13.4.
+
+  V1's deterministic category inference (step 9 in table_enricher)
+  is retained as a fallback when LLM is unavailable or returns
+  invalid category.
+
+
+================================================================================
+6. SHEET COORDINATOR WORKFLOW
+================================================================================
+
+The SheetCoordinator runs ONCE PER SHEET after all TableAgents for that
+sheet have completed.
+
+6.1  SIGNAL COLLECTION
+-----------------------
+  Collect from all TableAgentResults on this sheet:
+    - EscalationRequest objects (unresolved title/headers/row_names)
+    - TableSignal objects (orphan_rows, header_unresolved, shared_note)
+
+6.2  TITLE RESOLUTION
+----------------------
+  For each escalation with role="title":
+    1. Search context blocks and rejected blocks near the table for
+       potential title candidates. Use V1's title_attachment_score()
+       for spatial scoring.
+    2. Search orphan rows that may have been detached from a table above.
+    3. If a candidate is found with score >= cfg.tier_b_accept:
+       assign title, record resolution_method="coordinator_spatial".
+    4. If no candidate found:
+       assign title=None, record title_source="unresolved".
+
+6.3  HEADER RESOLUTION
+-----------------------
+  For each escalation with role="column_headers":
+    1. Find the nearest RESOLVED table on the same sheet with high
+       column overlap (same column range ± 1 column).
+    2. Use V1's header_inheritance_score() to evaluate.
+    3. If inheritance score >= cfg.header_unresolved_floor:
+       assign column_headers from the donor table.
+       Record resolution_method="coordinator_inheritance".
+    4. If no suitable donor found:
+       assign column_headers=[], record as "unresolved".
+
+6.4  ROW-NAME RESOLUTION
+--------------------------
+  For each escalation with role="row_names":
+    1. Check if adjacent tables in the same section have a consistent
+       row-name column index.
+    2. If consistent: inherit the pattern.
+    3. If not: assign row_headers=[], record as "unresolved".
+
+6.5  SECTION DETECTION
+-----------------------
+  Retain V1's section_detector.py logic entirely:
+    - Detect section bands from rejected blocks with strong formatting
+      (fill + bold, fill + large font, bold + large font).
+    - Detect from workbook merged cells.
+    - Return List[SectionBand] per sheet.
+
+6.6  SECTION ASSIGNMENT
+------------------------
+  Assign each table to a section band using V1's
+  section_ownership_score():
+    - Spatial containment scoring.
+    - Emit section_ambiguity signals if two bands compete.
+
+6.7  OPTIONAL SHEET-LEVEL BATCH LLM CALL
+-----------------------------------------
+  When the coordinator has >= 2 unresolved escalations after
+  deterministic resolution (6.2-6.4), it MAY issue a single LLM
+  call per sheet to batch-resolve remaining ambiguities.
+
+  Purpose: Replace many per-table LLM calls with one sheet-level
+  reasoning call. Especially effective for header style clashes,
+  repeated row-name columns, or a stack of tables sharing one title.
+
+  System prompt:
+    "You are a spreadsheet analyst. The following tables on sheet
+     '{sheet_name}' have unresolved structural roles. Using sheet-level
+     consistency, resolve each. Respond with JSON:
+     {"resolutions": [
+       {"table_id": "...", "role": "title", "value": "...",
+        "reasoning": "..."},
+       ...
+     ]}"
+
+  User prompt includes:
+    - Per-table: bbox, resolved roles, unresolved roles, nearby context.
+    - Per-table: rejected blocks in vicinity (promoted to structured
+      neighbor objects, see Section 13.1).
+    - Sheet-level grammar observations.
+
+  Contract (what the sheet LLM may override):
+    - Unresolved roles (title/headers/row_names where confidence < 0.60).
+    - Category reclassification when table agents disagree.
+  What is FROZEN (sheet LLM may NOT override):
+    - xl_table bbox coordinates.
+    - Split decisions already confirmed by the split agent.
+    - Grammar workbook patterns (read-only during coordination).
+
+  Idempotency: LLM temperature=0. Deterministic ordering of tables in
+  the prompt (sorted by r_top, c_left). Audit trail records full prompt
+  and response.
+
+
+6.8  TREE ASSEMBLY
+-------------------
+  Reuse existing sheet_assembler.build_tree() and
+  relationship_builder.build_relationships() with extensions for
+  rejected block nodes (see Section 13.1).
+
+  Input: enriched tables (with resolved structures) + section bands
+         + promoted rejected blocks.
+  Output: SheetObjectTree, RelationshipGraph.
+
+
+================================================================================
+7. SPLIT-DECISION WORKFLOW FOR LARGE TABLES
+================================================================================
+
+This section replaces V1's multi-heuristic split detection
+(step2_splits.py) for tables that exceed the size threshold.
+
+7.1  TRIGGERING CONDITION
+--------------------------
+  A table is considered for splitting when:
+    n_rows > cfg.split_consideration_min_rows (default: 10)
+
+  Tables at or below 10 rows are never split.
+
+
+7.2  CUT LOADING
+-----------------
+  Gather split candidates from two sources:
+
+  Source A — cut_scores.jsonl (from xl_parse):
+    Filter entries where:
+      - sheet_name matches this table
+      - abs_row = entry.block_r1 + entry.index is within
+        [table.r_top, table.r_bot]
+      - combined_score > 0.3 (minimum signal threshold)
+    Extract: abs_row, combined_score, separator_score,
+             header_restart_score, changepoint_score
+
+  Source B — decisions.jsonl (from xl_table):
+    Filter split_attempt events associated with this leaf table.
+
+    NOTE: xl_table's split_lineage contains "row:{abs_split}" strings,
+    NOT candidate_id ancestry. You cannot filter by
+    "candidate_id in split_lineage". Instead, match via:
+      1. Walk parent_table_id chain upward from this leaf table to
+         find all ancestor candidate_ids.
+      2. Filter decisions.jsonl for entries where:
+         - entry.sheet == this table's sheet_name
+           (decisions.jsonl uses the key "sheet", not "sheet_name")
+         - entry.candidate_id matches any ancestor candidate_id, OR
+         - entry.bbox_excel overlaps this table's bbox (fallback for
+           sub-split tables whose candidate_id was reassigned)
+      3. Include both ACCEPTED and REJECTED attempts (V2 re-evaluates
+         all candidates with LLM).
+    Extract: split_row_abs, signal_source, decision, reason
+
+  Deduplicate by abs_row. Combine scores from both sources.
+
+  TOP-K FILTERING:
+    After gathering all candidates, apply:
+      1. Min score floor: discard candidates with combined_score <
+         cfg.split_min_score_floor (default: 0.3).
+      2. Structural signal gate: require at least ONE structural signal
+         (separator_score > 0 OR header_restart_score > 0 OR an xl_table
+         split_attempt exists) before a row enters the candidate set.
+         Rows with only changepoint signal are dropped.
+      3. Top-K cap: keep at most cfg.split_top_k (default: 5) candidates
+         ranked by combined_score DESC.
+      4. Dedup by proximity: if two candidates are within 2 rows of each
+         other, keep only the higher-scored one.
+
+    This reduces prompt noise, limits LLM cost per table, and avoids
+    sending weak cuts that only add confusion.
+
+  Sort final candidates by abs_row ascending.
+
+  Config keys:
+    split_min_score_floor: 0.3
+    split_top_k: 5
+    split_proximity_dedup: 2
+
+
+7.3  CONTEXT EXTRACTION
+------------------------
+  For each candidate cut at row r_cut (0-indexed):
+
+    NOTE ON INDEXING: All bbox coordinates in this pipeline are
+    0-indexed inclusive. openpyxl uses 1-based row and column
+    indices. Existing codebase helpers (step0_prefilter,
+    step3_headers, section_detector) consistently convert via
+    row=r + 1, column=c + 1. The split_agent MUST follow the
+    same convention. Do NOT call ws.cell() with 0-based coords.
+
+    # Convert 0-indexed r_cut to openpyxl 1-based
+    row_above = [ws.cell(row=r_cut + 1, column=c + 1).value
+                 for c in range(c_left, c_right + 1)]
+    row_below = [ws.cell(row=r_cut + 2 + 1, column=c + 1).value
+                 for c in range(c_left, c_right + 1)]
+
+    # Same for formula workbook
+    formula_above = [ws_formula.cell(row=r_cut + 1, column=c + 1).value
+                     for c in range(c_left, c_right + 1)]
+    formula_below = [ws_formula.cell(row=r_cut + 2 + 1, column=c + 1).value
+                     for c in range(c_left, c_right + 1)]
+
+    (Where r_cut is the 0-indexed row of the cut, r_cut + 1 is the
+     row below it in 0-indexed terms, and +1 converts to openpyxl's
+     1-based API. Use the existing helper pattern from step0 / step3.)
+
+  Include upstream context:
+    - combined_score from cut_scores
+    - xl_table decision (if any) and reason
+    - Whether the row is empty or partially empty
+
+
+7.4  LLM DECISION
+-------------------
+  Single LLM call per table with ALL candidates bundled:
+
+  System prompt:
+    "You are a spreadsheet analyst. A large table has been extracted
+     from an Excel workbook. For each proposed split boundary below,
+     decide whether the table should be split at that row. A split is
+     valid if there is a clear structural break: a new section header,
+     a new set of column headers restarting, a visible topic change,
+     or a significant empty/separator row.
+
+     Respond ONLY with JSON:
+     {"splits": [
+       {"row": <abs_row>, "should_split": true, "reason": "..."},
+       {"row": <abs_row>, "should_split": false, "reason": "..."}
+     ]}"
+
+  User prompt:
+    "Table: sheet '{sheet_name}', range {bbox_excel}, {n_rows} rows.
+
+     Candidate 1 (row {abs_row}, upstream_score={combined_score}):
+       Row above: [val1, val2, val3, ...]
+       Row below: [val1, val2, val3, ...]
+       xl_table decision: {ACCEPTED|REJECTED}, reason: {reason}
+
+     Candidate 2 (row {abs_row}, upstream_score={combined_score}):
+       ..."
+
+
+7.5  APPLICATION
+-----------------
+  For each confirmed split (should_split=true):
+    Create SemanticPartition:
+      partition_type = "v2_llm_split"
+      authoritative = True
+      sub_bbox = computed from split boundaries
+      confidence = 0.85  (LLM-confirmed)
+      evidence = {"source": "v2_llm_split",
+                  "reason": <LLM reason>,
+                  "upstream_score": <combined_score>}
+
+  Splits are applied as partitions within the original table (same
+  as V1's SemanticPartition model), not as new top-level tables.
+
+  If LLM rejects ALL candidates: no splitting occurs. The table
+  remains whole.
+
+
+================================================================================
+8. PARALLELIZATION STRATEGY
+================================================================================
+
+8.1  THREAD MODEL
+------------------
+
+  Primary:  ThreadPoolExecutor (not asyncio)
+  Reason:   openpyxl is not async. LLM calls are I/O-bound but the
+            OpenAI Python SDK supports threading natively. asyncio
+            would require aiohttp and async openpyxl (neither exists).
+
+  Workers:  cfg.max_parallel_sheets (default: min(4, len(sheets)))
+
+
+8.2  SHEET-LEVEL PARALLELISM
+------------------------------
+
+  Each sheet is submitted as a single task to the ThreadPoolExecutor:
+
+    def _process_sheet(sheet_name, tables, upstream, grammar, cfg, ...):
+        # Open per-thread workbook handles
+        wb_local = openpyxl.load_workbook(path, data_only=True, read_only=True)
+        wb_formula_local = openpyxl.load_workbook(path, data_only=False, read_only=True)
+        ws = wb_local[sheet_name]
+        ws_formula = wb_formula_local[sheet_name]
+
+        # Process each table
+        results = []
+        for table in tables:
+            result = run_table_agent(table, ..., ws, ws_formula, grammar, ...)
+            results.append(result)
+            # Merge grammar updates
+            for obs in result.grammar_updates:
+                grammar.add_observation(obs)  # Thread-safe
+
+        # Run coordinator
+        resolved = run_sheet_coordinator(sheet_name, results, ...)
+
+        # Close per-thread handles
+        wb_local.close()
+        wb_formula_local.close()
+
+        return resolved
+
+
+8.3  TABLE-LEVEL PARALLELISM WITHIN A SHEET
+---------------------------------------------
+
+  Tables within a sheet are processed SEQUENTIALLY by default.
+  Reason: grammar updates from earlier tables benefit later tables
+  on the same sheet. Sequential processing maximizes grammar
+  shortcutting within a sheet.
+
+  Optional: tables on the same sheet CAN be parallelized if grammar
+  is already high-confidence (>= 0.80). This is a future optimization.
+
+
+8.4  WHAT IS SEQUENTIAL (NOT PARALLELIZED)
+--------------------------------------------
+
+  1. load_upstream()            — reads files, must be first
+  2. GrammarWorkbookAgent       — must complete before TableAgents
+  3. detect_text_dominant_sheets — cheap, runs before grammar
+  4. AssemblyLayer / write_outputs — must be after all processing
+  5. Manifest building          — after all processing
+
+
+8.5  THREAD SAFETY DETAILS
+----------------------------
+
+  GrammarProfile._lock:
+    - add_observation() acquires lock.
+    - matches_*() reads snapshot of list (no lock needed;
+      list.append is atomic in CPython, and reads of a slightly
+      stale list are acceptable — worst case, a table misses
+      one pattern and falls through to LLM).
+
+  AgentResultStore._lock:
+    - Thread-safe append for per-table results.
+    - Each table writes to its own slot (table_id key).
+
+  TraceAccumulator / ToolCallRecorder:
+    - Add threading.Lock to __init__.
+    - Each record() / finalize_table() call acquires lock.
+
+  openpyxl:
+    - NOT thread-safe. Each thread opens its own workbook handle
+      in read_only mode. This is safe and cheap (read-only mode
+      uses iterators, not full cell caching).
+
+  OpenAI client:
+    - Thread-safe per documentation. Share one client instance
+      across all threads (created at startup, passed to all agents).
+    - Replaces V1's per-call client creation.
+
+  Python logging:
+    - Thread-safe by default.
+
+
+8.6  DETERMINISTIC OUTPUT ORDERING
+------------------------------------
+
+  To ensure stable, reproducible outputs regardless of thread
+  scheduling order:
+    - Sort enriched_tables by (sheet_name, r_top, c_left) before export.
+    - Sort signals by (source_table_id).
+    - Sort trees_by_sheet by sheet_name.
+    - Sort debug_events by (table_id, event_ts).
+
+
+================================================================================
+9. REQUIRED NEW FILES / MODULES
+================================================================================
+
+9.1  NEW FILES TO CREATE
+--------------------------
+
+  xl_sheetagent/agents/__init__.py
+    Agent package init. Exports run_grammar_workbook_agent,
+    run_table_agent, run_sheet_coordinator.
+
+  xl_sheetagent/agents/grammar_workbook_agent.py
+    GrammarWorkbookAgent implementation. Functions:
+      _select_grammar_samples()
+      _llm_structure_identify()
+      _capture_role_formatting()
+      _build_initial_profile()
+      run_grammar_workbook_agent()
+
+  xl_sheetagent/agents/table_agent.py
+    TableAgent implementation. Functions:
+      _grammar_pre_check()
+      _llm_structure_read()
+      _title_fallback()
+      _header_fallback()
+      _row_name_fallback()
+      _emit_escalation()
+      _emit_grammar_update()
+      _run_interpretation()
+      run_table_agent()
+
+  xl_sheetagent/agents/sheet_coordinator_agent.py
+    SheetCoordinator V2 implementation. Functions:
+      _resolve_title_escalations()
+      _resolve_header_escalations()
+      _resolve_row_name_escalations()
+      run_sheet_coordinator()
+
+  xl_sheetagent/agents/split_agent.py
+    LLM-controlled split logic. Functions:
+      _load_split_candidates()
+      _extract_split_context()
+      _llm_split_decision()
+      run_split_decision()
+
+  xl_sheetagent/schemas/grammar_profile.py
+    New mutable GrammarProfile dataclass + supporting types:
+      RoleFormatting
+      GrammarObservation
+      GrammarProfile (with Lock, matches_*, add_observation,
+                      to_snapshot_dict)
+      GrammarWorkbookResult
+
+  xl_sheetagent/schemas/agent_types.py
+    Agent communication types:
+      EscalationRequest
+      TableAgentResult
+      SplitCandidate
+      SheetProcessingResult
+      MethodConfidence  (per-role confidence record, Section 13.3)
+
+  xl_sheetagent/tools/ontology_map.py
+    Ontology hint derivation and mapping:
+      ONTOLOGY_LABELS: List[str]  (allowed enum values)
+      derive_ontology_hint(table_category, key_entities) -> str | None
+      (deterministic fallback mapping)
+
+
+9.2  FILES TO MODIFY
+---------------------
+
+  xl_sheetagent/__init__.py
+    Add run_sheetagent_v2() function. Existing run_sheetagent()
+    dispatches to V1 or V2 based on cfg.v2_enabled flag.
+
+  xl_sheetagent/config.py
+    Add V2 config fields to XlSheetAgentConfig:
+      v2_enabled: bool
+      grammar_sample_max_rows: int        # 12
+      grammar_sample_count: int           # 3
+      grammar_sample_attempts: int        # 5
+      grammar_match_threshold: float      # 0.75
+      split_consideration_min_rows: int   # 10
+      split_min_score_floor: float        # 0.3
+      split_top_k: int                    # 5
+      split_proximity_dedup: int          # 2
+      max_parallel_sheets: int            # 4
+      coordinator_batch_llm_threshold: int # 2  (min escalations to trigger)
+      ontology_hint_enabled: bool         # true
+
+  xl_sheetagent/schemas/enriched_table.py
+    Add fields to EnrichedTableObject:
+      structure_method: str        # "grammar_match" | "llm_structure"
+                                   # | "fallback" | "escalation"
+                                   # | "coordinator_llm"
+      llm_structure_response: Dict # Raw LLM response for structure ID
+      grammar_match_confidence: float
+      decision_confidence: Dict    # Per-role confidence record.
+                                   # See Section 13.3.
+                                   # {"title": {"method": "llm", "confidence": 0.92},
+                                   #  "column_headers": {"method": "grammar", "confidence": 0.85},
+                                   #  "row_names": {"method": "fallback", "confidence": 0.60}}
+      ontology_hint: str | None    # Enumerable domain label.
+                                   # See Section 13.4.
+
+  xl_sheetagent/schemas/run_manifest.py
+    Add V2 fields to RunManifest:
+      v2_mode: bool
+      grammar_workbook_tables: int
+      tables_grammar_shortcut: int
+      tables_llm_structure: int
+      tables_escalated: int
+      tables_split_by_llm: int
+      parallel_sheets: int
+      grammar_updates_during_run: int
+
+  xl_sheetagent/schemas/grammar_snapshot.py
+    Add backward-compatible serialization from GrammarProfile.
+    New pattern types: "title", "column_header", "row_name"
+    alongside old V1 types ("section_header", "table_title",
+    "repeated_label").
+
+  xl_sheetagent/tools/llm_client.py
+    Add shared OpenAI client singleton (thread-safe):
+      _shared_client: OpenAI = None
+      _client_lock: threading.Lock
+      def get_shared_client(cfg) -> OpenAI
+    Modify call_llm() to use shared client.
+
+  xl_sheetagent/tools/payload_builder.py
+    Add new payload modes:
+      "structure_identification" — first 3 rows with values + formulas
+      "split_context"           — 1 row above + 1 row below each cut
+
+  xl_sheetagent/tools/debug_trace.py
+    Add threading.Lock to TraceAccumulator.__init__() and
+    ToolCallRecorder.__init__(). Wrap record/finalize calls.
+
+  xl_sheetagent/assembly/exporter.py
+    Update write_outputs() to:
+      - Serialize GrammarProfile via to_snapshot_dict()
+      - Write V2 manifest fields
+      - Write grammar_profile_evolution.jsonl (debug)
+      - Write escalation_log.jsonl (debug)
+
+  config/stages.yaml
+    Add V2 keys under xl_sheetagent:
+      v2_enabled: true
+      grammar_sample_max_rows: 12
+      grammar_sample_count: 3
+      grammar_sample_attempts: 5
+      grammar_match_threshold: 0.75
+      split_consideration_min_rows: 10
+      split_min_score_floor: 0.3
+      split_top_k: 5
+      split_proximity_dedup: 2
+      max_parallel_sheets: 4
+      coordinator_batch_llm_threshold: 2
+      ontology_hint_enabled: true
+
+  core/stage_config.py
+    Update sheetagent_config_from_pipeline() (or equivalent builder)
+    to handle new V2 config fields with exact key matching.
+
+
+9.3  FILES TO RETAIN UNCHANGED
+-------------------------------
+
+  xl_sheetagent/upstream_compat.py         Upstream loading is the same.
+  xl_sheetagent/scoring.py                 Pure scoring functions still
+                                           used by SheetCoordinator.
+  xl_sheetagent/modules/section_detector.py  Section detection is
+                                           formatting-based, still valid.
+  xl_sheetagent/modules/text_dominant_handler.py  Retained as-is.
+  xl_sheetagent/assembly/sheet_assembler.py  Tree building unchanged.
+  xl_sheetagent/assembly/relationship_builder.py  Edge building unchanged.
+  xl_sheetagent/assembly/tree_renderer.py  PNG rendering unchanged.
+  xl_sheetagent/schemas/sheet_object_tree.py  Tree/edge schemas unchanged.
+  xl_sheetagent/schemas/signals.py         Signal schema unchanged.
+  xl_sheetagent/schemas/run_manifest.py    (extended, not replaced)
+  xl_sheetagent/tools/provenance_tools.py  Provenance utils unchanged.
+  xl_sheetagent/tools/payload_builder.py   (extended, not replaced)
+  apps/streamlit_viewer.py                 Reads JSON only; output
+                                           formats preserved.
+
+
+9.4  FILES TO DEPRECATE (keep for V1 fallback, not deleted)
+------------------------------------------------------------
+
+  xl_sheetagent/modules/grammar_builder.py
+    Replaced by: agents/grammar_workbook_agent.py
+    V1 grammar was formatting-only. V2 uses LLM-based structure
+    identification + formatting capture.
+
+  xl_sheetagent/modules/table_enricher.py
+    Replaced by: agents/table_agent.py
+    V1 ran Steps 0-3 sequentially. V2 runs LLM-first with grammar
+    shortcutting.
+
+  xl_sheetagent/modules/sheet_coordinator.py
+    Replaced by: agents/sheet_coordinator_agent.py
+    V2 coordinator handles escalation requests from table agents.
+
+  xl_sheetagent/steps/step0_prefilter.py
+    PARTIALLY retained: context_block routing logic reused in
+    table_agent.py Step G. Content bbox computation reused.
+
+  xl_sheetagent/steps/step1_boundary.py
+    Replaced by: table_agent.py Steps B-C (title fallback).
+    V1 spatial scoring retained as fallback, but LLM is primary.
+
+  xl_sheetagent/steps/step2_splits.py
+    Replaced by: agents/split_agent.py
+    V1 multi-heuristic scoring replaced by LLM-only decisions.
+
+  xl_sheetagent/steps/step3_headers.py
+    Replaced by: table_agent.py Steps B-C (header fallback).
+    V1's 4-level cascade replaced by LLM-first + fallback.
+
+  xl_sheetagent/steps/step4_interpretation.py
+    Folded into: table_agent.py Step H.
+    Same LLM prompt, now called per-table instead of as a
+    separate phase.
+
+  xl_sheetagent/tools/v1c_review.py
+    No longer needed. V1C confirmation pattern (confirm_footnote,
+    confirm_split, confirm_row_header) is replaced by V2's
+    LLM-first approach.
+
+
+================================================================================
+10. OUTPUT ARTIFACTS
+================================================================================
+
+10.1  ARTIFACTS THAT STAY IDENTICAL (schema unchanged)
+-------------------------------------------------------
+
+  enriched_tables.json
+    Same schema. New fields added (structure_method,
+    grammar_match_confidence, decision_confidence,
+    ontology_hint) but old fields preserved.
+    Backward compatible.
+
+  summaries.json
+    Same schema. No changes.
+
+  run_manifest.json
+    Same schema with new fields appended (v2_mode,
+    tables_grammar_shortcut, etc.). Old fields preserved.
+    Backward compatible.
+
+  sheet_object_trees/{sheet}_tree.json
+    Extended TreeNode schema: new node_type values
+    ("rejected_block", "floating_label", "orphan_header"),
+    new fields (rejection_source, block_confidence).
+    tree_schema_version bumped to "2.0".
+    Old consumers check version and skip unknown node types.
+
+  relationship_graphs/{sheet}_rels.json
+    Extended: new edge types ("belongs_to", "labels") for
+    rejected block relationships. Same base schema.
+
+  streamlit_view_bundle.json
+    Same schema. Optional new keys may be added but old keys
+    preserved. Backward compatible.
+
+  debug_log.jsonl
+    Same event format. New event types added (grammar_match,
+    llm_structure, escalation, v2_split) alongside V1 types.
+
+  text_dominant_sheets.json
+    Unchanged (text-dominant detection retained as-is).
+
+
+10.2  ARTIFACTS THAT CHANGE IN CONTENT (not schema)
+-----------------------------------------------------
+
+  grammar_snapshot.json
+    New pattern types: "title", "column_header", "row_name"
+    (in addition to V1's "section_header", "table_title",
+    "repeated_label").
+    New fields per pattern: "role_formatting" (RoleFormatting dict),
+    "source" ("llm_workbook" | "llm_table_agent" | "v1_formatting").
+    Old patterns can coexist with new ones.
+
+  grammar_discovery_report.json
+    New keys: "grammar_workbook_tables", "llm_calls_in_grammar_phase",
+    "mutable_updates_count", "patterns_by_source".
+
+
+10.3  NEW V2-SPECIFIC ARTIFACTS (debug only)
+----------------------------------------------
+
+  debug/grammar_profile_evolution.jsonl
+    One line per grammar update event:
+      {ts, table_id, sheet_name, role, new_pattern, n_total_patterns}
+    Tracks how the grammar profile evolved during the run.
+
+  debug/escalation_log.jsonl
+    One line per escalation request + resolution:
+      {table_id, sheet_name, role, attempted_methods,
+       resolution_method, resolved_value}
+
+These are debug-only files. The Streamlit viewer does NOT
+need to read them (but the Debug Explorer tab could display
+them if updated in a future viewer version).
+
+
+================================================================================
+11. PHASED IMPLEMENTATION PLAN
+================================================================================
+
+PHASE 1: INFRASTRUCTURE
+-------------------------
+  Create foundation types and thread-safety plumbing.
+
+  Tasks:
+    1. Create xl_sheetagent/agents/__init__.py
+    2. Create xl_sheetagent/schemas/grammar_profile.py
+       - RoleFormatting, GrammarObservation, GrammarProfile
+    3. Create xl_sheetagent/schemas/agent_types.py
+       - EscalationRequest, TableAgentResult, SplitCandidate,
+         SheetProcessingResult
+    4. Extend xl_sheetagent/config.py with V2 fields
+    5. Update config/stages.yaml with V2 config entries
+    6. Update core/stage_config.py to handle new fields
+    7. Add threading.Lock to TraceAccumulator and ToolCallRecorder
+    8. Add shared OpenAI client to llm_client.py
+    9. Add new payload modes to payload_builder.py:
+       "structure_identification" and "split_context"
+
+  Tests:
+    - GrammarProfile thread-safety unit test
+    - Config loading with V2 fields
+    - Payload builder new modes
+
+
+PHASE 2: GRAMMAR WORKBOOK AGENT
+---------------------------------
+  Implement the blocking grammar learning phase.
+
+  Tasks:
+    1. Implement agents/grammar_workbook_agent.py:
+       - _select_grammar_samples()
+       - _llm_structure_identify()
+       - _capture_role_formatting()
+       - _build_initial_profile()
+       - run_grammar_workbook_agent()
+    2. Write GrammarProfile.to_snapshot_dict() for output compat.
+
+  Tests:
+    - Sample selection with various table distributions
+    - Formatting capture from mock workbook
+    - Integration test with mock LLM responses
+    - Edge case: all tables too small, all tables too large
+
+
+PHASE 3: TABLE AGENT + SPLIT AGENT
+------------------------------------
+  Implement the per-table LLM-first workflow.
+
+  Tasks:
+    1. Implement agents/table_agent.py:
+       - _grammar_pre_check()
+       - _llm_structure_read()
+       - _title_fallback(), _header_fallback(), _row_name_fallback()
+       - _emit_escalation()
+       - _emit_grammar_update()
+       - _run_interpretation()
+       - run_table_agent()
+    2. Implement agents/split_agent.py:
+       - _load_split_candidates()
+       - _extract_split_context()
+       - _llm_split_decision()
+       - run_split_decision()
+    3. Extract reusable logic from V1's step0_prefilter.py
+       (content_bbox, context_block routing).
+    4. Extract reusable logic from V1's step1_boundary.py
+       (spatial title search, title_attachment_score).
+
+  Tests:
+    - Table agent with grammar match (no LLM call)
+    - Table agent with LLM structure read
+    - Table agent fallback chain
+    - Table agent escalation
+    - Split agent with mock cut_scores and decisions
+    - Context block routing
+
+
+PHASE 4: SHEET COORDINATOR V2
+-------------------------------
+  Implement escalation resolution and tree assembly.
+
+  Tasks:
+    1. Implement agents/sheet_coordinator_agent.py:
+       - _resolve_title_escalations()
+       - _resolve_header_escalations()
+       - _resolve_row_name_escalations()
+       - run_sheet_coordinator()
+    2. Integrate with section_detector.py (unchanged).
+    3. Integrate with sheet_assembler.py (unchanged).
+    4. Integrate with relationship_builder.py (unchanged).
+
+  Tests:
+    - Title resolution from context blocks
+    - Header inheritance from resolved tables
+    - Section detection + assignment (regression)
+    - Tree assembly (regression)
+
+
+PHASE 5: PARALLEL ORCHESTRATION
+---------------------------------
+  Wire everything together with ThreadPoolExecutor.
+
+  Tasks:
+    1. Implement run_sheetagent_v2() in __init__.py:
+       - ThreadPoolExecutor for sheet-level parallelism
+       - Per-thread workbook handles
+       - GrammarProfile merging under lock
+       - Result collection and deterministic sorting
+    2. Add v2_enabled dispatch in run_sheetagent().
+    3. Deterministic output ordering.
+
+  Tests:
+    - Integration test: full pipeline with 3+ sheets
+    - Thread-safety test: concurrent grammar updates
+    - Deterministic ordering test: same output across runs
+    - Regression test: V1 mode still works
+
+
+PHASE 6: ENHANCEMENTS (Section 13 items)
+-------------------------------------------
+  Implement the five V2 enhancements.
+
+  Tasks:
+    1. Rejected blocks as graph nodes (13.1):
+       - Add quality gate to filter rejected blocks
+       - Extend sheet_assembler.py: build rejected_block/floating_label/
+         orphan_header nodes
+       - Extend relationship_builder.py: belongs_to, labels edges
+       - Add tree_schema_version="2.0" to SheetObjectTree output
+    2. Sheet coordinator batch LLM (13.2):
+       - Add optional LLM call path to sheet_coordinator_agent.py
+       - Prompt construction from structured rejected block neighbors
+       - Audit trail to escalation_log.jsonl
+    3. Confidence system (13.3):
+       - Create MethodConfidence dataclass in agent_types.py
+       - Populate decision_confidence in TableAgent and SheetCoordinator
+       - Wire escalation rule: only escalate when confidence < 0.60
+         or methods disagree
+    4. Ontology hook (13.4):
+       - Create xl_sheetagent/tools/ontology_map.py
+       - Add ontology_hint to interpretation prompt (Step H)
+       - Add deterministic fallback mapping
+    5. Top-K split filtering (13.5):
+       - Already specified in Section 7.2 — implement in split_agent.py
+
+  Tests:
+    - Rejected block node/edge graph tests
+    - Coordinator batch LLM with mock responses
+    - Confidence propagation through the full pipeline
+    - Ontology hint derivation for each table_category
+    - Top-K filtering edge cases (0 candidates, all below floor)
+
+
+PHASE 7: ASSEMBLY AND OUTPUT
+------------------------------
+  Update export pipeline for V2 artifacts.
+
+  Tasks:
+    1. Update exporter.py:
+       - GrammarProfile serialization to grammar_snapshot.json
+       - V2 manifest fields
+       - grammar_profile_evolution.jsonl (debug)
+       - escalation_log.jsonl (debug)
+    2. Update enriched_table.py with V2 fields (decision_confidence,
+       ontology_hint).
+    3. Update run_manifest.py with V2 fields.
+    4. Verify Streamlit viewer loads V2 outputs without changes.
+
+  Tests:
+    - Output format validation against V1 schemas
+    - Streamlit viewer smoke test with V2 outputs
+    - Grammar snapshot backward compatibility
+
+
+PHASE 8: TESTING AND HARDENING
+--------------------------------
+  Comprehensive testing and edge cases.
+
+  Tasks:
+    1. Thread-safety stress tests (many concurrent grammar updates).
+    2. Edge cases:
+       - Zero tables
+       - One table
+       - All context blocks
+       - Empty grammar (no successful samples)
+       - Very wide tables (100+ columns)
+       - Tables with no formulas
+    3. LLM failure handling:
+       - LLM returns garbage JSON
+       - LLM times out
+       - LLM returns "none" for all roles
+       - Graceful degradation to V1 when LLM unavailable
+    4. Performance benchmarking:
+       - V1 sequential vs V2 parallel
+       - LLM call count with grammar shortcutting
+       - Wall-clock time for 50+ table workbooks
+    5. Regression tests:
+       - All V1 tests still pass with v2_enabled=false
+       - V2 outputs are Streamlit-compatible
+       - No xl_kg substring (TestNoLegacyKgSubstring)
+
+
+================================================================================
+12. ASSUMPTIONS / RISKS / OPEN QUESTIONS
+================================================================================
+
+ASSUMPTIONS
+-----------
+
+  A1. LLM AVAILABILITY
+      V2 requires an LLM to function. When skip_llm_enrichment=true,
+      the system falls back to V1's deterministic pipeline entirely
+      (not V2 with LLM disabled). The v2_enabled flag is ignored
+      when skip_llm_enrichment=true.
+
+  A2. OPENPYXL READ-ONLY THREADING
+      Opening multiple read-only openpyxl workbook handles to the
+      same file is safe on Windows. This is documented behavior
+      (read-only mode uses file iterators, not exclusive locks).
+
+  A3. LLM CONSISTENCY
+      The LLM returns consistent structural identifications for
+      tables with similar formatting. The grammar profile's voting
+      logic handles occasional disagreements by requiring >= 2 of 3
+      formatting attributes to match.
+
+  A4. TOKEN BUDGET
+      Sending 3 rows of a table fits within LLM token limits.
+      For very wide tables (100+ columns), the payload builder must
+      truncate to the first 20 columns with a note "[{n} more cols]".
+
+  A5. OPENAI CLIENT THREAD SAFETY
+      The OpenAI Python client is thread-safe for concurrent
+      chat.completions.create() calls, as documented.
+
+
+RISKS
+-----
+
+  R1. LLM COST
+      V2 makes ~2-3 LLM calls per table (structure read + possible
+      split + interpretation). For a 200-table workbook: 400-600 calls.
+
+      Mitigations:
+        - Grammar shortcutting: after 5-10 tables, most should be
+          grammar-matched (0 LLM calls).
+        - Batch grammar workbook: 3 tables in potentially 1-2 calls.
+        - Use cheaper models for structure ID (gpt-3.5-turbo) and
+          reserve gpt-4 for interpretation.
+        - Track LLM cost in run_manifest for monitoring.
+
+  R2. NON-DETERMINISM FROM PARALLELISM
+      If grammar evolves differently depending on thread scheduling
+      order, outputs may differ between runs.
+
+      Mitigations:
+        - Grammar workbook (blocking phase) provides a stable
+          baseline before parallel processing begins.
+        - Grammar updates are append-only (never remove patterns).
+        - Tables within a sheet are processed sequentially.
+        - Final grammar state is independent of update order
+          (pattern matching uses attribute comparison, not ordering).
+
+  R3. THREAD SAFETY OF GRAMMAR PROFILE
+      Lock contention could bottleneck parallel execution if many
+      threads try to update grammar simultaneously.
+
+      Mitigation:
+        - Updates are rare (only when a genuinely NEW formatting
+          pattern is discovered; most tables confirm existing patterns).
+        - Lock is only held during append (microseconds).
+        - Reads are lock-free.
+
+  R4. WIDE TABLE TRUNCATION
+      The LLM cannot see all columns of a 50-column table in 3 rows.
+
+      Mitigation:
+        - Truncate to first 20 columns in the payload.
+        - Include a note: "[{n} additional columns not shown]"
+        - The LLM's structural identification (title row, header rows)
+          is typically evident from the first few columns.
+
+  R5. LLM PROMPT BRITTLENESS
+      LLM may not always return valid JSON or may misidentify roles.
+
+      Mitigations:
+        - JSON parsing with fallback (strip code fences, retry parse).
+        - Validate LLM response against expected schema.
+        - Fallback chain (Steps C-D) handles LLM failures gracefully.
+        - Temperature=0 for deterministic results.
+
+
+OPEN QUESTIONS
+--------------
+
+  Q1. SHOULD THE GRAMMAR WORKBOOK AGENT ALSO DETECT SECTION HEADERS?
+
+      V1 grammar detected "section_header" patterns from formatting.
+      V2's grammar focuses on title / header / row-name.
+      Should section headers be a fourth role learned from LLM?
+
+      Recommendation: Yes — add a fourth role. The section_detector
+      can then use LLM-learned section patterns in addition to its
+      existing formatting heuristics.
+
+  Q2. FORMULA REPRESENTATION IN LLM PROMPTS
+
+      "Send first 3 rows: values + formulas." Should formulas be
+      sent as A1-style strings (=SUM(B2:B10)) or as computed values?
+
+      Recommendation: Send BOTH — the computed value AND the formula
+      string if it exists. Format: "42.5 (=SUM(B2:B10))". This gives
+      the LLM maximum context for distinguishing calculated vs input
+      cells.
+
+  Q3. SHOULD V2 STILL EMIT V1-STYLE SIGNALS?
+
+      V1 emits orphan_rows, header_unresolved, shared_note signals.
+      V2 replaces much of this with escalation requests.
+
+      Recommendation: Yes, emit both for backward compatibility.
+      Escalation requests are V2-internal; signals feed into the
+      Streamlit viewer and debug explorer.
+
+  Q4. HOW MANY THREADS PER SHEET?
+
+      For table-level parallelism within a sheet: 1 thread (sequential)
+      is recommended initially. Future optimization can add intra-sheet
+      parallelism for high-confidence grammar (>= 0.80).
+
+  Q5. SHOULD INTERPRETATION (STEP H) BE BATCHED?
+
+      V1 runs interpretation as a separate Phase 3 after all
+      enrichment. V2 runs it per-table inside the TableAgent.
+      Could we batch multiple tables' interpretation prompts into
+      a single LLM call to reduce cost?
+
+      Recommendation: Start with per-table calls (simpler, easier
+      to debug). Optimize to batching if LLM cost is a concern
+      after initial benchmarking.
+
+
+================================================================================
+13. V2 ENHANCEMENTS (ADDENDA)
+================================================================================
+
+These five enhancements tighten the V2 design: 4 + 5 + 7 form a bundle
+for "same or better quality, fewer tokens." 3 improves grounding for
+titles and sections. 6 is orthogonal but cheap to add early.
+
+
+13.1  REJECTED BLOCKS AS FIRST-CLASS GRAPH OBJECTS
+----------------------------------------------------
+
+Today rejected blocks are list-shaped context (upstream.rejected_blocks,
+used near boundaries/titles). V2 promotes them to nodes in the
+SheetObjectTree alongside tables, sections, and partitions.
+
+This matches how analysts think: floating headers, side labels, and
+"ghost" structure are real objects that affect nearby tables.
+
+NODE SCHEMA:
+  New node_type values for TreeNode:
+    "rejected_block"     — a block rejected by xl_parse/xl_table
+    "floating_label"     — a rejected block identified as a label
+    "orphan_header"      — a rejected block identified as a header
+
+  Additional fields on TreeNode:
+    rejection_source: str | None     # "xl_parse" | "xl_table"
+    rejection_reason: str | None     # "too_small" | "low_density" | etc.
+    block_confidence: float          # Parse-level confidence (0-1)
+
+EDGE TYPES:
+  New relationship edges:
+    "belongs_to"   — rejected block belongs to a table or section
+    "labels"       — rejected block labels (serves as title for) a table
+    "annotates"    — rejected block annotates a table (already exists)
+
+QUALITY GATE:
+  Not all rejected blocks should be promoted. Filter by:
+    - block_confidence >= 0.3 (from rejection metadata)
+    - n_cells_on >= 1 (not completely empty)
+    - Spatial proximity to a table (within 5 rows above/below or
+      overlapping column range)
+  This prevents parse noise from polluting the graph.
+
+TREE SCHEMA VERSIONING:
+  Add "tree_schema_version": "2.0" to the SheetObjectTree root.
+  Consumers that assume "tables only" check this field and handle
+  new node types gracefully (skip unknown types). The Streamlit
+  viewer already renders node_type as a column and will display
+  new types without code changes.
+
+USAGE IN COORDINATOR:
+  The SheetCoordinator can now feed structured neighbor objects
+  (not just "nearby text") into title/header resolution prompts.
+  This makes the optional sheet-level LLM call (Section 6.7) more
+  actionable: the prompt says "rejected block B at row 5 contains
+  bold text 'Financial Summary'" rather than dumping raw JSON.
+
+
+13.2  STRENGTHENED SHEET COORDINATOR (AGENTIC + OPTIONAL SHEET-LEVEL LLM)
+--------------------------------------------------------------------------
+
+The SheetCoordinator evolves from pure deterministic resolution to a
+two-tier system: deterministic-first, optional batch LLM for unresolved
+remainder. See Section 6.7 for the full LLM call specification.
+
+BENEFITS:
+  - Batch reasoning: resolves header style clashes, repeated row-name
+    columns, and stacked-table title assignment in a single LLM call
+    instead of many per-table structure calls.
+  - Reduces total LLM cost: one sheet LLM call replaces N per-table
+    fallback calls that the table agents would otherwise make.
+  - Consistency: the LLM sees ALL unresolved tables on the sheet at
+    once, so it can enforce consistent style (e.g., "all 8 tables in
+    this section use column A as row names").
+
+RISKS AND MITIGATIONS:
+  - Override contract: the sheet LLM may NOT override xl_table bboxes,
+    confirmed splits, or grammar workbook patterns. Only unresolved
+    roles with confidence < 0.60 are eligible for override.
+  - Deterministic ordering: tables presented to the LLM are sorted by
+    (r_top, c_left) for reproducibility.
+  - Audit: the full prompt + response is recorded in escalation_log.jsonl
+    and the enriched_table.step_log with resolution_method =
+    "coordinator_batch_llm".
+
+CONFIG:
+  coordinator_batch_llm_threshold: 2
+    Minimum number of unresolved escalations needed to trigger the
+    sheet-level LLM call. If only 1 escalation remains, deterministic
+    methods are sufficient.
+
+
+13.3  EXPLICIT CONFIDENCE SYSTEM (METHOD vs. CONFIDENCE SEPARATION)
+--------------------------------------------------------------------
+
+Every structural decision on an enriched table carries BOTH:
+  - method: HOW the decision was made
+  - confidence: HOW SURE we are about it
+
+This separation matches the repo's existing pattern (header_confidence,
+table_category_confidence) and avoids resurrecting heuristic gates as
+decision-makers.
+
+PER-ROLE CONFIDENCE RECORD:
+  decision_confidence: Dict[str, MethodConfidence]
+
+  @dataclass
+  class MethodConfidence:
+      method: str          # "grammar" | "llm_structure" | "fallback"
+                           # | "coordinator_deterministic"
+                           # | "coordinator_batch_llm" | "upstream"
+      confidence: float    # 0.0-1.0
+      source_table_id: str | None   # For inherited decisions
+      evidence: Dict       # Method-specific evidence
+
+  Example:
+    {
+      "title": {"method": "llm_structure", "confidence": 0.92,
+                "source_table_id": null,
+                "evidence": {"llm_raw": {"title_row": 0}}},
+      "column_headers": {"method": "grammar", "confidence": 0.85,
+                         "source_table_id": null,
+                         "evidence": {"pattern_id": "header_bold_fill"}},
+      "row_names": {"method": "coordinator_deterministic",
+                    "confidence": 0.60,
+                    "source_table_id": "tbl_abc123",
+                    "evidence": {"inherited_from": "tbl_abc123",
+                                 "column_overlap": 0.95}}
+    }
+
+ESCALATION RULE:
+  The SheetCoordinator only processes escalations where:
+    - confidence < cfg.coordinator_escalation_floor (default 0.60), OR
+    - methods disagree (grammar says one thing, upstream says another)
+
+  This prevents the coordinator from re-doing work that table agents
+  already resolved with high confidence.
+
+USAGE IN ASSEMBLY:
+  The confidence record flows through to enriched_tables.json output.
+  Downstream consumers can filter by confidence (e.g., "only trust
+  titles with confidence >= 0.80").
+
+
+13.4  ONTOLOGY HOOK (ontology_hint)
+-------------------------------------
+
+A stable, enumerable label on each enriched table that classifies
+the table's domain role. Derived from table_category + LLM context.
+
+PURPOSE:
+  Enables RAG / Q&A pipelines to filter and route tables by domain
+  meaning without parsing free-text summaries. Small surface area,
+  big downstream value.
+
+SCHEMA:
+  ontology_hint: str | None
+
+  Allowed values (HEOR domain):
+    "cost"           — cost input, unit cost, resource cost
+    "utility"        — utility/disutility values, QALYs
+    "comparator"     — treatment comparisons, arm definitions
+    "efficacy"       — clinical efficacy, hazard ratios, ORs
+    "population"     — cohort definitions, baseline characteristics
+    "transition"     — transition probabilities, Markov states
+    "sensitivity"    — sensitivity analysis inputs/outputs
+    "summary"        — model results, summary outputs
+    "assumption"     — documented assumptions
+    "reference"      — literature references, citations
+    "metadata"       — index, table of contents, navigation
+    null             — unclassifiable or not attempted
+
+DERIVATION:
+  1. Primary: LLM interpretation (Step H) returns ontology_hint
+     alongside table_category. Added to the interpretation prompt.
+  2. Fallback: deterministic mapping from table_category:
+       "input" -> "cost" (if key_entities contains cost terms)
+       "output" -> "summary"
+       "reference" -> "reference"
+       "note" -> "assumption"
+       etc.
+  3. Confidence: same as table_category_confidence.
+
+CONFIG:
+  ontology_hint_enabled: true
+    When false, ontology_hint is always null (saves LLM tokens
+    by not adding it to the interpretation prompt).
+
+  Ontology mapping conflicts (e.g., HEOR "outcome" vs generic
+  "result") should be documented in a mapping module:
+    xl_sheetagent/tools/ontology_map.py
+
+DOWNSTREAM COMPATIBILITY:
+  The field is optional (None-able). Consumers that do not use it
+  simply ignore it. No Streamlit viewer changes needed — it will
+  appear in the Table Inspector's full JSON expansion.
+
+
+13.5  SPLIT LOGIC: TOP-K CANDIDATE FILTERING
+-----------------------------------------------
+
+See Section 7.2 for the full specification (already integrated).
+
+Summary of the enhancement:
+  - Min score floor: combined_score >= 0.3 (configurable).
+  - Structural signal gate: at least one structural signal required
+    (separator_score > 0 OR header_restart_score > 0 OR xl_table
+    split_attempt exists). Changepoint-only rows are dropped.
+  - Top-K cap: at most 5 candidates per table (configurable).
+  - Proximity dedup: within 2 rows, keep only the higher-scored.
+
+EFFECT:
+  - Reduces prompt noise for the LLM split decision call.
+  - Limits LLM cost per table (fewer candidates = shorter prompt).
+  - Avoids sending weak cuts that only add confusion.
+  - Works synergistically with the LLM-only split design: cleaner
+    input leads to better LLM decisions.
+
+Config keys (already added to Section 9.2):
+  split_min_score_floor: 0.3
+  split_top_k: 5
+  split_proximity_dedup: 2
+
+
+================================================================================
+A. RECOMMENDATIONS: WHAT TO REMOVE FROM OLD SHEETAGENT
+================================================================================
+
+REMOVE (replace with V2 equivalents):
+
+  1. modules/grammar_builder.py — V1 formatting-only grammar
+     Replacement: agents/grammar_workbook_agent.py
+     Reason: V2 grammar uses LLM to identify structural roles, then
+     captures formatting. V1 only looked at formatting without
+     understanding what the formatting meant.
+
+  2. modules/table_enricher.py — V1 sequential enrichment orchestrator
+     Replacement: agents/table_agent.py
+     Reason: V2 is LLM-first, not deterministic-first. The step
+     ordering and logic is fundamentally different.
+
+  3. modules/sheet_coordinator.py — V1 signal resolution
+     Replacement: agents/sheet_coordinator_agent.py
+     Reason: V2 coordinator handles escalation requests (new concept).
+     V1 coordinator only resolved pre-defined signal types.
+
+  4. steps/step2_splits.py — V1 multi-heuristic split detection
+     Replacement: agents/split_agent.py
+     Reason: V2 uses LLM-only split decisions. The old evidence
+     aggregation scoring (column_split_score, etc.) is removed.
+
+  5. steps/step3_headers.py — V1 4-level header cascade
+     Replacement: table_agent.py Steps B-C
+     Reason: V2 uses LLM-first. The 4-level cascade (upstream ->
+     shapes -> rejected_blocks -> LLM fallback) is inverted: LLM
+     is primary, upstream/spatial are fallbacks.
+
+  6. steps/step4_interpretation.py — V1 Phase 3 LLM interpretation
+     Replacement: folded into table_agent.py Step H
+     Reason: V2 runs interpretation per-table inside the agent,
+     not as a separate phase.
+
+  7. tools/v1c_review.py — V1C confirmation payloads
+     Replacement: not needed
+     Reason: V2 does not use the V1C confirmation pattern
+     (confirm_footnote, confirm_split, confirm_row_header).
+     The LLM-first approach makes confirmations unnecessary.
+
+DO NOT DELETE these files. Keep them for V1 fallback mode
+(v2_enabled=false).
+
+
+================================================================================
+B. RECOMMENDATIONS: WHAT TO RETAIN
+================================================================================
+
+RETAIN UNCHANGED:
+
+  1. upstream_compat.py
+     Upstream loading from xl_init, xl_parse, xl_table outputs is the
+     same in V2. No changes needed.
+
+  2. scoring.py
+     All 5 scoring functions (title_attachment_score,
+     header_inheritance_score, note_scope_score,
+     section_ownership_score, column_split_score) are still used by:
+     - SheetCoordinator title resolution (title_attachment_score)
+     - SheetCoordinator header inheritance (header_inheritance_score)
+     - SheetCoordinator section assignment (section_ownership_score)
+     - TableAgent title fallback (title_attachment_score)
+
+  3. modules/section_detector.py
+     Section band detection from rejected blocks with strong formatting.
+     This is formatting-based and does not need LLM. Used by
+     SheetCoordinator in Phase 6.5.
+
+  4. modules/text_dominant_handler.py
+     Text-dominant sheet detection. Runs before grammar, unchanged.
+
+  5. steps/step0_prefilter.py (partially)
+     Content bbox computation and context block routing logic.
+     Reused by table_agent.py Step G.
+
+  6. assembly/sheet_assembler.py
+     Tree building from enriched tables + sections. Same interface,
+     same output format.
+
+  7. assembly/relationship_builder.py
+     Edge building (contains, inherits_header, visualizes, annotates).
+     Same interface, same output format.
+
+  8. assembly/tree_renderer.py
+     PNG rendering. Same interface.
+
+  9. schemas/sheet_object_tree.py
+     TreeNode, SheetObjectTree, RelationshipEdge, RelationshipGraph.
+     No schema changes.
+
+  10. schemas/signals.py
+      TableSignal (orphan_rows, header_unresolved, shared_note,
+      section_ambiguity). Still emitted for backward compatibility.
+
+  11. tools/provenance_tools.py
+      Provenance parsing utilities. Unchanged.
+
+  12. tools/payload_builder.py (extended, not replaced)
+      Existing modes preserved. New modes added.
+
+
+================================================================================
+C. RECOMMENDATIONS: WHERE OUTPUTS AND STREAMLIT STAY UNCHANGED
+================================================================================
+
+THE STREAMLIT VIEWER (apps/streamlit_viewer.py) REQUIRES NO CHANGES.
+
+It reads:
+  - run_manifest.json          -> New V2 fields are additive; old fields
+                                  preserved. Viewer reads by key, so new
+                                  keys are simply ignored.
+  - streamlit_view_bundle.json -> Same schema. Viewer reads "sheets",
+                                  "tables", known keys only.
+  - enriched_tables.json       -> New fields (structure_method, etc.)
+                                  are additive. Viewer reads by key.
+  - grammar_snapshot.json      -> New pattern types coexist with old.
+                                  Viewer renders all patterns.
+  - sheet_object_trees/        -> Same TreeNode schema.
+  - relationship_graphs/       -> Same RelationshipEdge schema.
+  - debug_log.jsonl            -> New event types are displayed as-is
+                                  (viewer shows event_type + details).
+
+All output file SCHEMAS are backward compatible. V2 adds fields but
+never removes or renames existing fields.
+
+New V2-only debug artifacts (grammar_profile_evolution.jsonl,
+escalation_log.jsonl) are in the debug/ folder and are NOT read by
+the current Streamlit viewer. A future viewer update could add tabs
+for these.
+
+
+================================================================================
+D. RECOMMENDATIONS: WHERE INTERFACES MUST CHANGE
+================================================================================
+
+1. ENTRY POINT (xl_sheetagent/__init__.py)
+   - run_sheetagent() must dispatch to V1 or V2 based on
+     cfg.v2_enabled.
+   - run_sheetagent_v2() is the new parallel orchestrator.
+   - Callers (scripts, orchestrator app) do not need to change —
+     they call run_sheetagent() which handles dispatch internally.
+
+2. CONFIG (config.py + stages.yaml)
+   - 7 new config fields added.
+   - core/stage_config.py must handle the new fields.
+   - YAML must include the new keys for V2 mode.
+   - V1 mode ignores the new keys.
+
+3. LLM CLIENT (tools/llm_client.py)
+   - Shared OpenAI client singleton.
+   - Thread-safe by design.
+   - Existing call_llm() / call_llm_json() interfaces unchanged.
+
+4. PAYLOAD BUILDER (tools/payload_builder.py)
+   - Two new payload modes: "structure_identification" and
+     "split_context".
+   - Existing modes unchanged.
+
+5. DEBUG INFRASTRUCTURE (tools/debug_trace.py)
+   - threading.Lock added to TraceAccumulator and ToolCallRecorder.
+   - External interface unchanged; callers do not need modification.
+
+6. ENRICHED TABLE SCHEMA (schemas/enriched_table.py)
+   - 3 new optional fields.
+   - All existing fields preserved.
+   - Consumers (Streamlit viewer, export) handle gracefully via
+     key-based access.
+
+7. RUN MANIFEST SCHEMA (schemas/run_manifest.py)
+   - 8 new fields.
+   - All existing fields preserved.
+
+8. GRAMMAR SNAPSHOT SCHEMA (schemas/grammar_snapshot.py)
+   - Serialization method updated to include V2 patterns.
+   - V1 patterns coexist with V2 patterns.
+   - GrammarProfile.to_snapshot_dict() produces the same JSON
+     structure as V1's GrammarSnapshot.to_dict().
+
+
+================================================================================
+END OF PLAN
+================================================================================

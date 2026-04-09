@@ -1,5 +1,1155 @@
 [
   {
+    "table_id": "f57ac8d2e4e4931a_t3",
+    "sheet_name": "Introduction",
+    "bbox": {
+      "r_top": 10,
+      "c_left": 2,
+      "r_bot": 12,
+      "c_right": 4,
+      "bbox_excel": "C11:E13"
+    },
+    "content_bbox": {
+      "r_top": 10,
+      "c_left": 2,
+      "r_bot": 12,
+      "c_right": 4
+    },
+    "empty_zones": [],
+    "title": null,
+    "title_source": null,
+    "column_headers": [],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.7,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "context_block_routed",
+        "formula_ratio": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "note",
+    "table_category_confidence": 0.7,
+    "table_category_reasoning": "context_block",
+    "is_context_block": true,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {},
+    "semantic_hint": "",
+    "llm_summary": null,
+    "llm_table_category": null,
+    "llm_table_category_confidence": 0.0,
+    "sheet_level_text_dominant": true,
+    "sheet_text_summary": "Excel sheet containing assumptions for a financial model.",
+    "structure_method": "context_block",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {},
+    "ontology_hint": null
+  },
+  {
+    "table_id": "f57ac8d2e4e4931a_b3",
+    "sheet_name": "Introduction",
+    "bbox": {
+      "r_top": 13,
+      "c_left": 2,
+      "r_bot": 14,
+      "c_right": 4,
+      "bbox_excel": "C14:E15"
+    },
+    "content_bbox": {
+      "r_top": 14,
+      "c_left": 2,
+      "r_bot": 14,
+      "c_right": 4
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 13,
+        "c_left": 2,
+        "r_bot": 13,
+        "c_right": 4,
+        "trimmable": true
+      }
+    ],
+    "title": null,
+    "title_source": null,
+    "column_headers": [],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.7,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "context_block_routed",
+        "formula_ratio": 0.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "note",
+    "table_category_confidence": 0.7,
+    "table_category_reasoning": "context_block",
+    "is_context_block": true,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {},
+    "semantic_hint": "",
+    "llm_summary": null,
+    "llm_table_category": null,
+    "llm_table_category_confidence": 0.0,
+    "sheet_level_text_dominant": true,
+    "sheet_text_summary": "Excel sheet containing assumptions for a financial model.",
+    "structure_method": "context_block",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {},
+    "ontology_hint": null
+  },
+  {
+    "table_id": "262a4c0f1d47d09d",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 3,
+      "c_left": 1,
+      "r_bot": 9,
+      "c_right": 4,
+      "bbox_excel": "B4:E10"
+    },
+    "content_bbox": {
+      "r_top": 3,
+      "c_left": 1,
+      "r_bot": 9,
+      "c_right": 4
+    },
+    "empty_zones": [],
+    "title": "Year",
+    "title_source": "first_bbox_row",
+    "column_headers": [
+      "2020",
+      "1909813.415472605",
+      "2356312.4040997457",
+      "446498.98862714064"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.7857142857142857
+      },
+      {
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Budget impact comparison with and without InO over the years 2020 to 2023.",
+      "key_entities": [
+        "InO"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "Table showing budget impact with and without InO for the years 2020-2023.",
+    "llm_summary": "Table showing budget impact with and without InO for the years 2020-2023.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "llm_structure",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "title": {
+        "method": "llm_structure",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": null
+  },
+  {
+    "table_id": "47ecc07e130eef5f_t10",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 47,
+      "c_left": 1,
+      "r_bot": 56,
+      "c_right": 11,
+      "bbox_excel": "B48:L57"
+    },
+    "content_bbox": {
+      "r_top": 47,
+      "c_left": 1,
+      "r_bot": 56,
+      "c_right": 11
+    },
+    "empty_zones": [],
+    "title": "Without InO",
+    "title_source": "first_bbox_row",
+    "column_headers": [
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.8947368421052632
+      },
+      {
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Cost comparison between treatment with and without InO over 5 years.",
+      "key_entities": [
+        "InO",
+        "Drug costs",
+        "Adverse events costs",
+        "Subsequent treatment costs"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "This table compares costs between a treatment without InO and a treatment with InO over a 5-year period.",
+    "llm_summary": "This table compares costs between a treatment without InO and a treatment with InO over a 5-year period.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": "cost"
+  },
+  {
+    "table_id": "47ecc07e130eef5f_b10",
+    "sheet_name": "Results",
+    "bbox": {
+      "r_top": 57,
+      "c_left": 1,
+      "r_bot": 63,
+      "c_right": 11,
+      "bbox_excel": "B58:L64"
+    },
+    "content_bbox": {
+      "r_top": 58,
+      "c_left": 6,
+      "r_bot": 63,
+      "c_right": 11
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 57,
+        "c_left": 1,
+        "r_bot": 57,
+        "c_right": 11,
+        "trimmable": true
+      },
+      {
+        "position": "leading_cols",
+        "r_top": 58,
+        "c_left": 1,
+        "r_bot": 63,
+        "c_right": 5,
+        "trimmable": true
+      }
+    ],
+    "title": "None",
+    "title_source": "coordinator_batch_llm",
+    "column_headers": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Drug costs",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999",
+      "257456.4413999999"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.8333333333333334
+      },
+      {
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Cost breakdown for drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+      "key_entities": [
+        "Drug costs",
+        "Adverse events costs",
+        "Subsequent treatment costs",
+        "Hospitalization costs",
+        "SCT costs"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "This table displays costs associated with drug treatment, adverse events, subsequent treatments, hospitalizations, and s",
+    "llm_summary": "This table displays costs associated with drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "cost"
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_t45",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 47,
+      "c_right": 13,
+      "bbox_excel": "B3:N48"
+    },
+    "content_bbox": {
+      "r_top": 2,
+      "c_left": 1,
+      "r_bot": 46,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "trailing_rows",
+        "r_top": 47,
+        "c_left": 1,
+        "r_bot": 47,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 2,
+        "c_left": 6,
+        "r_bot": 46,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "Value used in the model",
+    "title_source": "first_bbox_row",
+    "column_headers": [
+      "Patient population",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "sub_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 2,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "sub_bbox": {
+          "r_top": 3,
+          "c_left": 1,
+          "r_bot": 5,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "sub_bbox": {
+          "r_top": 6,
+          "c_left": 1,
+          "r_bot": 19,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "sub_bbox": {
+          "r_top": 20,
+          "c_left": 1,
+          "r_bot": 33,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "sub_bbox": {
+          "r_top": 34,
+          "c_left": 1,
+          "r_bot": 47,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      }
+    ],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.24390243902439024
+      },
+      {
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
+      },
+      {
+        "step": "F",
+        "action": "split_decision",
+        "n_partitions": 5
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Patient population values for the model including number of patients, annual percentage change, and market shares.",
+      "key_entities": [
+        "InO",
+        "Number of patients",
+        "Annual percentage change",
+        "Market shares"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "semantic_hint": "Table detailing values used in the model for patient population parameters.",
+    "llm_summary": "Table detailing values used in the model for patient population parameters.",
+    "llm_table_category": "input",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "llm_structure",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "title": {
+        "method": "llm_structure",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": "population"
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_b45",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 48,
+      "c_left": 1,
+      "r_bot": 71,
+      "c_right": 13,
+      "bbox_excel": "B49:N72"
+    },
+    "content_bbox": {
+      "r_top": 48,
+      "c_left": 1,
+      "r_bot": 71,
+      "c_right": 13
+    },
+    "empty_zones": [],
+    "title": "Adverse events, frequencies (same as global models)",
+    "title_source": "first_bbox_row",
+    "column_headers": [
+      "Neutropenia",
+      "0.359756097560976",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378",
+      "0.377622377622378"
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_b45",
+        "sub_bbox": {
+          "r_top": 48,
+          "c_left": 1,
+          "r_bot": 59,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_t70_b45",
+        "sub_bbox": {
+          "r_top": 60,
+          "c_left": 1,
+          "r_bot": 71,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 0.9230769230769231
+        },
+        "v1c_llm_confirm_pending": false
+      }
+    ],
+    "confidence": 0.5,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.11442786069651742
+      },
+      {
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
+      },
+      {
+        "step": "F",
+        "action": "split_decision",
+        "n_partitions": 2
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Frequency table of adverse events for various drugs in the health economic model.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "FLAG-Ida",
+        "FLAG",
+        "Mitoxantrone and cytarabine",
+        "HIDAC",
+        "DVP-Asp",
+        "DVP-Asp+Cyclo",
+        "hCVAD+MTX",
+        "Blinatumomab",
+        "TKI (Ponatinib)",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "semantic_hint": "The table displays frequencies of adverse events for different drugs in a health economic model.",
+    "llm_summary": "The table displays frequencies of adverse events for different drugs in a health economic model.",
+    "llm_table_category": "input",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_t46",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 72,
+      "c_left": 1,
+      "r_bot": 117,
+      "c_right": 13,
+      "bbox_excel": "B73:N118"
+    },
+    "content_bbox": {
+      "r_top": 73,
+      "c_left": 1,
+      "r_bot": 117,
+      "c_right": 13
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 72,
+        "c_left": 1,
+        "r_bot": 72,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "Adverse events, frequencies (same as global models)",
+    "title_source": "coordinator_batch_llm",
+    "column_headers": [
+      "Subsequent treatments in world without InO ",
+      "",
+      "",
+      "",
+      "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "sub_bbox": {
+          "r_top": 72,
+          "c_left": 1,
+          "r_bot": 84,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "sub_bbox": {
+          "r_top": 85,
+          "c_left": 1,
+          "r_bot": 104,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "sub_bbox": {
+          "r_top": 105,
+          "c_left": 1,
+          "r_bot": 117,
+          "c_right": 13
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      }
+    ],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.2261904761904762
+      },
+      {
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
+      },
+      {
+        "step": "F",
+        "action": "split_decision",
+        "n_partitions": 3
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table showing the distribution of subsequent treatments in a scenario without InO and the redistribution of Blinatumomab shares in Lebanon.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "Blinatumomab",
+        "FLAG-Ida",
+        "Mitoxantrone and cytarabine",
+        "HIDAC",
+        "DVP-Asp",
+        "hCVAD+MTX",
+        "TKI (Ponatinib)",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "This table presents the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the ",
+    "llm_summary": "This table presents the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the impact on the availability of Blinatumomab in Lebanon.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_b46",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 118,
+      "c_left": 1,
+      "r_bot": 119,
+      "c_right": 13,
+      "bbox_excel": "B119:N120"
+    },
+    "content_bbox": {
+      "r_top": 119,
+      "c_left": 1,
+      "r_bot": 119,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 118,
+        "c_left": 1,
+        "r_bot": 118,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 119,
+        "c_left": 6,
+        "r_bot": 119,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "none",
+    "title_source": "coordinator_batch_llm",
+    "column_headers": [
+      "SCT costs",
+      "100000",
+      "100000",
+      "",
+      "Assumption  ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.25
+      },
+      {
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "assumption",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table detailing the assumed costs of Stem Cell Transplant (SCT).",
+      "key_entities": [
+        "SCT costs"
+      ],
+      "table_category": "assumption",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
+    "llm_summary": "The table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
+    "llm_table_category": "assumption",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "assumption"
+  },
+  {
+    "table_id": "9814fc53f594ba29_b118",
+    "sheet_name": "Inputs",
+    "bbox": {
+      "r_top": 120,
+      "c_left": 1,
+      "r_bot": 121,
+      "c_right": 13,
+      "bbox_excel": "B121:N122"
+    },
+    "content_bbox": {
+      "r_top": 121,
+      "c_left": 1,
+      "r_bot": 121,
+      "c_right": 5
+    },
+    "empty_zones": [
+      {
+        "position": "leading_rows",
+        "r_top": 120,
+        "c_left": 1,
+        "r_bot": 120,
+        "c_right": 13,
+        "trimmable": true
+      },
+      {
+        "position": "trailing_cols",
+        "r_top": 121,
+        "c_left": 6,
+        "r_bot": 121,
+        "c_right": 13,
+        "trimmable": true
+      }
+    ],
+    "title": "none",
+    "title_source": "coordinator_batch_llm",
+    "column_headers": [
+      "End-of-life costs",
+      "5000",
+      "5000",
+      "",
+      "Assumption  ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "row_headers": [],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [],
+    "confidence": 0.4,
+    "ambiguity_class": "STRUCTURAL",
+    "step_log": [
+      {
+        "step": 0,
+        "action": "content_bbox_computed",
+        "formula_ratio": 0.25
+      },
+      {
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
+      }
+    ],
+    "shape_attachments": [],
+    "table_category": "assumption",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
+    "is_context_block": false,
+    "section_path": null,
+    "section_assignment_confidence": 0.0,
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "End-of-life costs assumption table with values of 5000.",
+      "key_entities": [
+        "End-of-life costs"
+      ],
+      "table_category": "assumption",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents end-of-life costs as an assumption.",
+    "llm_summary": "The table presents end-of-life costs as an assumption.",
+    "llm_table_category": "assumption",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "assumption"
+  },
+  {
     "table_id": "94c8c58d611b9e70_t103",
     "sheet_name": "Calculations",
     "bbox": {
@@ -16,74 +1166,160 @@
       "c_right": 7
     },
     "empty_zones": [],
-    "title": null,
+    "title": "BIM calculation",
+    "title_source": "first_bbox_row",
     "column_headers": [
-      "BIM calculation",
+      "Number of patients eligible for treatment with Inotuzumab Ozogamicin",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024"
+      "15",
+      "15",
+      "15",
+      "15",
+      "15"
     ],
     "row_headers": [],
-    "footnotes": [
-      "World with InO",
-      "Current treatments used"
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_t103",
+        "sub_bbox": {
+          "r_top": 2,
+          "c_left": 1,
+          "r_bot": 3,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_t103",
+        "sub_bbox": {
+          "r_top": 4,
+          "c_left": 1,
+          "r_bot": 18,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_t103",
+        "sub_bbox": {
+          "r_top": 19,
+          "c_left": 1,
+          "r_bot": 35,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_t103",
+        "sub_bbox": {
+          "r_top": 36,
+          "c_left": 1,
+          "r_bot": 104,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      }
     ],
-    "semantic_partitions": [],
-    "confidence": 0.4,
+    "confidence": 0.7214285714285715,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 2,
-          "c_left": 1,
-          "r_bot": 104,
-          "c_right": 7
-        },
-        "content_bbox": {
-          "r_top": 2,
-          "c_left": 1,
-          "r_bot": 104,
-          "c_right": 7
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9703125
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": null,
-        "footnotes_count": 2
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
       },
       {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 7
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "F",
+        "action": "split_decision",
+        "n_partitions": 4
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of patients eligible for treatment with Inotuzumab Ozogamicin over multiple years.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents the calculation of the number of patients eligible for treatment with Inotuzumab Ozogamicin over the ",
+    "llm_summary": "The table presents the calculation of the number of patients eligible for treatment with Inotuzumab Ozogamicin over the years.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "llm_structure",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "title": {
+        "method": "llm_structure",
+        "confidence": 0.7214285714285715
+      },
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.7214285714285715
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
@@ -111,82 +1347,93 @@
         "trimmable": true
       }
     ],
-    "title": null,
+    "title": "% of patients alive",
+    "title_source": "first_bbox_row",
     "column_headers": [
+      "Year",
       "INO",
+      "FLAG-Ida",
+      "FLAG",
+      "MXN & Ara-C ",
+      "HIDAC",
+      "DVP-Asp",
+      "DVP-Asp+Cyclo",
+      "hCVAD+MTX",
+      "Blinatumomab",
+      "TKI -Ponatinib",
+      "TKI + vincristine",
+      "Clofarabine",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "Total"
+      ""
     ],
     "row_headers": [],
-    "footnotes": [
-      "INO"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.4,
+    "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 11,
-          "c_left": 12,
-          "r_bot": 18,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 11,
-          "c_left": 12,
-          "r_bot": 18,
-          "c_right": 24
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.0
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": null,
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
+    "table_category": "output",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Percentage of patients alive over time for different treatment regimens.",
+      "key_entities": [
+        "INO",
+        "FLAG-Ida",
+        "FLAG",
+        "MXN & Ara-C",
+        "HIDAC",
+        "DVP-Asp",
+        "DVP-Asp+Cyclo",
+        "hCVAD+MTX",
+        "Blinatumomab",
+        "TKI -Ponatinib",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "output",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the percentage of patients alive over different years for various treatment regimens.",
+    "llm_summary": "The table shows the percentage of patients alive over different years for various treatment regimens.",
+    "llm_table_category": "output",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": "summary"
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
@@ -214,80 +1461,87 @@
         "trimmable": true
       }
     ],
-    "title": "Year 5",
+    "title": "Survival Rate",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "Total"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 19,
-          "c_left": 12,
-          "r_bot": 27,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 21,
-          "c_left": 12,
-          "r_bot": 27,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Year 5",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patients that die each year under the current situation for the drug INO.",
+      "key_entities": [
+        "INO"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "Table showing the number of patients that die each year under the current situation for the drug INO.",
+    "llm_summary": "Table showing the number of patients that die each year under the current situation for the drug INO.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_t25_b17",
@@ -331,82 +1585,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Treatment Group Comparison",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "FLAG-Ida"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 28,
-          "c_left": 12,
-          "r_bot": 36,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 29,
-          "c_left": 14,
-          "r_bot": 35,
-          "c_right": 27
-        },
-        "empty_zones_count": 3,
-        "trimmable_zones": 3
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
@@ -425,27 +1677,30 @@
       "c_right": 27
     },
     "empty_zones": [],
-    "title": "2024",
+    "title": "FLAG-Ida",
+    "title_source": "first_bbox_row",
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "2019",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "Total"
+      "0.6",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
     "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
@@ -453,52 +1708,51 @@
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 37,
-          "c_left": 12,
-          "r_bot": 43,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 37,
-          "c_left": 12,
-          "r_bot": 43,
-          "c_right": 27
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for FLAG-Ida patients from 2019 to 2024.",
+      "key_entities": [
+        "FLAG-Ida"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents annual mortality rates for FLAG-Ida patients from 2019 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for FLAG-Ida patients from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
@@ -534,82 +1788,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "FLAG"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 44,
-          "c_left": 12,
-          "r_bot": 51,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 45,
-          "c_left": 14,
-          "r_bot": 51,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patients that die annually from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "deaths",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
@@ -637,9 +1889,10 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
+      "FLAG",
       "",
       "Current situation",
       "",
@@ -654,63 +1907,62 @@
       "2022",
       "2023",
       "2024",
-      "Total"
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 52,
-          "c_left": 12,
-          "r_bot": 59,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 53,
-          "c_left": 12,
-          "r_bot": 59,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "death rate"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_t57_b25_b23",
@@ -746,82 +1998,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "MXN & Ara-C"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 60,
-          "c_left": 12,
-          "r_bot": 67,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 61,
-          "c_left": 14,
-          "r_bot": 67,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
@@ -849,9 +2099,10 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Chemotherapy Regimen Comparison",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
-      "INO",
+      "MXN & Ara-C ",
       "",
       "Current situation",
       "",
@@ -866,63 +2117,60 @@
       "2022",
       "2023",
       "2024",
-      "Total"
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 68,
-          "c_left": 12,
-          "r_bot": 75,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 69,
-          "c_left": 12,
-          "r_bot": 75,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Number of patients that die each year for MXN & Ara-C under current and projected scenarios.",
+      "key_entities": [
+        "MXN & Ara-C"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year for the drugs MXN & Ara-C under the current situation and proj",
+    "llm_summary": "The table shows the number of patients that die each year for the drugs MXN & Ara-C under the current situation and projected from 2020 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
@@ -966,82 +2214,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "HIDAC"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 76,
-          "c_left": 12,
-          "r_bot": 84,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 77,
-          "c_left": 14,
-          "r_bot": 83,
-          "c_right": 27
-        },
-        "empty_zones_count": 3,
-        "trimmable_zones": 3
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
@@ -1060,27 +2306,30 @@
       "c_right": 27
     },
     "empty_zones": [],
-    "title": "2024",
+    "title": "HIDAC",
+    "title_source": "first_bbox_row",
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "2019",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "Total"
+      "0.24",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
     "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
@@ -1088,52 +2337,53 @@
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 85,
-          "c_left": 12,
-          "r_bot": 91,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 85,
-          "c_left": 12,
-          "r_bot": 91,
-          "c_right": 27
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table detailing mortality rates for patients on HIDAC treatment over a six-year period.",
+      "key_entities": [
+        "HIDAC",
+        "mortality rates",
+        "patients"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents annual mortality rates for patients on HIDAC treatment from 2019 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for patients on HIDAC treatment from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
@@ -1169,82 +2419,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "DVP-Asp"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 92,
-          "c_left": 12,
-          "r_bot": 99,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 93,
-          "c_left": 14,
-          "r_bot": 99,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 based on death rates per year.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
@@ -1272,9 +2520,10 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
+      "DVP-Asp",
       "",
       "Current situation",
       "",
@@ -1289,63 +2538,60 @@
       "2022",
       "2023",
       "2024",
-      "Total"
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 100,
-          "c_left": 12,
-          "r_bot": 107,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 101,
-          "c_left": 12,
-          "r_bot": 107,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of annual patient mortality under DVP-Asp treatment from 2019 to 2024.",
+      "key_entities": [
+        "DVP-Asp"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year under the DVP-Asp treatment from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp treatment from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "94c8c58d611b9e70_b103",
@@ -1373,9 +2619,10 @@
         "trimmable": true
       }
     ],
-    "title": "Total costs in world without InO",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "",
+      "World with InO",
       "",
       "",
       "",
@@ -1385,59 +2632,109 @@
     ],
     "row_headers": [],
     "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.7214285714285715,
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
+    "semantic_partitions": [
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_b103",
+        "sub_bbox": {
+          "r_top": 105,
+          "c_left": 1,
+          "r_bot": 131,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      },
+      {
+        "partition_type": "v2_llm_split",
+        "authoritative": true,
+        "derived_from_table_id": "94c8c58d611b9e70_b103",
+        "sub_bbox": {
+          "r_top": 132,
+          "c_left": 1,
+          "r_bot": 205,
+          "c_right": 7
+        },
+        "suggested_title": null,
+        "confidence": 0.85,
+        "evidence": {
+          "source": "v2_llm_split",
+          "upstream_score": 1.0
+        },
+        "v1c_llm_confirm_pending": false
+      }
+    ],
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 105,
-          "c_left": 1,
-          "r_bot": 205,
-          "c_right": 7
-        },
-        "content_bbox": {
-          "r_top": 106,
-          "c_left": 1,
-          "r_bot": 205,
-          "c_right": 7
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9760765550239234
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Total costs in world without InO",
-        "footnotes_count": 0
+        "step": "B",
+        "action": "llm_structure",
+        "title_row": 0,
+        "header_rows": [
+          1
+        ],
+        "row_name_column": 0
       },
       {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 7
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "F",
+        "action": "split_decision",
+        "n_partitions": 2
       }
     ],
     "shape_attachments": [],
-    "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table comparing dosages of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in the context of a health economics model.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "FLAG-Ida",
+        "FLAG"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "semantic_hint": "Comparison of different treatments including Inotuzumab Ozogamicin, FLAG-Ida, and FLAG.",
+    "llm_summary": "Comparison of different treatments including Inotuzumab Ozogamicin, FLAG-Ida, and FLAG.",
+    "llm_table_category": "input",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "llm_structure",
+    "llm_structure_response": {
+      "title_row": 0,
+      "header_rows": [
+        1
+      ],
+      "row_name_column": 0
+    },
+    "grammar_match_confidence": 0.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "llm_structure",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
@@ -1473,82 +2770,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "DVP-Asp+Cyclo"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 108,
-          "c_left": 12,
-          "r_bot": 115,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 109,
-          "c_left": 14,
-          "r_bot": 115,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patient deaths annually based on probabilities from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "probabilities",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "This table shows the number of patients that die each year from 2019 to 2024 based on specific probabilities.",
+    "llm_summary": "This table shows the number of patients that die each year from 2019 to 2024 based on specific probabilities.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
@@ -1576,9 +2871,10 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Drug Combination Comparison",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
-      "INO",
+      "DVP-Asp+Cyclo",
       "",
       "Current situation",
       "",
@@ -1593,63 +2889,62 @@
       "2022",
       "2023",
       "2024",
-      "Total"
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 116,
-          "c_left": 12,
-          "r_bot": 123,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 117,
-          "c_left": 12,
-          "r_bot": 123,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of annual patient deaths under DVP-Asp+Cyclo treatment versus current situation from 2019 to 2024.",
+      "key_entities": [
+        "DVP-Asp+Cyclo",
+        "patients",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year under the DVP-Asp+Cyclo treatment compared to the current situ",
+    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp+Cyclo treatment compared to the current situation from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
@@ -1693,82 +2988,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "hCVAD+MTX"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 124,
-          "c_left": 12,
-          "r_bot": 132,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 125,
-          "c_left": 14,
-          "r_bot": 131,
-          "c_right": 27
-        },
-        "empty_zones_count": 3,
-        "trimmable_zones": 3
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
@@ -1787,27 +3080,30 @@
       "c_right": 27
     },
     "empty_zones": [],
-    "title": "2024",
+    "title": "hCVAD+MTX",
+    "title_source": "first_bbox_row",
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "2019",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
-      "Total"
+      "4.8",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
     "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
@@ -1815,52 +3111,51 @@
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 133,
-          "c_left": 12,
-          "r_bot": 139,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 133,
-          "c_left": 12,
-          "r_bot": 139,
-          "c_right": 27
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for hCVAD+MTX patients from 2020 to 2024.",
+      "key_entities": [
+        "hCVAD+MTX"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents annual mortality rates for patients on hCVAD+MTX treatment from 2020 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for patients on hCVAD+MTX treatment from 2020 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
@@ -1896,82 +3191,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "Blinatumomab"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 140,
-          "c_left": 12,
-          "r_bot": 147,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 141,
-          "c_left": 14,
-          "r_bot": 147,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on specific values.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
@@ -1999,9 +3292,10 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
+      "Blinatumomab",
       "",
       "Current situation",
       "",
@@ -2016,63 +3310,62 @@
       "2022",
       "2023",
       "2024",
-      "Total"
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 148,
-          "c_left": 12,
-          "r_bot": 155,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 149,
-          "c_left": 12,
-          "r_bot": 155,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table showing annual mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+      "key_entities": [
+        "Blinatumomab",
+        "patients",
+        "mortality rates"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents annual patient mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024",
+    "llm_summary": "The table presents annual patient mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
@@ -2108,80 +3401,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
-      "INO",
       "",
-      "Current situation",
       "",
-      "2020",
-      "2021",
-      "2022",
-      "2023",
-      "2024",
+      "Future situation",
       "",
       "2020",
       "2021",
       "2022",
       "2023",
       "2024",
-      "Total"
+      "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 156,
-          "c_left": 12,
-          "r_bot": 162,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 157,
-          "c_left": 14,
-          "r_bot": 162,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9361702127659575
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 using specific rates.",
+      "key_entities": [
+        "Number of patients",
+        "rates",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2024 based on specific rates.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024 based on specific rates.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "076daba6b93bd14c_t17_t9",
@@ -2200,7 +3493,8 @@
       "c_right": 27
     },
     "empty_zones": [],
-    "title": null,
+    "title": "2024",
+    "title_source": "first_bbox_row",
     "column_headers": [
       "",
       "",
@@ -2221,59 +3515,60 @@
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.4,
+    "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 177,
-          "c_left": 12,
-          "r_bot": 185,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 177,
-          "c_left": 12,
-          "r_bot": 185,
-          "c_right": 27
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9444444444444444
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": null,
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+      "key_entities": [
+        "TKI - Ponatinib"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "Table showing annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+    "llm_summary": "Table showing annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "076daba6b93bd14c_t17_b9",
@@ -2317,82 +3612,84 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Treatment Response",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
       "",
       "",
+      "Future situation",
       "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "TKI + vincristine"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 186,
-          "c_left": 12,
-          "r_bot": 194,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 187,
-          "c_left": 14,
-          "r_bot": 193,
-          "c_right": 27
-        },
-        "empty_zones_count": 3,
-        "trimmable_zones": 3
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Tracking annual patient mortality from 2020 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "patients that die",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table tracks the number of patients who die each year from 2020 to 2024.",
+    "llm_summary": "The table tracks the number of patients who die each year from 2020 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
@@ -2411,13 +3708,14 @@
       "c_right": 27
     },
     "empty_zones": [],
-    "title": "2024",
+    "title": "TKI + vincristine",
+    "title_source": "first_bbox_row",
     "column_headers": [
       "",
       "",
+      "2019",
       "",
-      "",
-      "",
+      "0",
       "",
       "",
       "",
@@ -2432,6 +3730,8 @@
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
     "confidence": 0.5,
     "ambiguity_class": "STRUCTURAL",
@@ -2439,52 +3739,52 @@
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 195,
-          "c_left": 12,
-          "r_bot": 201,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 195,
-          "c_left": 12,
-          "r_bot": 201,
-          "c_right": 27
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
-    "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category": "output",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table detailing annual patient mortality under TKI + vincristine treatment from 2019 to 2024.",
+      "key_entities": [
+        "TKI",
+        "vincristine"
+      ],
+      "table_category": "output",
+      "section_path": ""
+    },
+    "semantic_hint": "The table shows the number of patients that die each year under the treatment of TKI + vincristine from 2019 to 2024.",
+    "llm_summary": "The table shows the number of patients that die each year under the treatment of TKI + vincristine from 2019 to 2024.",
+    "llm_table_category": "output",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "title": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      },
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.5
+      }
+    },
+    "ontology_hint": "summary"
   },
   {
     "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
@@ -2520,82 +3820,80 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Side Effects",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
       "",
       "",
+      "Future situation",
       "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
-    "footnotes": [
-      "Clofarabine"
-    ],
+    "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 202,
-          "c_left": 12,
-          "r_bot": 209,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 203,
-          "c_left": 14,
-          "r_bot": 209,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table calculating the annual number of patient deaths from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "year",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "This table tracks the number of patients that die each year from 2019 to 2024.",
+    "llm_summary": "This table tracks the number of patients that die each year from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": "population"
   },
   {
     "table_id": "076daba6b93bd14c_b17_t23_b15",
@@ -2623,80 +3921,78 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": null,
+    "title_source": null,
     "column_headers": [
+      "Clofarabine",
       "",
+      "Current situation",
       "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
-    "confidence": 0.5,
+    "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
     "step_log": [
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 210,
-          "c_left": 12,
-          "r_bot": 217,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 211,
-          "c_left": 12,
-          "r_bot": 217,
-          "c_right": 27
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
+        "formula_ratio": 0.9333333333333333
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Table detailing mortality rates per year for patients on Clofarabine from 2019 to 2024.",
+      "key_entities": [
+        "Clofarabine"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "semantic_hint": "The table presents annual mortality rates for patients on Clofarabine from 2019 to 2024.",
+    "llm_summary": "The table presents annual mortality rates for patients on Clofarabine from 2019 to 2024.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "grammar_match",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
+      }
+    },
+    "ontology_hint": null
   },
   {
     "table_id": "076daba6b93bd14c_b17_b23",
@@ -2732,137 +4028,30 @@
         "trimmable": true
       }
     ],
-    "title": "2024",
+    "title": "Treatment Duration",
+    "title_source": "coordinator_batch_llm",
     "column_headers": [
       "",
       "",
+      "Future situation",
       "",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "Total "
     ],
     "row_headers": [],
     "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 218,
-          "c_left": 12,
-          "r_bot": 225,
-          "c_right": 27
-        },
-        "content_bbox": {
-          "r_top": 219,
-          "c_left": 14,
-          "r_bot": 225,
-          "c_right": 27
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "2024",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 16
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_t70_t45",
-    "sheet_name": "Inputs",
-    "bbox": {
-      "r_top": 2,
-      "c_left": 1,
-      "r_bot": 47,
-      "c_right": 13,
-      "bbox_excel": "B3:N48"
-    },
-    "content_bbox": {
-      "r_top": 2,
-      "c_left": 1,
-      "r_bot": 46,
-      "c_right": 5
-    },
-    "empty_zones": [
-      {
-        "position": "trailing_rows",
-        "r_top": 47,
-        "c_left": 1,
-        "r_bot": 47,
-        "c_right": 13,
-        "trimmable": true
-      },
-      {
-        "position": "trailing_cols",
-        "r_top": 2,
-        "c_left": 6,
-        "r_bot": 46,
-        "c_right": 13,
-        "trimmable": true
-      }
-    ],
-    "title": null,
-    "column_headers": [
-      "Adverse events, frequencies (same as global models)",
-      "Inotuzumab Ozogamicin",
-      "FLAG-Ida",
-      "FLAG",
-      "Mitoxantrone and cytarabine",
-      "HIDAC",
-      "DVP-Asp",
-      "DVP-Asp+Cyclo",
-      "hCVAD+MTX",
-      "Blinatumomab",
-      "TKI (Ponatinib)",
-      "TKI + vincristine",
-      "Clofarabine"
-    ],
-    "row_headers": [],
-    "footnotes": [
-      "Adverse events, frequencies (same as global models)",
-      "Neutropenia",
-      "Thrombocytopenia"
-    ],
+    "footnotes_v1c_pending": [],
+    "row_headers_v1c_pending": [],
     "semantic_partitions": [],
     "confidence": 0.4,
     "ambiguity_class": "STRUCTURAL",
@@ -2870,852 +4059,48 @@
       {
         "step": 0,
         "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 2,
-          "c_left": 1,
-          "r_bot": 47,
-          "c_right": 13
-        },
-        "content_bbox": {
-          "r_top": 2,
-          "c_left": 1,
-          "r_bot": 46,
-          "c_right": 5
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
+        "formula_ratio": 0.9491525423728814
       },
       {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": null,
-        "footnotes_count": 3
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 13
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_t70_b45",
-    "sheet_name": "Inputs",
-    "bbox": {
-      "r_top": 48,
-      "c_left": 1,
-      "r_bot": 71,
-      "c_right": 13,
-      "bbox_excel": "B49:N72"
-    },
-    "content_bbox": {
-      "r_top": 48,
-      "c_left": 1,
-      "r_bot": 71,
-      "c_right": 13
-    },
-    "empty_zones": [],
-    "title": "Clofarabine",
-    "column_headers": [
-      "Adverse events, frequencies (same as global models)",
-      "Inotuzumab Ozogamicin",
-      "FLAG-Ida",
-      "FLAG",
-      "Mitoxantrone and cytarabine",
-      "HIDAC",
-      "DVP-Asp",
-      "DVP-Asp+Cyclo",
-      "hCVAD+MTX",
-      "Blinatumomab",
-      "TKI (Ponatinib)",
-      "TKI + vincristine",
-      "Clofarabine"
-    ],
-    "row_headers": [],
-    "footnotes": [
-      "Subsequent treatments in world without InO"
-    ],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 48,
-          "c_left": 1,
-          "r_bot": 71,
-          "c_right": 13
-        },
-        "content_bbox": {
-          "r_top": 48,
-          "c_left": 1,
-          "r_bot": 71,
-          "c_right": 13
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Clofarabine",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 13
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_b70_t46",
-    "sheet_name": "Inputs",
-    "bbox": {
-      "r_top": 72,
-      "c_left": 1,
-      "r_bot": 117,
-      "c_right": 13,
-      "bbox_excel": "B73:N118"
-    },
-    "content_bbox": {
-      "r_top": 73,
-      "c_left": 1,
-      "r_bot": 117,
-      "c_right": 13
-    },
-    "empty_zones": [
-      {
-        "position": "leading_rows",
-        "r_top": 72,
-        "c_left": 1,
-        "r_bot": 72,
-        "c_right": 13,
-        "trimmable": true
-      }
-    ],
-    "title": "Graft-versus-host disease after SCT",
-    "column_headers": [
-      "Adverse events, frequencies (same as global models)",
-      "Inotuzumab Ozogamicin",
-      "FLAG-Ida",
-      "FLAG",
-      "Mitoxantrone and cytarabine",
-      "HIDAC",
-      "DVP-Asp",
-      "DVP-Asp+Cyclo",
-      "hCVAD+MTX",
-      "Blinatumomab",
-      "TKI (Ponatinib)",
-      "TKI + vincristine",
-      "Clofarabine"
-    ],
-    "row_headers": [],
-    "footnotes": [
-      "SCT costs"
-    ],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 72,
-          "c_left": 1,
-          "r_bot": 117,
-          "c_right": 13
-        },
-        "content_bbox": {
-          "r_top": 73,
-          "c_left": 1,
-          "r_bot": 117,
-          "c_right": 13
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Graft-versus-host disease after SCT",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 13
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_b70_b46",
-    "sheet_name": "Inputs",
-    "bbox": {
-      "r_top": 118,
-      "c_left": 1,
-      "r_bot": 119,
-      "c_right": 13,
-      "bbox_excel": "B119:N120"
-    },
-    "content_bbox": {
-      "r_top": 119,
-      "c_left": 1,
-      "r_bot": 119,
-      "c_right": 5
-    },
-    "empty_zones": [
-      {
-        "position": "leading_rows",
-        "r_top": 118,
-        "c_left": 1,
-        "r_bot": 118,
-        "c_right": 13,
-        "trimmable": true
-      },
-      {
-        "position": "trailing_cols",
-        "r_top": 119,
-        "c_left": 6,
-        "r_bot": 119,
-        "c_right": 13,
-        "trimmable": true
-      }
-    ],
-    "title": "Clofarabine",
-    "column_headers": [
-      "Adverse events, frequencies (same as global models)",
-      "Inotuzumab Ozogamicin",
-      "FLAG-Ida",
-      "FLAG",
-      "Mitoxantrone and cytarabine",
-      "HIDAC",
-      "DVP-Asp",
-      "DVP-Asp+Cyclo",
-      "hCVAD+MTX",
-      "Blinatumomab",
-      "TKI (Ponatinib)",
-      "TKI + vincristine",
-      "Clofarabine"
-    ],
-    "row_headers": [],
-    "footnotes": [
-      "End-of-life costs"
-    ],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 118,
-          "c_left": 1,
-          "r_bot": 119,
-          "c_right": 13
-        },
-        "content_bbox": {
-          "r_top": 119,
-          "c_left": 1,
-          "r_bot": 119,
-          "c_right": 5
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Clofarabine",
-        "footnotes_count": 1
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 13
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "9814fc53f594ba29_b118",
-    "sheet_name": "Inputs",
-    "bbox": {
-      "r_top": 120,
-      "c_left": 1,
-      "r_bot": 121,
-      "c_right": 13,
-      "bbox_excel": "B121:N122"
-    },
-    "content_bbox": {
-      "r_top": 121,
-      "c_left": 1,
-      "r_bot": 121,
-      "c_right": 5
-    },
-    "empty_zones": [
-      {
-        "position": "leading_rows",
-        "r_top": 120,
-        "c_left": 1,
-        "r_bot": 120,
-        "c_right": 13,
-        "trimmable": true
-      },
-      {
-        "position": "trailing_cols",
-        "r_top": 121,
-        "c_left": 6,
-        "r_bot": 121,
-        "c_right": 13,
-        "trimmable": true
-      }
-    ],
-    "title": "SCT costs",
-    "column_headers": [
-      "Adverse events, frequencies (same as global models)",
-      "Inotuzumab Ozogamicin",
-      "FLAG-Ida",
-      "FLAG",
-      "Mitoxantrone and cytarabine",
-      "HIDAC",
-      "DVP-Asp",
-      "DVP-Asp+Cyclo",
-      "hCVAD+MTX",
-      "Blinatumomab",
-      "TKI (Ponatinib)",
-      "TKI + vincristine",
-      "Clofarabine"
-    ],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 120,
-          "c_left": 1,
-          "r_bot": 121,
-          "c_right": 13
-        },
-        "content_bbox": {
-          "r_top": 121,
-          "c_left": 1,
-          "r_bot": 121,
-          "c_right": 5
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "SCT costs",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 13
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "unknown",
-        "confidence": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "unknown",
-    "table_category_confidence": 0.0,
-    "table_category_reasoning": "insufficient signal",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "f57ac8d2e4e4931a_t3",
-    "sheet_name": "Introduction",
-    "bbox": {
-      "r_top": 10,
-      "c_left": 2,
-      "r_bot": 12,
-      "c_right": 4,
-      "bbox_excel": "C11:E13"
-    },
-    "content_bbox": {
-      "r_top": 10,
-      "c_left": 2,
-      "r_bot": 12,
-      "c_right": 4
-    },
-    "empty_zones": [],
-    "title": null,
-    "column_headers": [],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.7,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 10,
-          "c_left": 2,
-          "r_bot": 12,
-          "c_right": 4
-        },
-        "content_bbox": {
-          "r_top": 10,
-          "c_left": 2,
-          "r_bot": 12,
-          "c_right": 4
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
-      },
-      {
-        "step": 0,
-        "action": "context_block_routed",
-        "formula_ratio": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "note",
-    "table_category_confidence": 0.7,
-    "table_category_reasoning": "context_block",
-    "is_context_block": true,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "f57ac8d2e4e4931a_b3",
-    "sheet_name": "Introduction",
-    "bbox": {
-      "r_top": 13,
-      "c_left": 2,
-      "r_bot": 14,
-      "c_right": 4,
-      "bbox_excel": "C14:E15"
-    },
-    "content_bbox": {
-      "r_top": 14,
-      "c_left": 2,
-      "r_bot": 14,
-      "c_right": 4
-    },
-    "empty_zones": [
-      {
-        "position": "leading_rows",
-        "r_top": 13,
-        "c_left": 2,
-        "r_bot": 13,
-        "c_right": 4,
-        "trimmable": true
-      }
-    ],
-    "title": null,
-    "column_headers": [],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.7,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 13,
-          "c_left": 2,
-          "r_bot": 14,
-          "c_right": 4
-        },
-        "content_bbox": {
-          "r_top": 14,
-          "c_left": 2,
-          "r_bot": 14,
-          "c_right": 4
-        },
-        "empty_zones_count": 1,
-        "trimmable_zones": 1
-      },
-      {
-        "step": 0,
-        "action": "context_block_routed",
-        "formula_ratio": 0.0
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "note",
-    "table_category_confidence": 0.7,
-    "table_category_reasoning": "context_block",
-    "is_context_block": true,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "262a4c0f1d47d09d",
-    "sheet_name": "Results",
-    "bbox": {
-      "r_top": 3,
-      "c_left": 1,
-      "r_bot": 9,
-      "c_right": 4,
-      "bbox_excel": "B4:E10"
-    },
-    "content_bbox": {
-      "r_top": 3,
-      "c_left": 1,
-      "r_bot": 9,
-      "c_right": 4
-    },
-    "empty_zones": [],
-    "title": null,
-    "column_headers": [
-      "Year",
-      "Without InO",
-      "With InO",
-      "Budget impact"
-    ],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.4,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 3,
-          "c_left": 1,
-          "r_bot": 9,
-          "c_right": 4
-        },
-        "content_bbox": {
-          "r_top": 3,
-          "c_left": 1,
-          "r_bot": 9,
-          "c_right": 4
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": null,
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 4
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+        "step": "A",
+        "action": "grammar_match",
+        "title_conf": 1.0,
+        "header_conf": 1.0
       }
     ],
     "shape_attachments": [],
     "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
+    "table_category_confidence": 0.85,
+    "table_category_reasoning": "V2 LLM-confirmed",
     "is_context_block": false,
     "section_path": null,
     "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "47ecc07e130eef5f_t10",
-    "sheet_name": "Results",
-    "bbox": {
-      "r_top": 47,
-      "c_left": 1,
-      "r_bot": 56,
-      "c_right": 11,
-      "bbox_excel": "B48:L57"
+    "parent_section_id": null,
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2022.",
+      "key_entities": [
+        "Number of patients",
+        "death",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
     },
-    "content_bbox": {
-      "r_top": 47,
-      "c_left": 1,
-      "r_bot": 56,
-      "c_right": 11
-    },
-    "empty_zones": [],
-    "title": "Budget impact breakdown by cost component",
-    "column_headers": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "Drug costs",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999"
-    ],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 47,
-          "c_left": 1,
-          "r_bot": 56,
-          "c_right": 11
-        },
-        "content_bbox": {
-          "r_top": 47,
-          "c_left": 1,
-          "r_bot": 56,
-          "c_right": 11
-        },
-        "empty_zones_count": 0,
-        "trimmable_zones": 0
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Budget impact breakdown by cost component",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 11
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
+    "semantic_hint": "The table shows the number of patients that die each year from 2019 to 2022.",
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2022.",
+    "llm_table_category": "calc",
+    "llm_table_category_confidence": 0.85,
+    "sheet_level_text_dominant": false,
+    "sheet_text_summary": null,
+    "structure_method": "coordinator_batch_llm",
+    "llm_structure_response": null,
+    "grammar_match_confidence": 1.0,
+    "decision_confidence": {
+      "column_headers": {
+        "method": "grammar_match",
+        "confidence": 0.4
       }
-    ],
-    "shape_attachments": [],
-    "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
-  },
-  {
-    "table_id": "47ecc07e130eef5f_b10",
-    "sheet_name": "Results",
-    "bbox": {
-      "r_top": 57,
-      "c_left": 1,
-      "r_bot": 63,
-      "c_right": 11,
-      "bbox_excel": "B58:L64"
     },
-    "content_bbox": {
-      "r_top": 58,
-      "c_left": 6,
-      "r_bot": 63,
-      "c_right": 11
-    },
-    "empty_zones": [
-      {
-        "position": "leading_rows",
-        "r_top": 57,
-        "c_left": 1,
-        "r_bot": 57,
-        "c_right": 11,
-        "trimmable": true
-      },
-      {
-        "position": "leading_cols",
-        "r_top": 58,
-        "c_left": 1,
-        "r_bot": 63,
-        "c_right": 5,
-        "trimmable": true
-      }
-    ],
-    "title": "Annual budget impact",
-    "column_headers": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "Drug costs",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999",
-      "257456.4413999999"
-    ],
-    "row_headers": [],
-    "footnotes": [],
-    "semantic_partitions": [],
-    "confidence": 0.5,
-    "ambiguity_class": "STRUCTURAL",
-    "step_log": [
-      {
-        "step": 0,
-        "action": "content_bbox_computed",
-        "original_bbox": {
-          "r_top": 57,
-          "c_left": 1,
-          "r_bot": 63,
-          "c_right": 11
-        },
-        "content_bbox": {
-          "r_top": 58,
-          "c_left": 6,
-          "r_bot": 63,
-          "c_right": 11
-        },
-        "empty_zones_count": 2,
-        "trimmable_zones": 2
-      },
-      {
-        "step": 1,
-        "action": "boundary_validated",
-        "title": "Annual budget impact",
-        "footnotes_count": 0
-      },
-      {
-        "step": 2,
-        "action": "splits_detected",
-        "partitions_count": 0
-      },
-      {
-        "step": 3,
-        "action": "headers_resolved",
-        "column_headers_count": 11
-      },
-      {
-        "step": 9,
-        "action": "category_inferred",
-        "category": "calc",
-        "confidence": 0.6
-      }
-    ],
-    "shape_attachments": [],
-    "table_category": "calc",
-    "table_category_confidence": 0.6,
-    "table_category_reasoning": "high formula ratio",
-    "is_context_block": false,
-    "section_path": null,
-    "section_assignment_confidence": 0.0,
-    "parent_section_id": null
+    "ontology_hint": "population"
   }
 ]

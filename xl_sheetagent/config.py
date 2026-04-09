@@ -49,3 +49,17 @@ class XlSheetAgentConfig:
     llm_model: str
     llm_max_tokens: int
     skip_llm_enrichment: bool
+
+    # V2 agent-based pipeline
+    v2_enabled: bool
+    grammar_sample_max_rows: int
+    grammar_sample_count: int
+    grammar_sample_attempts: int
+    grammar_match_threshold: float
+    split_consideration_min_rows: int
+    split_min_score_floor: float
+    split_top_k: int
+    split_proximity_dedup: int
+    max_parallel_sheets: int
+    coordinator_batch_llm_threshold: int
+    ontology_hint_enabled: bool

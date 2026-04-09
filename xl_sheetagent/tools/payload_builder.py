@@ -204,6 +204,24 @@ def build_payload(
             "formula_ratio": formula_ratio,
         }
 
+    # --- V2 modes ---
+
+    if mode == "structure_identification":
+        # First n_rows with values + formulas for LLM structure identification
+        rows_text: List[List[str]] = []
+        for ri in range(min(n_rows, r_bot - r_top + 1)):
+            row_cells: List[str] = []
+            for ci in range(c_left, c_right + 1):
+                val = ws.cell(row=r_top + ri, column=ci).value
+                val_str = "" if val is None else str(val)
+                if ws_formula is not None:
+                    fval = ws_formula.cell(row=r_top + ri, column=ci).value
+                    if fval is not None and str(fval).startswith("="):
+                        val_str = f"{val_str} ({fval})"
+                row_cells.append(val_str)
+            rows_text.append(row_cells)
+        return {"mode": mode, "rows": rows_text}
+
     raise ValueError(f"Unknown payload mode: {mode!r}")
 
 

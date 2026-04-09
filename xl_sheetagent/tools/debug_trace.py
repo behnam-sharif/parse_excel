@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -42,15 +43,17 @@ class TableTrace:
 # ---------------------------------------------------------------------------
 
 class TraceAccumulator:
-    """Collects structured trace events per table."""
+    """Collects structured trace events per table. Thread-safe for V2."""
 
     def __init__(self) -> None:
         self._traces: Dict[str, TableTrace] = {}
+        self._lock = threading.Lock()
 
     def begin_table(self, table_id: str) -> None:
-        """Initialise trace for *table_id* (idempotent)."""
-        if table_id not in self._traces:
-            self._traces[table_id] = TableTrace(table_id=table_id)
+        """Initialise trace for *table_id* (idempotent). Thread-safe."""
+        with self._lock:
+            if table_id not in self._traces:
+                self._traces[table_id] = TableTrace(table_id=table_id)
 
     def record_scoring_call(
         self,
@@ -60,12 +63,13 @@ class TraceAccumulator:
         output: Any,
     ) -> None:
         self.begin_table(table_id)
-        self._traces[table_id].scoring_calls.append({
-            "function": function_name,
-            "inputs": inputs,
-            "output": output,
-            "ts": time.time(),
-        })
+        with self._lock:
+            self._traces[table_id].scoring_calls.append({
+                "function": function_name,
+                "inputs": inputs,
+                "output": output,
+                "ts": time.time(),
+            })
 
     def record_step(
         self,
@@ -74,11 +78,12 @@ class TraceAccumulator:
         event: Dict[str, Any],
     ) -> None:
         self.begin_table(table_id)
-        self._traces[table_id].step_entries.append({
-            "step": step_num,
-            **event,
-            "ts": time.time(),
-        })
+        with self._lock:
+            self._traces[table_id].step_entries.append({
+                "step": step_num,
+                **event,
+                "ts": time.time(),
+            })
 
     def record_llm_call(
         self,
@@ -133,10 +138,11 @@ class TraceAccumulator:
         final_confidence: float,
         final_category: str,
     ) -> None:
-        """Set final confidence and category for a table trace."""
+        """Set final confidence and category for a table trace. Thread-safe."""
         self.begin_table(table_id)
-        self._traces[table_id].final_confidence = final_confidence
-        self._traces[table_id].final_category = final_category
+        with self._lock:
+            self._traces[table_id].final_confidence = final_confidence
+            self._traces[table_id].final_category = final_category
 
     def get_trace(self, table_id: str) -> Optional[TableTrace]:
         return self._traces.get(table_id)
@@ -150,10 +156,11 @@ class TraceAccumulator:
 # ---------------------------------------------------------------------------
 
 class ToolCallRecorder:
-    """Records every LLM call across the pipeline."""
+    """Records every LLM call across the pipeline. Thread-safe for V2."""
 
     def __init__(self) -> None:
         self._records: List[Dict[str, Any]] = []
+        self._lock = threading.Lock()
 
     def record(
         self,
@@ -166,17 +173,18 @@ class ToolCallRecorder:
         latency_ms: float,
         model: str,
     ) -> None:
-        self._records.append({
-            "table_id": table_id,
-            "system_prompt": system_prompt[:500],
-            "user_prompt": user_prompt[:1000],
-            "response_text": response_text[:2000],
-            "tokens_in": tokens_in,
-            "tokens_out": tokens_out,
-            "latency_ms": latency_ms,
-            "model": model,
-            "ts": time.time(),
-        })
+        with self._lock:
+            self._records.append({
+                "table_id": table_id,
+                "system_prompt": system_prompt[:500],
+                "user_prompt": user_prompt[:1000],
+                "response_text": response_text[:2000],
+                "tokens_in": tokens_in,
+                "tokens_out": tokens_out,
+                "latency_ms": latency_ms,
+                "model": model,
+                "ts": time.time(),
+            })
 
     def all_records(self) -> List[Dict[str, Any]]:
         return list(self._records)

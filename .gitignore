@@ -15,6 +15,7 @@ build/
 venv/
 env/
 ENV/
+.env
 
 # ----------------------------
 # IDE / OS

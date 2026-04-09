@@ -1,261 +1,734 @@
 [
   {
-    "table_id": "94c8c58d611b9e70_t103",
-    "sheet_name": "Calculations",
-    "title": null,
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
-    "sheet_name": "Calculations",
-    "title": null,
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
-    "sheet_name": "Calculations",
-    "title": "Year 5",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_t25_b17",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_t57_b25_b23",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "94c8c58d611b9e70_b103",
-    "sheet_name": "Calculations",
-    "title": "Total costs in world without InO",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_t17_t9",
-    "sheet_name": "Calculations",
-    "title": null,
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_t17_b9",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_b17_t23_b15",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "076daba6b93bd14c_b17_b23",
-    "sheet_name": "Calculations",
-    "title": "2024",
-    "table_category": "calc",
-    "is_context_block": false
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_t70_t45",
-    "sheet_name": "Inputs",
-    "title": null,
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_t70_b45",
-    "sheet_name": "Inputs",
-    "title": "Clofarabine",
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_b70_t46",
-    "sheet_name": "Inputs",
-    "title": "Graft-versus-host disease after SCT",
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
-    "table_id": "9814fc53f594ba29_t118_b70_b46",
-    "sheet_name": "Inputs",
-    "title": "Clofarabine",
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
-    "table_id": "9814fc53f594ba29_b118",
-    "sheet_name": "Inputs",
-    "title": "SCT costs",
-    "table_category": "unknown",
-    "is_context_block": false
-  },
-  {
     "table_id": "f57ac8d2e4e4931a_t3",
     "sheet_name": "Introduction",
     "title": null,
     "table_category": "note",
-    "is_context_block": true
+    "table_category_confidence": 0.7,
+    "is_context_block": true,
+    "llm_summary": null,
+    "rag_fields": {},
+    "section_path": null
   },
   {
     "table_id": "f57ac8d2e4e4931a_b3",
     "sheet_name": "Introduction",
     "title": null,
     "table_category": "note",
-    "is_context_block": true
+    "table_category_confidence": 0.7,
+    "is_context_block": true,
+    "llm_summary": null,
+    "rag_fields": {},
+    "section_path": null
   },
   {
     "table_id": "262a4c0f1d47d09d",
     "sheet_name": "Results",
-    "title": null,
+    "title": "Year",
     "table_category": "calc",
-    "is_context_block": false
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "Table showing budget impact with and without InO for the years 2020-2023.",
+    "rag_fields": {
+      "embedding_description": "Budget impact comparison with and without InO over the years 2020 to 2023.",
+      "key_entities": [
+        "InO"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
   },
   {
     "table_id": "47ecc07e130eef5f_t10",
     "sheet_name": "Results",
-    "title": "Budget impact breakdown by cost component",
+    "title": "Without InO",
     "table_category": "calc",
-    "is_context_block": false
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "This table compares costs between a treatment without InO and a treatment with InO over a 5-year period.",
+    "rag_fields": {
+      "embedding_description": "Cost comparison between treatment with and without InO over 5 years.",
+      "key_entities": [
+        "InO",
+        "Drug costs",
+        "Adverse events costs",
+        "Subsequent treatment costs"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
   },
   {
     "table_id": "47ecc07e130eef5f_b10",
     "sheet_name": "Results",
-    "title": "Annual budget impact",
+    "title": "None",
     "table_category": "calc",
-    "is_context_block": false
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "This table displays costs associated with drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+    "rag_fields": {
+      "embedding_description": "Cost breakdown for drug treatment, adverse events, subsequent treatments, hospitalizations, and stem cell transplants.",
+      "key_entities": [
+        "Drug costs",
+        "Adverse events costs",
+        "Subsequent treatment costs",
+        "Hospitalization costs",
+        "SCT costs"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_t45",
+    "sheet_name": "Inputs",
+    "title": "Value used in the model",
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "Table detailing values used in the model for patient population parameters.",
+    "rag_fields": {
+      "embedding_description": "Patient population values for the model including number of patients, annual percentage change, and market shares.",
+      "key_entities": [
+        "InO",
+        "Number of patients",
+        "Annual percentage change",
+        "Market shares"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_t70_b45",
+    "sheet_name": "Inputs",
+    "title": "Adverse events, frequencies (same as global models)",
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table displays frequencies of adverse events for different drugs in a health economic model.",
+    "rag_fields": {
+      "embedding_description": "Frequency table of adverse events for various drugs in the health economic model.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "FLAG-Ida",
+        "FLAG",
+        "Mitoxantrone and cytarabine",
+        "HIDAC",
+        "DVP-Asp",
+        "DVP-Asp+Cyclo",
+        "hCVAD+MTX",
+        "Blinatumomab",
+        "TKI (Ponatinib)",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_t46",
+    "sheet_name": "Inputs",
+    "title": "Adverse events, frequencies (same as global models)",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "This table presents the distribution of subsequent treatments in a scenario without Inotuzumab Ozogamicin (InO) and the impact on the availability of Blinatumomab in Lebanon.",
+    "rag_fields": {
+      "embedding_description": "Calculation table showing the distribution of subsequent treatments in a scenario without InO and the redistribution of Blinatumomab shares in Lebanon.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "Blinatumomab",
+        "FLAG-Ida",
+        "Mitoxantrone and cytarabine",
+        "HIDAC",
+        "DVP-Asp",
+        "hCVAD+MTX",
+        "TKI (Ponatinib)",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_t118_b70_b46",
+    "sheet_name": "Inputs",
+    "title": "none",
+    "table_category": "assumption",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents the costs associated with Stem Cell Transplant (SCT) as an assumption.",
+    "rag_fields": {
+      "embedding_description": "Table detailing the assumed costs of Stem Cell Transplant (SCT).",
+      "key_entities": [
+        "SCT costs"
+      ],
+      "table_category": "assumption",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "9814fc53f594ba29_b118",
+    "sheet_name": "Inputs",
+    "title": "none",
+    "table_category": "assumption",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents end-of-life costs as an assumption.",
+    "rag_fields": {
+      "embedding_description": "End-of-life costs assumption table with values of 5000.",
+      "key_entities": [
+        "End-of-life costs"
+      ],
+      "table_category": "assumption",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "94c8c58d611b9e70_t103",
+    "sheet_name": "Calculations",
+    "title": "BIM calculation",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents the calculation of the number of patients eligible for treatment with Inotuzumab Ozogamicin over the years.",
+    "rag_fields": {
+      "embedding_description": "Calculation of patients eligible for treatment with Inotuzumab Ozogamicin over multiple years.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+    "sheet_name": "Calculations",
+    "title": "% of patients alive",
+    "table_category": "output",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the percentage of patients alive over different years for various treatment regimens.",
+    "rag_fields": {
+      "embedding_description": "Percentage of patients alive over time for different treatment regimens.",
+      "key_entities": [
+        "INO",
+        "FLAG-Ida",
+        "FLAG",
+        "MXN & Ara-C",
+        "HIDAC",
+        "DVP-Asp",
+        "DVP-Asp+Cyclo",
+        "hCVAD+MTX",
+        "Blinatumomab",
+        "TKI -Ponatinib",
+        "TKI + vincristine",
+        "Clofarabine"
+      ],
+      "table_category": "output",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
+    "sheet_name": "Calculations",
+    "title": "Survival Rate",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "Table showing the number of patients that die each year under the current situation for the drug INO.",
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patients that die each year under the current situation for the drug INO.",
+      "key_entities": [
+        "INO"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_t25_b17",
+    "sheet_name": "Calculations",
+    "title": "Treatment Group Comparison",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "title": "FLAG-Ida",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents annual mortality rates for FLAG-Ida patients from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for FLAG-Ida patients from 2019 to 2024.",
+      "key_entities": [
+        "FLAG-Ida"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patients that die annually from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "deaths",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "death rate"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_t57_b25_b23",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
+    "sheet_name": "Calculations",
+    "title": "Chemotherapy Regimen Comparison",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year for the drugs MXN & Ara-C under the current situation and projected from 2020 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Number of patients that die each year for MXN & Ara-C under current and projected scenarios.",
+      "key_entities": [
+        "MXN & Ara-C"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on death rates.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "title": "HIDAC",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents annual mortality rates for patients on HIDAC treatment from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Table detailing mortality rates for patients on HIDAC treatment over a six-year period.",
+      "key_entities": [
+        "HIDAC",
+        "mortality rates",
+        "patients"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 based on death rates per year.",
+      "key_entities": [
+        "Number of patients",
+        "death rate",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp treatment from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of annual patient mortality under DVP-Asp treatment from 2019 to 2024.",
+      "key_entities": [
+        "DVP-Asp"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "94c8c58d611b9e70_b103",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "input",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "Comparison of different treatments including Inotuzumab Ozogamicin, FLAG-Ida, and FLAG.",
+    "rag_fields": {
+      "embedding_description": "Table comparing dosages of Inotuzumab Ozogamicin, FLAG-Ida, and FLAG in the context of a health economics model.",
+      "key_entities": [
+        "Inotuzumab Ozogamicin",
+        "FLAG-Ida",
+        "FLAG"
+      ],
+      "table_category": "input",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "This table shows the number of patients that die each year from 2019 to 2024 based on specific probabilities.",
+    "rag_fields": {
+      "embedding_description": "Calculation table for the number of patient deaths annually based on probabilities from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "probabilities",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
+    "sheet_name": "Calculations",
+    "title": "Drug Combination Comparison",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year under the DVP-Asp+Cyclo treatment compared to the current situation from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of annual patient deaths under DVP-Asp+Cyclo treatment versus current situation from 2019 to 2024.",
+      "key_entities": [
+        "DVP-Asp+Cyclo",
+        "patients",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "title": "hCVAD+MTX",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents annual mortality rates for patients on hCVAD+MTX treatment from 2020 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for hCVAD+MTX patients from 2020 to 2024.",
+      "key_entities": [
+        "hCVAD+MTX"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation of the number of patients that die each year from 2019 to 2024 based on specific values.",
+      "key_entities": [
+        "Number of patients",
+        "years",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents annual patient mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Calculation table showing annual mortality rates for Blinatumomab treatment and the current situation from 2019 to 2024.",
+      "key_entities": [
+        "Blinatumomab",
+        "patients",
+        "mortality rates"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2024 based on specific rates.",
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2024 using specific rates.",
+      "key_entities": [
+        "Number of patients",
+        "rates",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_t17_t9",
+    "sheet_name": "Calculations",
+    "title": "2024",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "Table showing annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Annual mortality rates for TKI drug Ponatinib from 2020 to 2024.",
+      "key_entities": [
+        "TKI - Ponatinib"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_t17_b9",
+    "sheet_name": "Calculations",
+    "title": "Treatment Response",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table tracks the number of patients who die each year from 2020 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Tracking annual patient mortality from 2020 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "patients that die",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
+    "sheet_name": "Calculations",
+    "title": "TKI + vincristine",
+    "table_category": "output",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year under the treatment of TKI + vincristine from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Table detailing annual patient mortality under TKI + vincristine treatment from 2019 to 2024.",
+      "key_entities": [
+        "TKI",
+        "vincristine"
+      ],
+      "table_category": "output",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
+    "sheet_name": "Calculations",
+    "title": "Side Effects",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "This table tracks the number of patients that die each year from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Table calculating the annual number of patient deaths from 2019 to 2024.",
+      "key_entities": [
+        "Number of patients",
+        "year",
+        "deaths"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_t23_b15",
+    "sheet_name": "Calculations",
+    "title": null,
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table presents annual mortality rates for patients on Clofarabine from 2019 to 2024.",
+    "rag_fields": {
+      "embedding_description": "Table detailing mortality rates per year for patients on Clofarabine from 2019 to 2024.",
+      "key_entities": [
+        "Clofarabine"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
+  },
+  {
+    "table_id": "076daba6b93bd14c_b17_b23",
+    "sheet_name": "Calculations",
+    "title": "Treatment Duration",
+    "table_category": "calc",
+    "table_category_confidence": 0.85,
+    "is_context_block": false,
+    "llm_summary": "The table shows the number of patients that die each year from 2019 to 2022.",
+    "rag_fields": {
+      "embedding_description": "Calculation table displaying the annual number of patient deaths from 2019 to 2022.",
+      "key_entities": [
+        "Number of patients",
+        "death",
+        "years"
+      ],
+      "table_category": "calc",
+      "section_path": ""
+    },
+    "section_path": null
   }
 ]

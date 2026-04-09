@@ -33,6 +33,62 @@ from ..schemas.sheet_object_tree import (
 )
 
 
+def _excel_a1_range(bbox: Optional[Dict[str, Any]]) -> str:
+    """Excel range like C2:D7 from bbox (0-indexed r_top/c_left/r_bot/c_right or bbox_excel)."""
+    if not bbox:
+        return ""
+    ex = bbox.get("bbox_excel")
+    if ex:
+        return str(ex)
+    try:
+        from openpyxl.utils import get_column_letter
+
+        r1 = int(bbox["r_top"]) + 1
+        c1 = int(bbox["c_left"]) + 1
+        r2 = int(bbox["r_bot"]) + 1
+        c2 = int(bbox["c_right"]) + 1
+        return f"{get_column_letter(c1)}{r1}:{get_column_letter(c2)}{r2}"
+    except Exception:
+        return ""
+
+
+def _preview_header_cells(cells: List[str], *, max_cells: int = 8, max_chars: int = 140) -> str:
+    """Short joined preview of header strings for viewer / bundle."""
+    parts: List[str] = []
+    raw = cells or []
+    for i, h in enumerate(raw):
+        if i >= max_cells:
+            parts.append(f"+{len(raw) - max_cells} more")
+            break
+        s = "" if h is None else str(h).strip()
+        parts.append(s if s else "—")
+    text = " | ".join(parts)
+    if len(text) > max_chars:
+        return text[: max_chars - 3] + "..."
+    return text
+
+
+def _bundle_table_summary(t: EnrichedTableObject) -> Dict[str, Any]:
+    """Per-table row for streamlit_view_bundle.json (Sheet Browser)."""
+    bbox = t.bbox if isinstance(t.bbox, dict) else {}
+    ch = list(t.column_headers or [])
+    rh = list(t.row_headers or [])
+    return {
+        "table_id": t.table_id,
+        "title": t.title,
+        "table_category": t.table_category,
+        "table_category_confidence": t.table_category_confidence,
+        "section_path": t.section_path,
+        "llm_summary": t.llm_summary,
+        "is_context_block": t.is_context_block,
+        "excel_range": _excel_a1_range(bbox),
+        "column_headers_preview": _preview_header_cells(ch),
+        "row_headers_preview": _preview_header_cells(rh, max_cells=6, max_chars=120),
+        "n_column_headers": len(ch),
+        "n_row_headers": len(rh),
+    }
+
+
 def _serialise_enriched(table: EnrichedTableObject) -> Dict[str, Any]:
     """Convert an EnrichedTableObject to a JSON-safe dict."""
     d = asdict(table)
@@ -185,15 +241,7 @@ def _write_view_bundle(
     tables_by_sheet: Dict[str, list] = {}
     if enriched_tables:
         for t in enriched_tables:
-            tables_by_sheet.setdefault(t.sheet_name, []).append({
-                "table_id": t.table_id,
-                "title": t.title,
-                "table_category": t.table_category,
-                "table_category_confidence": t.table_category_confidence,
-                "section_path": t.section_path,
-                "llm_summary": t.llm_summary,
-                "is_context_block": t.is_context_block,
-            })
+            tables_by_sheet.setdefault(t.sheet_name, []).append(_bundle_table_summary(t))
 
     sheets = []
     for sheet_name, tree in trees.items():
@@ -228,33 +276,56 @@ def _write_view_bundle(
 
 
 def _write_grammar(output_path: str, grammar) -> None:
-    """Write grammar_snapshot.json and grammar_discovery_report.json."""
-    snapshot = asdict(grammar)
+    """Write grammar_snapshot.json and grammar_discovery_report.json.
+
+    Supports both V1 GrammarSnapshot (dataclass with asdict) and V2
+    GrammarProfile (class with to_snapshot_dict).
+    """
+    # V2 GrammarProfile has to_snapshot_dict(); V1 GrammarSnapshot is a dataclass
+    if hasattr(grammar, "to_snapshot_dict"):
+        snapshot = grammar.to_snapshot_dict()
+    else:
+        snapshot = asdict(grammar)
     _write_json(os.path.join(output_path, "grammar_snapshot.json"), snapshot)
 
     # Discovery report: summary of patterns
-    confirmed = [p for p in grammar.patterns if p.status == "confirmed"]
-    observed = [p for p in grammar.patterns if p.status == "observed"]
+    # V2 patterns are dicts from to_snapshot_dict(); V1 patterns are dataclass instances
+    raw_patterns = grammar.patterns if hasattr(grammar, "patterns") else []
+    patterns = []
+    for p in raw_patterns:
+        if isinstance(p, dict):
+            patterns.append(p)
+        else:
+            patterns.append({"status": getattr(p, "status", ""), "pattern_type": getattr(p, "pattern_type", "")})
+
+    confirmed = [p for p in patterns if p.get("status") == "confirmed"]
+    observed = [p for p in patterns if p.get("status") == "observed"]
     report = {
-        "discovery_method": grammar.discovery_method,
-        "guide_sheets": grammar.guide_sheets,
-        "guide_sheet_confidence": grammar.guide_sheet_confidence,
-        "sample_sheets": grammar.sample_sheets,
-        "total_patterns": len(grammar.patterns),
+        "discovery_method": grammar.discovery_method if hasattr(grammar, "discovery_method") else "unknown",
+        "guide_sheets": grammar.guide_sheets if hasattr(grammar, "guide_sheets") else [],
+        "guide_sheet_confidence": grammar.guide_sheet_confidence if hasattr(grammar, "guide_sheet_confidence") else 0.0,
+        "sample_sheets": grammar.sample_sheets if hasattr(grammar, "sample_sheets") else [],
+        "total_patterns": len(patterns),
         "confirmed_patterns": len(confirmed),
         "observed_patterns": len(observed),
         "confirmed_by_type": {},
         "observed_by_type": {},
     }
     for p in confirmed:
-        report["confirmed_by_type"][p.pattern_type] = (
-            report["confirmed_by_type"].get(p.pattern_type, 0) + 1
-        )
+        pt = p.get("pattern_type", "unknown")
+        report["confirmed_by_type"][pt] = report["confirmed_by_type"].get(pt, 0) + 1
     for p in observed:
-        report["observed_by_type"][p.pattern_type] = (
-            report["observed_by_type"].get(p.pattern_type, 0) + 1
-        )
+        pt = p.get("pattern_type", "unknown")
+        report["observed_by_type"][pt] = report["observed_by_type"].get(pt, 0) + 1
     _write_json(os.path.join(output_path, "grammar_discovery_report.json"), report)
+
+    # V2: Write grammar evolution log if present
+    if hasattr(grammar, "evolution_log") and grammar.evolution_log:
+        evo_path = os.path.join(output_path, "debug", "grammar_profile_evolution.jsonl")
+        os.makedirs(os.path.dirname(evo_path), exist_ok=True)
+        with open(evo_path, "w", encoding="utf-8") as f:
+            for entry in grammar.evolution_log:
+                f.write(json.dumps(entry, default=str) + "\n")
 
 
 def _write_tree_pngs(

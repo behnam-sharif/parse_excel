@@ -15,10 +15,36 @@ from __future__ import annotations
 import json
 import logging
 import os
+import threading
 import time
 from typing import Any, Dict, Optional
 
 _log = logging.getLogger("xl_sheetagent.llm_client")
+
+# V2: Shared OpenAI client singleton (thread-safe)
+_shared_client = None
+_client_lock = threading.Lock()
+
+
+def get_shared_client(cfg):
+    """Return a shared OpenAI client instance. Thread-safe."""
+    global _shared_client
+    if _shared_client is not None:
+        return _shared_client
+    with _client_lock:
+        if _shared_client is not None:
+            return _shared_client
+        from core.env_bootstrap import load_project_dotenv
+        load_project_dotenv()
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "OPENAI_API_KEY is not set. Set the env var or use "
+                "skip_llm_enrichment: true in config/stages.yaml."
+            )
+        from openai import OpenAI
+        _shared_client = OpenAI(api_key=api_key)
+        return _shared_client
 
 
 def is_llm_available(cfg) -> bool:

@@ -1,7 +1,7 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-08T20:50:50.529734+00:00",
-  "xl_sheetagent_version": "0.2.0",
+  "run_ts": "2026-04-09T05:27:22.228089+00:00",
+  "xl_sheetagent_version": "0.5.0",
   "upstream_schema_versions": {
     "xl_parse": "unknown",
     "xl_table": "3.1.0"
@@ -10,6 +10,22 @@
   "n_tables_input": 37,
   "n_tables_enriched": 35,
   "n_context_blocks": 2,
-  "n_signals_emitted": 60,
-  "elapsed_seconds": 295.67
+  "n_signals_emitted": 2,
+  "elapsed_seconds": 852.59,
+  "grammar_patterns_confirmed": 7,
+  "guide_sheets_detected": 0,
+  "llm_calls_made": 0,
+  "tables_llm_confirmed": 35,
+  "text_dominant_sheets": 1,
+  "tree_pngs_generated": 0,
+  "debug_traces_written": 0,
+  "tool_calls_recorded": 0,
+  "v2_mode": true,
+  "grammar_workbook_tables": 3,
+  "tables_grammar_shortcut": 29,
+  "tables_llm_structure": 6,
+  "tables_escalated": 35,
+  "tables_split_by_llm": 5,
+  "parallel_sheets": 4,
+  "grammar_updates_during_run": 6
 }

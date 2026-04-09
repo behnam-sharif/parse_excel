@@ -33,3 +33,13 @@ class RunManifest:
     tree_pngs_generated: int = 0
     debug_traces_written: int = 0
     tool_calls_recorded: int = 0
+
+    # V2 metadata
+    v2_mode: bool = False
+    grammar_workbook_tables: int = 0
+    tables_grammar_shortcut: int = 0
+    tables_llm_structure: int = 0
+    tables_escalated: int = 0
+    tables_split_by_llm: int = 0
+    parallel_sheets: int = 0
+    grammar_updates_during_run: int = 0

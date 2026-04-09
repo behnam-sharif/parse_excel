@@ -3,8 +3,8 @@ streamlit_viewer.py — Read-only artifact browser for xl_sheetagent outputs (V1
 
 Run:  py -3 -m streamlit run apps/streamlit_viewer.py
 
-Imports ONLY: json, pathlib, pandas, streamlit, PIL.
-Does NOT import any xl_sheetagent modules.
+Imports: json, pathlib, pandas, streamlit, PIL, openpyxl.utils (for A1 ranges).
+Does NOT import any xl_sheetagent packages.
 """
 
 from __future__ import annotations
@@ -36,6 +36,79 @@ def _load_jsonl(path: Path) -> List[Dict[str, Any]]:
         return [json.loads(line) for line in lines if line.strip()]
     except Exception:
         return []
+
+
+def _excel_range_from_bbox(bbox: Optional[Dict[str, Any]]) -> str:
+    """Excel address range from enriched bbox (0-based grid + optional bbox_excel)."""
+    if not bbox:
+        return ""
+    ex = bbox.get("bbox_excel")
+    if ex:
+        return str(ex)
+    try:
+        from openpyxl.utils import get_column_letter
+
+        r1 = int(bbox["r_top"]) + 1
+        c1 = int(bbox["c_left"]) + 1
+        r2 = int(bbox["r_bot"]) + 1
+        c2 = int(bbox["c_right"]) + 1
+        return f"{get_column_letter(c1)}{r1}:{get_column_letter(c2)}{r2}"
+    except Exception:
+        return ""
+
+
+def _preview_cells(cells: List[Any], max_cells: int = 8, max_chars: int = 140) -> str:
+    parts: List[str] = []
+    raw = cells or []
+    for i, h in enumerate(raw):
+        if i >= max_cells:
+            parts.append(f"+{len(raw) - max_cells} more")
+            break
+        s = "" if h is None else str(h).strip()
+        parts.append(s if s else "—")
+    text = " | ".join(parts)
+    if len(text) > max_chars:
+        return text[: max_chars - 3] + "..."
+    return text
+
+
+def _sheet_browser_rows(
+    bundle_tables: List[Dict[str, Any]],
+    enriched_by_id: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Merge bundle summaries with enriched_tables.json for full Sheet Browser columns."""
+    out: List[Dict[str, Any]] = []
+    for row in bundle_tables:
+        tid = row.get("table_id", "")
+        full = enriched_by_id.get(tid, {})
+        bbox = full.get("bbox") if isinstance(full.get("bbox"), dict) else {}
+        cols = full.get("column_headers") if isinstance(full, dict) else None
+        rhs = full.get("row_headers") if isinstance(full, dict) else None
+        if not isinstance(cols, list):
+            cols = []
+        if not isinstance(rhs, list):
+            rhs = []
+        excel_range = row.get("excel_range") or _excel_range_from_bbox(bbox)
+        col_prev = row.get("column_headers_preview") or _preview_cells(cols)
+        rh_prev = row.get("row_headers_preview") or _preview_cells(rhs, max_cells=6, max_chars=120)
+        nch = row.get("n_column_headers")
+        if nch is None:
+            nch = len(cols)
+        nrh = row.get("n_row_headers")
+        if nrh is None:
+            nrh = len(rhs)
+        out.append({
+            "table_id": tid,
+            "excel_range": excel_range,
+            "title": (full.get("title") if full else None) or row.get("title"),
+            "column_headers_preview": col_prev,
+            "row_headers_preview": rh_prev,
+            "n_column_headers": nch,
+            "n_row_headers": nrh,
+            "table_category": row.get("table_category") or full.get("table_category"),
+            "is_context_block": row.get("is_context_block", full.get("is_context_block", False)),
+        })
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -120,8 +193,8 @@ def _tab_sheet_browser(artifact_dir: Path) -> None:
         return
 
     sheet_names = [s["sheet_name"] for s in sheets]
+    # key="selected_sheet" owns session state — do not assign to it after this widget.
     selected = st.sidebar.selectbox("Select Sheet", sheet_names, key="selected_sheet")
-    st.session_state["selected_sheet"] = selected
 
     sheet_data = next((s for s in sheets if s["sheet_name"] == selected), None)
     if sheet_data is None:
@@ -129,26 +202,66 @@ def _tab_sheet_browser(artifact_dir: Path) -> None:
 
     st.header(f"Sheet: {selected}")
 
-    # Tree PNG
-    png_rel = sheet_data.get("tree_png_path", "")
+    # Tree PNG (optional V1D artifact) or JSON tree path for manual inspection
+    png_rel = sheet_data.get("tree_png_path", "") or ""
+    tree_json_rel = sheet_data.get("tree_path", "") or ""
     if png_rel:
         png_path = artifact_dir / png_rel
         if png_path.is_file():
             try:
                 from PIL import Image
                 img = Image.open(str(png_path))
-                st.image(img, caption=f"Object Tree: {selected}", use_container_width=True)
+                w, h = img.size
+                # Very wide PNGs + use_container_width shrink height to a “hairline”; cap width instead.
+                if h > 0 and w / h >= 5:
+                    st.image(
+                        img,
+                        caption=f"Object Tree: {selected} (wide layout — scroll horizontally if needed)",
+                        width=min(1600, max(900, w // 2)),
+                    )
+                else:
+                    st.image(img, caption=f"Object Tree: {selected}", use_container_width=True)
             except Exception:
-                st.info("Tree PNG exists but could not be displayed")
+                st.warning("Tree PNG file exists but could not be displayed (corrupt or unsupported).")
         else:
-            st.info("Tree PNG not yet generated")
+            st.info(
+                f"No image file at `{png_rel}` (export may skip PNG generation). "
+                + (f"Structured tree JSON: `{tree_json_rel}`" if tree_json_rel else "")
+            )
+    else:
+        st.info(
+            "No **tree_png_path** in this bundle. "
+            + (f"Use **tree_path** JSON instead: `{tree_json_rel}`" if tree_json_rel else "")
+        )
 
-    # Tables on sheet
+    # Tables on sheet (merge with enriched_tables.json for ranges/headers on older bundles)
     tables = sheet_data.get("tables", [])
     if tables:
         st.subheader(f"Tables ({len(tables)})")
-        df = pd.DataFrame(tables)
-        st.dataframe(df, use_container_width=True)
+        enriched_path = artifact_dir / "enriched_tables.json"
+        enriched_raw = _load_json(enriched_path)
+        by_id: Dict[str, Dict[str, Any]] = {}
+        if isinstance(enriched_raw, list):
+            for t in enriched_raw:
+                if isinstance(t, dict) and t.get("table_id"):
+                    by_id[str(t["table_id"])] = t
+        rows = _sheet_browser_rows(tables, by_id)
+        df = pd.DataFrame(rows)
+        preferred = [
+            "table_id",
+            "excel_range",
+            "title",
+            "column_headers_preview",
+            "row_headers_preview",
+            "n_column_headers",
+            "n_row_headers",
+            "table_category",
+            "is_context_block",
+        ]
+        cols = [c for c in preferred if c in df.columns]
+        if cols:
+            df = df[cols]
+        st.dataframe(df, use_container_width=True, hide_index=True)
     else:
         st.info("No table summaries in bundle")
 
@@ -176,7 +289,6 @@ def _tab_table_inspector(artifact_dir: Path) -> None:
         return
 
     selected_id = st.sidebar.selectbox("Select Table", table_ids, key="selected_table_id")
-    st.session_state["selected_table_id"] = selected_id
 
     table = next((t for t in enriched if t.get("table_id") == selected_id), None)
     if table is None:
@@ -312,12 +424,18 @@ def _tab_debug(artifact_dir: Path) -> None:
             mask = df.apply(lambda row: search_term.lower() in str(row).lower(), axis=1)
             df = df[mask]
 
-        # Event type filter
+        # Event type filter: never sort raw values (JSONL can mix str, float, int).
         if "event_type" in df.columns:
-            event_types = ["(all)"] + sorted(df["event_type"].unique().tolist())
-            selected_type = st.selectbox("Event Type", event_types)
+            raw = df["event_type"].dropna().unique().tolist()
+            # Sort string labels only — avoids TypeError from mixed types in sorted()
+            str_labels = sorted({str(x) for x in raw})
+            event_types = ["(all)"] + str_labels
+            selected_type = st.selectbox("Event Type", event_types, key="debug_event_type")
             if selected_type != "(all)":
-                df = df[df["event_type"] == selected_type]
+                df = df[
+                    df["event_type"].map(lambda v: str(v) if pd.notna(v) else "")
+                    == selected_type
+                ]
 
         st.dataframe(df, use_container_width=True)
     else:

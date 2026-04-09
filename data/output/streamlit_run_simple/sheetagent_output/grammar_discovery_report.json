@@ -1,0 +1,19 @@
+{
+  "discovery_method": "v2_llm_workbook",
+  "guide_sheets": [],
+  "guide_sheet_confidence": 0.0,
+  "sample_sheets": [],
+  "total_patterns": 16,
+  "confirmed_patterns": 7,
+  "observed_patterns": 9,
+  "confirmed_by_type": {
+    "title": 3,
+    "column_header": 2,
+    "row_name": 2
+  },
+  "observed_by_type": {
+    "title": 3,
+    "column_header": 5,
+    "row_name": 1
+  }
+}

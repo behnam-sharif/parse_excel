@@ -1,0 +1,408 @@
+{
+  "guide_sheets": [],
+  "sample_sheets": [],
+  "patterns": [
+    {
+      "pattern_name": "v2_title_0",
+      "pattern_type": "title",
+      "observed_count": 2,
+      "observed_sheets": [],
+      "confidence": 0.6,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 9.0,
+        "font_name": "Calibri",
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": "Calibri",
+        "font_size": 9.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null,
+        "has_empty_row_above": true
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_title_1",
+      "pattern_type": "title",
+      "observed_count": 2,
+      "observed_sheets": [],
+      "confidence": 0.6,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 10.0,
+        "font_name": "Calibri Light",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": "Calibri Light",
+        "font_size": 10.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": "Values must be of type <class 'str'>",
+        "has_empty_row_above": true
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_title_2",
+      "pattern_type": "title",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 11.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": null,
+        "font_size": 11.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null,
+        "has_empty_row_above": false
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_title_3",
+      "pattern_type": "title",
+      "observed_count": 2,
+      "observed_sheets": [],
+      "confidence": 0.6,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": null,
+        "is_bold": false,
+        "font_size": null,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": null,
+        "font_size": null,
+        "is_bold": false,
+        "fill_color": null,
+        "text_color": null,
+        "has_empty_row_above": false
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_title_4",
+      "pattern_type": "title",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": true,
+        "font_size": 12.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": null,
+        "font_size": 12.0,
+        "is_bold": true,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null,
+        "has_empty_row_above": false
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_title_5",
+      "pattern_type": "title",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": true,
+        "font_size": 10.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "title",
+        "font_name": null,
+        "font_size": 10.0,
+        "is_bold": true,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null,
+        "has_empty_row_above": false
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_0",
+      "pattern_type": "column_header",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 9.0,
+        "font_name": "Calibri",
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": "Calibri",
+        "font_size": 9.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_1",
+      "pattern_type": "column_header",
+      "observed_count": 2,
+      "observed_sheets": [],
+      "confidence": 0.6,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 10.0,
+        "font_name": "Calibri Light",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": "Calibri Light",
+        "font_size": 10.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_2",
+      "pattern_type": "column_header",
+      "observed_count": 2,
+      "observed_sheets": [],
+      "confidence": 0.6,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 11.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": null,
+        "font_size": 11.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_3",
+      "pattern_type": "column_header",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 12.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": null,
+        "font_size": 12.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_4",
+      "pattern_type": "column_header",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "7CDFA8",
+        "is_bold": true,
+        "font_size": 9.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": null,
+        "font_size": 9.0,
+        "is_bold": true,
+        "fill_color": "7CDFA8",
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_5",
+      "pattern_type": "column_header",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": null,
+        "is_bold": false,
+        "font_size": null,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": null,
+        "font_size": null,
+        "is_bold": false,
+        "fill_color": null,
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_column_header_6",
+      "pattern_type": "column_header",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": "781450",
+        "is_bold": true,
+        "font_size": 9.0,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "column_header",
+        "font_name": null,
+        "font_size": 9.0,
+        "is_bold": true,
+        "fill_color": "781450",
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_row_name_0",
+      "pattern_type": "row_name",
+      "observed_count": 3,
+      "observed_sheets": [],
+      "confidence": 0.75,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 11.0,
+        "font_name": "Calibri",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "role_formatting": {
+        "role": "row_name",
+        "font_name": "Calibri",
+        "font_size": 11.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_row_name_1",
+      "pattern_type": "row_name",
+      "observed_count": 5,
+      "observed_sheets": [],
+      "confidence": 0.9,
+      "status": "confirmed",
+      "evidence": {
+        "fill_color": "Values must be of type <class 'str'>",
+        "is_bold": false,
+        "font_size": 10.0,
+        "font_name": "Calibri Light",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "role_formatting": {
+        "role": "row_name",
+        "font_name": "Calibri Light",
+        "font_size": 10.0,
+        "is_bold": false,
+        "fill_color": "Values must be of type <class 'str'>",
+        "text_color": "Values must be of type <class 'str'>"
+      },
+      "source": "llm_workbook"
+    },
+    {
+      "pattern_name": "v2_row_name_2",
+      "pattern_type": "row_name",
+      "observed_count": 1,
+      "observed_sheets": [],
+      "confidence": 0.44999999999999996,
+      "status": "observed",
+      "evidence": {
+        "fill_color": null,
+        "is_bold": false,
+        "font_size": null,
+        "font_name": null,
+        "text_color": null
+      },
+      "role_formatting": {
+        "role": "row_name",
+        "font_name": null,
+        "font_size": null,
+        "is_bold": false,
+        "fill_color": null,
+        "text_color": null
+      },
+      "source": "llm_workbook"
+    }
+  ],
+  "discovery_method": "v2_llm_workbook",
+  "guide_sheet_confidence": 0.0,
+  "frozen": true,
+  "v2_profile": {
+    "n_observations": 9,
+    "confidence": 0.95,
+    "sample_table_ids": [
+      "f57ac8d2e4e4931a_t3",
+      "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
+      "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7"
+    ]
+  }
+}

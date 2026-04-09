@@ -91,3 +91,12 @@ class EnrichedTableObject:
     # V1C: Text-dominant sheet metadata
     sheet_level_text_dominant: bool = False
     sheet_text_summary: Optional[str] = None
+
+    # V2: Structure method tracking
+    structure_method: Optional[str] = None          # grammar_match | llm_structure
+                                                    # | fallback | escalation
+                                                    # | coordinator_batch_llm
+    llm_structure_response: Optional[Dict[str, Any]] = None
+    grammar_match_confidence: float = 0.0
+    decision_confidence: Dict[str, Any] = field(default_factory=dict)
+    ontology_hint: Optional[str] = None
