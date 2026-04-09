@@ -19,6 +19,7 @@ from .schemas import CoreDataRegion
 # ---------------------------------------------------------------------------
 
 BLANK = "BLANK"
+FORMULA = "FORMULA"
 NUMBER = "NUMBER"
 TEXT = "TEXT"
 
@@ -27,17 +28,29 @@ TEXT = "TEXT"
 # Cell classification
 # ---------------------------------------------------------------------------
 
-def classify_cell(value) -> str:
+def classify_cell(value, data_type=None) -> str:
     """Classify a single cell value.
 
-    Rules follow xl_table Section 9.2:
+    Rules:
+      - data_type == 'f' -> FORMULA (takes precedence)
       - None / empty string -> BLANK
       - bool -> NUMBER
       - int / float -> NUMBER
       - date -> TEXT
       - error string (#REF! etc.) -> TEXT
       - everything else -> TEXT
+
+    Parameters
+    ----------
+    value : any
+        Cell value (from ws.cell.value when data_only=False, shows formula string)
+    data_type : str, optional
+        Cell data_type from openpyxl (ws.cell.data_type). 'f' indicates formula.
     """
+    # Formula takes precedence
+    if data_type == 'f':
+        return FORMULA
+
     if value is None:
         return BLANK
     if isinstance(value, str):
@@ -60,13 +73,20 @@ def read_cell_grid(
     c_left: int,
     r_bot: int,
     c_right: int,
-) -> List[List]:
-    """Read raw cell values from an openpyxl worksheet into a 2D list.
+) -> tuple[List[List], List[List[str]]]:
+    """Read raw cell values and data_types from an openpyxl worksheet into 2D lists.
 
     Coordinates are 0-indexed inclusive. openpyxl uses 1-indexed.
-    Returns grid[row_offset][col_offset] = cell_value.
+
+    Returns
+    -------
+    grid : List[List]
+        Grid of cell values: grid[row_offset][col_offset] = cell_value
+    data_types : List[List[str]]
+        Grid of cell data_types: data_types[row_offset][col_offset] = cell.data_type
     """
     grid = []
+    data_types = []
     for row in ws.iter_rows(
         min_row=r_top + 1,
         max_row=r_bot + 1,
@@ -74,12 +94,20 @@ def read_cell_grid(
         max_col=c_right + 1,
     ):
         grid.append([cell.value for cell in row])
-    return grid
+        data_types.append([cell.data_type for cell in row])
+    return grid, data_types
 
 
-def classify_grid(grid: List[List]) -> List[List[str]]:
-    """Classify every cell in a grid."""
-    return [[classify_cell(v) for v in row] for row in grid]
+def classify_grid(grid: List[List], data_types: List[List[str]]) -> List[List[str]]:
+    """Classify every cell in a grid using values and data_types."""
+    classified = []
+    for row_idx, row in enumerate(grid):
+        row_types = []
+        for col_idx, value in enumerate(row):
+            dt = data_types[row_idx][col_idx] if row_idx < len(data_types) and col_idx < len(data_types[row_idx]) else None
+            row_types.append(classify_cell(value, dt))
+        classified.append(row_types)
+    return classified
 
 
 # ---------------------------------------------------------------------------
@@ -201,6 +229,7 @@ def find_core_data_region(
 
     Steps:
       1. Compute per-row numeric ratio (among non-blank cells).
+         Numeric = FORMULA + NUMBER cells.
       2. Find the longest contiguous block of rows where ratio >= threshold.
       3. Within those rows, find the column span with numeric content.
 
@@ -211,11 +240,11 @@ def find_core_data_region(
     if n_rows == 0 or n_cols == 0:
         return None
 
-    # Per-row numeric ratio
+    # Per-row numeric ratio (FORMULA + NUMBER cells)
     row_ratios = []
     for r in range(n_rows):
         non_blank = sum(1 for c in range(n_cols) if types[r][c] != BLANK)
-        numeric = sum(1 for c in range(n_cols) if types[r][c] == NUMBER)
+        numeric = sum(1 for c in range(n_cols) if types[r][c] in (NUMBER, FORMULA))
         ratio = numeric / non_blank if non_blank > 0 else 0.0
         row_ratios.append(ratio)
 
@@ -262,14 +291,14 @@ def find_core_data_region(
     if core_c_end < core_c_start:
         return None
 
-    # Compute overall numeric ratio in core region
+    # Compute overall numeric ratio in core region (FORMULA + NUMBER)
     total_non_blank = 0
     total_numeric = 0
     for r in range(core_r_start, core_r_end + 1):
         for c in range(core_c_start, core_c_end + 1):
             if types[r][c] != BLANK:
                 total_non_blank += 1
-                if types[r][c] == NUMBER:
+                if types[r][c] in (NUMBER, FORMULA):
                     total_numeric += 1
 
     overall_ratio = total_numeric / total_non_blank if total_non_blank > 0 else 0.0

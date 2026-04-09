@@ -14,10 +14,16 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Optional
 
 import streamlit as st
+
+# Import bbox_to_excel_range from xl_table
+_ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(_ROOT))
+from xl_table.coords import bbox_to_excel_range
 
 
 def render_v3a_results(run_result) -> None:
@@ -92,10 +98,14 @@ def _render_sheet(sheet_result) -> None:
 
     # Tables
     for i, tr in enumerate(sheet_result.table_results):
+        bbox = tr.original_bbox
+        excel_range = bbox_to_excel_range(
+            bbox['r_top'], bbox['c_left'], bbox['r_bot'], bbox['c_right']
+        )
+        # Table name format: Table1_SheetName_B3:N48
+        table_name = f"Table{i+1}_{tr.sheet_name}_{excel_range}"
         with st.expander(
-            f"Table {i+1}: {tr.table_id} "
-            f"(rows {tr.original_bbox['r_top']}-{tr.original_bbox['r_bot']}, "
-            f"cols {tr.original_bbox['c_left']}-{tr.original_bbox['c_right']})",
+            table_name,
             expanded=(i == 0),
         ):
             _render_table_result_obj(tr)
@@ -107,22 +117,34 @@ def _render_sheet(sheet_result) -> None:
 
 def _render_table_result_obj(tr) -> None:
     """Render a single table agent result from object."""
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**Original bbox**")
-        st.json(tr.original_bbox)
-    with col2:
-        st.markdown("**Trimmed bbox**")
-        st.json(tr.trimmed_bbox)
+    # Trimmed bbox
+    trimmed_range = bbox_to_excel_range(
+        tr.trimmed_bbox['r_top'], tr.trimmed_bbox['c_left'],
+        tr.trimmed_bbox['r_bot'], tr.trimmed_bbox['c_right']
+    )
+    st.markdown(f"**Trimmed bbox**: {trimmed_range}")
 
+    # Core data region
     if tr.core_data_region:
+        core_range = bbox_to_excel_range(
+            tr.core_data_region.r_top, tr.core_data_region.c_left,
+            tr.core_data_region.r_bot, tr.core_data_region.c_right
+        )
         st.markdown(
-            f"**Core data region**: rows {tr.core_data_region.r_top}-{tr.core_data_region.r_bot}, "
-            f"cols {tr.core_data_region.c_left}-{tr.core_data_region.c_right} "
+            f"**Core data region**: {core_range} "
             f"(numeric ratio: {tr.core_data_region.numeric_ratio:.2%})"
         )
     else:
         st.warning("No core data region detected")
+
+    # Split candidates
+    if tr.split_candidates:
+        st.warning(f"⚠️ **Potential internal splits detected**: {len(tr.split_candidates)}")
+        for sc in tr.split_candidates:
+            axis_label = "row" if sc.axis == "row" else "col"
+            st.caption(
+                f"  [{axis_label} {sc.index}] score={sc.combined_score:.2f} — {sc.reason}"
+            )
 
     # Candidate groups
     _show_candidates("Title candidates", tr.title_candidates)
@@ -189,10 +211,18 @@ def _render_sheet_from_dict(sheet_data: dict) -> None:
 
     for i, tr in enumerate(sheet_data.get("table_results", [])):
         bbox = tr.get("original_bbox", {})
+        try:
+            excel_range = bbox_to_excel_range(
+                bbox.get('r_top', 0), bbox.get('c_left', 0),
+                bbox.get('r_bot', 0), bbox.get('c_right', 0)
+            )
+        except Exception:
+            excel_range = "?"
+        # Table name format: Table1_SheetName_B3:N48
+        sheet_name = tr.get("sheet_name", sheet_data.get("sheet_name", "?"))
+        table_name = f"Table{i+1}_{sheet_name}_{excel_range}"
         with st.expander(
-            f"Table {i+1}: {tr.get('table_id', '?')} "
-            f"(rows {bbox.get('r_top', '?')}-{bbox.get('r_bot', '?')}, "
-            f"cols {bbox.get('c_left', '?')}-{bbox.get('c_right', '?')})",
+            table_name,
             expanded=(i == 0),
         ):
             _render_table_from_dict(tr)
@@ -204,21 +234,41 @@ def _render_sheet_from_dict(sheet_data: dict) -> None:
 
 def _render_table_from_dict(tr: dict) -> None:
     """Render a table result from JSON dict."""
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**Original bbox**")
-        st.json(tr.get("original_bbox", {}))
-    with col2:
-        st.markdown("**Trimmed bbox**")
-        st.json(tr.get("trimmed_bbox", {}))
+    # Trimmed bbox
+    trimmed_bbox = tr.get("trimmed_bbox", {})
+    try:
+        trimmed_range = bbox_to_excel_range(
+            trimmed_bbox.get('r_top', 0), trimmed_bbox.get('c_left', 0),
+            trimmed_bbox.get('r_bot', 0), trimmed_bbox.get('c_right', 0)
+        )
+        st.markdown(f"**Trimmed bbox**: {trimmed_range}")
+    except Exception:
+        st.markdown("**Trimmed bbox**: ?")
 
+    # Core data region
     core = tr.get("core_data_region")
     if core:
-        st.markdown(
-            f"**Core data region**: rows {core['r_top']}-{core['r_bot']}, "
-            f"cols {core['c_left']}-{core['c_right']} "
-            f"(numeric ratio: {core.get('numeric_ratio', 0):.2%})"
-        )
+        try:
+            core_range = bbox_to_excel_range(
+                core['r_top'], core['c_left'], core['r_bot'], core['c_right']
+            )
+            st.markdown(
+                f"**Core data region**: {core_range} "
+                f"(numeric ratio: {core.get('numeric_ratio', 0):.2%})"
+            )
+        except Exception:
+            st.markdown("**Core data region**: ?")
+
+    # Split candidates
+    split_cands = tr.get("split_candidates", [])
+    if split_cands:
+        st.warning(f"⚠️ **Potential internal splits detected**: {len(split_cands)}")
+        for sc in split_cands:
+            axis_label = sc.get("axis", "?")
+            st.caption(
+                f"  [{axis_label} {sc.get('index', '?')}] "
+                f"score={sc.get('combined_score', 0):.2f} — {sc.get('reason', '')}"
+            )
 
     for key, label in [
         ("title_candidates", "Title candidates"),

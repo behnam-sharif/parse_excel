@@ -2,10 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Shell Configuration
-
-The Bash tool on this machine is broken (exit code 3221225477).
-DO NOT use the Bash tool. Use Write/Edit tools only, or write scripts for the user to run manually.
+#
 
 ## What This Is
 

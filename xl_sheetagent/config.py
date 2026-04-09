@@ -74,3 +74,20 @@ class XlSheetAgentConfig:
     v3a_llm_model: str
     v3a_llm_max_tokens: int
     v3a_max_parallel_sheets: int
+    v3a_split_threshold: float
+
+    # V3A Phase 1-3: Enhanced validation and heuristics
+    v3a_header_column_validation: bool
+    v3a_numeric_header_fallback: bool
+    v3a_title_single_cell_strict: bool
+    v3a_footnote_all_text_strict: bool
+
+    # V3A Phase 2: Formatting analysis
+    v3a_formatting_analysis_enabled: bool
+    v3a_formatting_long_text_threshold: int
+
+    # V3A Phase 4: Two-pass split architecture
+    v3a_two_pass_enabled: bool
+    v3a_split_core_bbox_ratio: float
+    v3a_split_min_numeric_outside: int
+    v3a_split_max_depth: int

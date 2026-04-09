@@ -1,22 +1,53 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-09T18:19:51.698657+00:00",
+  "run_ts": "2026-04-09T23:34:17.764300+00:00",
   "version": "3a.0.1",
   "sheets": [
     {
       "sheet_name": "Calculations",
       "table_results": [
         {
-          "table_id": "94c8c58d611b9e70_t103",
+          "table_id": "94c8c58d611b9e70_t103_top",
           "sheet_name": "Calculations",
           "original_bbox": {
             "r_top": 2,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 7
+          },
+          "trimmed_bbox": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 7
+          },
+          "core_data_region": {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 7,
+            "numeric_ratio": 0.8333
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "94c8c58d611b9e70_t103_bottom",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 4,
             "c_left": 1,
             "r_bot": 104,
             "c_right": 7
           },
           "trimmed_bbox": {
-            "r_top": 2,
+            "r_top": 5,
             "c_left": 1,
             "r_bot": 104,
             "c_right": 7
@@ -26,7 +57,7 @@
             "c_left": 1,
             "r_bot": 104,
             "c_right": 7,
-            "numeric_ratio": 0.8333
+            "numeric_ratio": 0.9762
           },
           "title_candidates": [
             {
@@ -36,31 +67,106 @@
                 "r_top": 90,
                 "c_left": 1,
                 "r_bot": 90,
-                "c_right": 7
+                "c_right": 1
               },
-              "source_table_id": "94c8c58d611b9e70_t103",
+              "source_table_id": "94c8c58d611b9e70_t103_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
             }
           ],
-          "header_row_candidates": [],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Costs of an allogeneic stem cell transplant | =SUM(D78:D89) | =SUM(E78:E89) | =SUM(F78:F89) | =SUM(G78:G89) | =SUM(H78:H89)",
+              "location": {
+                "r_top": 89,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 7
+              },
+              "source_table_id": "94c8c58d611b9e70_t103_bottom",
+              "decision": "kept",
+              "decision_reason": "column_count_validated=6"
+            }
+          ],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "unknown",
+              "index": -1,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.8,
+              "reason": "Core (98 cells) is 14% of bbox (700 cells), 530 numeric cells scattered outside"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
         },
         {
-          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_top",
           "sheet_name": "Calculations",
           "original_bbox": {
             "r_top": 11,
+            "c_left": 12,
+            "r_bot": 12,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 11,
+            "c_left": 12,
+            "r_bot": 12,
+            "c_right": 24
+          },
+          "core_data_region": {
+            "r_top": 11,
+            "c_left": 12,
+            "r_bot": 12,
+            "c_right": 24,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_bottom",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 13,
             "c_left": 12,
             "r_bot": 18,
             "c_right": 27
           },
           "trimmed_bbox": {
-            "r_top": 11,
+            "r_top": 13,
             "c_left": 12,
             "r_bot": 18,
             "c_right": 24
@@ -72,38 +178,39 @@
             "c_right": 24,
             "numeric_ratio": 0.9231
           },
-          "title_candidates": [
-            {
-              "piece_type": "title",
-              "text": "% of patients alive",
-              "location": {
-                "r_top": 11,
-                "c_left": 12,
-                "r_bot": 11,
-                "c_right": 24
-              },
-              "source_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
-          "header_row_candidates": [
-            {
-              "piece_type": "header_row",
-              "text": "Year | INO | FLAG-Ida | FLAG | MXN & Ara-C | HIDAC | DVP-Asp | DVP-Asp+Cyclo | hCVAD+MTX | Blinatumomab | TKI -Ponatinib | TKI + vincristine | Clofarabine",
-              "location": {
-                "r_top": 12,
-                "c_left": 12,
-                "r_bot": 12,
-                "c_right": 24
-              },
-              "source_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
+          "title_candidates": [],
+          "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 13,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            },
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -134,6 +241,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -164,6 +291,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -194,6 +332,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -224,6 +382,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -254,6 +423,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -284,6 +473,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -314,6 +514,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -344,6 +564,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -374,6 +605,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -404,6 +655,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -434,6 +696,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -458,7 +740,7 @@
             "c_left": 1,
             "r_bot": 205,
             "c_right": 7,
-            "numeric_ratio": 0.8434
+            "numeric_ratio": 0.988
           },
           "title_candidates": [
             {
@@ -468,16 +750,41 @@
                 "r_top": 191,
                 "c_left": 1,
                 "r_bot": 191,
+                "c_right": 1
+              },
+              "source_table_id": "94c8c58d611b9e70_b103",
+              "decision": "kept",
+              "decision_reason": "single_cell_validated"
+            }
+          ],
+          "header_row_candidates": [
+            {
+              "piece_type": "header_row",
+              "text": "Costs of an allogeneic stem cell transplant | =SUM(D179:D190) | =SUM(E179:E190) | =SUM(F179:F190) | =SUM(G179:G190) | =SUM(H179:H190)",
+              "location": {
+                "r_top": 190,
+                "c_left": 1,
+                "r_bot": 190,
                 "c_right": 7
               },
               "source_table_id": "94c8c58d611b9e70_b103",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "column_count_validated=6"
             }
           ],
-          "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "unknown",
+              "index": -1,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.8,
+              "reason": "Core (98 cells) is 14% of bbox (700 cells), 530 numeric cells scattered outside"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -508,6 +815,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -538,6 +856,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -568,6 +906,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -598,6 +947,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -628,6 +997,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -658,6 +1038,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -688,21 +1088,73 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 0.9539473684210527,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9539473684210527,
+              "reason": "High split score: separator=0.95"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
         },
         {
-          "table_id": "076daba6b93bd14c_t17_t9",
+          "table_id": "076daba6b93bd14c_t17_t9_top",
           "sheet_name": "Calculations",
           "original_bbox": {
             "r_top": 177,
+            "c_left": 12,
+            "r_bot": 177,
+            "c_right": 27
+          },
+          "trimmed_bbox": {
+            "r_top": 177,
+            "c_left": 14,
+            "r_bot": 177,
+            "c_right": 27
+          },
+          "core_data_region": {
+            "r_top": 177,
+            "c_left": 14,
+            "r_bot": 177,
+            "c_right": 27,
+            "numeric_ratio": 1.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "076daba6b93bd14c_t17_t9_bottom",
+          "sheet_name": "Calculations",
+          "original_bbox": {
+            "r_top": 178,
             "c_left": 12,
             "r_bot": 185,
             "c_right": 27
           },
           "trimmed_bbox": {
-            "r_top": 177,
+            "r_top": 179,
             "c_left": 12,
             "r_bot": 185,
             "c_right": 27
@@ -718,6 +1170,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -748,6 +1220,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -778,6 +1261,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -808,6 +1311,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -838,6 +1352,26 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 13,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -868,6 +1402,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 15,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -883,16 +1428,47 @@
       "sheet_name": "Inputs",
       "table_results": [
         {
-          "table_id": "9814fc53f594ba29_t118_t70_t45",
+          "table_id": "9814fc53f594ba29_t45_top",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 2,
+            "c_left": 1,
+            "r_bot": 2,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 2,
+            "c_left": 2,
+            "r_bot": 2,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 2,
+            "c_left": 2,
+            "r_bot": 2,
+            "c_right": 5,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_t45_bottom",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 3,
             "c_left": 1,
             "r_bot": 47,
             "c_right": 13
           },
           "trimmed_bbox": {
-            "r_top": 2,
+            "r_top": 3,
             "c_left": 1,
             "r_bot": 46,
             "c_right": 5
@@ -912,11 +1488,11 @@
                 "r_top": 3,
                 "c_left": 1,
                 "r_bot": 3,
-                "c_right": 5
+                "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "source_table_id": "9814fc53f594ba29_t45_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
             },
             {
               "piece_type": "title",
@@ -925,39 +1501,39 @@
                 "r_top": 6,
                 "c_left": 1,
                 "r_bot": 6,
-                "c_right": 5
+                "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "source_table_id": "9814fc53f594ba29_t45_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
             }
           ],
           "header_row_candidates": [
             {
               "piece_type": "header_row",
-              "text": "Annual percentage change | 0 | 0 | Assumption - This can be adjusted for different payers",
+              "text": "Annual percentage change | =IF(E6=\"\",D6,E6) | 0 | Assumption - This can be adjusted for different payers",
               "location": {
                 "r_top": 5,
                 "c_left": 1,
                 "r_bot": 5,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "source_table_id": "9814fc53f594ba29_t45_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "column_count_validated=4"
             },
             {
               "piece_type": "header_row",
-              "text": "Number of patients in the 1st year | 15 | 15 | Number of patients treated in the first year - This can be adjusted for different payers",
+              "text": "Number of patients in the 1st year | =IF(E5=\"\",D5,E5) | 15 | Number of patients treated in the first year - This can be adjusted for different payers",
               "location": {
                 "r_top": 4,
                 "c_left": 1,
                 "r_bot": 4,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "source_table_id": "9814fc53f594ba29_t45_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "column_count_validated=4"
             }
           ],
           "row_name_candidates": [],
@@ -971,9 +1547,56 @@
                 "r_bot": 20,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_t45",
+              "source_table_id": "9814fc53f594ba29_t45_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "below_core_all_text"
+            }
+          ],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 3,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 6,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 20,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 34,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "unknown",
+              "index": -1,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.8,
+              "reason": "Core (65 cells) is 30% of bbox (220 cells), 53 numeric cells scattered outside"
             }
           ],
           "pieces_sent_to_coordinator": [],
@@ -981,57 +1604,85 @@
           "llm_details": []
         },
         {
-          "table_id": "9814fc53f594ba29_t118_t70_b45",
+          "table_id": "9814fc53f594ba29_b45_t24_top",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 48,
             "c_left": 1,
-            "r_bot": 71,
+            "r_bot": 59,
             "c_right": 13
           },
           "trimmed_bbox": {
             "r_top": 48,
             "c_left": 1,
-            "r_bot": 71,
+            "r_bot": 59,
             "c_right": 13
           },
           "core_data_region": {
-            "r_top": 49,
+            "r_top": 48,
             "c_left": 1,
             "r_bot": 59,
             "c_right": 13,
             "numeric_ratio": 0.9231
           },
           "title_candidates": [],
-          "header_row_candidates": [
-            {
-              "piece_type": "header_row",
-              "text": "Adverse events, frequencies (same as global models) | Inotuzumab Ozogamicin | FLAG-Ida | FLAG | Mitoxantrone and cytarabine | HIDAC | DVP-Asp | DVP-Asp+Cyclo | hCVAD+MTX | Blinatumomab | TKI (Ponatinib) | TKI + vincristine | Clofarabine",
-              "location": {
-                "r_top": 48,
-                "c_left": 1,
-                "r_bot": 48,
-                "c_right": 13
-              },
-              "source_table_id": "9814fc53f594ba29_t118_t70_b45",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
+          "header_row_candidates": [],
           "row_name_candidates": [],
-          "footnote_candidates": [
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_b45_t24_bottom",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 60,
+            "c_left": 1,
+            "r_bot": 71,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 60,
+            "c_left": 1,
+            "r_bot": 71,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 61,
+            "c_left": 1,
+            "r_bot": 71,
+            "c_right": 5,
+            "numeric_ratio": 0.5
+          },
+          "title_candidates": [
             {
-              "piece_type": "footnote",
+              "piece_type": "title",
               "text": "Adverse events, costs",
               "location": {
                 "r_top": 60,
                 "c_left": 1,
                 "r_bot": 60,
-                "c_right": 13
+                "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t118_t70_b45",
+              "source_table_id": "9814fc53f594ba29_b45_t24_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
+            }
+          ],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 60,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
             }
           ],
           "pieces_sent_to_coordinator": [],
@@ -1039,16 +1690,47 @@
           "llm_details": []
         },
         {
-          "table_id": "9814fc53f594ba29_t118_b70_t46",
+          "table_id": "9814fc53f594ba29_b45_b24_t46_top",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 72,
+            "c_left": 1,
+            "r_bot": 73,
+            "c_right": 13
+          },
+          "trimmed_bbox": {
+            "r_top": 73,
+            "c_left": 1,
+            "r_bot": 73,
+            "c_right": 5
+          },
+          "core_data_region": {
+            "r_top": 73,
+            "c_left": 1,
+            "r_bot": 73,
+            "c_right": 5,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
+          "sheet_name": "Inputs",
+          "original_bbox": {
+            "r_top": 74,
             "c_left": 1,
             "r_bot": 117,
             "c_right": 13
           },
           "trimmed_bbox": {
-            "r_top": 73,
+            "r_top": 74,
             "c_left": 1,
             "r_bot": 117,
             "c_right": 13
@@ -1068,11 +1750,11 @@
                 "r_top": 90,
                 "c_left": 1,
                 "r_bot": 90,
-                "c_right": 13
+                "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
             },
             {
               "piece_type": "title",
@@ -1081,26 +1763,26 @@
                 "r_top": 91,
                 "c_left": 1,
                 "r_bot": 91,
-                "c_right": 13
+                "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "single_cell_validated"
             }
           ],
           "header_row_candidates": [
             {
               "piece_type": "header_row",
-              "text": "TKI (Ponatinib) | 11984.89 | 11984.89 | Detailed calculation in the cost-effectiveness model",
+              "text": "TKI (Ponatinib) | =IF(E90=\"\",D90,E90) | =D45 | Detailed calculation in the cost-effectiveness model",
               "location": {
                 "r_top": 89,
                 "c_left": 1,
                 "r_bot": 89,
                 "c_right": 13
               },
-              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "column_count_validated=4"
             }
           ],
           "row_name_candidates": [],
@@ -1114,9 +1796,83 @@
                 "r_bot": 105,
                 "c_right": 13
               },
-              "source_table_id": "9814fc53f594ba29_t118_b70_t46",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
               "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
+              "decision_reason": "below_core_all_text"
+            }
+          ],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 85,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 90,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 91,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 105,
+              "separator_score": 0.9230769230769231,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.9230769230769231,
+              "reason": "High split score: separator=0.92"
+            },
+            {
+              "axis": "row",
+              "index": 74,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            },
+            {
+              "axis": "row",
+              "index": 79,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            },
+            {
+              "axis": "row",
+              "index": 80,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            },
+            {
+              "axis": "unknown",
+              "index": -1,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 0.8,
+              "reason": "Core (65 cells) is 11% of bbox (572 cells), 152 numeric cells scattered outside"
             }
           ],
           "pieces_sent_to_coordinator": [],
@@ -1124,7 +1880,7 @@
           "llm_details": []
         },
         {
-          "table_id": "9814fc53f594ba29_t118_b70_b46",
+          "table_id": "9814fc53f594ba29_b45_b24_b46_t2",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 118,
@@ -1149,12 +1905,13 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
         },
         {
-          "table_id": "9814fc53f594ba29_b118",
+          "table_id": "9814fc53f594ba29_b45_b24_b46_b2",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 120,
@@ -1179,6 +1936,7 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -1194,22 +1952,63 @@
       "sheet_name": "Introduction",
       "table_results": [
         {
-          "table_id": "f57ac8d2e4e4931a_t3",
+          "table_id": "f57ac8d2e4e4931a_t3_top",
           "sheet_name": "Introduction",
           "original_bbox": {
             "r_top": 10,
             "c_left": 2,
-            "r_bot": 12,
+            "r_bot": 10,
             "c_right": 4
           },
           "trimmed_bbox": {
             "r_top": 10,
             "c_left": 2,
-            "r_bot": 12,
+            "r_bot": 10,
             "c_right": 4
           },
           "core_data_region": {
             "r_top": 10,
+            "c_left": 2,
+            "r_bot": 10,
+            "c_right": 4,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 3,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "f57ac8d2e4e4931a_t3_bottom",
+          "sheet_name": "Introduction",
+          "original_bbox": {
+            "r_top": 11,
+            "c_left": 2,
+            "r_bot": 12,
+            "c_right": 4
+          },
+          "trimmed_bbox": {
+            "r_top": 12,
+            "c_left": 2,
+            "r_bot": 12,
+            "c_right": 4
+          },
+          "core_data_region": {
+            "r_top": 12,
             "c_left": 2,
             "r_bot": 12,
             "c_right": 4,
@@ -1219,6 +2018,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 3,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -1249,6 +2059,17 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "col",
+              "index": 3,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -1257,23 +2078,63 @@
       "coordinator": {
         "sheet_name": "Introduction",
         "pieces_from_tables": [],
-        "leftover_regions": []
+        "leftover_regions": [
+          {
+            "r_top": 2,
+            "c_left": 1,
+            "r_bot": 8,
+            "c_right": 4,
+            "text_preview": "Budget impact model for Inotuzumab Ozogamicin for the treatment of relapsed or refractory acute lymphoblastic leukaemia - Lebanon | Introduction | This budget impact model estimates the financial impl",
+            "source": "gap_scan"
+          }
+        ]
       }
     },
     {
       "sheet_name": "Results",
       "table_results": [
         {
-          "table_id": "262a4c0f1d47d09d",
+          "table_id": "262a4c0f1d47d09d_top",
           "sheet_name": "Results",
           "original_bbox": {
             "r_top": 3,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 4
+          },
+          "trimmed_bbox": {
+            "r_top": 3,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 4
+          },
+          "core_data_region": {
+            "r_top": 3,
+            "c_left": 1,
+            "r_bot": 3,
+            "c_right": 4,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "262a4c0f1d47d09d_bottom",
+          "sheet_name": "Results",
+          "original_bbox": {
+            "r_top": 4,
             "c_left": 1,
             "r_bot": 9,
             "c_right": 4
           },
           "trimmed_bbox": {
-            "r_top": 3,
+            "r_top": 4,
             "c_left": 1,
             "r_bot": 9,
             "c_right": 4
@@ -1286,38 +2147,66 @@
             "numeric_ratio": 0.9583
           },
           "title_candidates": [],
-          "header_row_candidates": [
-            {
-              "piece_type": "header_row",
-              "text": "Year | Without InO | With InO | Budget impact",
-              "location": {
-                "r_top": 3,
-                "c_left": 1,
-                "r_bot": 3,
-                "c_right": 4
-              },
-              "source_table_id": "262a4c0f1d47d09d",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
+          "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 4,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
         },
         {
-          "table_id": "47ecc07e130eef5f_t10",
+          "table_id": "47ecc07e130eef5f_t10_top",
           "sheet_name": "Results",
           "original_bbox": {
             "r_top": 47,
+            "c_left": 1,
+            "r_bot": 47,
+            "c_right": 11
+          },
+          "trimmed_bbox": {
+            "r_top": 47,
+            "c_left": 2,
+            "r_bot": 47,
+            "c_right": 7
+          },
+          "core_data_region": {
+            "r_top": 47,
+            "c_left": 2,
+            "r_bot": 47,
+            "c_right": 7,
+            "numeric_ratio": 0.0
+          },
+          "title_candidates": [],
+          "header_row_candidates": [],
+          "row_name_candidates": [],
+          "footnote_candidates": [],
+          "split_candidates": [],
+          "pieces_sent_to_coordinator": [],
+          "llm_decision_summaries": [],
+          "llm_details": []
+        },
+        {
+          "table_id": "47ecc07e130eef5f_t10_bottom",
+          "sheet_name": "Results",
+          "original_bbox": {
+            "r_top": 48,
             "c_left": 1,
             "r_bot": 56,
             "c_right": 11
           },
           "trimmed_bbox": {
-            "r_top": 47,
+            "r_top": 48,
             "c_left": 1,
             "r_bot": 56,
             "c_right": 11
@@ -1327,40 +2216,23 @@
             "c_left": 1,
             "r_bot": 56,
             "c_right": 11,
-            "numeric_ratio": 0.914
+            "numeric_ratio": 0.9247
           },
-          "title_candidates": [
-            {
-              "piece_type": "title",
-              "text": "Without InO | With InO",
-              "location": {
-                "r_top": 47,
-                "c_left": 1,
-                "r_bot": 47,
-                "c_right": 11
-              },
-              "source_table_id": "47ecc07e130eef5f_t10",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
-          "header_row_candidates": [
-            {
-              "piece_type": "header_row",
-              "text": "Without InO | With InO",
-              "location": {
-                "r_top": 47,
-                "c_left": 1,
-                "r_bot": 47,
-                "c_right": 11
-              },
-              "source_table_id": "47ecc07e130eef5f_t10",
-              "decision": "kept",
-              "decision_reason": "default (LLM disabled)"
-            }
-          ],
+          "title_candidates": [],
+          "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [
+            {
+              "axis": "row",
+              "index": 48,
+              "separator_score": 0.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 1.0,
+              "combined_score": 1.0,
+              "reason": "High split score: changepoint=1.00"
+            }
+          ],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -1391,6 +2263,7 @@
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
+          "split_candidates": [],
           "pieces_sent_to_coordinator": [],
           "llm_decision_summaries": [],
           "llm_details": []
@@ -1403,7 +2276,7 @@
       }
     }
   ],
-  "elapsed_seconds": 2.62,
-  "n_tables_processed": 37,
+  "elapsed_seconds": 1.39,
+  "n_tables_processed": 46,
   "n_llm_calls": 0
 }

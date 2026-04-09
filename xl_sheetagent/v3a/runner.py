@@ -102,17 +102,76 @@ def run_v3a(
     all_sheet_results: List[V3ASheetResult] = []
 
     def _process_sheet(sheet_name: str, table_views: list) -> V3ASheetResult:
-        """Process one sheet: per-thread workbook, sequential table agents, coordinator."""
+        """Process one sheet with two-pass architecture (Phase 4).
+
+        Pass 1: Detect on all tables
+        Pass 2: Split flagged tables and re-detect children
+        """
         wb_local = openpyxl.load_workbook(
-            upstream.workbook_path, data_only=True, read_only=True,
+            upstream.workbook_path, data_only=False, read_only=True,
         )
         ws_local = wb_local[sheet_name]
 
-        # Run table agents sequentially within the sheet
-        table_results = []
+        # --- PASS 1: Initial detection ---
+        first_pass_results = []
+        tables_needing_split = []
+
         for tv in table_views:
-            result = run_table_agent(tv, ws_local, config, llm_fn=llm_fn)
-            table_results.append(result)
+            result = run_table_agent(
+                tv, ws_local, config,
+                llm_fn=llm_fn,
+                cut_scores=upstream.cut_scores,
+            )
+            first_pass_results.append(result)
+
+            # Check if split needed
+            if result.split_candidates:
+                tables_needing_split.append((tv, result))
+
+        # --- PASS 2: Split and re-detect (if enabled) ---
+        if getattr(config, "v3a_two_pass_enabled", False) and tables_needing_split:
+            from .split_agent import decide_split
+            from .cell_analysis import read_cell_grid, classify_grid
+
+            final_table_results = []
+
+            for tv, first_result in tables_needing_split:
+                # Re-read grid for split decision
+                grid, data_types = read_cell_grid(
+                    ws_local, tv.r_top, tv.c_left, tv.r_bot, tv.c_right
+                )
+                types = classify_grid(grid, data_types)
+
+                split_decision = decide_split(
+                    grid, types, tv.r_top, tv.c_left, tv.r_bot, tv.c_right,
+                    first_result.core_data_region, first_result.split_candidates, config,
+                )
+
+                if split_decision:
+                    # Split into child tables
+                    child_tables = _split_table(tv, split_decision)
+
+                    # Re-run detection on each child
+                    for child_tv in child_tables:
+                        child_result = run_table_agent(
+                            child_tv, ws_local, config,
+                            llm_fn=llm_fn,
+                            cut_scores=upstream.cut_scores,
+                        )
+                        final_table_results.append(child_result)
+                else:
+                    # Split decision rejected, keep original
+                    final_table_results.append(first_result)
+
+            # Add tables that didn't need splitting
+            for tv, first_result in zip(table_views, first_pass_results):
+                if (tv, first_result) not in tables_needing_split:
+                    final_table_results.append(first_result)
+
+            table_results = final_table_results
+        else:
+            # No two-pass or no splits needed
+            table_results = first_pass_results
 
         # Run sheet coordinator
         coordinator = collect_sheet(
@@ -184,3 +243,73 @@ def run_v3a(
     )
 
     return run_result
+
+
+# ---------------------------------------------------------------------------
+# Phase 4: Two-Pass Split Helper
+# ---------------------------------------------------------------------------
+
+def _split_table(table_view, split_decision):
+    """
+    Split table into two children based on split decision.
+
+    Parameters
+    ----------
+    table_view : TableView
+        Original table view to split
+    split_decision : SplitDecision
+        Decision from split agent
+
+    Returns
+    -------
+    list[TableView]
+        [top_child, bottom_child] for row splits
+        [left_child, right_child] for col splits
+
+    Notes
+    -----
+    Only row splits supported in Phase 4. Column splits deferred to v3b.
+    """
+    from copy import copy
+
+    if split_decision.split_axis != "row":
+        # Only row splits supported for now
+        _log.warning(
+            "Table %s: Column split requested but not yet supported, keeping original",
+            table_view.table_id,
+        )
+        return [table_view]
+
+    split_row = split_decision.split_index
+    cut_side = split_decision.cut_side
+
+    if cut_side == "bottom":
+        # Split row belongs to bottom child
+        top = copy(table_view)
+        top.table_id = f"{table_view.table_id}_top"
+        top.r_bot = split_row - 1
+        top.n_rows = top.r_bot - top.r_top + 1
+
+        bottom = copy(table_view)
+        bottom.table_id = f"{table_view.table_id}_bottom"
+        bottom.r_top = split_row
+        bottom.n_rows = bottom.r_bot - bottom.r_top + 1
+    else:  # cut_side == "top"
+        # Split row belongs to top child
+        top = copy(table_view)
+        top.table_id = f"{table_view.table_id}_top"
+        top.r_bot = split_row
+        top.n_rows = top.r_bot - top.r_top + 1
+
+        bottom = copy(table_view)
+        bottom.table_id = f"{table_view.table_id}_bottom"
+        bottom.r_top = split_row + 1
+        bottom.n_rows = bottom.r_bot - bottom.r_top + 1
+
+    _log.info(
+        "Table %s split at row %d (%s): top=%s (%d rows), bottom=%s (%d rows)",
+        table_view.table_id, split_row, cut_side,
+        top.table_id, top.n_rows, bottom.table_id, bottom.n_rows,
+    )
+
+    return [top, bottom]

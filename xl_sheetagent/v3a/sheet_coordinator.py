@@ -4,8 +4,9 @@ V3A Sheet Coordinator.
 VERY IMPORTANT design constraint: the coordinator is ONLY a container.
 
 It should collect:
-  - all pieces sent from table agents
+  - all pieces sent from table agents (only when LLM is enabled in v3b)
   - leftover text regions on the sheet that are outside all table bboxes
+    (from xl_parse rejected_blocks.jsonl that don't overlap with final tables)
 
 It should NOT:
   - resolve titles
@@ -14,6 +15,12 @@ It should NOT:
   - merge anything
 
 No intelligence — only storage.
+
+NOTE: In v3a (no LLM), the coordinator will typically be empty because:
+  - All candidates are kept with their tables by default (no LLM ownership decisions)
+  - Most rejected blocks from xl_parse overlap with final tables (filtered out)
+
+In v3b (with LLM), pieces that don't belong to specific tables will appear here.
 """
 
 from __future__ import annotations
@@ -61,10 +68,11 @@ def collect_sheet(
     for tr in table_results:
         pieces_from_tables.extend(tr.pieces_sent_to_coordinator)
 
-    # 2. Collect leftover text regions from rejected blocks
+    # 2. Collect leftover text regions
     leftover_regions: List[LeftoverRegion] = []
     table_bboxes = _get_table_bboxes(table_results)
 
+    # 2a. From rejected blocks
     for rb in rejected_blocks:
         if rb.get("sheet_name") != sheet_name:
             continue
@@ -82,7 +90,7 @@ def collect_sheet(
         if ws is not None:
             text_preview = _read_region_preview(ws, r_top, c_left, r_bot, c_right)
 
-        if text_preview or ws is None:
+        if text_preview:
             leftover_regions.append(LeftoverRegion(
                 r_top=r_top,
                 c_left=c_left,
@@ -91,6 +99,11 @@ def collect_sheet(
                 text_preview=text_preview,
                 source="rejected_block",
             ))
+
+    # 2b. Scan for gap regions (text cells not covered by any table bbox)
+    if ws is not None:
+        gap_regions = _scan_gap_regions(ws, table_bboxes)
+        leftover_regions.extend(gap_regions)
 
     _log.debug(
         "Sheet %s coordinator: %d pieces from tables, %d leftover regions",
@@ -183,3 +196,83 @@ def _read_region_preview(ws, r_top: int, c_left: int, r_bot: int, c_right: int, 
     if len(result) > max_chars:
         result = result[:max_chars] + "..."
     return result
+
+
+def _scan_gap_regions(ws, table_bboxes: List[tuple], max_scan_rows: int = 500, max_scan_cols: int = 100) -> List[LeftoverRegion]:
+    """Scan the sheet for text cells not covered by any table bbox.
+
+    Groups nearby text cells into gap regions.
+    """
+    gap_regions = []
+
+    # Build set of cells covered by table bboxes
+    covered_cells = set()
+    for r_top, c_left, r_bot, c_right in table_bboxes:
+        for r in range(r_top, r_bot + 1):
+            for c in range(c_left, c_right + 1):
+                covered_cells.add((r, c))
+
+    # Scan sheet for non-empty cells not in tables
+    text_cells = []
+    for row_idx, row in enumerate(ws.iter_rows(max_row=max_scan_rows, max_col=max_scan_cols)):
+        for col_idx, cell in enumerate(row):
+            # Use indices from enumerate instead of cell.row/column (handles EmptyCell)
+            r = row_idx  # Already 0-indexed from enumerate
+            c = col_idx  # Already 0-indexed from enumerate
+            if (r, c) in covered_cells:
+                continue
+            if cell.value is not None and str(cell.value).strip():
+                text_cells.append((r, c, str(cell.value).strip()))
+
+    if not text_cells:
+        return gap_regions
+
+    # Group nearby text cells into regions (simple clustering by proximity)
+    text_cells.sort()  # Sort by (row, col)
+
+    current_region_cells = [text_cells[0]]
+
+    for i in range(1, len(text_cells)):
+        r, c, v = text_cells[i]
+        prev_r, prev_c, prev_v = current_region_cells[-1]
+
+        # If close to previous cell (within 5 rows/cols), add to current region
+        if abs(r - prev_r) <= 5 and abs(c - prev_c) <= 5:
+            current_region_cells.append(text_cells[i])
+        else:
+            # Finalize current region
+            if len(current_region_cells) >= 2:  # At least 2 cells
+                _finalize_gap_region(current_region_cells, gap_regions)
+            # Start new region
+            current_region_cells = [text_cells[i]]
+
+    # Finalize last region
+    if len(current_region_cells) >= 2:
+        _finalize_gap_region(current_region_cells, gap_regions)
+
+    return gap_regions
+
+
+def _finalize_gap_region(cells: List[tuple], gap_regions: List[LeftoverRegion]):
+    """Convert a group of text cells into a LeftoverRegion."""
+    rows = [r for r, c, v in cells]
+    cols = [c for r, c, v in cells]
+    values = [v for r, c, v in cells]
+
+    r_top = min(rows)
+    r_bot = max(rows)
+    c_left = min(cols)
+    c_right = max(cols)
+
+    text_preview = " | ".join(values[:10])
+    if len(values) > 10:
+        text_preview += f" | ... ({len(values)} cells)"
+
+    gap_regions.append(LeftoverRegion(
+        r_top=r_top,
+        c_left=c_left,
+        r_bot=r_bot,
+        c_right=c_right,
+        text_preview=text_preview[:200],
+        source="gap_scan",
+    ))

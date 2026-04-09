@@ -41,6 +41,35 @@ class CandidatePiece:
 
 
 # ---------------------------------------------------------------------------
+# Split candidate record (from cut_scores.jsonl)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class SplitCandidate:
+    """A potential internal split detected from xl_parse cut_scores."""
+    axis: str               # "row" | "col"
+    index: int              # absolute row/col index
+    separator_score: float
+    header_restart_score: float
+    changepoint_score: float
+    combined_score: float
+    reason: str             # why this split was flagged
+
+
+@dataclass
+class SplitDecision:
+    """Decision from Split Agent (Phase 4).
+
+    Concrete decision on whether/where to split a table.
+    """
+    split_axis: str         # "row" | "col"
+    split_index: int        # absolute row/col index where split occurs
+    cut_side: str           # "top" | "bottom" (row) or "left" | "right" (col)
+    reason: str             # human-readable explanation
+    confidence: float       # combined score from split candidate (0.0-1.0)
+
+
+# ---------------------------------------------------------------------------
 # LLM decision record
 # ---------------------------------------------------------------------------
 
@@ -73,6 +102,9 @@ class TableAgentResult:
     header_row_candidates: List[CandidatePiece] = field(default_factory=list)
     row_name_candidates: List[CandidatePiece] = field(default_factory=list)
     footnote_candidates: List[CandidatePiece] = field(default_factory=list)
+
+    # Split candidates (flagged, not applied)
+    split_candidates: List[SplitCandidate] = field(default_factory=list)
 
     # Pieces sent to sheet coordinator
     pieces_sent_to_coordinator: List[CandidatePiece] = field(default_factory=list)

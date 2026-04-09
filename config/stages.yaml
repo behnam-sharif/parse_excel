@@ -264,7 +264,7 @@ xl_sheetagent:
   ontology_hint_enabled: true
 
   # V3A clean redesign (table agents + sheet coordinator)
-  v3a_enabled: false
+  v3a_enabled: true
   v3a_margin_trim: true
   v3a_core_numeric_ratio: 0.40
   v3a_title_scan_rows: 5
@@ -273,6 +273,23 @@ xl_sheetagent:
   v3a_llm_model: "gpt-4o-mini"
   v3a_llm_max_tokens: 512
   v3a_max_parallel_sheets: 4
+  v3a_split_threshold: 0.5
+
+  # V3A Phase 1-3: Enhanced validation and heuristics
+  v3a_header_column_validation: true      # Validate header col count matches core
+  v3a_numeric_header_fallback: true       # Always try numeric header fallback
+  v3a_title_single_cell_strict: true      # Enforce single-cell title rule
+  v3a_footnote_all_text_strict: true      # Use all-text heuristic (not ratio)
+
+  # V3A Phase 2: Formatting analysis
+  v3a_formatting_analysis_enabled: true   # Enable bold/fill detection
+  v3a_formatting_long_text_threshold: 50  # Flag row names if avg > 50 chars
+
+  # V3A Phase 4: Two-pass split architecture
+  v3a_two_pass_enabled: true              # Enable split-and-redetect
+  v3a_split_core_bbox_ratio: 0.5          # Flag if core < 50% of bbox
+  v3a_split_min_numeric_outside: 10       # Min numeric cells outside core
+  v3a_split_max_depth: 2                  # Max recursive split depth (safety)
 
 xl_image:
   adaptive_enabled: true
