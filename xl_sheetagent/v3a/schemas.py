@@ -112,6 +112,13 @@ class TableAgentResult:
     # LLM decision audit trail
     llm_decisions: List[LLMDecisionRecord] = field(default_factory=list)
 
+    # --- PHASE 4+: Hierarchy metadata (v3a.1.0) ---
+    parent_table_id: Optional[str] = None
+    split_depth: int = 0
+    children: List['TableAgentResult'] = field(default_factory=list)
+    split_decision_applied: Optional[SplitDecision] = None
+    hierarchy_role: str = "standalone"  # "standalone" | "parent" | "child_numeric" | "child_metadata"
+
 
 # ---------------------------------------------------------------------------
 # Sheet coordinator result

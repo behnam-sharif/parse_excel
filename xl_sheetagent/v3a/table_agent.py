@@ -51,6 +51,8 @@ def run_table_agent(
     config,
     llm_fn=None,
     cut_scores=None,
+    parent_id: Optional[str] = None,
+    split_depth: int = 0,
 ) -> TableAgentResult:
     """Run the table agent for a single table.
 
@@ -67,6 +69,10 @@ def run_table_agent(
         If None or config.v3a_skip_llm is True, all candidates are kept by default.
     cut_scores : list[dict], optional
         Cut scores from xl_parse (cut_scores.jsonl) for split detection.
+    parent_id : str, optional
+        Parent table ID if this is a child from splitting (Phase 4+).
+    split_depth : int, optional
+        Depth in split hierarchy (0=root, 1=child, 2=grandchild, etc.)
 
     Returns
     -------
@@ -132,31 +138,46 @@ def run_table_agent(
     # Phase 4: Pass core and types for Trigger 2 detection
     split_cands = _detect_splits(sn, r_top, c_left, r_bot, c_right, cut_scores, config, core, types)
 
-    # 5-7. Scan for candidates
-    title_cands = _scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
+    # 4b. Determine hierarchy role (Phase 4+)
+    hierarchy_role = _determine_hierarchy_role(core, parent_id)
 
-    # Try text headers first, fallback to numeric headers if none found
-    header_cands = _scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
-    if not header_cands:
-        _log.debug("Table %s: No text headers found, trying numeric header fallback", tid)
-        header_cands = _scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
+    # 5-7. Scan for candidates (hierarchy-aware)
+    if getattr(config, "v3a_hierarchical_splits", False):
+        # NEW: Conditional candidate collection based on hierarchy role
+        all_candidates = _collect_candidates_by_role(
+            hierarchy_role, grid, types, r_top, c_left, r_bot, c_right,
+            core, tid, ws, config, split_cands
+        )
+        title_cands = [c for c in all_candidates if c.piece_type == "title"]
+        header_cands = [c for c in all_candidates if c.piece_type == "header_row"]
+        rowname_cands = [c for c in all_candidates if c.piece_type == "row_name"]
+        footnote_cands = [c for c in all_candidates if c.piece_type == "footnote"]
+    else:
+        # LEGACY: Original behavior (collect all candidates)
+        title_cands = _scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
 
-    # Phase 2: Formatting analysis - unpack tuple return and handle split flag
-    rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
-    if rowname_split_flag:
-        split_cands.append(SplitCandidate(
-            axis="unknown",
-            index=-1,
-            separator_score=0.0,
-            header_restart_score=0.0,
-            changepoint_score=0.0,
-            combined_score=0.75,  # High score to trigger split
-            reason="Row names column has mixed formatting or very long text",
-        ))
+        # Try text headers first, fallback to numeric headers if none found
+        header_cands = _scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
+        if not header_cands:
+            _log.debug("Table %s: No text headers found, trying numeric header fallback", tid)
+            header_cands = _scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
 
-    footnote_cands = _scan_footnotes(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
+        # Phase 2: Formatting analysis - unpack tuple return and handle split flag
+        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        if rowname_split_flag:
+            split_cands.append(SplitCandidate(
+                axis="unknown",
+                index=-1,
+                separator_score=0.0,
+                header_restart_score=0.0,
+                changepoint_score=0.0,
+                combined_score=0.75,  # High score to trigger split
+                reason="Row names column has mixed formatting or very long text",
+            ))
 
-    all_candidates = title_cands + header_cands + rowname_cands + footnote_cands
+        footnote_cands = _scan_footnotes(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
+
+        all_candidates = title_cands + header_cands + rowname_cands + footnote_cands
 
     # 8. LLM ownership decisions
     llm_decisions: List[LLMDecisionRecord] = []
@@ -192,6 +213,11 @@ def run_table_agent(
         split_candidates=split_cands,
         pieces_sent_to_coordinator=pieces_sent,
         llm_decisions=llm_decisions,
+        # Phase 4+: Hierarchy metadata
+        parent_table_id=parent_id,
+        split_depth=split_depth,
+        hierarchy_role=hierarchy_role,
+        # children populated later by runner
     )
 
 
@@ -525,9 +551,15 @@ def _scan_row_names(
         if has_formula:
             break
 
-    # Reject if formulas present
-    if has_formula:
+    # Phase 4+: Don't reject formulas if config allows, just flag for quality
+    allow_formulas = getattr(config, "v3a_row_names_allow_formulas", False) if hasattr(config, "v3a_row_names_allow_formulas") else False
+
+    if has_formula and not allow_formulas:
+        # LEGACY: Reject if formulas present
         return candidates, should_flag_for_split
+
+    if has_formula:
+        _log.debug("Table %s: Row names contain formulas (quality concern)", tid)
 
     text_parts = []
     for r in range(core_r_start, core_r_end + 1):
@@ -581,6 +613,11 @@ def _scan_row_names(
             _log.warning("Table %s: Formatting analysis failed: %s", tid, e)
 
     # Build candidate with metadata
+    metadata_parts = []
+    if has_formula:
+        metadata_parts.append("formulas_present")
+    metadata_parts.extend(formatting_notes)
+
     candidate = CandidatePiece(
         piece_type="row_name",
         text=combined_text,
@@ -590,7 +627,7 @@ def _scan_row_names(
         ),
         source_table_id=tid,
         decision="pending",
-        decision_reason=", ".join(formatting_notes) if formatting_notes else "",
+        decision_reason=", ".join(metadata_parts) if metadata_parts else "",
     )
 
     candidates.append(candidate)
@@ -687,6 +724,126 @@ def _scan_footnotes(
 
 def _bbox_dict(r_top: int, c_left: int, r_bot: int, c_right: int) -> dict:
     return {"r_top": r_top, "c_left": c_left, "r_bot": r_bot, "c_right": c_right}
+
+
+# ---------------------------------------------------------------------------
+# Phase 4+: Hierarchy-aware candidate collection
+# ---------------------------------------------------------------------------
+
+def _determine_hierarchy_role(core: Optional[CoreDataRegion], parent_id: Optional[str]) -> str:
+    """
+    Determine hierarchy role based on context (Phase 4+).
+
+    Rules:
+    - No parent → standalone table
+    - Has parent + 0% numeric → metadata child (header/title candidate)
+    - Has parent + >0% numeric → data child
+
+    Parameters
+    ----------
+    core : CoreDataRegion or None
+        Core data region
+    parent_id : str or None
+        Parent table ID if this is a child
+
+    Returns
+    -------
+    str
+        "standalone" | "parent" | "child_numeric" | "child_metadata"
+    """
+    if parent_id is None:
+        return "standalone"
+
+    if core and core.numeric_ratio == 0.0:
+        return "child_metadata"  # 0% numeric → metadata candidate
+
+    return "child_numeric"  # Has parent and has numbers → data child
+
+
+def _collect_candidates_by_role(
+    hierarchy_role: str,
+    grid, types, r_top, c_left, r_bot, c_right,
+    core, tid, ws, config, split_cands,
+) -> List[CandidatePiece]:
+    """
+    Collect candidates based on hierarchy role (Phase 4+).
+
+    Requirements table:
+    | Role             | Collect                           |
+    |------------------|-----------------------------------|
+    | standalone       | TITLE + HEADER + ROW_NAME + FOOTNOTE |
+    | parent           | TITLE + HEADER only               |
+    | child_numeric    | TITLE + ROW_NAME + FOOTNOTE       |
+    | child_metadata   | HEADER/TITLE candidate for siblings |
+
+    Parameters
+    ----------
+    hierarchy_role : str
+        One of: "standalone", "parent", "child_numeric", "child_metadata"
+    ... (same as individual scan functions)
+
+    Returns
+    -------
+    List[CandidatePiece]
+        All candidates for this table based on its role
+    """
+    candidates = []
+
+    if hierarchy_role == "child_metadata":
+        # Special: 0% numeric child → treat as potential header for parent
+        _log.debug("Table %s: child_metadata role (0%% numeric) - collecting title+header", tid)
+        candidates.extend(_scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        candidates.extend(_scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+
+    elif hierarchy_role == "parent":
+        # Parent with children → only TITLE + HEADER
+        _log.debug("Table %s: parent role - collecting title+header", tid)
+        candidates.extend(_scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        candidates.extend(_scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        # Fallback to numeric headers if none found
+        if not any(c.piece_type == "header_row" for c in candidates):
+            candidates.extend(_scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+
+    elif hierarchy_role == "child_numeric":
+        # Data child → TITLE + ROW_NAME + FOOTNOTE (no HEADER - inherited from parent)
+        _log.debug("Table %s: child_numeric role - collecting title+rowname+footnote", tid)
+        candidates.extend(_scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        candidates.extend(rowname_cands)
+        if rowname_split_flag:
+            split_cands.append(SplitCandidate(
+                axis="unknown",
+                index=-1,
+                separator_score=0.0,
+                header_restart_score=0.0,
+                changepoint_score=0.0,
+                combined_score=0.75,
+                reason="Row names column has mixed formatting or very long text",
+            ))
+        candidates.extend(_scan_footnotes(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+
+    else:  # standalone
+        # Collect everything
+        _log.debug("Table %s: standalone role - collecting all candidates", tid)
+        candidates.extend(_scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        candidates.extend(_scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        if not any(c.piece_type == "header_row" for c in candidates):
+            candidates.extend(_scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        candidates.extend(rowname_cands)
+        if rowname_split_flag:
+            split_cands.append(SplitCandidate(
+                axis="unknown",
+                index=-1,
+                separator_score=0.0,
+                header_restart_score=0.0,
+                changepoint_score=0.0,
+                combined_score=0.75,
+                reason="Row names column has mixed formatting or very long text",
+            ))
+        candidates.extend(_scan_footnotes(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
+
+    return candidates
 
 
 def _build_table_context(table_view, core, grid, r_top, c_left) -> dict:

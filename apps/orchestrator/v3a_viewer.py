@@ -27,12 +27,18 @@ from xl_table.coords import bbox_to_excel_range
 
 
 def render_v3a_results(run_result) -> None:
-    """Render V3A results in the Streamlit main area."""
+    """Render V3A results in the Streamlit main area (Phase 6: hierarchy support)."""
+    # Check if hierarchical (v3a.1.0+)
+    is_hierarchical = getattr(run_result, 'version', '') >= '3a.1.0'
+
     st.success(
         f"V3A complete — {run_result.n_tables_processed} tables across "
         f"{len(run_result.sheets)} sheets ({run_result.elapsed_seconds:.2f}s, "
         f"{run_result.n_llm_calls} LLM calls)"
     )
+
+    if is_hierarchical:
+        st.info("📦 Hierarchical mode enabled (v3a.1.0+)")
 
     # Summary metrics
     c1, c2, c3, c4 = st.columns(4)
@@ -93,10 +99,10 @@ def render_v3a_from_json(output_path: str) -> None:
 # ---------------------------------------------------------------------------
 
 def _render_sheet(sheet_result) -> None:
-    """Render one sheet's V3A results."""
+    """Render one sheet's V3A results (Phase 6: hierarchy support)."""
     st.markdown(f"### Sheet: {sheet_result.sheet_name}")
 
-    # Tables
+    # Tables - render hierarchically if children present
     for i, tr in enumerate(sheet_result.table_results):
         bbox = tr.original_bbox
         excel_range = bbox_to_excel_range(
@@ -104,25 +110,64 @@ def _render_sheet(sheet_result) -> None:
         )
         # Table name format: Table1_SheetName_B3:N48
         table_name = f"Table{i+1}_{tr.sheet_name}_{excel_range}"
+
+        # Add hierarchy badge
+        hierarchy_badge = _get_hierarchy_badge(tr)
+        if hierarchy_badge:
+            table_name = f"{hierarchy_badge} {table_name}"
+
         with st.expander(
             table_name,
             expanded=(i == 0),
         ):
-            _render_table_result_obj(tr)
+            _render_table_result_obj(tr, depth=0)
 
     # Coordinator
     with st.expander("Sheet Coordinator", expanded=False):
         _render_coordinator_obj(sheet_result.coordinator)
 
 
-def _render_table_result_obj(tr) -> None:
-    """Render a single table agent result from object."""
+def _get_hierarchy_badge(tr) -> str:
+    """Get emoji badge for hierarchy role (Phase 6)."""
+    role = getattr(tr, 'hierarchy_role', 'standalone')
+
+    if role == 'parent':
+        n_children = len(getattr(tr, 'children', []))
+        return f"📦 Parent ({n_children} children)"
+    elif role == 'child_numeric':
+        return "📊 Child (data)"
+    elif role == 'child_metadata':
+        return "📝 Child (metadata)"
+    else:
+        return ""
+
+
+def _render_table_result_obj(tr, depth: int = 0) -> None:
+    """Render a single table agent result from object (Phase 6: hierarchy support)."""
+    indent = "  " * depth
+
+    # Hierarchy metadata (v3a.1.0+)
+    if hasattr(tr, 'hierarchy_role'):
+        role = tr.hierarchy_role
+        split_depth = getattr(tr, 'split_depth', 0)
+        parent_id = getattr(tr, 'parent_table_id', None)
+
+        if role == 'parent':
+            st.info(f"{indent}📦 **Parent Table** (split into {len(tr.children)} children)")
+        elif role == 'child_numeric':
+            st.success(f"{indent}📊 **Child Table** (numeric data, depth={split_depth})")
+        elif role == 'child_metadata':
+            st.warning(f"{indent}📝 **Child Table** (metadata - 0% numeric, depth={split_depth})")
+
+        if parent_id:
+            st.caption(f"{indent}Parent: `{parent_id}`")
+
     # Trimmed bbox
     trimmed_range = bbox_to_excel_range(
         tr.trimmed_bbox['r_top'], tr.trimmed_bbox['c_left'],
         tr.trimmed_bbox['r_bot'], tr.trimmed_bbox['c_right']
     )
-    st.markdown(f"**Trimmed bbox**: {trimmed_range}")
+    st.markdown(f"{indent}**Trimmed bbox**: {trimmed_range}")
 
     # Core data region
     if tr.core_data_region:
@@ -131,57 +176,73 @@ def _render_table_result_obj(tr) -> None:
             tr.core_data_region.r_bot, tr.core_data_region.c_right
         )
         st.markdown(
-            f"**Core data region**: {core_range} "
+            f"{indent}**Core data region**: {core_range} "
             f"(numeric ratio: {tr.core_data_region.numeric_ratio:.2%})"
         )
     else:
-        st.warning("No core data region detected")
+        st.warning(f"{indent}No core data region detected")
 
     # Split candidates
     if tr.split_candidates:
-        st.warning(f"⚠️ **Potential internal splits detected**: {len(tr.split_candidates)}")
+        st.warning(f"{indent}⚠️ **Potential internal splits detected**: {len(tr.split_candidates)}")
         for sc in tr.split_candidates:
             axis_label = "row" if sc.axis == "row" else "col"
             st.caption(
-                f"  [{axis_label} {sc.index}] score={sc.combined_score:.2f} — {sc.reason}"
+                f"{indent}  [{axis_label} {sc.index}] score={sc.combined_score:.2f} — {sc.reason}"
             )
 
     # Candidate groups
-    _show_candidates("Title candidates", tr.title_candidates)
-    _show_candidates("Header row candidates", tr.header_row_candidates)
-    _show_candidates("Row name candidates", tr.row_name_candidates)
-    _show_candidates("Footnote candidates", tr.footnote_candidates)
+    _show_candidates("Title candidates", tr.title_candidates, indent)
+    _show_candidates("Header row candidates", tr.header_row_candidates, indent)
+    _show_candidates("Row name candidates", tr.row_name_candidates, indent)
+    _show_candidates("Footnote candidates", tr.footnote_candidates, indent)
 
     # Sent to coordinator
     if tr.pieces_sent_to_coordinator:
-        st.markdown(f"**Sent to coordinator**: {len(tr.pieces_sent_to_coordinator)} pieces")
+        st.markdown(f"{indent}**Sent to coordinator**: {len(tr.pieces_sent_to_coordinator)} pieces")
         for p in tr.pieces_sent_to_coordinator:
-            st.caption(f"[{p.piece_type}] {p.text[:100]} — reason: {p.decision_reason}")
+            st.caption(f"{indent}[{p.piece_type}] {p.text[:100]} — reason: {p.decision_reason}")
 
     # LLM decisions
     if tr.llm_decisions:
-        st.markdown(f"**LLM decisions**: {len(tr.llm_decisions)}")
+        st.markdown(f"{indent}**LLM decisions**: {len(tr.llm_decisions)}")
         for dec in tr.llm_decisions:
             st.caption(
-                f"[{dec.piece_type}] {dec.decision} — {dec.reason}"
+                f"{indent}[{dec.piece_type}] {dec.decision} — {dec.reason}"
             )
-        with st.expander("Full LLM payloads", expanded=False):
+        with st.expander(f"{indent}Full LLM payloads", expanded=False):
             for j, dec in enumerate(tr.llm_decisions):
-                st.markdown(f"**Decision {j+1}**")
+                st.markdown(f"{indent}**Decision {j+1}**")
                 st.text(f"Prompt:\n{dec.full_prompt[:500]}")
                 st.text(f"Response:\n{dec.full_response[:500]}")
 
+    # Phase 6: Render children recursively
+    if hasattr(tr, 'children') and tr.children:
+        st.markdown(f"{indent}---")
+        st.markdown(f"{indent}**Children** ({len(tr.children)}):")
+        for i, child in enumerate(tr.children):
+            child_bbox = child.original_bbox
+            child_range = bbox_to_excel_range(
+                child_bbox['r_top'], child_bbox['c_left'],
+                child_bbox['r_bot'], child_bbox['c_right']
+            )
+            child_badge = _get_hierarchy_badge(child)
+            child_name = f"{child_badge} {child.table_id} ({child_range})"
 
-def _show_candidates(label: str, candidates) -> None:
-    """Show a candidate group."""
+            with st.expander(f"{indent}  Child {i+1}: {child_name}", expanded=False):
+                _render_table_result_obj(child, depth=depth+1)
+
+
+def _show_candidates(label: str, candidates, indent: str = "") -> None:
+    """Show a candidate group (Phase 6: indent support)."""
     if not candidates:
         return
-    st.markdown(f"**{label}** ({len(candidates)})")
+    st.markdown(f"{indent}**{label}** ({len(candidates)})")
     for c in candidates:
         loc = c.location
         icon = "kept" if c.decision == "kept" else "sent"
         st.caption(
-            f"  [{icon}] row {loc['r_top']}-{loc['r_bot']}, "
+            f"{indent}  [{icon}] row {loc['r_top']}-{loc['r_bot']}, "
             f"col {loc['c_left']}-{loc['c_right']}: "
             f"\"{c.text[:120]}\" — {c.decision_reason}"
         )
@@ -206,7 +267,7 @@ def _render_coordinator_obj(coordinator) -> None:
 # ---------------------------------------------------------------------------
 
 def _render_sheet_from_dict(sheet_data: dict) -> None:
-    """Render one sheet's V3A results from a JSON dict."""
+    """Render one sheet's V3A results from a JSON dict (Phase 6: hierarchy support)."""
     st.markdown(f"### Sheet: {sheet_data['sheet_name']}")
 
     for i, tr in enumerate(sheet_data.get("table_results", [])):
@@ -221,19 +282,59 @@ def _render_sheet_from_dict(sheet_data: dict) -> None:
         # Table name format: Table1_SheetName_B3:N48
         sheet_name = tr.get("sheet_name", sheet_data.get("sheet_name", "?"))
         table_name = f"Table{i+1}_{sheet_name}_{excel_range}"
+
+        # Add hierarchy badge
+        hierarchy_badge = _get_hierarchy_badge_from_dict(tr)
+        if hierarchy_badge:
+            table_name = f"{hierarchy_badge} {table_name}"
+
         with st.expander(
             table_name,
             expanded=(i == 0),
         ):
-            _render_table_from_dict(tr)
+            _render_table_from_dict(tr, depth=0)
 
     coord = sheet_data.get("coordinator", {})
     with st.expander("Sheet Coordinator", expanded=False):
         _render_coordinator_from_dict(coord)
 
 
-def _render_table_from_dict(tr: dict) -> None:
-    """Render a table result from JSON dict."""
+def _get_hierarchy_badge_from_dict(tr: dict) -> str:
+    """Get emoji badge for hierarchy role from dict (Phase 6)."""
+    role = tr.get('hierarchy_role', 'standalone')
+
+    if role == 'parent':
+        n_children = len(tr.get('children', []))
+        return f"📦 Parent ({n_children} children)"
+    elif role == 'child_numeric':
+        return "📊 Child (data)"
+    elif role == 'child_metadata':
+        return "📝 Child (metadata)"
+    else:
+        return ""
+
+
+def _render_table_from_dict(tr: dict, depth: int = 0) -> None:
+    """Render a table result from JSON dict (Phase 6: hierarchy support)."""
+    indent = "  " * depth
+
+    # Hierarchy metadata (v3a.1.0+)
+    role = tr.get('hierarchy_role', 'standalone')
+    if role != 'standalone':
+        split_depth = tr.get('split_depth', 0)
+        parent_id = tr.get('parent_table_id')
+
+        if role == 'parent':
+            n_children = len(tr.get('children', []))
+            st.info(f"{indent}📦 **Parent Table** (split into {n_children} children)")
+        elif role == 'child_numeric':
+            st.success(f"{indent}📊 **Child Table** (numeric data, depth={split_depth})")
+        elif role == 'child_metadata':
+            st.warning(f"{indent}📝 **Child Table** (metadata - 0% numeric, depth={split_depth})")
+
+        if parent_id:
+            st.caption(f"{indent}Parent: `{parent_id}`")
+
     # Trimmed bbox
     trimmed_bbox = tr.get("trimmed_bbox", {})
     try:
@@ -241,9 +342,9 @@ def _render_table_from_dict(tr: dict) -> None:
             trimmed_bbox.get('r_top', 0), trimmed_bbox.get('c_left', 0),
             trimmed_bbox.get('r_bot', 0), trimmed_bbox.get('c_right', 0)
         )
-        st.markdown(f"**Trimmed bbox**: {trimmed_range}")
+        st.markdown(f"{indent}**Trimmed bbox**: {trimmed_range}")
     except Exception:
-        st.markdown("**Trimmed bbox**: ?")
+        st.markdown(f"{indent}**Trimmed bbox**: ?")
 
     # Core data region
     core = tr.get("core_data_region")
@@ -253,20 +354,20 @@ def _render_table_from_dict(tr: dict) -> None:
                 core['r_top'], core['c_left'], core['r_bot'], core['c_right']
             )
             st.markdown(
-                f"**Core data region**: {core_range} "
+                f"{indent}**Core data region**: {core_range} "
                 f"(numeric ratio: {core.get('numeric_ratio', 0):.2%})"
             )
         except Exception:
-            st.markdown("**Core data region**: ?")
+            st.markdown(f"{indent}**Core data region**: ?")
 
     # Split candidates
     split_cands = tr.get("split_candidates", [])
     if split_cands:
-        st.warning(f"⚠️ **Potential internal splits detected**: {len(split_cands)}")
+        st.warning(f"{indent}⚠️ **Potential internal splits detected**: {len(split_cands)}")
         for sc in split_cands:
             axis_label = sc.get("axis", "?")
             st.caption(
-                f"  [{axis_label} {sc.get('index', '?')}] "
+                f"{indent}  [{axis_label} {sc.get('index', '?')}] "
                 f"score={sc.get('combined_score', 0):.2f} — {sc.get('reason', '')}"
             )
 
@@ -278,11 +379,11 @@ def _render_table_from_dict(tr: dict) -> None:
     ]:
         cands = tr.get(key, [])
         if cands:
-            st.markdown(f"**{label}** ({len(cands)})")
+            st.markdown(f"{indent}**{label}** ({len(cands)})")
             for c in cands:
                 loc = c.get("location", {})
                 st.caption(
-                    f"  [{c.get('decision', '?')}] "
+                    f"{indent}  [{c.get('decision', '?')}] "
                     f"row {loc.get('r_top', '?')}-{loc.get('r_bot', '?')}, "
                     f"col {loc.get('c_left', '?')}-{loc.get('c_right', '?')}: "
                     f"\"{c.get('text', '')[:120]}\" — {c.get('decision_reason', '')}"
@@ -290,22 +391,44 @@ def _render_table_from_dict(tr: dict) -> None:
 
     sent = tr.get("pieces_sent_to_coordinator", [])
     if sent:
-        st.markdown(f"**Sent to coordinator**: {len(sent)}")
+        st.markdown(f"{indent}**Sent to coordinator**: {len(sent)}")
 
     # LLM decision summaries
     summaries = tr.get("llm_decision_summaries", [])
     if summaries:
-        st.markdown(f"**LLM decisions**: {len(summaries)}")
+        st.markdown(f"{indent}**LLM decisions**: {len(summaries)}")
         for s in summaries:
-            st.caption(f"[{s.get('piece_type')}] {s.get('decision')} — {s.get('reason')}")
+            st.caption(f"{indent}[{s.get('piece_type')}] {s.get('decision')} — {s.get('reason')}")
 
         details = tr.get("llm_details", [])
         if details:
-            with st.expander("Full LLM payloads", expanded=False):
+            with st.expander(f"{indent}Full LLM payloads", expanded=False):
                 for j, d in enumerate(details):
-                    st.markdown(f"**Decision {j+1}**")
+                    st.markdown(f"{indent}**Decision {j+1}**")
                     st.text(f"Prompt:\n{d.get('full_prompt', '')[:500]}")
                     st.text(f"Response:\n{d.get('full_response', '')[:500]}")
+
+    # Phase 6: Render children recursively
+    children = tr.get('children', [])
+    if children:
+        st.markdown(f"{indent}---")
+        st.markdown(f"{indent}**Children** ({len(children)}):")
+        for i, child in enumerate(children):
+            child_bbox = child.get("original_bbox", {})
+            try:
+                child_range = bbox_to_excel_range(
+                    child_bbox.get('r_top', 0), child_bbox.get('c_left', 0),
+                    child_bbox.get('r_bot', 0), child_bbox.get('c_right', 0)
+                )
+            except Exception:
+                child_range = "?"
+
+            child_badge = _get_hierarchy_badge_from_dict(child)
+            child_id = child.get('table_id', 'unknown')
+            child_name = f"{child_badge} {child_id} ({child_range})"
+
+            with st.expander(f"{indent}  Child {i+1}: {child_name}", expanded=False):
+                _render_table_from_dict(child, depth=depth+1)
 
 
 def _render_coordinator_from_dict(coord: dict) -> None:

@@ -291,6 +291,12 @@ xl_sheetagent:
   v3a_split_min_numeric_outside: 10       # Min numeric cells outside core
   v3a_split_max_depth: 2                  # Max recursive split depth (safety)
 
+  # V3A Phase 4+: Hierarchical splitting (v3a.1.0)
+  v3a_hierarchical_splits: true           # Enable parent-child hierarchy (FEATURE FLAG)
+  v3a_multi_split_enabled: true           # Execute ALL valid splits (not just top-1)
+  v3a_row_names_allow_formulas: true      # Don't reject row names with formulas
+  v3a_column_split_classification: true   # Classify column splits as title/rowname
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2

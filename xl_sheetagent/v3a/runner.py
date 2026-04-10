@@ -36,7 +36,7 @@ from .exporter import write_v3a_outputs
 
 _log = logging.getLogger("xl_sheetagent.v3a.runner")
 
-V3A_VERSION = "3a.0.1"
+V3A_VERSION = "3a.1.0"  # Phase 4+: Hierarchical splitting support
 
 
 def run_v3a(
@@ -102,81 +102,120 @@ def run_v3a(
     all_sheet_results: List[V3ASheetResult] = []
 
     def _process_sheet(sheet_name: str, table_views: list) -> V3ASheetResult:
-        """Process one sheet with two-pass architecture (Phase 4).
+        """Process one sheet with optional recursive splitting (Phase 4+).
 
-        Pass 1: Detect on all tables
-        Pass 2: Split flagged tables and re-detect children
+        If v3a_hierarchical_splits enabled:
+          - Pass 1: Detect on all root tables
+          - Pass 2+: Recursive split-and-detect (breadth-first)
+        Otherwise:
+          - Legacy two-pass behavior
         """
         wb_local = openpyxl.load_workbook(
             upstream.workbook_path, data_only=False, read_only=True,
         )
         ws_local = wb_local[sheet_name]
 
-        # --- PASS 1: Initial detection ---
-        first_pass_results = []
-        tables_needing_split = []
+        hierarchical_enabled = getattr(config, "v3a_hierarchical_splits", False)
 
-        for tv in table_views:
-            result = run_table_agent(
-                tv, ws_local, config,
-                llm_fn=llm_fn,
-                cut_scores=upstream.cut_scores,
-            )
-            first_pass_results.append(result)
+        if hierarchical_enabled:
+            # --- NEW: Recursive hierarchical splitting ---
+            _log.debug("Sheet %s: Using hierarchical splitting mode", sheet_name)
 
-            # Check if split needed
-            if result.split_candidates:
-                tables_needing_split.append((tv, result))
-
-        # --- PASS 2: Split and re-detect (if enabled) ---
-        if getattr(config, "v3a_two_pass_enabled", False) and tables_needing_split:
-            from .split_agent import decide_split
-            from .cell_analysis import read_cell_grid, classify_grid
-
-            final_table_results = []
-
-            for tv, first_result in tables_needing_split:
-                # Re-read grid for split decision
-                grid, data_types = read_cell_grid(
-                    ws_local, tv.r_top, tv.c_left, tv.r_bot, tv.c_right
+            # Pass 1: Detect on all root tables
+            root_results = []
+            for tv in table_views:
+                result = run_table_agent(
+                    tv, ws_local, config,
+                    llm_fn=llm_fn,
+                    cut_scores=upstream.cut_scores,
+                    parent_id=None,
+                    split_depth=0,
                 )
-                types = classify_grid(grid, data_types)
+                root_results.append(result)
 
-                split_decision = decide_split(
-                    grid, types, tv.r_top, tv.c_left, tv.r_bot, tv.c_right,
-                    first_result.core_data_region, first_result.split_candidates, config,
+            # Pass 2+: Recursive splitting
+            max_depth = getattr(config, "v3a_split_max_depth", 2)
+            final_results = []
+
+            for root_result in root_results:
+                tree = _recursive_split_and_detect(
+                    root_result, ws_local, config, llm_fn,
+                    upstream.cut_scores, max_depth
                 )
+                final_results.append(tree)
 
-                if split_decision:
-                    # Split into child tables
-                    child_tables = _split_table(tv, split_decision)
+            # Flatten tree for coordinator
+            all_tables = _flatten_tree(final_results)
+            table_results = final_results  # Keep hierarchical for output
 
-                    # Re-run detection on each child
-                    for child_tv in child_tables:
-                        child_result = run_table_agent(
-                            child_tv, ws_local, config,
-                            llm_fn=llm_fn,
-                            cut_scores=upstream.cut_scores,
-                        )
-                        final_table_results.append(child_result)
-                else:
-                    # Split decision rejected, keep original
-                    final_table_results.append(first_result)
-
-            # Add tables that didn't need splitting
-            for tv, first_result in zip(table_views, first_pass_results):
-                if (tv, first_result) not in tables_needing_split:
-                    final_table_results.append(first_result)
-
-            table_results = final_table_results
         else:
-            # No two-pass or no splits needed
-            table_results = first_pass_results
+            # --- LEGACY: Original two-pass behavior ---
+            first_pass_results = []
+            tables_needing_split = []
+
+            for tv in table_views:
+                result = run_table_agent(
+                    tv, ws_local, config,
+                    llm_fn=llm_fn,
+                    cut_scores=upstream.cut_scores,
+                )
+                first_pass_results.append(result)
+
+                # Check if split needed
+                if result.split_candidates:
+                    tables_needing_split.append((tv, result))
+
+            # Pass 2: Split and re-detect (if enabled)
+            if getattr(config, "v3a_two_pass_enabled", False) and tables_needing_split:
+                from .split_agent import decide_split
+                from .cell_analysis import read_cell_grid, classify_grid
+
+                final_table_results = []
+
+                for tv, first_result in tables_needing_split:
+                    # Re-read grid for split decision
+                    grid, data_types = read_cell_grid(
+                        ws_local, tv.r_top, tv.c_left, tv.r_bot, tv.c_right
+                    )
+                    types = classify_grid(grid, data_types)
+
+                    split_decision = decide_split(
+                        grid, types, tv.r_top, tv.c_left, tv.r_bot, tv.c_right,
+                        first_result.core_data_region, first_result.split_candidates, config,
+                    )
+
+                    if split_decision:
+                        # Split into child tables
+                        child_tables = _split_table(tv, split_decision)
+
+                        # Re-run detection on each child
+                        for child_tv in child_tables:
+                            child_result = run_table_agent(
+                                child_tv, ws_local, config,
+                                llm_fn=llm_fn,
+                                cut_scores=upstream.cut_scores,
+                            )
+                            final_table_results.append(child_result)
+                    else:
+                        # Split decision rejected, keep original
+                        final_table_results.append(first_result)
+
+                # Add tables that didn't need splitting
+                for tv, first_result in zip(table_views, first_pass_results):
+                    if (tv, first_result) not in tables_needing_split:
+                        final_table_results.append(first_result)
+
+                table_results = final_table_results
+            else:
+                # No two-pass or no splits needed
+                table_results = first_pass_results
+
+            all_tables = table_results
 
         # Run sheet coordinator
         coordinator = collect_sheet(
             sheet_name,
-            table_results,
+            all_tables,
             rejected_by_sheet.get(sheet_name, []),
             ws=ws_local,
         )
@@ -313,3 +352,142 @@ def _split_table(table_view, split_decision):
     )
 
     return [top, bottom]
+
+
+def _recursive_split_and_detect(
+    parent_result,
+    ws, config, llm_fn, cut_scores, max_depth: int,
+):
+    """
+    Recursively split a table and detect children (breadth-first) (Phase 4+).
+
+    Parameters
+    ----------
+    parent_result : TableAgentResult
+        Parent table to potentially split
+    ws : openpyxl worksheet
+        Worksheet object
+    config : XlSheetAgentConfig
+        Configuration
+    llm_fn : callable or None
+        LLM function
+    cut_scores : list
+        Cut scores from xl_parse
+    max_depth : int
+        Maximum recursion depth
+
+    Returns
+    -------
+    TableAgentResult
+        Parent result with children populated
+    """
+    from .split_agent import decide_splits
+    from .cell_analysis import read_cell_grid, classify_grid
+
+    # Base case: max depth reached or no split candidates
+    if parent_result.split_depth >= max_depth or not parent_result.split_candidates:
+        return parent_result
+
+    # Get split decisions (ALL valid splits if multi-split enabled)
+    tv = _result_to_table_view(parent_result)
+    grid, data_types = read_cell_grid(ws, tv.r_top, tv.c_left, tv.r_bot, tv.c_right)
+    types = classify_grid(grid, data_types)
+
+    split_decisions = decide_splits(
+        grid, types, tv.r_top, tv.c_left, tv.r_bot, tv.c_right,
+        parent_result.core_data_region, parent_result.split_candidates, config,
+    )
+
+    if not split_decisions:
+        return parent_result
+
+    _log.info(
+        "Table %s: Applying %d split(s) at depth %d",
+        parent_result.table_id, len(split_decisions), parent_result.split_depth
+    )
+
+    # Execute splits (all of them if multi-split enabled)
+    children_views = []
+    for i, decision in enumerate(split_decisions):
+        child_views = _split_table(tv, decision)
+        children_views.extend(child_views)
+        if i == 0:
+            # Record first split decision in parent
+            parent_result.split_decision_applied = decision
+
+    # Mark parent as "parent" role
+    parent_result.hierarchy_role = "parent"
+
+    # Re-detect on each child
+    for child_tv in children_views:
+        child_result = run_table_agent(
+            child_tv, ws, config,
+            llm_fn=llm_fn,
+            cut_scores=cut_scores,
+            parent_id=parent_result.table_id,
+            split_depth=parent_result.split_depth + 1,
+        )
+
+        # Recursive call for this child
+        child_with_descendants = _recursive_split_and_detect(
+            child_result, ws, config, llm_fn, cut_scores, max_depth
+        )
+
+        parent_result.children.append(child_with_descendants)
+
+    return parent_result
+
+
+def _flatten_tree(results: List) -> List:
+    """
+    Flatten hierarchical tree for coordinator (depth-first traversal).
+
+    Parameters
+    ----------
+    results : list[TableAgentResult]
+        Root-level results (may have children)
+
+    Returns
+    -------
+    list[TableAgentResult]
+        Flattened list of all tables
+    """
+    flat = []
+    for result in results:
+        flat.append(result)
+        if result.children:
+            flat.extend(_flatten_tree(result.children))
+    return flat
+
+
+def _result_to_table_view(result):
+    """
+    Convert TableAgentResult back to TableView-like object for re-processing.
+
+    Parameters
+    ----------
+    result : TableAgentResult
+        Result to convert
+
+    Returns
+    -------
+    object
+        Minimal TableView-like object with required attributes
+    """
+    bbox = result.trimmed_bbox
+
+    # Create minimal object with attributes needed for processing
+    class TableView:
+        pass
+
+    tv = TableView()
+    tv.table_id = result.table_id
+    tv.sheet_name = result.sheet_name
+    tv.r_top = bbox['r_top']
+    tv.c_left = bbox['c_left']
+    tv.r_bot = bbox['r_bot']
+    tv.c_right = bbox['c_right']
+    tv.n_rows = bbox['r_bot'] - bbox['r_top'] + 1
+    tv.n_cols = bbox['c_right'] - bbox['c_left'] + 1
+
+    return tv
