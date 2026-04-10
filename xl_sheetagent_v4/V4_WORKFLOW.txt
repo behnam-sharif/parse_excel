@@ -1,0 +1,341 @@
+================================================================================
+xl_sheetagent_v4: AGENTIC TABLE INTELLIGENCE WORKFLOW
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      INPUT: xl_table OUTPUT                             │
+│                    (Bounding boxes from structural detection)           │
+├─────────────────────────────────────────────────────────────────────────┤
+│  tables_per_sheet.json:                                                 │
+│  {                                                                      │
+│    "Calculations": [                                                    │
+│      {"table_id": "94c8c58d611b9e70_t103", "bbox": "B3:H105"},       │
+│      {"table_id": "94c8c58d611b9e70_b103", "bbox": "B106:H206"}       │
+│    ]                                                                    │
+│  }                                                                      │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ For each table
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    STEP 1: READ TABLE DATA                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Tool: table_reader.py                                                  │
+│                                                                         │
+│  read_table_data(bbox="B3:H105", ws)                                   │
+│  ↓                                                                      │
+│  Returns:                                                               │
+│  {                                                                      │
+│    "grid": [[val1, val2, ...], ...],  // 2D array of values           │
+│    "types": [[TEXT, NUM, ...], ...],  // Cell types                   │
+│    "formatting": {...},                // Bold, merge, colors           │
+│    "dimensions": {"n_rows": 103, "n_cols": 7}                         │
+│  }                                                                      │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  STEP 2: HEURISTIC PRE-ANALYSIS                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Tool: metadata_detector.py                                             │
+│                                                                         │
+│  detect_metadata_zones(grid, types)                                    │
+│  ↓                                                                      │
+│  Returns:                                                               │
+│  {                                                                      │
+│    "title_candidates": [                                                │
+│      {"row": 0, "text": "World without InO", "confidence": 0.95}      │
+│    ],                                                                   │
+│    "header_candidates": [                                               │
+│      {"row": 2, "values": ["2020", "2021", ...], "conf": 0.90}       │
+│    ],                                                                   │
+│    "row_name_candidates": [                                             │
+│      {"col": 0, "values": ["Drug 1", ...], "conf": 0.85}             │
+│    ]                                                                    │
+│  }                                                                      │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ Build prompt with cell data + zones
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   STEP 3: LLM TABLE ANALYSIS                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Agent: table_intelligence_agent.py                                     │
+│  Prompt: TABLE_ANALYSIS_PROMPT                                          │
+│                                                                         │
+│  LLM Input:                                                             │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ "Analyze this table:                                       │        │
+│  │  Dimensions: 103 rows x 7 cols (B3:H105)                  │        │
+│  │  Cell Grid:                                                 │        │
+│  │    Row 0: BIM calculation | 2020 | 2021 | 2022            │        │
+│  │    Row 1: World without InO                                │        │
+│  │    Row 20: Drug costs                                      │        │
+│  │  Metadata zones:                                            │        │
+│  │    Title candidates: Row 1 'World without InO' (0.95)     │        │
+│  │  Extract: title, header, row names, summary, children"    │        │
+│  └────────────────────────────────────────────────────────────┘        │
+│                                                                         │
+│  LLM Output (JSON):                                                     │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ {                                                           │        │
+│  │   "title": "World without InO - Cost Analysis",            │        │
+│  │   "header": ["2020", "2021", "2022", "2023", "2024"],     │        │
+│  │   "row_names": ["Inotuzumab...", "FLAG-Ida", ...],        │        │
+│  │   "summary": "This table presents annual drug costs...",   │        │
+│  │   "children": [                                             │        │
+│  │     {"section": "Drug costs", "rows": [21, 34], ...}      │        │
+│  │   ]                                                         │        │
+│  │ }                                                           │        │
+│  └────────────────────────────────────────────────────────────┘        │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ Parse JSON response
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  STEP 4: DETECT CHILDREN (RECURSIVE)                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Tool: hierarchy_builder.py                                             │
+│                                                                         │
+│  For each child detected:                                               │
+│  ┌──────────────────────────────────────────────────────┐              │
+│  │ Child: "Drug costs" (rows 21-34)                     │              │
+│  │ ↓                                                     │              │
+│  │ Extract bbox: B21:H34                                │              │
+│  │ ↓                                                     │              │
+│  │ Recursively call: analyze_table(B21:H34)             │              │
+│  │ ↓                                                     │              │
+│  │ Returns: EnrichedTable for child                     │              │
+│  │   - title: "Drug Costs Section"                      │              │
+│  │   - header: ["2020", "2021", ...]                    │              │
+│  │   - row_names: ["Inotuzumab", "FLAG-Ida", ...]       │              │
+│  │   - summary: "This section lists..."                 │              │
+│  └──────────────────────────────────────────────────────┘              │
+│                                                                         │
+│  Build tree:                                                            │
+│  Parent (B3:H105)                                                       │
+│    ├─ Child 1: Drug costs (B21:H34)                                    │
+│    ├─ Child 2: Adverse events (B35:H48)                                │
+│    └─ Child 3: Subsequent treatment (B49:H62)                          │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    STEP 5: ONTOLOGY TAGGING                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Agent: ontology_tagger.py                                              │
+│  Prompt: ONTOLOGY_TAGGING_PROMPT                                        │
+│                                                                         │
+│  LLM Input:                                                             │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ "Tag this table with BIM concepts:                         │        │
+│  │  Title: World without InO - Cost Analysis                  │        │
+│  │  Summary: This table presents annual drug costs...         │        │
+│  │  Headers: [2020, 2021, 2022, ...]                         │        │
+│  │  Row names: [Inotuzumab, FLAG-Ida, ...]                   │        │
+│  │  Available concepts: cost_analysis, drug_comparison, ..."  │        │
+│  └────────────────────────────────────────────────────────────┘        │
+│                                                                         │
+│  LLM Output:                                                            │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ {                                                           │        │
+│  │   "tags": ["cost_analysis", "drug_comparison",             │        │
+│  │            "time_series"],                                  │        │
+│  │   "confidence": 0.92                                        │        │
+│  │ }                                                           │        │
+│  └────────────────────────────────────────────────────────────┘        │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ Build enriched structure
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  ENRICHED TABLE RESULT                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│  EnrichedTable {                                                        │
+│    table_id: "94c8c58d611b9e70_t103",                                 │
+│    bbox: "B3:H105",                                                     │
+│    metadata: {                                                          │
+│      title: "World without InO - Cost Analysis",                       │
+│      header: ["2020", "2021", "2022", "2023", "2024"],                │
+│      row_names: ["Inotuzumab...", "FLAG-Ida", ...]                    │
+│    },                                                                   │
+│    summary: "This table presents annual drug costs from 2020-2024...", │
+│    children: [                                                          │
+│      EnrichedTable {                                                    │
+│        section_name: "Drug costs",                                     │
+│        bbox: "B21:H34",                                                 │
+│        metadata: {...},                                                 │
+│        summary: "..."                                                   │
+│      }                                                                   │
+│    ],                                                                   │
+│    ontology_tags: ["cost_analysis", "drug_comparison", "time_series"]  │
+│  }                                                                      │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ Export results
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         STEP 6: EXPORT                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  Output 1: v4_results.json                                              │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ Full enriched structure (all tables, all metadata)         │        │
+│  │ - 37 tables analyzed                                        │        │
+│  │ - 120+ children detected                                    │        │
+│  │ - Complete hierarchies preserved                            │        │
+│  └────────────────────────────────────────────────────────────┘        │
+│                                                                         │
+│  Output 2: tree_map.html                                                │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ Interactive tree map visualization                          │        │
+│  │                                                              │        │
+│  │  Workbook                                                    │        │
+│  │    ├─ Calculations (3 tables)                               │        │
+│  │    │   ├─ Table: BIM header (B3:H4)                         │        │
+│  │    │   ├─ Table: World without InO (B6:H105)                │        │
+│  │    │   │   ├─ Drug costs (B21:H34)                          │        │
+│  │    │   │   ├─ Adverse events (B35:H48)                      │        │
+│  │    │   │   └─ ... (8 more sections)                         │        │
+│  │    │   └─ Table: World with InO (B107:H210)                 │        │
+│  │    │       └─ ... (8 sections)                               │        │
+│  │    ├─ Inputs (5 tables)                                      │        │
+│  │    └─ Results (3 tables)                                     │        │
+│  │                                                              │        │
+│  │  [Color-coded by type, hover shows summary]                 │        │
+│  └────────────────────────────────────────────────────────────┘        │
+│                                                                         │
+│  Output 3: ontology_map.json                                            │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │ BIM knowledge graph                                          │        │
+│  │ - Tables mapped to concepts                                  │        │
+│  │ - Relationships between tables                               │        │
+│  │ - Domain ontology structure                                  │        │
+│  └────────────────────────────────────────────────────────────┘        │
+└──────────────────────────────────┬──────────────────────────────────────┘
+                                   │
+                                   │ (Future: Week 5+)
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      STEP 7: Q&A SYSTEM (FUTURE)                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Agent: qa_agent.py                                                     │
+│  Prompt: QA_PROMPT                                                      │
+│                                                                         │
+│  User Question: "What are the drug costs in 2020?"                      │
+│  ↓                                                                      │
+│  LLM:                                                                   │
+│  1. Searches knowledge graph for "drug costs" + "2020"                  │
+│  2. Identifies relevant table: "94c8c58d611b9e70_t103"                 │
+│  3. Retrieves data from bbox B21:H34                                    │
+│  4. Extracts: "Total costs: $993,791.71"                               │
+│  5. Cites source: table_id, bbox, section                              │
+│  ↓                                                                      │
+│  Answer:                                                                │
+│  {                                                                      │
+│    "answer": "Total drug costs in 2020 were $993,791.71...",          │
+│    "sources": [{"table_id": "...", "bbox": "B21:H34"}],               │
+│    "confidence": 0.95                                                   │
+│  }                                                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+KEY FEATURES:
+=============
+
+✓ Semantic Understanding
+  - LLM extracts meaning (not just structure)
+  - Understands "World without InO" vs "World with InO"
+  - Identifies drug names, cost categories, year columns
+
+✓ Hierarchical Detection
+  - Parent tables → Children → Grandchildren (up to depth 3)
+  - Each level gets its own metadata + summary
+  - Preserves relationships in tree structure
+
+✓ Natural Language Summaries
+  - 2-3 sentence descriptions for each table
+  - Domain-specific terminology (BIM concepts)
+  - Explains what the table represents
+
+✓ BIM Ontology Mapping
+  - Tags tables with domain concepts
+  - cost_analysis, drug_comparison, market_share, etc.
+  - Enables knowledge graph queries
+
+✓ Interactive Visualization
+  - HTML tree map with drill-down
+  - Color-coded by type
+  - Hover shows summaries
+
+✓ Q&A System (Future)
+  - Natural language questions
+  - Data retrieval with citations
+  - Follow-up suggestions
+
+
+COMPARISON WITH V3A:
+====================
+
+v3a (Current):
+  - Reads xl_table bboxes
+  - Detects: title, header, row names, footnotes
+  - Uses heuristics (text ratio, formatting)
+  - Output: Structural metadata
+
+v4 (New):
+  - Reads xl_table bboxes
+  - Detects: title, header, row names + CHILDREN + SUMMARIES
+  - Uses LLM (semantic understanding)
+  - Output: Enriched metadata + hierarchies + knowledge graph
+  - Enables: Tree map visualization + Q&A system
+
+
+COST & PERFORMANCE:
+===================
+
+Single Table:
+  - 1-2 LLM calls (analysis + ontology)
+  - ~$0.02-0.05 per table
+  - 2-3 seconds
+
+With Children:
+  - +1 LLM call per child
+  - ~$0.01-0.02 per child
+  - +1-2 seconds per child
+
+Full Workbook (30 tables, 100 children):
+  - ~130 LLM calls
+  - ~$2.00-3.00 total
+  - 60-90 seconds (parallel processing)
+
+
+NEXT STEPS:
+===========
+
+Week 2: Implement core agent
+  - Add OpenAI/Anthropic API integration
+  - Test TABLE_ANALYSIS_PROMPT on real data
+  - Validate JSON parsing
+
+Week 3: Hierarchical processing
+  - Recursive analysis
+  - Tree building
+  - Export v4_results.json
+
+Week 4: Tree map visualization
+  - HTML generation with d3.js
+  - Interactive drill-down
+  - Color schemes
+
+Week 5: Ontology integration
+  - Load bim_ontology.yaml
+  - Tag tables
+  - Export ontology_map.json
+
+Week 6+: Q&A system
+  - Build knowledge graph
+  - Natural language queries
+  - Web interface
+
+================================================================================

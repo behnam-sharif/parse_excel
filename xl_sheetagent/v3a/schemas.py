@@ -119,6 +119,12 @@ class TableAgentResult:
     split_decision_applied: Optional[SplitDecision] = None
     hierarchy_role: str = "standalone"  # "standalone" | "parent" | "child_numeric" | "child_metadata"
 
+    # --- Metadata validation flags ---
+    title_found: bool = False
+    header_found: bool = False
+    row_names_found: bool = False
+    footnote_found: bool = False
+
 
 # ---------------------------------------------------------------------------
 # Sheet coordinator result

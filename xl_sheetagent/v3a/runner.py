@@ -288,6 +288,57 @@ def run_v3a(
 # Phase 4: Two-Pass Split Helper
 # ---------------------------------------------------------------------------
 
+def _partition_bbox_by_rows(r_top, c_left, r_bot, c_right, split_rows):
+    """
+    Partition a bbox into non-overlapping row segments.
+
+    Parameters
+    ----------
+    r_top, c_left, r_bot, c_right : int
+        Parent bbox coordinates
+    split_rows : list[int]
+        Sorted list of absolute row indices where splits occur
+
+    Returns
+    -------
+    list[tuple]
+        List of (segment_r_top, c_left, segment_r_bot, c_right) for each segment
+
+    Example
+    -------
+    Parent bbox: rows 3-48
+    Split rows: [6, 20, 34]
+    Result: [(3,_,5,_), (6,_,19,_), (20,_,33,_), (34,_,48,_)]
+    """
+    if not split_rows:
+        return [(r_top, c_left, r_bot, c_right)]
+
+    # Sort and deduplicate
+    split_rows = sorted(set(split_rows))
+
+    # Filter splits to only those within bbox bounds
+    valid_splits = [s for s in split_rows if r_top < s <= r_bot]
+
+    if not valid_splits:
+        return [(r_top, c_left, r_bot, c_right)]
+
+    segments = []
+    current_top = r_top
+
+    for split_row in valid_splits:
+        # Create segment [current_top, split_row-1]
+        if current_top <= split_row - 1:
+            segments.append((current_top, c_left, split_row - 1, c_right))
+        # Next segment starts at split_row
+        current_top = split_row
+
+    # Final segment from last split to r_bot
+    if current_top <= r_bot:
+        segments.append((current_top, c_left, r_bot, c_right))
+
+    return segments
+
+
 def _split_table(table_view, split_decision):
     """
     Split table into two children based on split decision.
@@ -321,6 +372,24 @@ def _split_table(table_view, split_decision):
 
     split_row = split_decision.split_index
     cut_side = split_decision.cut_side
+
+    # Validate split creates valid regions
+    if cut_side == "bottom":
+        # top region: [r_top, split_row-1], bottom region: [split_row, r_bot]
+        if split_row <= table_view.r_top or split_row > table_view.r_bot:
+            _log.warning(
+                "Table %s: Invalid split_row=%d for cut_side=bottom (r_top=%d, r_bot=%d), keeping original",
+                table_view.table_id, split_row, table_view.r_top, table_view.r_bot
+            )
+            return [table_view]
+    else:  # cut_side == "top"
+        # top region: [r_top, split_row], bottom region: [split_row+1, r_bot]
+        if split_row < table_view.r_top or split_row >= table_view.r_bot:
+            _log.warning(
+                "Table %s: Invalid split_row=%d for cut_side=top (r_top=%d, r_bot=%d), keeping original",
+                table_view.table_id, split_row, table_view.r_top, table_view.r_bot
+            )
+            return [table_view]
 
     if cut_side == "bottom":
         # Split row belongs to bottom child
@@ -359,7 +428,10 @@ def _recursive_split_and_detect(
     ws, config, llm_fn, cut_scores, max_depth: int,
 ):
     """
-    Recursively split a table and detect children (breadth-first) (Phase 4+).
+    Split table into flat non-overlapping segments (Phase 4+).
+
+    FLAT PARTITION: All splits applied in one pass, creating N+1 non-overlapping
+    children from N split points. No recursion, no grandchildren.
 
     Parameters
     ----------
@@ -374,18 +446,18 @@ def _recursive_split_and_detect(
     cut_scores : list
         Cut scores from xl_parse
     max_depth : int
-        Maximum recursion depth
+        Maximum depth (unused in flat mode, kept for compatibility)
 
     Returns
     -------
     TableAgentResult
-        Parent result with children populated
+        Parent result with children populated (no grandchildren)
     """
     from .split_agent import decide_splits
     from .cell_analysis import read_cell_grid, classify_grid
 
-    # Base case: max depth reached or no split candidates
-    if parent_result.split_depth >= max_depth or not parent_result.split_candidates:
+    # Base case: no split candidates
+    if not parent_result.split_candidates:
         return parent_result
 
     # Get split decisions (ALL valid splits if multi-split enabled)
@@ -401,39 +473,57 @@ def _recursive_split_and_detect(
     if not split_decisions:
         return parent_result
 
+    # Extract split row indices (only row splits supported)
+    split_rows = [d.split_index for d in split_decisions if d.split_axis == "row"]
+
+    if not split_rows:
+        _log.debug("Table %s: No valid row splits found", parent_result.table_id)
+        return parent_result
+
     _log.info(
-        "Table %s: Applying %d split(s) at depth %d",
-        parent_result.table_id, len(split_decisions), parent_result.split_depth
+        "Table %s: Partitioning into %d segments using %d split(s): rows=%s",
+        parent_result.table_id, len(split_rows) + 1, len(split_rows), split_rows
     )
 
-    # Execute splits (all of them if multi-split enabled)
-    children_views = []
-    for i, decision in enumerate(split_decisions):
-        child_views = _split_table(tv, decision)
-        children_views.extend(child_views)
-        if i == 0:
-            # Record first split decision in parent
-            parent_result.split_decision_applied = decision
+    # Partition parent bbox into non-overlapping segments
+    segments = _partition_bbox_by_rows(tv.r_top, tv.c_left, tv.r_bot, tv.c_right, split_rows)
+
+    _log.debug(
+        "Table %s: Created %d segments from bbox [%d:%d]",
+        parent_result.table_id, len(segments), tv.r_top, tv.r_bot
+    )
 
     # Mark parent as "parent" role
     parent_result.hierarchy_role = "parent"
 
-    # Re-detect on each child
-    for child_tv in children_views:
+    # Create child table view for each segment
+    from copy import copy
+
+    for i, (seg_r_top, seg_c_left, seg_r_bot, seg_c_right) in enumerate(segments):
+        child_tv = copy(tv)
+        child_tv.table_id = f"{parent_result.table_id}_child{i+1}"
+        child_tv.r_top = seg_r_top
+        child_tv.c_left = seg_c_left
+        child_tv.r_bot = seg_r_bot
+        child_tv.c_right = seg_c_right
+        child_tv.n_rows = seg_r_bot - seg_r_top + 1
+        child_tv.n_cols = seg_c_right - seg_c_left + 1
+
+        # Run detection on child (depth=1, no further splitting)
         child_result = run_table_agent(
             child_tv, ws, config,
             llm_fn=llm_fn,
             cut_scores=cut_scores,
             parent_id=parent_result.table_id,
-            split_depth=parent_result.split_depth + 1,
+            split_depth=1,  # All children are depth 1
         )
 
-        # Recursive call for this child
-        child_with_descendants = _recursive_split_and_detect(
-            child_result, ws, config, llm_fn, cut_scores, max_depth
-        )
+        parent_result.children.append(child_result)
 
-        parent_result.children.append(child_with_descendants)
+        _log.debug(
+            "Table %s: Child %d created [%d:%d] (%d rows)",
+            parent_result.table_id, i+1, seg_r_top, seg_r_bot, child_tv.n_rows
+        )
 
     return parent_result
 

@@ -200,6 +200,12 @@ def run_table_agent(
             if not cand.decision_reason:
                 cand.decision_reason = "default (LLM disabled)"
 
+    # Metadata validation flags (check if candidates found AND kept)
+    title_found = any(c.decision == "kept" for c in title_cands)
+    header_found = any(c.decision == "kept" for c in header_cands)
+    row_names_found = any(c.decision == "kept" for c in rowname_cands)
+    footnote_found = any(c.decision == "kept" for c in footnote_cands)
+
     return TableAgentResult(
         table_id=tid,
         sheet_name=sn,
@@ -217,6 +223,11 @@ def run_table_agent(
         parent_table_id=parent_id,
         split_depth=split_depth,
         hierarchy_role=hierarchy_role,
+        # Metadata validation flags
+        title_found=title_found,
+        header_found=header_found,
+        row_names_found=row_names_found,
+        footnote_found=footnote_found,
         # children populated later by runner
     )
 

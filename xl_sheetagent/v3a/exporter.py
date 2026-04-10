@@ -43,6 +43,9 @@ def write_v3a_outputs(run_result: V3ARunResult, output_path: str) -> None:
         json.dump(summary, f, indent=2, default=str)
     _log.info("Wrote %s", summary_path)
 
+    # Report metadata completeness statistics
+    _report_metadata_stats(run_result)
+
 
 def _serialize(run_result: V3ARunResult) -> Dict[str, Any]:
     """Convert run result to a JSON-serializable dict (Phase 4+: hierarchy support).
@@ -85,6 +88,18 @@ def _serialize_table_recursive(table: dict) -> None:
     table["has_children"] = len(table.get("children", [])) > 0
     table["is_child"] = table.get("parent_table_id") is not None
 
+    # Metadata validation (add missing metadata list)
+    missing_metadata = []
+    if not table.get("title_found", False):
+        missing_metadata.append("title")
+    if not table.get("header_found", False):
+        missing_metadata.append("header")
+    if not table.get("row_names_found", False):
+        missing_metadata.append("row_names")
+    if not table.get("footnote_found", False):
+        missing_metadata.append("footnote")
+    table["missing_metadata"] = missing_metadata
+
     # Recursively process children
     for child in table.get("children", []):
         _serialize_table_recursive(child)
@@ -124,6 +139,17 @@ def _build_summary(run_result: V3ARunResult) -> Dict[str, Any]:
 
 def _build_table_summary(tr) -> Dict[str, Any]:
     """Build summary for one table (recursive for children, Phase 4+)."""
+    # Metadata validation
+    missing_metadata = []
+    if not tr.title_found:
+        missing_metadata.append("title")
+    if not tr.header_found:
+        missing_metadata.append("header")
+    if not tr.row_names_found:
+        missing_metadata.append("row_names")
+    if not tr.footnote_found:
+        missing_metadata.append("footnote")
+
     summary = {
         "table_id": tr.table_id,
         "original_bbox": tr.original_bbox,
@@ -146,10 +172,62 @@ def _build_table_summary(tr) -> Dict[str, Any]:
         "split_depth": tr.split_depth,
         "parent_table_id": tr.parent_table_id,
         "n_children": len(tr.children),
+        # Metadata validation
+        "metadata_complete": len(missing_metadata) == 0,
+        "missing_metadata": missing_metadata,
     }
+
+    # Log warning if metadata missing
+    if missing_metadata:
+        _log.warning(
+            "Table %s: Missing metadata: %s",
+            tr.table_id, ", ".join(missing_metadata)
+        )
 
     # Recursively add children summaries
     if tr.children:
         summary["children"] = [_build_table_summary(child) for child in tr.children]
 
     return summary
+
+
+def _report_metadata_stats(run_result: V3ARunResult) -> None:
+    """Report metadata completeness statistics."""
+    def _collect_tables(results):
+        """Recursively collect all tables (parents and children)."""
+        tables = []
+        for tr in results:
+            tables.append(tr)
+            if tr.children:
+                tables.extend(_collect_tables(tr.children))
+        return tables
+
+    all_tables = []
+    for sheet in run_result.sheets:
+        all_tables.extend(_collect_tables(sheet.table_results))
+
+    if not all_tables:
+        return
+
+    n_total = len(all_tables)
+    n_missing_title = sum(1 for t in all_tables if not t.title_found)
+    n_missing_header = sum(1 for t in all_tables if not t.header_found)
+    n_missing_row_names = sum(1 for t in all_tables if not t.row_names_found)
+    n_missing_footnote = sum(1 for t in all_tables if not t.footnote_found)
+    n_complete = sum(
+        1 for t in all_tables
+        if t.title_found and t.header_found and t.row_names_found and t.footnote_found
+    )
+
+    _log.info(
+        "Metadata completeness: %d/%d tables have all metadata (%.0f%%)",
+        n_complete, n_total, 100 * n_complete / n_total if n_total > 0 else 0
+    )
+    if n_missing_title > 0:
+        _log.warning("  %d tables missing TITLE (%.0f%%)", n_missing_title, 100 * n_missing_title / n_total)
+    if n_missing_header > 0:
+        _log.warning("  %d tables missing HEADER (%.0f%%)", n_missing_header, 100 * n_missing_header / n_total)
+    if n_missing_row_names > 0:
+        _log.warning("  %d tables missing ROW_NAMES (%.0f%%)", n_missing_row_names, 100 * n_missing_row_names / n_total)
+    if n_missing_footnote > 0:
+        _log.info("  %d tables missing FOOTNOTE (%.0f%%) [optional]", n_missing_footnote, 100 * n_missing_footnote / n_total)

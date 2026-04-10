@@ -91,3 +91,9 @@ class XlSheetAgentConfig:
     v3a_split_core_bbox_ratio: float
     v3a_split_min_numeric_outside: int
     v3a_split_max_depth: int
+
+    # V3A Phase 4+: Hierarchical splitting (v3a.1.0)
+    v3a_hierarchical_splits: bool
+    v3a_multi_split_enabled: bool
+    v3a_row_names_allow_formulas: bool
+    v3a_column_split_classification: bool

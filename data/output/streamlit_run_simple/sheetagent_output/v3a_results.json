@@ -1,53 +1,22 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-09T23:41:45.540369+00:00",
-  "version": "3a.0.1",
+  "run_ts": "2026-04-10T18:19:31.427843+00:00",
+  "version": "3a.1.0",
   "sheets": [
     {
       "sheet_name": "Calculations",
       "table_results": [
         {
-          "table_id": "94c8c58d611b9e70_t103_top",
+          "table_id": "94c8c58d611b9e70_t103",
           "sheet_name": "Calculations",
           "original_bbox": {
             "r_top": 2,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 7
-          },
-          "trimmed_bbox": {
-            "r_top": 2,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 7
-          },
-          "core_data_region": {
-            "r_top": 2,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 7,
-            "numeric_ratio": 0.8333
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "94c8c58d611b9e70_t103_bottom",
-          "sheet_name": "Calculations",
-          "original_bbox": {
-            "r_top": 4,
             "c_left": 1,
             "r_bot": 104,
             "c_right": 7
           },
           "trimmed_bbox": {
-            "r_top": 5,
+            "r_top": 2,
             "c_left": 1,
             "r_bot": 104,
             "c_right": 7
@@ -69,7 +38,7 @@
                 "r_bot": 90,
                 "c_right": 1
               },
-              "source_table_id": "94c8c58d611b9e70_t103_bottom",
+              "source_table_id": "94c8c58d611b9e70_t103",
               "decision": "kept",
               "decision_reason": "single_cell_validated"
             }
@@ -84,7 +53,7 @@
                 "r_bot": 89,
                 "c_right": 7
               },
-              "source_table_id": "94c8c58d611b9e70_t103_bottom",
+              "source_table_id": "94c8c58d611b9e70_t103",
               "decision": "kept",
               "decision_reason": "column_count_validated=6"
             }
@@ -93,80 +62,174 @@
           "footnote_candidates": [],
           "split_candidates": [
             {
+              "axis": "row",
+              "index": 4,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
+            {
               "axis": "unknown",
               "index": -1,
               "separator_score": 0.0,
               "header_restart_score": 0.0,
               "changepoint_score": 0.0,
               "combined_score": 0.8,
-              "reason": "Core (98 cells) is 14% of bbox (700 cells), 530 numeric cells scattered outside"
+              "reason": "Core (98 cells) is 14% of bbox (721 cells), 540 numeric cells scattered outside"
             }
           ],
           "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_top",
-          "sheet_name": "Calculations",
-          "original_bbox": {
-            "r_top": 11,
-            "c_left": 12,
-            "r_bot": 12,
-            "c_right": 27
-          },
-          "trimmed_bbox": {
-            "r_top": 11,
-            "c_left": 12,
-            "r_bot": 12,
-            "c_right": 24
-          },
-          "core_data_region": {
-            "r_top": 11,
-            "c_left": 12,
-            "r_bot": 12,
-            "c_right": 24,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
             {
-              "axis": "col",
-              "index": 13,
-              "separator_score": 0.9539473684210527,
-              "header_restart_score": 0.0,
-              "changepoint_score": 0.0,
-              "combined_score": 0.9539473684210527,
-              "reason": "High split score: separator=0.95"
+              "table_id": "94c8c58d611b9e70_t103_child1",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 2,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 2,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 7
+              },
+              "core_data_region": {
+                "r_top": 2,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 7,
+                "numeric_ratio": 0.8333
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
             },
             {
-              "axis": "col",
-              "index": 15,
-              "separator_score": 0.9539473684210527,
-              "header_restart_score": 0.0,
-              "changepoint_score": 0.0,
-              "combined_score": 0.9539473684210527,
-              "reason": "High split score: separator=0.95"
+              "table_id": "94c8c58d611b9e70_t103_child2",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 5,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 7
+              },
+              "core_data_region": {
+                "r_top": 91,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 7,
+                "numeric_ratio": 0.9762
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "End-of-life costs",
+                  "location": {
+                    "r_top": 90,
+                    "c_left": 1,
+                    "r_bot": 90,
+                    "c_right": 1
+                  },
+                  "source_table_id": "94c8c58d611b9e70_t103_child2",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "unknown",
+                  "index": -1,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.8,
+                  "reason": "Core (98 cells) is 14% of bbox (700 cells), 530 numeric cells scattered outside"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
             }
           ],
-          "pieces_sent_to_coordinator": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": true,
+          "header_found": true,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "row_names",
+            "footnote"
+          ]
         },
         {
-          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_bottom",
+          "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "sheet_name": "Calculations",
           "original_bbox": {
-            "r_top": 13,
+            "r_top": 11,
             "c_left": 12,
             "r_bot": 18,
             "c_right": 27
           },
           "trimmed_bbox": {
-            "r_top": 13,
+            "r_top": 11,
             "c_left": 12,
             "r_bot": 18,
             "c_right": 24
@@ -178,7 +241,21 @@
             "c_right": 24,
             "numeric_ratio": 0.9231
           },
-          "title_candidates": [],
+          "title_candidates": [
+            {
+              "piece_type": "title",
+              "text": "% of patients alive",
+              "location": {
+                "r_top": 11,
+                "c_left": 12,
+                "r_bot": 11,
+                "c_right": 12
+              },
+              "source_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "decision": "kept",
+              "decision_reason": "single_cell_validated"
+            }
+          ],
           "header_row_candidates": [],
           "row_name_candidates": [],
           "footnote_candidates": [],
@@ -212,8 +289,168 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_child1",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 11,
+                "c_left": 12,
+                "r_bot": 12,
+                "c_right": 24
+              },
+              "trimmed_bbox": {
+                "r_top": 11,
+                "c_left": 12,
+                "r_bot": 12,
+                "c_right": 24
+              },
+              "core_data_region": {
+                "r_top": 11,
+                "c_left": 12,
+                "r_bot": 12,
+                "c_right": 24,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "col",
+                  "index": 13,
+                  "separator_score": 0.9539473684210527,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9539473684210527,
+                  "reason": "High split score: separator=0.95"
+                },
+                {
+                  "axis": "col",
+                  "index": 15,
+                  "separator_score": 0.9539473684210527,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9539473684210527,
+                  "reason": "High split score: separator=0.95"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8_child2",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 13,
+                "c_left": 12,
+                "r_bot": 18,
+                "c_right": 24
+              },
+              "trimmed_bbox": {
+                "r_top": 13,
+                "c_left": 12,
+                "r_bot": 18,
+                "c_right": 24
+              },
+              "core_data_region": {
+                "r_top": 13,
+                "c_left": 12,
+                "r_bot": 18,
+                "c_right": 24,
+                "numeric_ratio": 0.9231
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 13,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                },
+                {
+                  "axis": "col",
+                  "index": 13,
+                  "separator_score": 0.9539473684210527,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9539473684210527,
+                  "reason": "High split score: separator=0.95"
+                },
+                {
+                  "axis": "col",
+                  "index": 15,
+                  "separator_score": 0.9539473684210527,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9539473684210527,
+                  "reason": "High split score: separator=0.95"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": true,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
@@ -262,8 +499,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_t25_b17",
@@ -303,8 +557,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
@@ -353,8 +624,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
@@ -394,8 +682,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
@@ -444,8 +749,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_b23",
@@ -485,8 +807,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
@@ -535,8 +874,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
@@ -576,8 +932,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
@@ -626,8 +999,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
@@ -667,8 +1057,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
@@ -717,8 +1124,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "94c8c58d611b9e70_b103",
@@ -786,8 +1210,23 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": true,
+          "header_found": true,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
@@ -827,8 +1266,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
@@ -877,8 +1333,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
@@ -918,8 +1391,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
@@ -968,8 +1458,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
@@ -1009,8 +1516,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
@@ -1059,8 +1583,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
@@ -1100,61 +1641,37 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
-          "table_id": "076daba6b93bd14c_t17_t9_top",
+          "table_id": "076daba6b93bd14c_t17_t9",
           "sheet_name": "Calculations",
           "original_bbox": {
             "r_top": 177,
-            "c_left": 12,
-            "r_bot": 177,
-            "c_right": 27
-          },
-          "trimmed_bbox": {
-            "r_top": 177,
-            "c_left": 14,
-            "r_bot": 177,
-            "c_right": 27
-          },
-          "core_data_region": {
-            "r_top": 177,
-            "c_left": 14,
-            "r_bot": 177,
-            "c_right": 27,
-            "numeric_ratio": 1.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [
-            {
-              "axis": "col",
-              "index": 15,
-              "separator_score": 1.0,
-              "header_restart_score": 0.0,
-              "changepoint_score": 0.0,
-              "combined_score": 1.0,
-              "reason": "High split score: separator=1.00"
-            }
-          ],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "076daba6b93bd14c_t17_t9_bottom",
-          "sheet_name": "Calculations",
-          "original_bbox": {
-            "r_top": 178,
             "c_left": 12,
             "r_bot": 185,
             "c_right": 27
           },
           "trimmed_bbox": {
-            "r_top": 179,
+            "r_top": 177,
             "c_left": 12,
             "r_bot": 185,
             "c_right": 27
@@ -1171,6 +1688,15 @@
           "row_name_candidates": [],
           "footnote_candidates": [],
           "split_candidates": [
+            {
+              "axis": "row",
+              "index": 178,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
             {
               "axis": "col",
               "index": 13,
@@ -1191,8 +1717,151 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "076daba6b93bd14c_t17_t9_child1",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 177,
+                "c_left": 12,
+                "r_bot": 177,
+                "c_right": 27
+              },
+              "trimmed_bbox": {
+                "r_top": 177,
+                "c_left": 14,
+                "r_bot": 177,
+                "c_right": 27
+              },
+              "core_data_region": {
+                "r_top": 177,
+                "c_left": 14,
+                "r_bot": 177,
+                "c_right": 27,
+                "numeric_ratio": 1.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "col",
+                  "index": 15,
+                  "separator_score": 1.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: separator=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "076daba6b93bd14c_t17_t9",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "076daba6b93bd14c_t17_t9_child2",
+              "sheet_name": "Calculations",
+              "original_bbox": {
+                "r_top": 178,
+                "c_left": 12,
+                "r_bot": 185,
+                "c_right": 27
+              },
+              "trimmed_bbox": {
+                "r_top": 179,
+                "c_left": 12,
+                "r_bot": 185,
+                "c_right": 27
+              },
+              "core_data_region": {
+                "r_top": 179,
+                "c_left": 12,
+                "r_bot": 185,
+                "c_right": 27,
+                "numeric_ratio": 0.9333
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "col",
+                  "index": 13,
+                  "separator_score": 1.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: separator=1.00"
+                },
+                {
+                  "axis": "col",
+                  "index": 15,
+                  "separator_score": 1.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: separator=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "076daba6b93bd14c_t17_t9",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_t17_b9",
@@ -1232,8 +1901,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
@@ -1282,8 +1968,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
@@ -1323,8 +2026,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_b15",
@@ -1373,8 +2093,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_b23",
@@ -1414,8 +2151,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         }
       ],
       "coordinator": {
@@ -1428,47 +2182,16 @@
       "sheet_name": "Inputs",
       "table_results": [
         {
-          "table_id": "9814fc53f594ba29_t45_top",
+          "table_id": "9814fc53f594ba29_t45",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 2,
-            "c_left": 1,
-            "r_bot": 2,
-            "c_right": 13
-          },
-          "trimmed_bbox": {
-            "r_top": 2,
-            "c_left": 2,
-            "r_bot": 2,
-            "c_right": 5
-          },
-          "core_data_region": {
-            "r_top": 2,
-            "c_left": 2,
-            "r_bot": 2,
-            "c_right": 5,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "9814fc53f594ba29_t45_bottom",
-          "sheet_name": "Inputs",
-          "original_bbox": {
-            "r_top": 3,
             "c_left": 1,
             "r_bot": 47,
             "c_right": 13
           },
           "trimmed_bbox": {
-            "r_top": 3,
+            "r_top": 2,
             "c_left": 1,
             "r_bot": 46,
             "c_right": 5
@@ -1490,7 +2213,7 @@
                 "r_bot": 3,
                 "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t45_bottom",
+              "source_table_id": "9814fc53f594ba29_t45",
               "decision": "kept",
               "decision_reason": "single_cell_validated"
             },
@@ -1503,7 +2226,7 @@
                 "r_bot": 6,
                 "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_t45_bottom",
+              "source_table_id": "9814fc53f594ba29_t45",
               "decision": "kept",
               "decision_reason": "single_cell_validated"
             }
@@ -1518,7 +2241,7 @@
                 "r_bot": 5,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t45_bottom",
+              "source_table_id": "9814fc53f594ba29_t45",
               "decision": "kept",
               "decision_reason": "column_count_validated=4"
             },
@@ -1531,7 +2254,7 @@
                 "r_bot": 4,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t45_bottom",
+              "source_table_id": "9814fc53f594ba29_t45",
               "decision": "kept",
               "decision_reason": "column_count_validated=4"
             }
@@ -1547,7 +2270,7 @@
                 "r_bot": 20,
                 "c_right": 5
               },
-              "source_table_id": "9814fc53f594ba29_t45_bottom",
+              "source_table_id": "9814fc53f594ba29_t45",
               "decision": "kept",
               "decision_reason": "below_core_all_text"
             }
@@ -1596,26 +2319,373 @@
               "header_restart_score": 0.0,
               "changepoint_score": 0.0,
               "combined_score": 0.8,
-              "reason": "Core (65 cells) is 30% of bbox (220 cells), 53 numeric cells scattered outside"
+              "reason": "Core (65 cells) is 29% of bbox (225 cells), 53 numeric cells scattered outside"
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "9814fc53f594ba29_t45_child1",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 2,
+                "c_left": 1,
+                "r_bot": 2,
+                "c_right": 5
+              },
+              "trimmed_bbox": {
+                "r_top": 2,
+                "c_left": 2,
+                "r_bot": 2,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 2,
+                "c_left": 2,
+                "r_bot": 2,
+                "c_right": 5,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_t45",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_t45_child2",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 5,
+                "c_right": 5
+              },
+              "trimmed_bbox": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 5,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 5,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Patient population",
+                  "location": {
+                    "r_top": 3,
+                    "c_left": 1,
+                    "r_bot": 3,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_t45_child2",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 3,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_t45",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_t45_child3",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 6,
+                "c_left": 1,
+                "r_bot": 19,
+                "c_right": 5
+              },
+              "trimmed_bbox": {
+                "r_top": 6,
+                "c_left": 1,
+                "r_bot": 19,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 7,
+                "c_left": 1,
+                "r_bot": 19,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Market shares in world without InO",
+                  "location": {
+                    "r_top": 6,
+                    "c_left": 1,
+                    "r_bot": 6,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_t45_child3",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 6,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_t45",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_t45_child4",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 20,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 5
+              },
+              "trimmed_bbox": {
+                "r_top": 20,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 21,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Market shares in world with InO",
+                  "location": {
+                    "r_top": 20,
+                    "c_left": 1,
+                    "r_bot": 20,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_t45_child4",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 20,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_t45",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_t45_child5",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 34,
+                "c_left": 1,
+                "r_bot": 46,
+                "c_right": 5
+              },
+              "trimmed_bbox": {
+                "r_top": 34,
+                "c_left": 1,
+                "r_bot": 46,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 35,
+                "c_left": 1,
+                "r_bot": 46,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Annual drug costs",
+                  "location": {
+                    "r_top": 34,
+                    "c_left": 1,
+                    "r_bot": 34,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_t45_child5",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 34,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_t45",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": true,
+          "header_found": true,
+          "row_names_found": false,
+          "footnote_found": true,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "row_names"
+          ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_t24_top",
+          "table_id": "9814fc53f594ba29_b45_t24",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 48,
             "c_left": 1,
-            "r_bot": 59,
+            "r_bot": 71,
             "c_right": 13
           },
           "trimmed_bbox": {
             "r_top": 48,
             "c_left": 1,
-            "r_bot": 59,
+            "r_bot": 71,
             "c_right": 13
           },
           "core_data_region": {
@@ -1628,52 +2698,21 @@
           "title_candidates": [],
           "header_row_candidates": [],
           "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "9814fc53f594ba29_b45_t24_bottom",
-          "sheet_name": "Inputs",
-          "original_bbox": {
-            "r_top": 60,
-            "c_left": 1,
-            "r_bot": 71,
-            "c_right": 13
-          },
-          "trimmed_bbox": {
-            "r_top": 60,
-            "c_left": 1,
-            "r_bot": 71,
-            "c_right": 5
-          },
-          "core_data_region": {
-            "r_top": 61,
-            "c_left": 1,
-            "r_bot": 71,
-            "c_right": 5,
-            "numeric_ratio": 0.5
-          },
-          "title_candidates": [
+          "footnote_candidates": [
             {
-              "piece_type": "title",
+              "piece_type": "footnote",
               "text": "Adverse events, costs",
               "location": {
                 "r_top": 60,
                 "c_left": 1,
                 "r_bot": 60,
-                "c_right": 1
+                "c_right": 13
               },
-              "source_table_id": "9814fc53f594ba29_b45_t24_bottom",
+              "source_table_id": "9814fc53f594ba29_b45_t24",
               "decision": "kept",
-              "decision_reason": "single_cell_validated"
+              "decision_reason": "below_core_all_text"
             }
           ],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
           "split_candidates": [
             {
               "axis": "row",
@@ -1686,51 +2725,156 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "9814fc53f594ba29_b45_t24_child1",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 59,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 59,
+                "c_right": 13
+              },
+              "core_data_region": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 59,
+                "c_right": 13,
+                "numeric_ratio": 0.9231
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_t24",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_t24_child2",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 60,
+                "c_left": 1,
+                "r_bot": 71,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 60,
+                "c_left": 1,
+                "r_bot": 71,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 61,
+                "c_left": 1,
+                "r_bot": 71,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Adverse events, costs",
+                  "location": {
+                    "r_top": 60,
+                    "c_left": 1,
+                    "r_bot": 60,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_b45_t24_child2",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 60,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_t24",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": true,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names"
+          ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_b24_t46_top",
+          "table_id": "9814fc53f594ba29_b45_b24_t46",
           "sheet_name": "Inputs",
           "original_bbox": {
             "r_top": 72,
-            "c_left": 1,
-            "r_bot": 73,
-            "c_right": 13
-          },
-          "trimmed_bbox": {
-            "r_top": 73,
-            "c_left": 1,
-            "r_bot": 73,
-            "c_right": 5
-          },
-          "core_data_region": {
-            "r_top": 73,
-            "c_left": 1,
-            "r_bot": 73,
-            "c_right": 5,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
-          "sheet_name": "Inputs",
-          "original_bbox": {
-            "r_top": 74,
             "c_left": 1,
             "r_bot": 117,
             "c_right": 13
           },
           "trimmed_bbox": {
-            "r_top": 74,
+            "r_top": 73,
             "c_left": 1,
             "r_bot": 117,
             "c_right": 13
@@ -1752,7 +2896,7 @@
                 "r_bot": 90,
                 "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46",
               "decision": "kept",
               "decision_reason": "single_cell_validated"
             },
@@ -1765,7 +2909,7 @@
                 "r_bot": 91,
                 "c_right": 1
               },
-              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46",
               "decision": "kept",
               "decision_reason": "single_cell_validated"
             }
@@ -1780,7 +2924,7 @@
                 "r_bot": 89,
                 "c_right": 13
               },
-              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46",
               "decision": "kept",
               "decision_reason": "column_count_validated=4"
             }
@@ -1796,7 +2940,7 @@
                 "r_bot": 105,
                 "c_right": 13
               },
-              "source_table_id": "9814fc53f594ba29_b45_b24_t46_bottom",
+              "source_table_id": "9814fc53f594ba29_b45_b24_t46",
               "decision": "kept",
               "decision_reason": "below_core_all_text"
             }
@@ -1872,12 +3016,520 @@
               "header_restart_score": 0.0,
               "changepoint_score": 0.0,
               "combined_score": 0.8,
-              "reason": "Core (65 cells) is 11% of bbox (572 cells), 152 numeric cells scattered outside"
+              "reason": "Core (65 cells) is 11% of bbox (585 cells), 152 numeric cells scattered outside"
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child1",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 73,
+                "c_left": 1,
+                "r_bot": 73,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 73,
+                "c_left": 1,
+                "r_bot": 73,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 73,
+                "c_left": 1,
+                "r_bot": 73,
+                "c_right": 5,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child2",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 74,
+                "c_left": 1,
+                "r_bot": 78,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 74,
+                "c_left": 1,
+                "r_bot": 78,
+                "c_right": 13
+              },
+              "core_data_region": {
+                "r_top": 74,
+                "c_left": 1,
+                "r_bot": 78,
+                "c_right": 13,
+                "numeric_ratio": 0.9375
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 74,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child3",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 79,
+                "c_left": 1,
+                "r_bot": 79,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 79,
+                "c_left": 1,
+                "r_bot": 79,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 79,
+                "c_left": 1,
+                "r_bot": 79,
+                "c_right": 5,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 79,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child4",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 80,
+                "c_left": 1,
+                "r_bot": 84,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 80,
+                "c_left": 1,
+                "r_bot": 84,
+                "c_right": 13
+              },
+              "core_data_region": {
+                "r_top": 80,
+                "c_left": 1,
+                "r_bot": 84,
+                "c_right": 13,
+                "numeric_ratio": 0.9375
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 80,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child5",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 85,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 85,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 86,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Subsequent treatment costs",
+                  "location": {
+                    "r_top": 85,
+                    "c_left": 1,
+                    "r_bot": 85,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_b45_b24_t46_child5",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 85,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child6",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 90,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 90,
+                "c_right": 1
+              },
+              "core_data_region": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 90,
+                "c_right": 1,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 90,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child7",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 91,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 91,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 92,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "Number of bed days",
+                  "location": {
+                    "r_top": 91,
+                    "c_left": 1,
+                    "r_bot": 91,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_b45_b24_t46_child7",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 91,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "9814fc53f594ba29_b45_b24_t46_child8",
+              "sheet_name": "Inputs",
+              "original_bbox": {
+                "r_top": 105,
+                "c_left": 1,
+                "r_bot": 117,
+                "c_right": 13
+              },
+              "trimmed_bbox": {
+                "r_top": 105,
+                "c_left": 1,
+                "r_bot": 117,
+                "c_right": 5
+              },
+              "core_data_region": {
+                "r_top": 106,
+                "c_left": 1,
+                "r_bot": 117,
+                "c_right": 5,
+                "numeric_ratio": 0.5
+              },
+              "title_candidates": [
+                {
+                  "piece_type": "title",
+                  "text": "SCT rates after induction therapy",
+                  "location": {
+                    "r_top": 105,
+                    "c_left": 1,
+                    "r_bot": 105,
+                    "c_right": 1
+                  },
+                  "source_table_id": "9814fc53f594ba29_b45_b24_t46_child8",
+                  "decision": "kept",
+                  "decision_reason": "single_cell_validated"
+                }
+              ],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 105,
+                  "separator_score": 0.9230769230769231,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 0.9230769230769231,
+                  "reason": "High split score: separator=0.92"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": true,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": true,
+          "header_found": true,
+          "row_names_found": false,
+          "footnote_found": true,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "row_names"
+          ]
         },
         {
           "table_id": "9814fc53f594ba29_b45_b24_b46_t2",
@@ -1907,8 +3559,25 @@
           "footnote_candidates": [],
           "split_candidates": [],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "9814fc53f594ba29_b45_b24_b46_b2",
@@ -1938,8 +3607,25 @@
           "footnote_candidates": [],
           "split_candidates": [],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         }
       ],
       "coordinator": {
@@ -1952,63 +3638,22 @@
       "sheet_name": "Introduction",
       "table_results": [
         {
-          "table_id": "f57ac8d2e4e4931a_t3_top",
+          "table_id": "f57ac8d2e4e4931a_t3",
           "sheet_name": "Introduction",
           "original_bbox": {
             "r_top": 10,
-            "c_left": 2,
-            "r_bot": 10,
-            "c_right": 4
-          },
-          "trimmed_bbox": {
-            "r_top": 10,
-            "c_left": 2,
-            "r_bot": 10,
-            "c_right": 4
-          },
-          "core_data_region": {
-            "r_top": 10,
-            "c_left": 2,
-            "r_bot": 10,
-            "c_right": 4,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [
-            {
-              "axis": "col",
-              "index": 3,
-              "separator_score": 1.0,
-              "header_restart_score": 0.0,
-              "changepoint_score": 0.0,
-              "combined_score": 1.0,
-              "reason": "High split score: separator=1.00"
-            }
-          ],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "f57ac8d2e4e4931a_t3_bottom",
-          "sheet_name": "Introduction",
-          "original_bbox": {
-            "r_top": 11,
             "c_left": 2,
             "r_bot": 12,
             "c_right": 4
           },
           "trimmed_bbox": {
-            "r_top": 12,
+            "r_top": 10,
             "c_left": 2,
             "r_bot": 12,
             "c_right": 4
           },
           "core_data_region": {
-            "r_top": 12,
+            "r_top": 10,
             "c_left": 2,
             "r_bot": 12,
             "c_right": 4,
@@ -2020,6 +3665,15 @@
           "footnote_candidates": [],
           "split_candidates": [
             {
+              "axis": "row",
+              "index": 11,
+              "separator_score": 1.0,
+              "header_restart_score": 0.0,
+              "changepoint_score": 0.0,
+              "combined_score": 1.0,
+              "reason": "High split score: separator=1.00"
+            },
+            {
               "axis": "col",
               "index": 3,
               "separator_score": 1.0,
@@ -2030,8 +3684,142 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "f57ac8d2e4e4931a_t3_child1",
+              "sheet_name": "Introduction",
+              "original_bbox": {
+                "r_top": 10,
+                "c_left": 2,
+                "r_bot": 10,
+                "c_right": 4
+              },
+              "trimmed_bbox": {
+                "r_top": 10,
+                "c_left": 2,
+                "r_bot": 10,
+                "c_right": 4
+              },
+              "core_data_region": {
+                "r_top": 10,
+                "c_left": 2,
+                "r_bot": 10,
+                "c_right": 4,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "col",
+                  "index": 3,
+                  "separator_score": 1.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: separator=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "f57ac8d2e4e4931a_t3_child2",
+              "sheet_name": "Introduction",
+              "original_bbox": {
+                "r_top": 11,
+                "c_left": 2,
+                "r_bot": 12,
+                "c_right": 4
+              },
+              "trimmed_bbox": {
+                "r_top": 12,
+                "c_left": 2,
+                "r_bot": 12,
+                "c_right": 4
+              },
+              "core_data_region": {
+                "r_top": 12,
+                "c_left": 2,
+                "r_bot": 12,
+                "c_right": 4,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "col",
+                  "index": 3,
+                  "separator_score": 1.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 0.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: separator=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "f57ac8d2e4e4931a_b3",
@@ -2071,8 +3859,25 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         }
       ],
       "coordinator": {
@@ -2094,47 +3899,16 @@
       "sheet_name": "Results",
       "table_results": [
         {
-          "table_id": "262a4c0f1d47d09d_top",
+          "table_id": "262a4c0f1d47d09d",
           "sheet_name": "Results",
           "original_bbox": {
             "r_top": 3,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 4
-          },
-          "trimmed_bbox": {
-            "r_top": 3,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 4
-          },
-          "core_data_region": {
-            "r_top": 3,
-            "c_left": 1,
-            "r_bot": 3,
-            "c_right": 4,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "262a4c0f1d47d09d_bottom",
-          "sheet_name": "Results",
-          "original_bbox": {
-            "r_top": 4,
             "c_left": 1,
             "r_bot": 9,
             "c_right": 4
           },
           "trimmed_bbox": {
-            "r_top": 4,
+            "r_top": 3,
             "c_left": 1,
             "r_bot": 9,
             "c_right": 4
@@ -2162,51 +3936,144 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "262a4c0f1d47d09d_child1",
+              "sheet_name": "Results",
+              "original_bbox": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 4
+              },
+              "trimmed_bbox": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 4
+              },
+              "core_data_region": {
+                "r_top": 3,
+                "c_left": 1,
+                "r_bot": 3,
+                "c_right": 4,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "262a4c0f1d47d09d",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "262a4c0f1d47d09d_child2",
+              "sheet_name": "Results",
+              "original_bbox": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 9,
+                "c_right": 4
+              },
+              "trimmed_bbox": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 9,
+                "c_right": 4
+              },
+              "core_data_region": {
+                "r_top": 4,
+                "c_left": 1,
+                "r_bot": 9,
+                "c_right": 4,
+                "numeric_ratio": 0.9583
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 4,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "262a4c0f1d47d09d",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
-          "table_id": "47ecc07e130eef5f_t10_top",
+          "table_id": "47ecc07e130eef5f_t10",
           "sheet_name": "Results",
           "original_bbox": {
             "r_top": 47,
-            "c_left": 1,
-            "r_bot": 47,
-            "c_right": 11
-          },
-          "trimmed_bbox": {
-            "r_top": 47,
-            "c_left": 2,
-            "r_bot": 47,
-            "c_right": 7
-          },
-          "core_data_region": {
-            "r_top": 47,
-            "c_left": 2,
-            "r_bot": 47,
-            "c_right": 7,
-            "numeric_ratio": 0.0
-          },
-          "title_candidates": [],
-          "header_row_candidates": [],
-          "row_name_candidates": [],
-          "footnote_candidates": [],
-          "split_candidates": [],
-          "pieces_sent_to_coordinator": [],
-          "llm_decision_summaries": [],
-          "llm_details": []
-        },
-        {
-          "table_id": "47ecc07e130eef5f_t10_bottom",
-          "sheet_name": "Results",
-          "original_bbox": {
-            "r_top": 48,
             "c_left": 1,
             "r_bot": 56,
             "c_right": 11
           },
           "trimmed_bbox": {
-            "r_top": 48,
+            "r_top": 47,
             "c_left": 1,
             "r_bot": 56,
             "c_right": 11
@@ -2234,8 +4101,132 @@
             }
           ],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [
+            {
+              "table_id": "47ecc07e130eef5f_t10_child1",
+              "sheet_name": "Results",
+              "original_bbox": {
+                "r_top": 47,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 11
+              },
+              "trimmed_bbox": {
+                "r_top": 47,
+                "c_left": 2,
+                "r_bot": 47,
+                "c_right": 7
+              },
+              "core_data_region": {
+                "r_top": 47,
+                "c_left": 2,
+                "r_bot": 47,
+                "c_right": 7,
+                "numeric_ratio": 0.0
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "47ecc07e130eef5f_t10",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_metadata",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "47ecc07e130eef5f_t10_child2",
+              "sheet_name": "Results",
+              "original_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 56,
+                "c_right": 11
+              },
+              "trimmed_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 56,
+                "c_right": 11
+              },
+              "core_data_region": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 56,
+                "c_right": 11,
+                "numeric_ratio": 0.9247
+              },
+              "title_candidates": [],
+              "header_row_candidates": [],
+              "row_name_candidates": [],
+              "footnote_candidates": [],
+              "split_candidates": [
+                {
+                  "axis": "row",
+                  "index": 48,
+                  "separator_score": 0.0,
+                  "header_restart_score": 0.0,
+                  "changepoint_score": 1.0,
+                  "combined_score": 1.0,
+                  "reason": "High split score: changepoint=1.00"
+                }
+              ],
+              "pieces_sent_to_coordinator": [],
+              "parent_table_id": "47ecc07e130eef5f_t10",
+              "split_depth": 1,
+              "children": [],
+              "split_decision_applied": null,
+              "hierarchy_role": "child_numeric",
+              "title_found": false,
+              "header_found": false,
+              "row_names_found": false,
+              "footnote_found": false,
+              "llm_decision_summaries": [],
+              "llm_details": [],
+              "has_children": false,
+              "is_child": true,
+              "missing_metadata": [
+                "title",
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
+          ],
+          "split_decision_applied": null,
+          "hierarchy_role": "parent",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": true,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         },
         {
           "table_id": "47ecc07e130eef5f_b10",
@@ -2265,8 +4256,25 @@
           "footnote_candidates": [],
           "split_candidates": [],
           "pieces_sent_to_coordinator": [],
+          "parent_table_id": null,
+          "split_depth": 0,
+          "children": [],
+          "split_decision_applied": null,
+          "hierarchy_role": "standalone",
+          "title_found": false,
+          "header_found": false,
+          "row_names_found": false,
+          "footnote_found": false,
           "llm_decision_summaries": [],
-          "llm_details": []
+          "llm_details": [],
+          "has_children": false,
+          "is_child": false,
+          "missing_metadata": [
+            "title",
+            "header",
+            "row_names",
+            "footnote"
+          ]
         }
       ],
       "coordinator": {
@@ -2276,7 +4284,7 @@
       }
     }
   ],
-  "elapsed_seconds": 1.38,
-  "n_tables_processed": 46,
+  "elapsed_seconds": 1.48,
+  "n_tables_processed": 37,
   "n_llm_calls": 0
 }
