@@ -32,6 +32,7 @@ from core.paths import (
     get_parse_output_path,
     get_table_output_path,
     get_sheetagent_output_path,
+    get_v4_sheetagent_output_path,
 )
 from core.stage_config import (
     xl_table_config_from_mapping,
@@ -59,7 +60,23 @@ def _load_v3a_viewer():
     return mod
 
 
+def _load_v4_viewer():
+    """Load sibling ``v4_viewer.py`` by path.
+
+    ``streamlit run apps/orchestrator/app.py`` executes this file as ``__main__``,
+    so ``from .v4_viewer`` relative imports fail.
+    """
+    path = Path(__file__).resolve().parent / "v4_viewer.py"
+    spec = importlib.util.spec_from_file_location("orchestrator_v4_viewer", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load v4_viewer from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 _v3a_viewer = _load_v3a_viewer()
+_v4_viewer = _load_v4_viewer()
 
 
 def _default_session() -> None:
@@ -193,6 +210,7 @@ def app() -> None:
     parse_out = get_parse_output_path(run_id, base)
     table_out = get_table_output_path(run_id, base)
     sa_out = get_sheetagent_output_path(run_id, base)
+    v4_out = get_v4_sheetagent_output_path(run_id, base)
 
     cli = f"""```text
 py -3 scripts/run_init.py --input <workbook.xlsx> --run-id {run_id} --output-base {base} --no-interactive
@@ -284,6 +302,11 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     parse_btn = st.sidebar.button("▶ Run xl_parse", disabled=busy)
     table_btn = st.sidebar.button("▶ Run xl_table", disabled=busy)
     v3a_btn = st.sidebar.button("▶ Run V3A sheetagent", disabled=busy)
+    v4_btn = st.sidebar.button("▶ Run xl_sheetagent_v4", disabled=busy)
+    st.sidebar.caption(
+        "⚠️ V4 requires: `pip install openpyxl openai pyyaml` and LLM API key implementation "
+        "(see QUICK_START.md in xl_sheetagent_v4/)"
+    )
 
     if init_btn and not busy:
         _clear_for_run("xl_init")
@@ -355,6 +378,31 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
+    if v4_btn and not busy:
+        _clear_for_run("xl_sheetagent_v4")
+
+        _run_id_capture = run_id
+        _v4_out_capture = v4_out
+        _table_out_capture = table_out
+
+        def _work():
+            from xl_sheetagent_v4.runner import run_v4_analysis
+
+            _v4_out_capture.mkdir(parents=True, exist_ok=True)
+
+            # Note: LLM client is None — user must add API key implementation
+            return run_v4_analysis(
+                run_id=_run_id_capture,
+                output_base=Path(_v4_out_capture).parent.parent,
+                llm_client=None,  # User must implement LLM calls
+                model="gpt-4o",
+                max_recursion_depth=3,
+            )
+
+        st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
+        st.rerun()
+
     view_v3a_saved_btn = st.sidebar.button(
         "📂 View saved V3A results (no re-run)",
         disabled=busy,
@@ -367,10 +415,11 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     # --- Main area -----------------------------------------------------------
     st.subheader("Paths")
     st.code(
-        f"init_output:       {init_out}\n"
-        f"parse_output:      {parse_out}\n"
-        f"table_output:      {table_out}\n"
-        f"sheetagent_output: {sa_out}",
+        f"init_output:          {init_out}\n"
+        f"parse_output:         {parse_out}\n"
+        f"table_output:         {table_out}\n"
+        f"sheetagent_output:    {sa_out}\n"
+        f"v4_sheetagent_output: {v4_out}",
         language="text",
     )
 
@@ -420,6 +469,9 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         else:
             # Fallback: load from saved JSON
             _v3a_viewer.render_v3a_from_json(str(sa_out))
+    elif res is not None and op == "xl_sheetagent_v4":
+        # V4 results - show Phase 1 & 2 output (tables, metadata, children)
+        _v4_viewer.render_v4_from_json(str(v4_out))
     elif res is not None and op == "xl_init":
         st.success(
             f"xl_init complete — {len(res.table_sheets)} approved sheet(s). "
@@ -435,7 +487,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     ):
         st.info(
             "Upload a workbook, then run **xl_init** → **xl_parse** → **xl_table** "
-            "in order. Then optionally run **V3A sheetagent** to extract semantic pieces."
+            "in order. Then optionally run **V3A sheetagent** or **xl_sheetagent_v4** "
+            "to extract semantic pieces and metadata."
         )
 
 
