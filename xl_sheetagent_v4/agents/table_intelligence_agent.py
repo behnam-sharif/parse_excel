@@ -6,7 +6,7 @@ LLM-powered agent that analyzes tables and extracts rich metadata.
 
 import json
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
 
 from ..tools import (
@@ -14,12 +14,15 @@ from ..tools import (
     detect_metadata_zones,
     detect_children,
 )
+from ..tools.table_reader import compute_structural_summary
 from ..prompts.table_analysis import build_table_analysis_prompt
 from ..schemas.enriched_table import (
     EnrichedTable,
     TableMetadata,
     ChildTable,
+    PatternObservation,
 )
+from ..llm_dispatch import complete_text
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +84,8 @@ class TableIntelligenceAgent:
         ws: Any,
         depth: int = 0,
         max_depth: int = 3,
+        all_tables_in_sheet: Optional[List] = None,
+        run_dir: Optional[Path] = None,
     ) -> EnrichedTable:
         """
         Analyze a single table and extract metadata.
@@ -120,13 +125,42 @@ class TableIntelligenceAgent:
 
         # Step 2: Heuristic pre-analysis
         metadata_zones = detect_metadata_zones(grid, types, formatting)
+
+        # Step 2.1: v3a header candidates (non-numerical rows in top 20%)
+        from ..tools.metadata_detector import detect_header_candidates_v3a
+        header_candidates_v3a = detect_header_candidates_v3a(grid, types, bbox_coords)
+        metadata_zones["header_candidates_v3a"] = header_candidates_v3a
+
         table_data["metadata_zones"] = metadata_zones
+
+        # Step 2.5: Structural summary (scans ALL rows)
+        structural_summary = compute_structural_summary(grid, types, formatting)
+        table_data["structural_summary"] = structural_summary
+
+        # Step 2.6: Check for missing header / inheritance
+        header_inheritance = None
+        if all_tables_in_sheet:
+            has_header, _ = self._has_header_row(grid, types)
+            if not has_header:
+                logger.warning(f"Table {table_id} has no header row, checking inheritance")
+                header_inheritance = self._find_header_inheritance_candidate(
+                    table_id, bbox_coords, all_tables_in_sheet,
+                )
+                if header_inheritance:
+                    logger.info(f"Will inherit header from {header_inheritance['source_table_id']}")
+
+        # Step 2.7: Load validation inputs from upstream stages
+        validation_inputs = self._load_validation_inputs(
+            sheet_name, bbox, table_id, run_dir
+        )
 
         # Step 3: Call LLM for analysis
         analysis_result = self._call_llm_analysis(
             table_data,
             sheet_name,
             bbox,
+            validation_inputs=validation_inputs,
+            header_inheritance=header_inheritance,
         )
 
         # Step 4: Parse LLM response
@@ -141,8 +175,18 @@ class TableIntelligenceAgent:
             grid, types, bbox, bbox_coords, formatting
         )
 
-        # Merge children (LLM takes priority)
+        # Merge children (union merge: LLM + heuristic)
         children_list = self._merge_children(llm_children, heuristic_children)
+
+        # Step 6.3: Cross-validate children with grammar cuts
+        grammar_cuts = validation_inputs.get("grammar_cuts", [])
+        if grammar_cuts:
+            children_list = self._validate_children_with_cuts(
+                children_list, grammar_cuts, bbox_coords
+            )
+
+        # Step 6.5: Build two-level hierarchy
+        children_list = self._nest_children_under_parents(children_list)
 
         # Step 7: Recursively analyze children
         enriched_children = []
@@ -177,6 +221,19 @@ class TableIntelligenceAgent:
 
                     enriched_children.append(child_obj)
 
+        # Step 7.5: Parse pattern observations
+        raw_patterns = parsed.get("pattern_observations", [])
+        pattern_observations = []
+        for rp in raw_patterns:
+            if isinstance(rp, dict):
+                pattern_observations.append(PatternObservation(
+                    pattern_type=rp.get("pattern_type", "other"),
+                    confidence=rp.get("confidence", 0.0),
+                    evidence=rp.get("evidence", ""),
+                    applies_to_tables=rp.get("applies_to_tables", []),
+                    generalizable=rp.get("generalizable", False),
+                ))
+
         # Step 8: Build EnrichedTable
         enriched = EnrichedTable(
             table_id=table_id,
@@ -188,6 +245,7 @@ class TableIntelligenceAgent:
             summary_confidence=parsed.get("analysis_confidence", 0.0),
             children=enriched_children,
             depth=depth,
+            pattern_observations=pattern_observations,
             llm_calls=self.llm_calls,
             llm_tokens_used=self.total_tokens,
         )
@@ -205,6 +263,8 @@ class TableIntelligenceAgent:
         table_data: Dict[str, Any],
         sheet_name: str,
         bbox: str,
+        validation_inputs: Optional[Dict[str, Any]] = None,
+        header_inheritance: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
         Call LLM to analyze table.
@@ -217,6 +277,10 @@ class TableIntelligenceAgent:
             Sheet name
         bbox : str
             Excel bbox
+        validation_inputs : Dict[str, Any], optional
+            Grammar cuts and rejected splits from upstream
+        header_inheritance : Dict[str, Any], optional
+            Header inheritance context
 
         Returns
         -------
@@ -229,6 +293,8 @@ class TableIntelligenceAgent:
             table_data=table_data,
             sheet_name=sheet_name,
             bbox_excel=bbox,
+            validation_inputs=validation_inputs,
+            header_inheritance=header_inheritance,
         )
 
         logger.debug(f"LLM prompt length: {len(prompt)} chars")
@@ -237,7 +303,6 @@ class TableIntelligenceAgent:
         response = self._call_llm(prompt)
 
         self.llm_calls += 1
-        # TODO: Track tokens (needs LLM client integration)
 
         return response
 
@@ -264,31 +329,19 @@ class TableIntelligenceAgent:
         if self.llm_client is None:
             raise NotImplementedError(
                 "LLM client not configured. "
-                "User needs to add API key and initialize LLM client."
+                "Set OPENAI_API_KEY (or pass an API key into your client) and pass "
+                "llm_client=openai.OpenAI() into run_v4_analysis."
             )
 
-        # Placeholder for actual LLM call
-        # User will implement this based on their LLM provider
-        #
-        # Example for OpenAI:
-        # response = self.llm_client.chat.completions.create(
-        #     model=self.model,
-        #     messages=[{"role": "user", "content": prompt}],
-        #     max_tokens=self.max_tokens,
-        #     temperature=self.temperature,
-        # )
-        # return response.choices[0].message.content
-        #
-        # Example for Anthropic:
-        # response = self.llm_client.messages.create(
-        #     model=self.model,
-        #     max_tokens=self.max_tokens,
-        #     temperature=self.temperature,
-        #     messages=[{"role": "user", "content": prompt}],
-        # )
-        # return response.content[0].text
-
-        raise NotImplementedError("LLM client not implemented yet")
+        text, delta = complete_text(
+            self.llm_client,
+            self.model,
+            prompt,
+            self.max_tokens,
+            self.temperature,
+        )
+        self.total_tokens += delta
+        return text
 
     def _parse_llm_response(self, response: str) -> Dict[str, Any]:
         """
@@ -327,14 +380,18 @@ class TableIntelligenceAgent:
             return {
                 "title": "Parse Error",
                 "title_confidence": 0.0,
+                "title_source": "missing",
                 "header": [],
                 "header_confidence": 0.0,
+                "header_source": "missing",
                 "row_names": [],
                 "row_names_confidence": 0.0,
+                "row_names_source": "missing",
                 "summary": "Failed to parse LLM response",
                 "children": [],
                 "table_type": "other",
                 "analysis_confidence": 0.0,
+                "pattern_observations": [],
             }
 
     def _build_metadata(self, parsed: Dict[str, Any]) -> TableMetadata:
@@ -355,11 +412,15 @@ class TableIntelligenceAgent:
         metadata = TableMetadata(
             title=parsed.get("title", ""),
             title_confidence=parsed.get("title_confidence", 0.0),
+            title_source=parsed.get("title_source", "detected"),
             header=parsed.get("header", []),
             header_confidence=parsed.get("header_confidence", 0.0),
+            header_source=parsed.get("header_source", "detected"),
+            header_inherited_from=parsed.get("header_inherited_from"),
             header_location=parsed.get("header_location"),
             row_names=parsed.get("row_names", []),
             row_names_confidence=parsed.get("row_names_confidence", 0.0),
+            row_names_source=parsed.get("row_names_source", "detected"),
             row_names_location=parsed.get("row_names_location"),
             data_region=parsed.get("data_region"),
             table_type=parsed.get("table_type", "other"),
@@ -367,17 +428,310 @@ class TableIntelligenceAgent:
             reasoning=parsed.get("reasoning", ""),
         )
 
+        # Enforce: row names are NEVER inherited
+        if metadata.row_names_source == "inherited":
+            logger.warning("Row names cannot be inherited — marking as missing")
+            metadata.row_names_source = "missing"
+            metadata.row_names = []
+
         return metadata
+
+    def _has_header_row(
+        self, grid: List[List[Any]], types: List[List[str]]
+    ) -> Tuple[bool, Optional[int]]:
+        """
+        Detect if the table has its own header row.
+
+        Checks first 3 rows for >=70% text, <30% numbers.
+
+        Returns
+        -------
+        Tuple[bool, Optional[int]]
+            (has_header, header_row_index)
+        """
+        for r in range(min(3, len(grid))):
+            if r >= len(types):
+                break
+            row_types = types[r]
+            text_count = sum(1 for t in row_types if t == "TEXT")
+            num_count = sum(1 for t in row_types if t == "NUMBER")
+            total = text_count + num_count
+            if total == 0:
+                continue
+            if text_count / total >= 0.7 and num_count / total < 0.3:
+                return True, r
+        return False, None
+
+    def _find_header_inheritance_candidate(
+        self,
+        current_table_id: str,
+        current_bbox: Dict[str, int],
+        all_tables_in_sheet: List,
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Find table above current table with matching column alignment.
+
+        Parameters
+        ----------
+        current_table_id : str
+            ID of the current table
+        current_bbox : Dict[str, int]
+            Current table bbox coords {r_top, c_left, r_bot, c_right}
+        all_tables_in_sheet : List[EnrichedTable]
+            Previously analyzed tables on this sheet
+
+        Returns
+        -------
+        Optional[Dict[str, Any]]
+            {source_table_id, inherited_header, row_distance, confidence}
+            or None if no candidate found
+        """
+        current_left = current_bbox["c_left"]
+        current_right = current_bbox["c_right"]
+        current_top = current_bbox["r_top"]
+
+        candidates = []
+        for other_table in all_tables_in_sheet:
+            if other_table.table_id == current_table_id:
+                continue
+            other_bbox = other_table.bbox_coords
+            # Must be above
+            if other_bbox["r_top"] >= current_top:
+                continue
+            # Columns must align (within 1 col tolerance)
+            cols_align = (
+                abs(other_bbox["c_left"] - current_left) <= 1
+                and abs(other_bbox["c_right"] - current_right) <= 1
+            )
+            if cols_align and other_table.metadata and other_table.metadata.header:
+                row_distance = current_top - other_bbox["r_bot"]
+                confidence = 0.9 if row_distance <= 5 else 0.7
+                candidates.append({
+                    "source_table_id": other_table.table_id,
+                    "inherited_header": other_table.metadata.header,
+                    "row_distance": row_distance,
+                    "confidence": confidence,
+                })
+
+        if candidates:
+            closest = min(candidates, key=lambda c: c["row_distance"])
+            logger.info(
+                f"Found header inheritance candidate: {closest['source_table_id']} "
+                f"(distance={closest['row_distance']} rows)"
+            )
+            return closest
+        return None
+
+    def _load_validation_inputs(
+        self,
+        sheet_name: str,
+        bbox: str,
+        table_id: str,
+        run_dir: Optional[Path] = None,
+    ) -> Dict[str, Any]:
+        """
+        Load grammar cuts and rejected splits from upstream stages.
+
+        Parameters
+        ----------
+        sheet_name : str
+            Sheet name to filter on
+        bbox : str
+            Excel bbox
+        table_id : str
+            Table ID
+        run_dir : Path, optional
+            Run directory path
+
+        Returns
+        -------
+        Dict[str, Any]
+            {"grammar_cuts": [...], "rejected_splits": [...]}
+        """
+        validation_data: Dict[str, Any] = {
+            "grammar_cuts": [],
+            "rejected_splits": [],
+        }
+
+        if not run_dir:
+            return validation_data
+
+        run_dir = Path(run_dir)
+
+        # Load grammar cuts from xl_parse
+        cut_scores_path = run_dir / "parse_output" / "cut_scores.jsonl"
+        if cut_scores_path.exists():
+            try:
+                with open(cut_scores_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        cut = json.loads(line)
+                        if cut.get("sheet_name") == sheet_name:
+                            validation_data["grammar_cuts"].append(cut)
+                logger.debug(
+                    f"Loaded {len(validation_data['grammar_cuts'])} grammar cuts "
+                    f"for sheet '{sheet_name}'"
+                )
+            except Exception as e:
+                logger.warning(f"Failed to load cut_scores.jsonl: {e}")
+
+        # Load rejected splits from xl_table (if available)
+        rejected_path = run_dir / "table_output" / "rejected_splits.jsonl"
+        if rejected_path.exists():
+            try:
+                with open(rejected_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        split = json.loads(line)
+                        if split.get("table_id") == table_id:
+                            validation_data["rejected_splits"].append(split)
+                logger.debug(
+                    f"Loaded {len(validation_data['rejected_splits'])} rejected splits "
+                    f"for table '{table_id}'"
+                )
+            except Exception as e:
+                logger.warning(f"Failed to load rejected_splits.jsonl: {e}")
+
+        return validation_data
+
+    def _validate_children_with_cuts(
+        self,
+        children: List[Dict[str, Any]],
+        grammar_cuts: List[Dict[str, Any]],
+        bbox_coords: Dict[str, int],
+    ) -> List[Dict[str, Any]]:
+        """
+        Cross-validate children boundaries against grammar cuts.
+
+        Boosts confidence when a child boundary aligns with a grammar cut
+        (within 2 rows).
+
+        Parameters
+        ----------
+        children : List[Dict[str, Any]]
+            Children from LLM/heuristic merge
+        grammar_cuts : List[Dict[str, Any]]
+            Grammar cuts from xl_parse
+        bbox_coords : Dict[str, int]
+            Parent bbox coords
+
+        Returns
+        -------
+        List[Dict[str, Any]]
+            Children with validation metadata
+        """
+        if not grammar_cuts:
+            return children
+
+        r_top = bbox_coords.get("r_top", 0)
+
+        for child in children:
+            row_range = child.get("row_range", [])
+            if not row_range or len(row_range) < 1:
+                continue
+
+            child_start_absolute = r_top + row_range[0]
+
+            matching_cuts = [
+                c for c in grammar_cuts
+                if abs(c.get("row", -999) - child_start_absolute) <= 2
+            ]
+
+            if matching_cuts:
+                child["validation"] = {
+                    "source": "grammar_cut",
+                    "cut_type": matching_cuts[0].get("cut_type", "unknown"),
+                    "cut_confidence": matching_cuts[0].get("confidence", 0.0),
+                }
+                original_conf = child.get("confidence", 0.5)
+                child["confidence"] = min(original_conf * 1.15, 0.98)
+                logger.debug(
+                    f"Child '{child.get('section_name')}' validated by grammar cut "
+                    f"at row {child_start_absolute}"
+                )
+            else:
+                child["validation"] = {
+                    "source": "llm_only",
+                    "note": "No grammar cut at this boundary",
+                }
+
+        return children
+
+    @staticmethod
+    def _nest_children_under_parents(
+        children: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """
+        Build two-level hierarchy: nest leaf children under parent sections.
+
+        Children with ``is_parent_section=True`` become containers.
+        Leaf children whose ``row_range`` falls inside a parent's range
+        are nested under that parent (removed from the top-level list).
+
+        If no parent sections exist, the flat list is returned unchanged.
+        """
+        parent_sections = [
+            c for c in children if c.get("is_parent_section", False)
+        ]
+        if not parent_sections:
+            return children
+
+        leaf_sections = [
+            c for c in children if not c.get("is_parent_section", False)
+        ]
+
+        # Assign leaves to parents by row range containment
+        assigned = set()
+        for leaf_idx, leaf in enumerate(leaf_sections):
+            leaf_range = leaf.get("row_range", [])
+            if not leaf_range or len(leaf_range) < 2:
+                continue
+            leaf_start = leaf_range[0]
+            for parent in parent_sections:
+                p_range = parent.get("row_range", [])
+                if not p_range or len(p_range) < 2:
+                    continue
+                if p_range[0] <= leaf_start <= p_range[1]:
+                    parent.setdefault("nested_children", []).append(leaf)
+                    assigned.add(leaf_idx)
+                    break
+
+        # Unassigned leaves stay at top level alongside parents
+        top_level = list(parent_sections)
+        for idx, leaf in enumerate(leaf_sections):
+            if idx not in assigned:
+                top_level.append(leaf)
+
+        top_level.sort(key=lambda c: (c.get("row_range") or [0])[0])
+        return top_level
+
+    @staticmethod
+    def _row_range_iou(a: List[int], b: List[int]) -> float:
+        """Compute intersection-over-union of two [start, end] row ranges."""
+        if not a or not b or len(a) < 2 or len(b) < 2:
+            return 0.0
+        start = max(a[0], b[0])
+        end = min(a[1], b[1])
+        intersection = max(0, end - start + 1)
+        union = max(a[1], b[1]) - min(a[0], b[0]) + 1
+        return intersection / union if union > 0 else 0.0
 
     def _merge_children(
         self,
         llm_children: List[Dict[str, Any]],
         heuristic_children: List[Dict[str, Any]],
+        heuristic_confidence_scale: float = 0.8,
     ) -> List[Dict[str, Any]]:
         """
-        Merge children from LLM and heuristics.
+        Union-merge children from LLM and heuristics.
 
-        LLM takes priority; heuristics fill gaps.
+        LLM children are the primary set. Heuristic children that don't
+        overlap with any LLM child (IoU < 0.5) are added with scaled-down
+        confidence.
 
         Parameters
         ----------
@@ -385,26 +739,52 @@ class TableIntelligenceAgent:
             Children from LLM
         heuristic_children : List[Dict[str, Any]]
             Children from heuristics
+        heuristic_confidence_scale : float
+            Scale factor for heuristic-only child confidence
 
         Returns
         -------
         List[Dict[str, Any]]
-            Merged children
+            Merged children sorted by row_range start
         """
+        # Tag LLM children
+        for child in llm_children:
+            child.setdefault("source", "llm")
 
-        # If LLM found children, use those
-        if llm_children:
-            logger.debug(f"Using {len(llm_children)} children from LLM")
-            return llm_children
+        if not llm_children and not heuristic_children:
+            return []
 
-        # Otherwise use heuristics
-        if heuristic_children:
-            logger.debug(
-                f"Using {len(heuristic_children)} children from heuristics"
-            )
-            return heuristic_children
+        if not llm_children:
+            for child in heuristic_children:
+                child["source"] = "heuristic"
+                child["confidence"] = child.get("confidence", 0.5) * heuristic_confidence_scale
+            return sorted(heuristic_children, key=lambda c: (c.get("row_range") or [0])[0])
 
-        return []
+        merged = list(llm_children)
+
+        for h_child in heuristic_children:
+            h_range = h_child.get("row_range", [])
+            overlaps = False
+            for l_child in llm_children:
+                l_range = l_child.get("row_range", [])
+                if self._row_range_iou(h_range, l_range) > 0.5:
+                    overlaps = True
+                    l_child["source"] = "both"
+                    break
+
+            if not overlaps:
+                h_child["source"] = "heuristic"
+                h_child["confidence"] = h_child.get("confidence", 0.5) * heuristic_confidence_scale
+                merged.append(h_child)
+
+        merged.sort(key=lambda c: (c.get("row_range") or [0])[0])
+
+        logger.debug(
+            f"Merged children: {len(llm_children)} LLM + "
+            f"{sum(1 for c in merged if c.get('source') == 'heuristic')} heuristic-only = "
+            f"{len(merged)} total"
+        )
+        return merged
 
 
 def create_agent(

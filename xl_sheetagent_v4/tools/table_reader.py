@@ -229,6 +229,104 @@ def load_workbook_safe(file_path: Path, data_only: bool = True) -> Any:
     return wb
 
 
+def compute_structural_summary(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    formatting: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """
+    Scan ALL rows and produce a compact structural summary.
+
+    Parameters
+    ----------
+    grid : List[List[Any]]
+        Full 2D grid of cell values
+    types : List[List[str]]
+        Full 2D grid of cell types
+    formatting : Dict[str, Any], optional
+        Formatting information (bold_cells, etc.)
+
+    Returns
+    -------
+    Dict[str, Any]
+        {
+            "total_rows": int,
+            "total_cols": int,
+            "blank_row_indices": List[int],
+            "bold_first_cell_rows": List[int],
+            "type_transition_rows": List[int],
+            "section_header_rows": List[Dict],  # [{row, text}]
+        }
+    """
+    if not grid:
+        return {
+            "total_rows": 0,
+            "total_cols": 0,
+            "blank_row_indices": [],
+            "bold_first_cell_rows": [],
+            "type_transition_rows": [],
+            "section_header_rows": [],
+        }
+
+    n_rows = len(grid)
+    n_cols = len(grid[0]) if grid else 0
+    formatting = formatting or {}
+    bold_cells = set()
+    for coord in formatting.get("bold_cells", []):
+        if isinstance(coord, (list, tuple)) and len(coord) == 2:
+            bold_cells.add(tuple(coord))
+
+    blank_row_indices = []
+    bold_first_cell_rows = []
+    type_transition_rows = []
+    section_header_rows = []
+
+    prev_num_ratio = None
+
+    for r in range(n_rows):
+        row_types = types[r] if r < len(types) else []
+
+        # Blank rows
+        if all(t == "BLANK" for t in row_types):
+            blank_row_indices.append(r)
+            prev_num_ratio = None
+            continue
+
+        # Bold first-cell rows
+        if (r, 0) in bold_cells:
+            bold_first_cell_rows.append(r)
+
+        # Type transition: significant shift in NUMBER ratio
+        non_blank = sum(1 for t in row_types if t != "BLANK")
+        num_count = sum(1 for t in row_types if t == "NUMBER")
+        text_count = sum(1 for t in row_types if t == "TEXT")
+        num_ratio = num_count / max(non_blank, 1)
+
+        if prev_num_ratio is not None and abs(num_ratio - prev_num_ratio) >= 0.4:
+            type_transition_rows.append(r)
+
+        prev_num_ratio = num_ratio
+
+        # Section header candidates: mostly text, few cells filled, has content
+        if non_blank > 0 and non_blank <= n_cols * 0.5 and text_count >= non_blank * 0.7:
+            first_text = None
+            for val in grid[r]:
+                if val and str(val).strip():
+                    first_text = str(val).strip()
+                    break
+            if first_text and len(first_text) < 80:
+                section_header_rows.append({"row": r, "text": first_text})
+
+    return {
+        "total_rows": n_rows,
+        "total_cols": n_cols,
+        "blank_row_indices": blank_row_indices,
+        "bold_first_cell_rows": bold_first_cell_rows,
+        "type_transition_rows": type_transition_rows,
+        "section_header_rows": section_header_rows,
+    }
+
+
 def get_sheet_by_name(wb: Any, sheet_name: str) -> Worksheet:
     """
     Get worksheet by name.

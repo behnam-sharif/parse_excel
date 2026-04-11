@@ -10,11 +10,47 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+from core.paths import get_v4_sheetagent_output_path
+
 from .agents import TableIntelligenceAgent
-from .tools import load_workbook_safe, get_sheet_by_name
+from .tools.table_reader import load_workbook_safe, get_sheet_by_name
 from .schemas.enriched_table import EnrichedTable, V4RunResult
 
 logger = logging.getLogger(__name__)
+
+
+def _normalize_tables_per_sheet(raw: Any) -> List[Dict[str, Any]]:
+    """
+    xl_table writes ``tables_per_sheet.json`` as ``{sheet_name: [table_dict, ...]}``.
+
+    Some tooling expects ``[{"sheet_name": str, "tables": [...]}, ...]``; accept both.
+    """
+    if isinstance(raw, dict):
+        out: List[Dict[str, Any]] = []
+        for sheet_name, tables in raw.items():
+            if not isinstance(tables, list):
+                logger.warning(
+                    "Skipping sheet %r: expected a list of tables, got %s",
+                    sheet_name,
+                    type(tables).__name__,
+                )
+                continue
+            out.append({"sheet_name": str(sheet_name), "tables": tables})
+        return out
+    if isinstance(raw, list):
+        return raw
+    raise TypeError(
+        "tables_per_sheet.json must be a JSON object (sheet -> tables) or a list; "
+        f"got {type(raw).__name__}"
+    )
+
+
+def _excel_range_for_table(table: Dict[str, Any]) -> Optional[str]:
+    """Table objects from xl_table use ``bbox_excel``; tolerate legacy ``bbox``."""
+    r = table.get("bbox_excel") or table.get("bbox")
+    if isinstance(r, str) and r.strip():
+        return r.strip()
+    return None
 
 
 def run_v4_analysis(
@@ -53,8 +89,15 @@ def run_v4_analysis(
        - Read table data from Excel
        - Call TableIntelligenceAgent to analyze
        - Recursively analyze children
-    4. Export enriched results
+    4. Export enriched results under ``v4_sheetagent_output/v4_output/`` (see core.paths).
     """
+
+    try:
+        from core.env_bootstrap import load_project_dotenv
+
+        load_project_dotenv()
+    except ImportError:
+        pass
 
     run_dir = output_base / run_id
     if not run_dir.exists():
@@ -71,8 +114,9 @@ def run_v4_analysis(
         )
 
     with open(table_output_path, "r", encoding="utf-8") as f:
-        tables_per_sheet = json.load(f)
+        tables_per_sheet_raw = json.load(f)
 
+    tables_per_sheet = _normalize_tables_per_sheet(tables_per_sheet_raw)
     logger.info(f"Loaded xl_table output: {len(tables_per_sheet)} sheets")
 
     # Step 2: Load cleaned workbook
@@ -121,8 +165,15 @@ def run_v4_analysis(
         # Analyze each table
         sheet_enriched_tables = []
         for table in tables:
+            if not isinstance(table, dict):
+                logger.warning(
+                    "Skipping non-dict table entry on sheet %r: %s",
+                    sheet_name,
+                    type(table).__name__,
+                )
+                continue
             table_id = table.get("table_id", f"unknown_{n_tables_analyzed}")
-            bbox = table.get("bbox")
+            bbox = _excel_range_for_table(table)
 
             if not bbox:
                 logger.warning(f"Table {table_id} has no bbox, skipping")
@@ -136,6 +187,8 @@ def run_v4_analysis(
                     ws=ws,
                     depth=0,
                     max_depth=max_recursion_depth,
+                    all_tables_in_sheet=sheet_enriched_tables,
+                    run_dir=run_dir,
                 )
 
                 sheet_enriched_tables.append(enriched)
@@ -183,8 +236,8 @@ def run_v4_analysis(
         f"{elapsed:.1f}s"
     )
 
-    # Step 6: Export
-    v4_output_dir = run_dir / "v4_output"
+    # Step 6: Export (canonical path via core.paths — matches orchestrator v4 viewer)
+    v4_output_dir = get_v4_sheetagent_output_path(run_id, str(output_base)) / "v4_output"
     v4_output_dir.mkdir(parents=True, exist_ok=True)
 
     export_path = v4_output_dir / "v4_results.json"
@@ -251,11 +304,15 @@ def _serialize_enriched_table(table: EnrichedTable) -> Dict[str, Any]:
         metadata_dict = {
             "title": table.metadata.title,
             "title_confidence": table.metadata.title_confidence,
+            "title_source": table.metadata.title_source,
             "header": table.metadata.header,
             "header_confidence": table.metadata.header_confidence,
+            "header_source": table.metadata.header_source,
+            "header_inherited_from": table.metadata.header_inherited_from,
             "header_location": table.metadata.header_location,
             "row_names": table.metadata.row_names,
             "row_names_confidence": table.metadata.row_names_confidence,
+            "row_names_source": table.metadata.row_names_source,
             "row_names_location": table.metadata.row_names_location,
             "data_region": table.metadata.data_region,
             "table_type": table.metadata.table_type,
@@ -281,6 +338,17 @@ def _serialize_enriched_table(table: EnrichedTable) -> Dict[str, Any]:
         }
         children_list.append(child_dict)
 
+    # Serialize pattern observations
+    pattern_obs_list = []
+    for po in table.pattern_observations:
+        pattern_obs_list.append({
+            "pattern_type": po.pattern_type,
+            "confidence": po.confidence,
+            "evidence": po.evidence,
+            "applies_to_tables": po.applies_to_tables,
+            "generalizable": po.generalizable,
+        })
+
     return {
         "table_id": table.table_id,
         "sheet_name": table.sheet_name,
@@ -293,6 +361,7 @@ def _serialize_enriched_table(table: EnrichedTable) -> Dict[str, Any]:
         "depth": table.depth,
         "ontology_tags": table.ontology_tags,
         "ontology_confidence": table.ontology_confidence,
+        "pattern_observations": pattern_obs_list,
     }
 
 
@@ -301,11 +370,15 @@ def _serialize_metadata(metadata) -> Dict[str, Any]:
     return {
         "title": metadata.title,
         "title_confidence": metadata.title_confidence,
+        "title_source": getattr(metadata, "title_source", "detected"),
         "header": metadata.header,
         "header_confidence": metadata.header_confidence,
+        "header_source": getattr(metadata, "header_source", "detected"),
+        "header_inherited_from": getattr(metadata, "header_inherited_from", None),
         "header_location": metadata.header_location,
         "row_names": metadata.row_names,
         "row_names_confidence": metadata.row_names_confidence,
+        "row_names_source": getattr(metadata, "row_names_source", "detected"),
         "row_names_location": metadata.row_names_location,
         "data_region": metadata.data_region,
         "table_type": metadata.table_type,

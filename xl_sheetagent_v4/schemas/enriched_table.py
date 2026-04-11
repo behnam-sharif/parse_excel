@@ -9,18 +9,33 @@ from typing import List, Optional, Dict, Any
 
 
 @dataclass
+class PatternObservation:
+    """Pattern observed by agent (metadata only, not for reuse during analysis)."""
+
+    pattern_type: str  # scenario_comparison, cost_breakdown, entity_template, time_series, other
+    confidence: float
+    evidence: str
+    applies_to_tables: List[str] = field(default_factory=list)
+    generalizable: bool = False
+
+
+@dataclass
 class TableMetadata:
     """Metadata extracted from a table."""
 
     title: str
     title_confidence: float
+    title_source: str = "detected"  # "detected" | "missing" | "inferred_from_parent"
 
-    header: List[str]
-    header_confidence: float
+    header: List[str] = field(default_factory=list)
+    header_confidence: float = 0.0
+    header_source: str = "detected"  # "detected" | "inherited" | "missing"
+    header_inherited_from: Optional[str] = None  # source table ID
+    row_names: List[str] = field(default_factory=list)
+    row_names_confidence: float = 0.0
+    row_names_source: str = "detected"  # "detected" | "missing" (NEVER "inherited")
+
     header_location: Optional[Dict[str, int]] = None  # {"row": N}
-
-    row_names: List[str]
-    row_names_confidence: float
     row_names_location: Optional[Dict[str, int]] = None  # {"col": N}
 
     data_region: Optional[Dict[str, int]] = None  # {r_top, c_left, r_bot, c_right}
@@ -79,6 +94,9 @@ class EnrichedTable:
     # Ontology and knowledge graph
     ontology_tags: List[str] = field(default_factory=list)
     ontology_confidence: float = 0.0
+
+    # Pattern observations (agent-level, not shared during analysis)
+    pattern_observations: List[PatternObservation] = field(default_factory=list)
 
     # LLM analysis metadata
     llm_calls: int = 0

@@ -410,3 +410,75 @@ def detect_data_region(
         "r_bot": r_bot,
         "c_right": c_right,
     }
+
+
+def detect_header_candidates_v3a(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    bbox_coords: Optional[Dict[str, int]] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Detect header candidates using v3a heuristic.
+
+    Rule: Non-numerical rows in top 20% of table (>=50% text, <20% numbers).
+
+    Parameters
+    ----------
+    grid : List[List[Any]]
+        Cell values
+    types : List[List[str]]
+        Cell types
+    bbox_coords : Dict[str, int], optional
+        Bbox coordinates (unused, for API consistency)
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        [{"row": 2, "text_ratio": 0.85, "confidence": 0.76, "values": [...], "source": "v3a_heuristic"}, ...]
+    """
+    candidates = []
+    n_rows = len(grid)
+
+    # Search top 20% (max 15 rows)
+    header_search_zone = min(int(n_rows * 0.2), 15)
+
+    for r in range(header_search_zone):
+        if r >= len(grid):
+            break
+
+        row_vals = grid[r]
+        row_types = types[r]
+
+        text_count = sum(1 for t in row_types if t == "TEXT")
+        num_count = sum(1 for t in row_types if t == "NUMBER")
+        total_non_blank = text_count + num_count
+
+        if total_non_blank == 0:
+            continue
+
+        text_ratio = text_count / total_non_blank
+        num_ratio = num_count / total_non_blank
+
+        # Header criteria: >=50% text, <20% numbers
+        if text_ratio >= 0.5 and num_ratio < 0.2:
+            confidence = 0.5 + (text_ratio * 0.3)
+
+            # Boost for year-like values (common in BIM headers)
+            has_years = any(
+                str(v).strip().isdigit() and 2000 <= int(str(v).strip()) <= 2050
+                for v in row_vals
+                if v and str(v).strip().isdigit()
+            )
+            if has_years:
+                confidence += 0.1
+
+            candidates.append({
+                "row": r,
+                "text_ratio": round(text_ratio, 2),
+                "num_ratio": round(num_ratio, 2),
+                "confidence": round(min(confidence, 0.95), 2),
+                "values": [str(v) if v else "" for v in row_vals[:10]],
+                "source": "v3a_heuristic",
+            })
+
+    return candidates

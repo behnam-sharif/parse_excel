@@ -14,6 +14,7 @@ from ..ontology import (
     load_default_ontology,
 )
 from ..prompts.ontology_tagging import build_ontology_prompt
+from ..llm_dispatch import complete_text
 
 
 logger = logging.getLogger(__name__)
@@ -190,34 +191,19 @@ class OntologyTagger:
         """
 
         if self.llm_client is None:
-            # Placeholder: User will add LLM client later
             raise NotImplementedError(
                 "LLM client not configured. "
-                "User needs to add API key and initialize LLM client."
+                "Set OPENAI_API_KEY and pass llm_client=openai.OpenAI() into OntologyTagger."
             )
 
-        # Placeholder for actual LLM call
-        # User will implement this based on their LLM provider
-        #
-        # Example for OpenAI:
-        # response = self.llm_client.chat.completions.create(
-        #     model=self.model,
-        #     messages=[{"role": "user", "content": prompt}],
-        #     max_tokens=self.max_tokens,
-        #     temperature=self.temperature,
-        # )
-        # return response.choices[0].message.content
-        #
-        # Example for Anthropic:
-        # response = self.llm_client.messages.create(
-        #     model=self.model,
-        #     max_tokens=self.max_tokens,
-        #     temperature=self.temperature,
-        #     messages=[{"role": "user", "content": prompt}],
-        # )
-        # return response.content[0].text
-
-        raise NotImplementedError("LLM client not implemented yet")
+        text, _delta = complete_text(
+            self.llm_client,
+            self.model,
+            prompt,
+            self.max_tokens,
+            self.temperature,
+        )
+        return text
 
     def _parse_llm_response(self, response: str) -> Dict[str, Any]:
         """

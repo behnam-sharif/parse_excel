@@ -266,8 +266,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         )
         st.markdown("**xl_sheetagent (V3A)**")
         st.caption(
-            "Merged when you click **Run V3A sheetagent**. Set `OPENAI_API_KEY` in `.env` "
-            "when LLM is on."
+            "Merged when you click **Run V3A sheetagent**. `OPENAI_API_KEY` in repo-root "
+            "`.env` is loaded automatically (see core/env_bootstrap.py) when LLM is on."
         )
         _sa_ov = st.session_state["cfg_ov"].setdefault("xl_sheetagent", {})
         _pc_sa = pc.xl_sheetagent
@@ -304,8 +304,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     v3a_btn = st.sidebar.button("▶ Run V3A sheetagent", disabled=busy)
     v4_btn = st.sidebar.button("▶ Run xl_sheetagent_v4", disabled=busy)
     st.sidebar.caption(
-        "⚠️ V4 requires: `pip install openpyxl openai pyyaml` and LLM API key implementation "
-        "(see QUICK_START.md in xl_sheetagent_v4/)"
+        "V4: install deps from requirements.txt; set OPENAI_API_KEY in repo-root .env. "
+        "Orchestrator loads .env and passes an OpenAI client into Phase 1."
     )
 
     if init_btn and not busy:
@@ -386,15 +386,25 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         _table_out_capture = table_out
 
         def _work():
+            from core.env_bootstrap import load_project_dotenv
+
+            load_project_dotenv()
+
+            import openai
             from xl_sheetagent_v4.runner import run_v4_analysis
 
             _v4_out_capture.mkdir(parents=True, exist_ok=True)
 
-            # Note: LLM client is None — user must add API key implementation
+            if not os.environ.get("OPENAI_API_KEY", "").strip():
+                raise RuntimeError(
+                    "OPENAI_API_KEY is missing. Add it to the repo-root .env file "
+                    "(or set it in the environment) before running xl_sheetagent_v4."
+                )
+            llm_client = openai.OpenAI()
             return run_v4_analysis(
                 run_id=_run_id_capture,
                 output_base=Path(_v4_out_capture).parent.parent,
-                llm_client=None,  # User must implement LLM calls
+                llm_client=llm_client,
                 model="gpt-4o",
                 max_recursion_depth=3,
             )

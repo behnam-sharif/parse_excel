@@ -164,8 +164,8 @@ def detect_section_headers(
         if (r, 0) in bold_cells:
             confidence += 0.20
 
-        # Boost if left-aligned single cell
-        if non_blank == 1 or non_blank == 2:
+        # Boost if left-aligned with limited fill (section headers up to 50% of cols)
+        if non_blank <= n_cols * 0.5:
             confidence += 0.15
 
         # Boost if surrounded by blank rows
@@ -287,8 +287,8 @@ def build_children_from_sections(
         if end_row <= section_row:
             continue
 
-        # Must have at least 3 rows (header + 2 data rows)
-        if end_row - section_row < 2:
+        # Must have at least 6 rows for a meaningful section
+        if end_row - section_row < 5:
             continue
 
         # Build child bbox
