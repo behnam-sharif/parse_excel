@@ -120,6 +120,47 @@ class V5TableResult:
 
 
 # ---------------------------------------------------------------------------
+# Resolved table (merged parent + children → single consumer-facing unit)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class ResolvedTable:
+    """
+    Fully resolved table: parent structural envelope merged with enriched
+    children.  For standalone tables this wraps a single V5TableResult.
+    For parent tables this combines parent bbox/title/headers with child
+    core_regions/row_names into one coherent object.
+
+    A node is a **leaf** when ``children == []`` (standalone or absorbed).
+    A node is a **container** when ``children`` is non-empty — the parent
+    holds shared headers and ``child_titles``; each child carries its own
+    title, row_names, core_regions, etc.
+
+    ``V5TableResult`` remains internal; consumers see only ``ResolvedTable``.
+    """
+    table_id: str                           # Same as parent V3a table_id
+    source_table_ids: List[str]             # All V5TableResult IDs that contributed
+    bbox: Dict[str, int]                    # Parent bbox (full extent)
+    title: Optional[str]
+    headers: List[List[str]]
+    row_names: Optional[List[str]]
+    notes: List[NoteEntry] = field(default_factory=list)
+    core_regions: List[CoreRegion] = field(default_factory=list)
+    table_role: str = "mixed"
+    row_tags: List[RowTag] = field(default_factory=list)
+    formatting: Optional[FormattingInfo] = None
+    confidence: float = 0.0
+    signals: Dict[str, Any] = field(default_factory=dict)
+    # Hierarchical children (v5.1)
+    child_titles: List[Optional[str]] = field(default_factory=list)
+    children: List["ResolvedTable"] = field(default_factory=list)
+    # Provenance (audit only)
+    child_summaries: List[Dict[str, Any]] = field(default_factory=list)
+    metadata_source: str = "heuristic"      # "heuristic" | "llm_resolved"
+    llm_metadata: Optional[Dict[str, Any]] = None
+
+
+# ---------------------------------------------------------------------------
 # Run result
 # ---------------------------------------------------------------------------
 
@@ -128,5 +169,6 @@ class V5RunResult:
     run_id: str
     sheet_name: str
     tables: List[V5TableResult] = field(default_factory=list)
+    resolved_tables: List[ResolvedTable] = field(default_factory=list)
     token_count: int = 0
     errors: List[str] = field(default_factory=list)

@@ -225,12 +225,32 @@ def _run_v5_sheet(
             )
             errors.append(f"bbox_{bbox_idx}: {exc}")
 
+    # Reconstruct V3a hierarchy tree (populate children lists)
+    table_by_id = {t.table_id: t for t in all_tables}
+    for t in all_tables:
+        if t.parent_table_id and t.parent_table_id in table_by_id:
+            table_by_id[t.parent_table_id].children.append(t)
+
+    # Resolution stage: merge parent + children into ResolvedTables
+    resolved = []
+    if config.enable_resolution:
+        try:
+            from .table_resolver import resolve_sheet_tables
+            resolved = resolve_sheet_tables(
+                all_tables, ws, config, llm_client,
+                cut_scores=cut_scores, audit_records=audit_records,
+            )
+        except Exception as exc:
+            logger.error("Resolution stage failed for %s: %s", sheet_name, exc, exc_info=True)
+            errors.append(f"resolution: {exc}")
+
     wb.close()
 
     return V5RunResult(
         run_id=run_id,
         sheet_name=sheet_name,
         tables=all_tables,
+        resolved_tables=resolved,
         token_count=total_tokens,
         errors=errors,
     )
@@ -269,7 +289,7 @@ def _process_one_bbox(
     parent_table_id = bbox.get("parent_table_id")
     split_depth = bbox.get("split_depth", 0)
 
-    table_id = f"{sheet_name}_t{bbox_idx}"
+    table_id = bbox.get("v3a_table_id") or f"{sheet_name}_t{bbox_idx}"
 
     return analyze_table(
         table_id=table_id,
@@ -288,6 +308,7 @@ def _process_one_bbox(
         llm_client=llm_client,
         llm_call_counter=llm_call_counter,
         audit_records=audit_records,
+        cut_scores=cut_scores,
     )
 
 
@@ -437,6 +458,46 @@ def _find_workbook(run_id: str, output_base: str) -> Optional[str]:
     return None
 
 
+def _flatten_v3a_table_nodes(tables: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Depth-first flatten of V3a ``table_results`` trees (parent ``children`` nested)."""
+    out: List[Dict[str, Any]] = []
+    for t in tables:
+        out.append(t)
+        ch = t.get("children") or []
+        if isinstance(ch, list) and ch:
+            out.extend(_flatten_v3a_table_nodes(ch))
+    return out
+
+
+def _xl_table_entry_to_v5_bbox(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """
+    Map an xl_table TableObject-like dict to V5 bbox keys (r1,c1,r2,c2) + hierarchy hints.
+    Accepts either nested ``bbox`` or flat r_top/c_left/r_bot/c_right.
+    """
+    bb = entry.get("bbox")
+    if isinstance(bb, dict):
+        r1 = bb.get("r_top", bb.get("r1"))
+        c1 = bb.get("c_left", bb.get("c1"))
+        r2 = bb.get("r_bot", bb.get("r2"))
+        c2 = bb.get("c_right", bb.get("c2"))
+    else:
+        r1 = entry.get("r_top", entry.get("r1"))
+        c1 = entry.get("c_left", entry.get("c1"))
+        r2 = entry.get("r_bot", entry.get("r2"))
+        c2 = entry.get("c_right", entry.get("c2"))
+    if r1 is None or c1 is None or r2 is None or c2 is None:
+        return None
+    return {
+        "r1": int(r1),
+        "c1": int(c1),
+        "r2": int(r2),
+        "c2": int(c2),
+        "hierarchy_role": entry.get("hierarchy_role", "standalone"),
+        "parent_table_id": entry.get("parent_table_id"),
+        "split_depth": int(entry.get("split_depth", 0)),
+    }
+
+
 def _load_bboxes(
     run_id: str, output_base: str,
 ) -> Dict[str, List[Dict[str, int]]]:
@@ -453,10 +514,22 @@ def _load_bboxes(
         try:
             with open(v3a_results, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            for sheet_result in data.get("sheet_results", []):
+            # Current V3a export uses "sheets" + per-sheet "table_results"; older drafts
+            # used "sheet_results" + "tables".
+            sheet_blocks = (
+                data.get("sheets")
+                or data.get("sheet_results")
+                or []
+            )
+            for sheet_result in sheet_blocks:
                 sheet_name = sheet_result.get("sheet_name", "")
+                raw_tables = (
+                    sheet_result.get("table_results")
+                    or sheet_result.get("tables")
+                    or []
+                )
                 sheet_bboxes = []
-                for table in sheet_result.get("tables", []):
+                for table in _flatten_v3a_table_nodes(raw_tables):
                     bb = table.get("trimmed_bbox") or table.get("original_bbox")
                     if bb:
                         sheet_bboxes.append({
@@ -464,19 +537,72 @@ def _load_bboxes(
                             "c1": bb.get("c_left", 0),
                             "r2": bb.get("r_bot", 0),
                             "c2": bb.get("c_right", 0),
-                            "hierarchy_role": table.get("hierarchy_role", "standalone"),
+                            "hierarchy_role": table.get(
+                                "hierarchy_role", "standalone",
+                            ),
                             "parent_table_id": table.get("parent_table_id"),
                             "split_depth": table.get("split_depth", 0),
+                            "v3a_table_id": table.get("table_id"),
                         })
                 if sheet_bboxes:
                     bboxes[sheet_name] = sheet_bboxes
-            logger.info("Loaded %d sheets from V3a results", len(bboxes))
-            return bboxes
+            if bboxes:
+                logger.info("Loaded %d sheets from V3a results", len(bboxes))
+                return bboxes
         except Exception as exc:
             logger.warning("Failed to load V3a results: %s", exc)
 
-    # Fallback: try table output
     table_dir = get_table_output_path(run_id, output_base)
+
+    # xl_table writes tables_per_sheet.json as {sheet_name: [TableObject dicts]}
+    # with flat r_top/c_left/r_bot/c_right (no nested "bbox").
+    tps = table_dir / "tables_per_sheet.json"
+    if tps.exists():
+        try:
+            with open(tps, "r", encoding="utf-8") as f:
+                tps_data = json.load(f)
+            if isinstance(tps_data, dict):
+                for sheet_name, tables in tps_data.items():
+                    if not isinstance(tables, list):
+                        continue
+                    sheet_bboxes = []
+                    for entry in tables:
+                        bb_dict = _xl_table_entry_to_v5_bbox(entry)
+                        if bb_dict:
+                            sheet_bboxes.append(bb_dict)
+                    if sheet_bboxes:
+                        bboxes[sheet_name] = sheet_bboxes
+            if bboxes:
+                logger.info("Loaded %d sheets from tables_per_sheet.json", len(bboxes))
+                return bboxes
+        except Exception as exc:
+            logger.warning("Failed to load tables_per_sheet.json: %s", exc)
+
+    # structural_tables.json: { "sheets": [ { "sheet_name", "tables": [...] } ] }
+    st_path = table_dir / "structural_tables.json"
+    if st_path.exists():
+        try:
+            with open(st_path, "r", encoding="utf-8") as f:
+                st_data = json.load(f)
+            for sheet_block in st_data.get("sheets") or []:
+                sheet_name = sheet_block.get("sheet_name", "")
+                tables = sheet_block.get("tables") or []
+                if not sheet_name or not isinstance(tables, list):
+                    continue
+                sheet_bboxes = []
+                for entry in tables:
+                    bb_dict = _xl_table_entry_to_v5_bbox(entry)
+                    if bb_dict:
+                        sheet_bboxes.append(bb_dict)
+                if sheet_bboxes:
+                    bboxes[sheet_name] = sheet_bboxes
+            if bboxes:
+                logger.info("Loaded %d sheets from structural_tables.json", len(bboxes))
+                return bboxes
+        except Exception as exc:
+            logger.warning("Failed to load structural_tables.json: %s", exc)
+
+    # Fallback: try legacy per-sheet JSON blobs
     for json_path in table_dir.glob("*.json"):
         try:
             with open(json_path, "r", encoding="utf-8") as f:

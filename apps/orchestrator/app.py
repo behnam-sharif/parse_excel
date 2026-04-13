@@ -320,7 +320,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     v5_btn = st.sidebar.button("▶ Run V5 sheetagent", disabled=busy)
     st.sidebar.caption(
         "V4/V5: set OPENAI_API_KEY in repo-root .env. "
-        "V5 wraps V3a hierarchy + deterministic row tagging + selective LLM."
+        "**V5** runs V3A first (writes `v3a_results.json`), then V5 enrichment. "
+        "Requires prior **xl_table** (and init/parse) for the same Run ID."
     )
 
     if init_btn and not busy:
@@ -434,11 +435,23 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         _run_id_capture = run_id
         _v5_out_capture = v5_out
         _base_capture = base
+        _sa_out_capture = sa_out
+        pc_chain = load_config()
+        _sa_user_v5 = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
+        _sa_merged_v5 = merge_stage_dict(pc_chain.xl_sheetagent, _sa_user_v5)
+        _sa_merged_v5 = merge_stage_dict(_sa_merged_v5, {"v3a_enabled": True})
+        _sa_cfg_v5 = sheetagent_config_from_mapping(_sa_merged_v5)
 
         def _work():
             from core.env_bootstrap import load_project_dotenv
 
             load_project_dotenv()
+
+            # V5 expects sheetagent_output/v3a_results.json — run V3A first (same as "Run V3A").
+            from xl_sheetagent import run_sheetagent
+
+            _sa_out_capture.mkdir(parents=True, exist_ok=True)
+            run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg_v5)
 
             from core.stage_config import sheetagent_v5_config_from_pipeline
 

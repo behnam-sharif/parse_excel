@@ -69,6 +69,13 @@ def detect_core_regions(
     # Step 3: Connected-component labeling (BFS)
     components = _find_connected_components(mask, n_rows, n_cols)
 
+    # Step 3.5: Expand components with structurally relevant blanks
+    if config.blank_inclusion_density_threshold > 0:
+        components = _expand_with_structural_blanks(
+            components, types, n_rows, n_cols,
+            config.blank_inclusion_density_threshold,
+        )
+
     # Step 4: Optional merge of near-touching components
     if config.component_merge_gap > 0:
         components = _merge_nearby_components(
@@ -149,6 +156,44 @@ def _bfs(
                     queue.append((nr, nc))
 
     return cells
+
+
+def _expand_with_structural_blanks(
+    components: List[Set[Tuple[int, int]]],
+    types: List[List[str]],
+    n_rows: int,
+    n_cols: int,
+    density_threshold: float,
+) -> List[Set[Tuple[int, int]]]:
+    """
+    For each component, include BLANK cells inside its bounding rectangle
+    when the component is dense enough.  This captures blank input cells
+    that are structurally part of a computation block.
+    """
+    expanded: List[Set[Tuple[int, int]]] = []
+    for comp in components:
+        r_min, c_min, r_max, c_max = _cells_to_bbox(comp)
+        bbox_area = (r_max - r_min + 1) * (c_max - c_min + 1)
+        if bbox_area == 0:
+            expanded.append(comp)
+            continue
+
+        density = len(comp) / bbox_area
+        if density < density_threshold:
+            expanded.append(comp)
+            continue
+
+        # Dense enough — include blanks inside the bounding rectangle
+        new_comp = set(comp)
+        for r in range(r_min, r_max + 1):
+            for c in range(c_min, c_max + 1):
+                if (r, c) not in new_comp:
+                    t = types[r][c] if r < len(types) and c < len(types[r]) else ""
+                    if t == "BLANK":
+                        new_comp.add((r, c))
+        expanded.append(new_comp)
+
+    return expanded
 
 
 def _merge_nearby_components(

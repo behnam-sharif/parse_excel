@@ -74,6 +74,10 @@ def detect_headers(
             row_strs = [str(v) if v is not None else "" for v in grid[r]]
             headers.append(row_strs)
 
+    # Expand merged cells: replicate merged value across all spanned columns/rows
+    if merge_info and headers:
+        headers = _expand_merged_headers(headers, header_indices, merge_info, grid)
+
     # Compute confidence
     confidence = _compute_header_confidence(
         row_tags, header_indices, merge_info,
@@ -173,27 +177,99 @@ def find_header_inheritance(
         )
         if cols_align and other.headers:
             row_distance = current_top - ob["r2"]
-            confidence = 0.9 if row_distance <= 5 else 0.7
+            if row_distance < 0:
+                continue  # Overlapping — not above
             candidates.append({
                 "source_table_id": other.table_id,
                 "inherited_header": other.headers,
                 "row_distance": row_distance,
-                "confidence": confidence,
             })
 
-    if candidates:
-        closest = min(candidates, key=lambda c: c["row_distance"])
-        logger.info(
-            "Header inheritance from %s (distance=%d rows)",
-            closest["source_table_id"], closest["row_distance"],
-        )
-        return closest
-    return None
+    if not candidates:
+        return None
+
+    # Sort by row distance (closest first)
+    candidates.sort(key=lambda c: c["row_distance"])
+    closest = candidates[0]
+
+    # Ambiguity check: if 2+ candidates are within 2 rows of the closest,
+    # inheritance is ambiguous — refuse to inherit.
+    if len(candidates) >= 2:
+        second = candidates[1]
+        if second["row_distance"] - closest["row_distance"] <= 2:
+            logger.info(
+                "Header inheritance ambiguous: %s (dist=%d) vs %s (dist=%d) — skipping",
+                closest["source_table_id"], closest["row_distance"],
+                second["source_table_id"], second["row_distance"],
+            )
+            return None
+
+    # Confidence penalty based on row gap
+    dist = closest["row_distance"]
+    if dist <= 2:
+        confidence = 0.9
+    elif dist <= 5:
+        confidence = 0.8
+    elif dist <= 10:
+        confidence = 0.65
+    else:
+        confidence = 0.5
+
+    closest["confidence"] = confidence
+
+    logger.info(
+        "Header inheritance from %s (distance=%d rows, confidence=%.2f)",
+        closest["source_table_id"], closest["row_distance"], confidence,
+    )
+    return closest
 
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+def _expand_merged_headers(
+    headers: List[List[str]],
+    header_indices: List[int],
+    merge_info: List[Tuple[int, int, int, int]],
+    grid: List[List[Any]],
+) -> List[List[str]]:
+    """Replicate merged cell values across all spanned columns in header rows.
+
+    For a merge spanning (mr1, mc1) to (mr2, mc2), the value lives in
+    grid[mr1][mc1].  Any header row overlapping the merge gets the value
+    replicated into every column in [mc1, mc2].
+
+    This handles both horizontal merges (category label spanning several
+    sub-columns) and vertical merges (group label spanning multiple header
+    rows).
+    """
+    # Map row index → position in headers list
+    row_to_idx = {r: i for i, r in enumerate(header_indices)}
+
+    for mr1, mc1, mr2, mc2 in merge_info:
+        # Get the merged value from the top-left cell of the merge
+        if mr1 < len(grid) and mc1 < len(grid[mr1]):
+            merge_val = grid[mr1][mc1]
+        else:
+            continue
+        val_str = str(merge_val) if merge_val is not None else ""
+        if not val_str.strip():
+            continue
+
+        # Apply to every header row that falls inside this merge
+        for r in range(mr1, mr2 + 1):
+            if r not in row_to_idx:
+                continue
+            h_idx = row_to_idx[r]
+            for c in range(mc1, mc2 + 1):
+                if c < len(headers[h_idx]):
+                    # Only fill if the cell is currently empty
+                    if not headers[h_idx][c].strip():
+                        headers[h_idx][c] = val_str
+
+    return headers
+
 
 def _find_first_data_row(row_tags: List[RowTag]) -> int:
     """Find index of first data_candidate or rowname_candidate row."""

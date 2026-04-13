@@ -51,6 +51,7 @@ def analyze_table(
     llm_client: Any = None,
     llm_call_counter: Optional[List[int]] = None,
     audit_records: Optional[Dict[str, List]] = None,
+    cut_scores: Optional[List[Dict[str, Any]]] = None,
 ) -> V5TableResult:
     """
     Full per-table analysis pipeline.
@@ -104,6 +105,7 @@ def analyze_table(
             merge_info, bold_rows, all_tables_in_sheet,
             structural_summary, config, llm_client,
             llm_call_counter, audit_records, signals,
+            cut_scores,
         )
     except Exception as exc:
         # Fallback: return minimal result with confidence 0
@@ -129,6 +131,7 @@ def _analyze_table_inner(
     merge_info, bold_rows, all_tables_in_sheet,
     structural_summary, config, llm_client,
     llm_call_counter, audit_records, signals,
+    cut_scores=None,
 ) -> V5TableResult:
     n_rows = len(grid)
 
@@ -142,6 +145,7 @@ def _analyze_table_inner(
 
     # Step 3: Header inheritance (if no local header found)
     inherited_from = None
+    header_source = "local" if headers else "none"
     if not headers and all_tables_in_sheet:
         inheritance = find_header_inheritance(
             all_tables_in_sheet, bbox, table_id, config,
@@ -150,19 +154,55 @@ def _analyze_table_inner(
             headers = inheritance["inherited_header"]
             header_conf = inheritance["confidence"]
             inherited_from = inheritance["source_table_id"]
+            header_source = "inherited"
             signals["header_inherited_from"] = inherited_from
 
     # Step 4: Role-aware candidate collection
     candidates = collect_candidates(
         hierarchy_role, row_tags, grid, types, header_indices, config,
+        bold_rows=bold_rows,
     )
     consumed: ConsumedMap = candidates["consumed"]
+
+    # Step 4.5: Composite row-0 split (title embedded in header row)
+    if candidates["title"] is None and headers and header_indices:
+        comp_title, comp_col = _detect_composite_row0(
+            grid, types, header_indices, bold_rows,
+        )
+        if comp_title is not None:
+            candidates["title"] = comp_title
+            candidates["title_rows"] = [header_indices[0]]
+            consumed.title_rows = [header_indices[0]]
+            # Blank out the title cell in the header output
+            headers[0][comp_col] = ""
+            signals["composite_row0_split"] = True
+            signals["composite_title_col"] = comp_col
 
     # Step 5: Core region detection (BEFORE LLM)
     core_regions = detect_core_regions(
         grid, types, consumed, config,
         r_top_abs=bbox["r1"], c_left_abs=bbox["c1"],
     )
+
+    # Step 5.5: Column-cut-based row name refinement (after core regions available)
+    if (
+        config.use_column_cuts_for_row_names
+        and cut_scores
+        and core_regions
+        and candidates["row_names"] is None
+        and hierarchy_role in ("standalone", "child_numeric")
+    ):
+        from .candidate_collector import _detect_row_name_columns, _extract_row_name_values
+        col_cuts = [c for c in cut_scores if c.get("axis") == "col"]
+        if col_cuts:
+            rn_cols = _detect_row_name_columns(types, col_cuts, core_regions, config)
+            if rn_cols:
+                rn_vals = _extract_row_name_values(grid, types, row_tags, rn_cols)
+                if rn_vals:
+                    candidates["row_names"] = rn_vals
+                    candidates["rowname_cols"] = rn_cols
+                    consumed.rowname_cols = rn_cols
+                    signals["row_names_source"] = "column_cuts"
 
     # Step 6: Selective LLM refinement
     llm_called = False
@@ -193,7 +233,7 @@ def _analyze_table_inner(
     # Step 8: Determine table role
     table_role = _determine_table_role(
         hierarchy_role, core_regions, grid, types,
-        structural_summary, llm_overrides, n_rows,
+        structural_summary, llm_overrides, n_rows, consumed,
     )
 
     # Step 9: Compute confidence
@@ -207,6 +247,11 @@ def _analyze_table_inner(
         audit_records, table_id, hierarchy_role, llm_called,
         llm_overrides, headers, len(core_regions), table_role, confidence,
     )
+
+    # Step 10: Provenance signals (§6)
+    title_source = "local" if candidates["title"] else "none"
+    signals["title_source"] = title_source
+    signals["header_source"] = header_source
 
     return V5TableResult(
         table_id=table_id,
@@ -342,6 +387,111 @@ def _apply_llm_overrides(
 
 
 # ---------------------------------------------------------------------------
+# Composite row-0 detection (Issue 1)
+# ---------------------------------------------------------------------------
+
+def _detect_composite_row0(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    header_indices: List[int],
+    bold_rows: Set[int],
+) -> tuple:
+    """Detect a composite row-0 where first cell is title, rest are headers.
+
+    A composite row looks like: ["Drug costs", "2020", "2021", "2022", "2023"]
+    where the first cell is a descriptive title and the remaining cells are
+    column headers. The row tagger classifies this as ``header_candidate``
+    because it exceeds ``title_max_nonempty``.
+
+    Returns
+    -------
+    tuple
+        (title_text, title_col) if composite detected, else (None, None).
+
+    Guards (do-not-split conditions)
+    --------------------------------
+    - Row 0 is not the first header row.
+    - First 2 columns both have non-blank TEXT (multi-label header).
+    - All non-blank cells are TEXT and no distinguishing signal (bold first
+      cell or first cell significantly longer than remaining cells).
+    """
+    # Must have row 0 as the first header
+    if not header_indices or header_indices[0] != 0:
+        return None, None
+    if not grid or not grid[0]:
+        return None, None
+
+    row_vals = grid[0]
+    row_types = types[0] if types else []
+    n_cols = len(row_vals)
+    if n_cols < 3:
+        return None, None
+
+    # Find first TEXT cell in cols 0-1
+    first_text_col = None
+    first_text_val = None
+    for c in range(min(2, n_cols)):
+        t = row_types[c] if c < len(row_types) else "BLANK"
+        v = row_vals[c]
+        if t == "TEXT" and v is not None and str(v).strip():
+            first_text_col = c
+            first_text_val = str(v).strip()
+            break
+
+    if first_text_col is None:
+        return None, None
+
+    # Guard 1: two long TEXT cells in first 2 columns → multi-label header, don't split
+    # Short labels in col 1 (e.g. "Q1", "Y1") are header values, not a second label.
+    if first_text_col == 0 and n_cols >= 2:
+        c1_type = row_types[1] if 1 < len(row_types) else "BLANK"
+        c1_val = row_vals[1]
+        if (
+            c1_type == "TEXT"
+            and c1_val is not None
+            and len(str(c1_val).strip()) >= 4
+        ):
+            # Both col 0 and col 1 have substantial text → multi-label header
+            return None, None
+
+    # Count non-blank cells after the title cell
+    remaining_non_blank = sum(
+        1 for c in range(first_text_col + 1, n_cols)
+        if c < len(row_types) and row_types[c] != "BLANK"
+    )
+    if remaining_non_blank < 2:
+        return None, None
+
+    # Guard 2: all non-blank cells are TEXT → need a distinguishing signal
+    non_blank_types = [
+        row_types[c] for c in range(n_cols)
+        if c < len(row_types) and row_types[c] != "BLANK"
+    ]
+    all_text = all(t == "TEXT" for t in non_blank_types)
+
+    if all_text:
+        is_bold = (0 in bold_rows)
+        # Check if first cell is significantly longer than remaining cells
+        remaining_lengths = [
+            len(str(row_vals[c]).strip())
+            for c in range(first_text_col + 1, n_cols)
+            if c < len(row_types) and row_types[c] != "BLANK"
+            and row_vals[c] is not None and str(row_vals[c]).strip()
+        ]
+        avg_remaining = (
+            sum(remaining_lengths) / len(remaining_lengths)
+            if remaining_lengths else 0
+        )
+        first_len = len(first_text_val)
+        significantly_longer = first_len > avg_remaining * 2 and first_len >= 5
+
+        if not is_bold and not significantly_longer:
+            return None, None
+
+    return first_text_val, first_text_col
+
+
+# ---------------------------------------------------------------------------
 # Table role determination
 # ---------------------------------------------------------------------------
 
@@ -353,6 +503,7 @@ def _determine_table_role(
     structural_summary: Dict[str, Any],
     llm_overrides: Dict[str, Any],
     n_rows: int,
+    consumed: Optional[ConsumedMap] = None,
 ) -> str:
     """
     Deterministic-first table role assignment.
@@ -363,6 +514,9 @@ def _determine_table_role(
         return "metadata"
 
     if not core_regions:
+        # Check if mostly text rows → metadata
+        if _is_mostly_text(types, consumed):
+            return "metadata"
         # LLM might have an opinion
         llm_role = llm_overrides.get("table_role")
         if llm_role and llm_role in ("input", "calc", "output", "mixed", "metadata"):
@@ -381,6 +535,10 @@ def _determine_table_role(
         if any(h == "calc" for h in hints):
             return "calc"
 
+    # Single core with output hint
+    if len(core_regions) == 1 and hints[0] == "output":
+        return "output"
+
     # Mixed signals
     role = "mixed"
 
@@ -390,6 +548,27 @@ def _determine_table_role(
         role = llm_role
 
     return role
+
+
+def _is_mostly_text(
+    types: List[List[str]],
+    consumed: Optional[ConsumedMap] = None,
+) -> bool:
+    """Return True if >70% of non-blank cells in unconsumed rows are TEXT."""
+    consumed_rows = consumed.all_consumed_rows() if consumed else set()
+    text_count = 0
+    non_blank_count = 0
+    for r, row_types in enumerate(types):
+        if r in consumed_rows:
+            continue
+        for t in row_types:
+            if t != "BLANK":
+                non_blank_count += 1
+                if t == "TEXT":
+                    text_count += 1
+    if non_blank_count == 0:
+        return True
+    return text_count / non_blank_count >= 0.70
 
 
 def _has_summary_row(

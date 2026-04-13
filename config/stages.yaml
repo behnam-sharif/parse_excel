@@ -346,6 +346,31 @@ xl_sheetagent_v5:
   # Audit
   emit_audit: true
 
+  # Resolution stage
+  enable_resolution: true
+  resolve_row_names_with_parent: true
+  absorb_metadata_only_children: true
+
+  # Core region blank inclusion
+  blank_inclusion_density_threshold: 0.30
+
+  # Enhanced LLM metadata resolution
+  use_llm_metadata_resolution: true
+  llm_metadata_max_tokens: 3000
+  llm_metadata_max_cells: 8000
+  include_cut_scores_in_prompt: true
+
+  # Row name column detection
+  row_name_text_ratio_threshold: 0.70
+  use_column_cuts_for_row_names: true
+
+  # Core-to-children consistency
+  enforce_multi_core_children: true
+  llm_children_fallback: true
+
+  # Export mode (v5.1): "flat" | "hierarchical" (default: hierarchical)
+  export_mode: "hierarchical"
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2

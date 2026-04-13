@@ -698,3 +698,9 @@ V3a is the splitter + hierarchy builder. V5 is the enricher. Parallelism is at s
 - V3a tests still pass (no V3a code modified)
 - V4 tests still pass (no V4 code modified)
 - Smoke tests: `py -3 -m pytest tests/test_smoke.py`
+
+---
+
+## Follow-on: v5.1 (child-centric hierarchy)
+
+Post–v5 work — BIM / multi-core / coverage / nested export — is specified in **`plan_sheetagent_v5_1.md`** (single source of truth for that scope).

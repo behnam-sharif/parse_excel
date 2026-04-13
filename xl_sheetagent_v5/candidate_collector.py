@@ -35,6 +35,7 @@ def collect_candidates(
     types: List[List[str]],
     header_rows: List[int],
     config: XlSheetAgentV5Config,
+    bold_rows: Optional[Set[int]] = None,
 ) -> Dict[str, Any]:
     """
     Collect candidates based on V3a hierarchy role + V5 row tags.
@@ -44,6 +45,10 @@ def collect_candidates(
         child_numeric:   TITLE + ROW_NAME + FOOTNOTE
         child_metadata:  TITLE + HEADER
         standalone:      TITLE + HEADER + ROW_NAME + FOOTNOTE
+
+    v5.1: For parent/standalone roles, detect_section_headers() is called
+    and those rows are excluded from note collection (they are section
+    labels, not footnotes).
 
     Returns
     -------
@@ -55,6 +60,7 @@ def collect_candidates(
             "rowname_cols": List[int],
             "notes": List[NoteEntry],
             "note_rows": List[int],
+            "section_header_rows": Set[int],
             "consumed": ConsumedMap,
         }
     """
@@ -71,14 +77,28 @@ def collect_candidates(
     # Header rows — already detected upstream, just record
     # (header_rows passed in so we track them in consumed map)
 
+    # v5.1: Detect section headers for parent/standalone (excludes from notes)
+    section_header_rows: Set[int] = set()
+    if hierarchy_role in ("parent", "standalone") and bold_rows is not None:
+        n_rows = len(grid)
+        n_cols = len(grid[0]) if grid and grid[0] else 0
+        section_headers = detect_section_headers(
+            grid, types, bold_rows, n_rows, n_cols,
+        )
+        section_header_rows = {sh["row"] for sh in section_headers}
+
     # Role-specific collection
     if hierarchy_role in ("standalone", "child_numeric"):
         row_names, rowname_cols = _collect_row_names(row_tags, grid, types)
-        notes, note_rows = _collect_notes(row_tags, grid)
+        notes, note_rows = _collect_notes(
+            row_tags, grid, exclude_rows=section_header_rows,
+        )
 
     elif hierarchy_role == "parent":
-        # Parent: no row names or footnotes
-        pass
+        # Parent: no row names; collect notes (excluding section headers)
+        notes, note_rows = _collect_notes(
+            row_tags, grid, exclude_rows=section_header_rows,
+        )
 
     elif hierarchy_role == "child_metadata":
         # Metadata child: no row names or footnotes
@@ -87,7 +107,9 @@ def collect_candidates(
     else:
         # Unknown role — collect everything (safe default)
         row_names, rowname_cols = _collect_row_names(row_tags, grid, types)
-        notes, note_rows = _collect_notes(row_tags, grid)
+        notes, note_rows = _collect_notes(
+            row_tags, grid, exclude_rows=section_header_rows,
+        )
 
     consumed = ConsumedMap(
         title_rows=title_rows,
@@ -103,6 +125,7 @@ def collect_candidates(
         "rowname_cols": rowname_cols,
         "notes": notes,
         "note_rows": note_rows,
+        "section_header_rows": section_header_rows,
         "consumed": consumed,
     }
 
@@ -321,21 +344,44 @@ def _collect_row_names(
     row_tags: List[RowTag],
     grid: List[List[Any]],
     types: List[List[str]],
+    col_cuts: Optional[List[Dict[str, Any]]] = None,
+    core_regions: Optional[List[Any]] = None,
+    config: Any = None,
+    parent_grid: Optional[List[List[Any]]] = None,
+    parent_types: Optional[List[List[str]]] = None,
 ) -> tuple:
-    """Collect row names from leftmost text column(s)."""
-    # Find data rows with rowname pattern
-    rowname_vals = []
-    has_rowname = False
+    """
+    Collect row names from leftmost text column(s).
 
-    for tag in row_tags:
-        if tag.layer1_tag == "rowname_candidate":
-            has_rowname = True
-            break
+    Uses column cuts as primary structural signal when available (Batch G),
+    falling back to row-tag heuristic otherwise.
+    Accepts optional parent_grid/parent_types for combined parent-child
+    context resolution (Batch C2 / Correction 5).
+    """
+    n_cols = len(grid[0]) if grid and grid[0] else 0
+
+    # --- Strategy 1: Column-cut-based detection ---
+    if col_cuts and core_regions and config:
+        rn_cols = _detect_row_name_columns(types, col_cuts, core_regions, config)
+        if rn_cols:
+            rowname_vals = _extract_row_name_values(grid, types, row_tags, rn_cols)
+            if rowname_vals:
+                return rowname_vals, rn_cols
+
+    # --- Strategy 2: Row-tag heuristic (existing fallback) ---
+    has_rowname = any(tag.layer1_tag == "rowname_candidate" for tag in row_tags)
+
+    if not has_rowname and parent_grid is not None:
+        # Check parent's leftmost column for row-name candidates
+        rowname_vals = _extract_parent_row_names(parent_grid, parent_types)
+        if rowname_vals:
+            return rowname_vals, [0]
 
     if not has_rowname:
         return None, []
 
     # Collect from first column across data/rowname rows
+    rowname_vals = []
     for tag in row_tags:
         if tag.layer1_tag in ("rowname_candidate", "data_candidate"):
             r = tag.row_index
@@ -350,17 +396,131 @@ def _collect_row_names(
     return rowname_vals, [0]
 
 
+def _detect_row_name_columns(
+    types: List[List[str]],
+    col_cuts: List[Dict[str, Any]],
+    core_regions: List[Any],
+    config: Any,
+) -> List[int]:
+    """
+    Detect row-name columns using column cut scores and cell type ratios.
+
+    A column is a row-name candidate if:
+    - High TEXT ratio (>= config.row_name_text_ratio_threshold)
+    - Positioned left of the first core region
+    - Aligned with a column cut boundary
+    """
+    if not types or not types[0]:
+        return []
+
+    n_rows = len(types)
+    n_cols = len(types[0])
+    threshold = getattr(config, "row_name_text_ratio_threshold", 0.70)
+
+    # Find leftmost core region column
+    min_core_col = n_cols
+    for cr in core_regions:
+        cr_bbox = cr.bbox if hasattr(cr, "bbox") else cr.get("bbox", {})
+        c1 = cr_bbox.get("c1", n_cols)
+        if c1 < min_core_col:
+            min_core_col = c1
+
+    # Get column cut indices
+    cut_col_indices = set()
+    for cut in col_cuts:
+        if cut.get("axis") == "col":
+            cut_col_indices.add(cut.get("index", -1))
+
+    # Scan columns left of first core region
+    candidate_cols = []
+    for c in range(min(min_core_col, n_cols)):
+        text_count = 0
+        non_blank_count = 0
+        for r in range(n_rows):
+            t = types[r][c] if c < len(types[r]) else "BLANK"
+            if t != "BLANK":
+                non_blank_count += 1
+                if t == "TEXT":
+                    text_count += 1
+        if non_blank_count == 0:
+            continue
+        text_ratio = text_count / non_blank_count
+        if text_ratio >= threshold:
+            candidate_cols.append(c)
+
+    if not candidate_cols:
+        return []
+
+    # Prefer contiguous block from leftmost
+    result = [candidate_cols[0]]
+    for i in range(1, len(candidate_cols)):
+        if candidate_cols[i] == candidate_cols[i - 1] + 1:
+            result.append(candidate_cols[i])
+        else:
+            break
+
+    return result
+
+
+def _extract_row_name_values(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    row_tags: List[RowTag],
+    rn_cols: List[int],
+) -> Optional[List[str]]:
+    """Extract row name values from detected row-name columns."""
+    vals = []
+    for tag in row_tags:
+        if tag.layer1_tag in ("rowname_candidate", "data_candidate"):
+            r = tag.row_index
+            if r < len(grid):
+                parts = []
+                for c in rn_cols:
+                    if c < len(grid[r]):
+                        v = grid[r][c]
+                        if v is not None and str(v).strip():
+                            parts.append(str(v).strip())
+                if parts:
+                    vals.append(" ".join(parts))
+    return vals if vals else None
+
+
+def _extract_parent_row_names(
+    parent_grid: List[List[Any]],
+    parent_types: Optional[List[List[str]]],
+) -> Optional[List[str]]:
+    """Extract row names from parent's leftmost column."""
+    if not parent_grid:
+        return None
+    vals = []
+    for r, row in enumerate(parent_grid):
+        if row:
+            val = row[0]
+            pt = parent_types[r][0] if parent_types and r < len(parent_types) and parent_types[r] else "BLANK"
+            if pt == "TEXT" and val is not None and str(val).strip():
+                vals.append(str(val).strip())
+    return vals if vals else None
+
+
 def _collect_notes(
     row_tags: List[RowTag],
     grid: List[List[Any]],
+    exclude_rows: Optional[Set[int]] = None,
 ) -> tuple:
-    """Collect notes from note_candidate rows."""
+    """Collect notes from note_candidate rows.
+
+    v5.1: ``exclude_rows`` (typically section header rows) are skipped —
+    they are section labels, not footnotes/annotations.
+    """
     notes: List[NoteEntry] = []
     note_rows: List[int] = []
+    skip = exclude_rows or set()
 
     for tag in row_tags:
         if tag.layer1_tag == "note_candidate":
             r = tag.row_index
+            if r in skip:
+                continue
             row_vals = grid[r] if r < len(grid) else []
             text = _first_nonempty_text(row_vals)
             if text:

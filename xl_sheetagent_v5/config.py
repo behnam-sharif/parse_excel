@@ -59,3 +59,28 @@ class XlSheetAgentV5Config:
 
     # Audit
     emit_audit: bool
+
+    # Resolution stage
+    enable_resolution: bool
+    resolve_row_names_with_parent: bool
+    absorb_metadata_only_children: bool
+
+    # Core region blank inclusion
+    blank_inclusion_density_threshold: float
+
+    # Enhanced LLM metadata resolution
+    use_llm_metadata_resolution: bool
+    llm_metadata_max_tokens: int
+    llm_metadata_max_cells: int
+    include_cut_scores_in_prompt: bool
+
+    # Row name column detection
+    row_name_text_ratio_threshold: float
+    use_column_cuts_for_row_names: bool
+
+    # Core-to-children consistency
+    enforce_multi_core_children: bool
+    llm_children_fallback: bool
+
+    # Export mode (v5.1): "flat" (legacy) | "hierarchical" (nested children)
+    export_mode: str = "hierarchical"
