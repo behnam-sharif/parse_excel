@@ -1,6 +1,6 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-10T22:03:36.456287",
+  "run_ts": "2026-04-13T16:01:24.138060",
   "version": "4.0.0",
   "sheets": [
     {
@@ -18,8 +18,9 @@
             "c_right": 8
           },
           "metadata": {
-            "title": "World without InO - Cost Analysis",
-            "title_confidence": 0.9,
+            "title": "BIM Calculation",
+            "title_confidence": 0.95,
+            "title_source": "detected",
             "header": [
               "BIM calculation",
               "2020",
@@ -29,6 +30,8 @@
               "2024"
             ],
             "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -49,28 +52,49 @@
               "TKI + vincristine",
               "Clofarabine",
               "Market shares (Total)",
-              "Drug costs"
+              "Drug costs",
+              "Total costs of adver",
+              "Costs of hospitaliza",
+              "Total end-of-life co",
+              "Total costs in world"
             ],
             "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
               "r_top": 3,
               "c_left": 1,
-              "r_bot": 17,
+              "r_bot": 102,
               "c_right": 6
             },
-            "table_type": "cost_analysis",
+            "table_type": "scenario_comparison",
             "analysis_confidence": 0.94,
-            "reasoning": "Clear column headers with years, row names are drug names, data contains numeric cost values, 'Total' row indicates calculation table."
+            "reasoning": "Clear column headers with years, row names are drug names and cost categories, indicating a scenario comparison between different treatment options."
           },
-          "summary": "This table presents a cost analysis for various treatments in a scenario without Inotuzumab Ozogamicin from 2020 to 2024. It includes annual drug costs and market share projections for competing therapies. The data enables comparison of treatment costs and market dynamics over the specified years.",
+          "summary": "This table presents a comprehensive analysis of budget impacts from 2020 to 2024, focusing on drug costs, adverse events, and hospitalization costs. It compares the financial implications of different treatment scenarios, particularly the 'World without InO' scenario. The data enables stakeholders to understand cost distributions across various treatments and years.",
           "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Single scenario 'World without InO' with multiple subsections, consistent structure across years.",
+              "applies_to_tables": [],
+              "generalizable": true
+            },
+            {
+              "pattern_type": "cost_breakdown",
+              "confidence": 0.85,
+              "evidence": "Repeated drug names across different cost sections such as 'Drug costs', 'Costs of adverse events', and 'Costs of hospitalization'.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
@@ -83,8 +107,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "% of Patients Alive Over Time by Treatment",
-            "title_confidence": 0.85,
+            "title": "% of Patients Alive Over Time",
+            "title_confidence": 0.95,
+            "title_source": "detected",
             "header": [
               "Year",
               "INO",
@@ -95,9 +120,14 @@
               "DVP-Asp",
               "DVP-Asp+Cyclo",
               "hCVAD+MTX",
-              "Blinatumomab"
+              "Blinatumomab",
+              "TKI -Ponatinib",
+              "TKI + vincristine",
+              "Clofarabine"
             ],
-            "header_confidence": 0.95,
+            "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -109,7 +139,8 @@
               "Year 4",
               "Year 5"
             ],
-            "row_names_confidence": 0.9,
+            "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -117,14 +148,14 @@
               "r_top": 2,
               "c_left": 1,
               "r_bot": 7,
-              "c_right": 9
+              "c_right": 12
             },
             "table_type": "calculation",
-            "analysis_confidence": 0.92,
-            "reasoning": "The table contains numeric values representing survival percentages over time, with clear column headers indicating different treatments and row names indicating years, suggesting a calculation of survival rates."
+            "analysis_confidence": 0.94,
+            "reasoning": "Clear column headers with treatment names, row names are years, and the data represents survival percentages."
           },
-          "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares survival rates across different therapies, including INO, FLAG-Ida, and Blinatumomab. The data provides insights into the effectiveness of each treatment over time.",
-          "summary_confidence": 0.92,
+          "summary": "This table presents the percentage of patients alive over a five-year period for various treatment options. It compares the survival rates of different therapies, including INO, FLAG-Ida, and Blinatumomab, among others. The data provides insights into the effectiveness of these treatments over time.",
+          "summary_confidence": 0.94,
           "children": [
             {
               "section_name": "% of patients alive",
@@ -133,12 +164,13 @@
                 0,
                 7
               ],
-              "confidence": 0.75,
+              "confidence": 0.6000000000000001,
               "reasoning": "Section header '% of patients alive' at row 0, ends at row 7",
-              "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares the survival rates of patients treated with different chemotherapy regimens, including INO, FLAG-Ida, and Blinatumomab. The data provides insights into the effectiveness of these treatments over time.",
+              "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares the survival rates of different therapies, including INO, FLAG-Ida, and Blinatumomab, among others. The data enables analysis of treatment effectiveness over time.",
               "metadata": {
-                "title": "% of Patients Alive Over Time by Treatment",
-                "title_confidence": 0.85,
+                "title": "% of patients alive",
+                "title_confidence": 0.95,
+                "title_source": "detected",
                 "header": [
                   "Year",
                   "INO",
@@ -149,9 +181,14 @@
                   "DVP-Asp",
                   "DVP-Asp+Cyclo",
                   "hCVAD+MTX",
-                  "Blinatumomab"
+                  "Blinatumomab",
+                  "TKI -Ponatinib",
+                  "TKI + vincristine",
+                  "Clofarabine"
                 ],
-                "header_confidence": 0.95,
+                "header_confidence": 0.98,
+                "header_source": "detected",
+                "header_inherited_from": null,
                 "header_location": {
                   "row": 1
                 },
@@ -163,7 +200,8 @@
                   "Year 4",
                   "Year 5"
                 ],
-                "row_names_confidence": 0.9,
+                "row_names_confidence": 0.92,
+                "row_names_source": "detected",
                 "row_names_location": {
                   "col": 0
                 },
@@ -171,11 +209,11 @@
                   "r_top": 2,
                   "c_left": 1,
                   "r_bot": 7,
-                  "c_right": 9
+                  "c_right": 12
                 },
                 "table_type": "calculation",
-                "analysis_confidence": 0.92,
-                "reasoning": "The table contains numeric values representing survival percentages over time, with clear column headers indicating different treatments and row names indicating years, suggesting a calculation of survival rates."
+                "analysis_confidence": 0.94,
+                "reasoning": "Clear column headers with treatment names, row names are years, and the data represents survival percentages."
               },
               "children": [
                 {
@@ -185,12 +223,13 @@
                     0,
                     7
                   ],
-                  "confidence": 0.75,
+                  "confidence": 0.6000000000000001,
                   "reasoning": "Section header '% of patients alive' at row 0, ends at row 7",
-                  "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares the survival rates of patients treated with different chemotherapy regimens, including INO, FLAG-Ida, and Blinatumomab. The data provides insights into the effectiveness of these treatments over time.",
+                  "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares the survival rates of different therapies, including INO, FLAG-Ida, and Blinatumomab, among others. The data enables analysis of treatment effectiveness over time.",
                   "metadata": {
-                    "title": "% of Patients Alive Over Time by Treatment",
-                    "title_confidence": 0.9,
+                    "title": "% of patients alive",
+                    "title_confidence": 0.95,
+                    "title_source": "detected",
                     "header": [
                       "Year",
                       "INO",
@@ -201,9 +240,14 @@
                       "DVP-Asp",
                       "DVP-Asp+Cyclo",
                       "hCVAD+MTX",
-                      "Blinatumomab"
+                      "Blinatumomab",
+                      "TKI -Ponatinib",
+                      "TKI + vincristine",
+                      "Clofarabine"
                     ],
-                    "header_confidence": 0.95,
+                    "header_confidence": 0.98,
+                    "header_source": "detected",
+                    "header_inherited_from": null,
                     "header_location": {
                       "row": 1
                     },
@@ -215,7 +259,8 @@
                       "Year 4",
                       "Year 5"
                     ],
-                    "row_names_confidence": 0.9,
+                    "row_names_confidence": 0.92,
+                    "row_names_source": "detected",
                     "row_names_location": {
                       "col": 0
                     },
@@ -223,11 +268,11 @@
                       "r_top": 2,
                       "c_left": 1,
                       "r_bot": 7,
-                      "c_right": 9
+                      "c_right": 12
                     },
                     "table_type": "calculation",
-                    "analysis_confidence": 0.92,
-                    "reasoning": "The table contains numeric values representing survival percentages over time, with clear column headers indicating different treatments and row names indicating years, suggesting a calculation of survival rates."
+                    "analysis_confidence": 0.94,
+                    "reasoning": "Clear column headers with treatment names, row names are years, and the data represents survival percentages."
                   },
                   "children": [
                     {
@@ -237,12 +282,13 @@
                         0,
                         7
                       ],
-                      "confidence": 0.75,
+                      "confidence": 0.6000000000000001,
                       "reasoning": "Section header '% of patients alive' at row 0, ends at row 7",
-                      "summary": "This table presents the percentage of patients alive over a five-year period for various treatment regimens. It compares the survival rates of different therapies, including INO, FLAG-Ida, and Blinatumomab, among others. The data provides insights into the effectiveness of these treatments over time.",
+                      "summary": "This table presents the percentage of patients alive over a five-year period for various treatments. It compares the survival rates of different therapies, including INO, FLAG-Ida, and Blinatumomab, among others. The data enables analysis of treatment effectiveness over time.",
                       "metadata": {
                         "title": "% of Patients Alive Over Time",
-                        "title_confidence": 0.85,
+                        "title_confidence": 0.95,
+                        "title_source": "detected",
                         "header": [
                           "Year",
                           "INO",
@@ -253,9 +299,14 @@
                           "DVP-Asp",
                           "DVP-Asp+Cyclo",
                           "hCVAD+MTX",
-                          "Blinatumomab"
+                          "Blinatumomab",
+                          "TKI -Ponatinib",
+                          "TKI + vincristine",
+                          "Clofarabine"
                         ],
-                        "header_confidence": 0.95,
+                        "header_confidence": 0.98,
+                        "header_source": "detected",
+                        "header_inherited_from": null,
                         "header_location": {
                           "row": 1
                         },
@@ -267,7 +318,8 @@
                           "Year 4",
                           "Year 5"
                         ],
-                        "row_names_confidence": 0.9,
+                        "row_names_confidence": 0.92,
+                        "row_names_source": "detected",
                         "row_names_location": {
                           "col": 0
                         },
@@ -275,11 +327,11 @@
                           "r_top": 2,
                           "c_left": 1,
                           "r_bot": 7,
-                          "c_right": 9
+                          "c_right": 12
                         },
                         "table_type": "calculation",
-                        "analysis_confidence": 0.92,
-                        "reasoning": "The table contains numeric values representing survival percentages over time, with clear column headers indicating different treatment regimens and row names indicating years, suggesting a calculation of survival rates."
+                        "analysis_confidence": 0.94,
+                        "reasoning": "Clear column headers with treatment names, row names are years, indicating a time-based calculation of patient survival rates."
                       },
                       "children": []
                     }
@@ -290,7 +342,16 @@
           ],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.88,
+              "evidence": "Consistent year-based columns across all treatments",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8",
@@ -303,8 +364,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "INO Patient Population Estimates",
+            "title": "INO Cost and Patient Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "INO",
               "Current situation",
@@ -313,9 +375,13 @@
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 2
             },
@@ -329,25 +395,35 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
-              "c_left": 2,
+              "r_top": 2,
+              "c_left": 0,
               "r_bot": 8,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "patient_population",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains yearly data on patient numbers, with a clear focus on population estimates rather than costs or market shares."
+            "reasoning": "The table includes year-based columns and focuses on cost and patient numbers, typical of cost analysis."
           },
-          "summary": "This table presents the annual patient population estimates for the years 2019 to 2024 under the current situation. It includes data on the number of patients treated with INO each year. The data enables analysis of trends in patient numbers over time.",
+          "summary": "This table presents the annual analysis of INO costs and patient numbers from 2019 to 2024. It compares the current situation with projections for subsequent years, highlighting the total number of patients treated each year. The data enables a comprehensive understanding of cost trends and patient treatment numbers over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_t25_b17",
@@ -362,16 +438,20 @@
           "metadata": {
             "title": "Future Situation Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -383,7 +463,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -391,18 +472,27 @@
               "r_top": 3,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "patient_population",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains yearly data with numeric values representing patient numbers, indicating a focus on patient population projections."
+            "reasoning": "The table contains year-based columns with numerical data representing patient numbers and costs, typical of cost analysis."
           },
-          "summary": "This table presents projected patient numbers from 2019 to 2024 under a future situation scenario. It includes annual data points for each year, showing a trend in patient numbers over time. The data enables analysis of patient population changes and potential impacts on healthcare planning.",
+          "summary": "This table presents projected patient numbers and associated costs from 2020 to 2024 under a future situation scenario. It includes annual data for each year, highlighting the number of patients and total costs. The data enables comparison of patient trends and cost implications over the specified period.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7",
@@ -415,8 +505,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Drug Costs and Patient Numbers",
+            "title": "FLAG-Ida Cost and Patient Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "FLAG-Ida",
               "Current situation",
@@ -424,9 +515,13 @@
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_t57_t25_b17",
             "header_location": {
               "row": 0
             },
@@ -439,26 +534,36 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 2,
-              "c_left": 2,
+              "r_top": 0,
+              "c_left": 0,
               "r_bot": 6,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing costs and patient numbers across multiple years, with clear column headers indicating a focus on cost analysis."
+            "reasoning": "The table contains cost and patient data over multiple years, with clear column headers and row names indicating a focus on cost analysis."
           },
-          "summary": "This table presents annual drug costs and patient numbers from 2019 to 2024. It provides a comparison of the current situation with projections for future years, highlighting changes in patient numbers and associated costs. The data enables analysis of trends over time in the context of health economics.",
+          "summary": "This table presents the annual cost and patient data for FLAG-Ida from 2019 to 2024. It includes projections of patient numbers and associated costs over the years. The data enables comparison of the current situation with future projections.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
@@ -471,23 +576,26 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Market Share Projections",
+            "title": "Future Situation Patient Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
-              "2019",
+              "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
             "row_names": [
-              "Future situation",
               "2019",
               "2020",
               "2021",
@@ -495,7 +603,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -503,18 +612,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based columns with numeric values representing market share percentages, indicating a focus on market share data."
+            "reasoning": "The table contains year-based projections of patient numbers, indicating a focus on patient population estimates."
           },
-          "summary": "This table presents market share projections for a future situation from 2019 to 2024. It includes annual data showing the progression of market share percentages over the years. The data enables analysis of trends and potential growth in market share over the specified period.",
+          "summary": "This table presents projections of patient numbers and related metrics from 2019 to 2024 under a future situation scenario. It includes annual data for each year, highlighting changes in patient numbers over time. The data enables analysis of trends and potential impacts on healthcare planning.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024 with patient data.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
@@ -527,19 +645,23 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Market Share Projections",
+            "title": "Annual Patient and Market Share Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "FLAG",
               "Current situation",
-              "2019",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_t57_b25_t23_t15_b7",
             "header_location": {
               "row": 1
             },
@@ -553,25 +675,35 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 2,
+              "r_top": 3,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "calculation",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-over-year market share data, with clear numeric values indicating market share percentages, fitting the market share category."
+            "reasoning": "The table contains year-based projections and calculations related to patient numbers and market shares, typical of a calculation table."
           },
-          "summary": "This table presents annual market share projections from 2019 to 2024. It provides insights into the changing market dynamics over the years, highlighting the growth or decline in market share percentages. The data is crucial for understanding trends and making informed decisions in the healthcare market.",
+          "summary": "This table presents annual projections of patient numbers and market shares from 2020 to 2024. It compares the current situation with future projections, highlighting changes in patient distribution over the years. The data enables analysis of trends in patient numbers and market share shifts over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024 across the table.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_t57_b25_b23",
@@ -584,17 +716,22 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Market Share Projections",
+            "title": "Future Situation and Patient Numbers Over Time",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -606,7 +743,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -614,18 +752,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "calculation",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based columns with numeric values representing market share percentages, indicating a focus on market share projections."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a calculation of future projections."
           },
-          "summary": "This table presents market share projections for a future situation from 2019 to 2024. It includes annual data points indicating the projected market share percentages for each year. The data enables analysis of trends in market share over the specified period.",
+          "summary": "This table presents the future situation and number of patients from 2019 to 2024. It includes annual projections of patient numbers and their corresponding totals. The data enables comparison of patient trends over the specified years.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8",
@@ -640,21 +787,24 @@
           "metadata": {
             "title": "MXN & Ara-C Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "detected",
             "header": [
               "Current situation",
-              "2019",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
             "row_names": [
-              "Current situation",
               "2019",
               "2020",
               "2021",
@@ -662,26 +812,36 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
+              "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-wise market share data for MXN & Ara-C, with numeric values indicating market share percentages, fitting the market share category."
+            "reasoning": "The table contains cost data over multiple years with a focus on patient numbers and total costs, fitting the cost analysis category."
           },
-          "summary": "This table presents the annual market share projections for MXN & Ara-C from 2019 to 2024. It provides a detailed view of the changing market share percentages over the years, indicating trends in treatment adoption. The data is crucial for understanding the dynamics of the treatment landscape over time.",
+          "summary": "This table presents the annual cost projections for MXN & Ara-C from 2019 to 2024. It includes the number of patients treated each year and the total cost for each year. The data enables comparison of cost trends over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8",
@@ -694,13 +854,22 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Market Share Projections",
+            "title": "Future Situation Patient Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
-              "Market Share"
+              "Future situation",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_t48_t16_t8",
             "header_location": {
               "row": 1
             },
@@ -712,7 +881,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -720,18 +890,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 4
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-wise market share data, with numeric values indicating percentages, fitting the market share category."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on patient population projections."
           },
-          "summary": "This table presents market share projections for the years 2019 to 2024 under a future situation scenario. It includes annual market share percentages, indicating changes over time. The data enables analysis of market trends and potential growth in market share.",
+          "summary": "This table presents projections of patient numbers from 2019 to 2024 under a future situation scenario. It includes annual data for each year, highlighting the growth in patient numbers over time. The data enables comparison of patient trends across different years.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7",
@@ -744,8 +923,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Drug Cost Projections",
+            "title": "HIDAC Current Situation Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "HIDAC",
               "Current situation",
@@ -753,9 +933,13 @@
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_t48_t16_b8",
             "header_location": {
               "row": 0
             },
@@ -769,25 +953,35 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 2,
+              "r_top": 1,
               "c_left": 2,
               "r_bot": 6,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "cost_analysis",
+            "table_type": "calculation",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric cost values across multiple years, with a clear focus on annual projections, indicating a cost analysis type."
+            "reasoning": "The table contains year-based data with a focus on a specific metric, suggesting a calculation or projection focus."
           },
-          "summary": "This table presents annual drug cost projections from 2019 to 2024 under the current situation. It includes specific cost values for each year, highlighting the changes over time. The data enables analysis of cost trends and potential budget impacts in the healthcare sector.",
+          "summary": "This table presents the annual progression of a health economic metric from 2019 to 2024 under the current situation. It includes specific values for each year and a total, highlighting changes over time. The data enables analysis of trends and projections in the healthcare context.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
@@ -800,17 +994,22 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Market Share Projections",
+            "title": "Future Situation Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -823,6 +1022,7 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -830,18 +1030,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-over-year market share data, with numeric values indicating percentages, fitting the market share category."
+            "reasoning": "The table contains year-based columns with numerical data representing patient numbers and costs, typical of cost analysis in BIM."
           },
-          "summary": "This table presents market share projections for a future situation from 2019 to 2024. It includes annual data on market share percentages, indicating trends over time. The data enables analysis of market dynamics and potential shifts in market share over the specified period.",
+          "summary": "This table presents projected patient numbers and associated costs from 2019 to 2024 under a future situation scenario. It includes annual data for each year, highlighting the progression of patient numbers and total costs over time. The data enables comparison of patient trends and financial implications across the specified years.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024 indicating a time series pattern.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
@@ -854,23 +1063,26 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Drug Costs and Patient Numbers",
+            "title": "DVP-Asp Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Current situation",
-              "2019",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7",
             "header_location": {
               "row": 1
             },
             "row_names": [
-              "Current situation",
               "2019",
               "2020",
               "2021",
@@ -879,25 +1091,35 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
+              "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing costs and patient numbers across different years, indicating a focus on cost analysis over time."
+            "reasoning": "The table contains year-based columns and cost data, indicating a cost analysis over time."
           },
-          "summary": "This table presents annual drug costs and patient numbers from 2019 to 2024. It provides a comparison of the current situation over the years, highlighting changes in patient numbers and associated costs. The data enables analysis of trends in drug costs and patient population over time.",
+          "summary": "This table presents the annual cost analysis for DVP-Asp from 2019 to 2024. It includes projections of patient numbers and total costs for each year. The data enables comparison of cost trends over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "94c8c58d611b9e70_b103",
@@ -912,20 +1134,23 @@
           "metadata": {
             "title": "World with InO - Cost Analysis",
             "title_confidence": 0.95,
+            "title_source": "detected",
             "header": [
-              "Drug",
-              "2020",
-              "2021",
-              "2022",
-              "2023",
-              "2024"
+              "Treatment",
+              "Year 1",
+              "Year 2",
+              "Year 3",
+              "Year 4",
+              "Year 5"
             ],
             "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 2
             },
             "row_names": [
-              "Inotuzumab Ozogamici",
+              "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
               "Mitoxantrone and cyt",
@@ -936,30 +1161,45 @@
               "Blinatumomab",
               "TKI (Ponatinib)",
               "TKI + vincristine",
-              "Clofarabine",
-              "Market shares (Total)",
-              "Drug costs"
+              "Clofarabine"
             ],
             "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
               "r_top": 3,
               "c_left": 1,
-              "r_bot": 14,
+              "r_bot": 12,
               "c_right": 6
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.94,
-            "reasoning": "Clear column headers with years, row names are drug names, data contains numeric cost values, 'Market shares (Total)' row indicates calculation table."
+            "reasoning": "Clear column headers with years, row names are drug names, and the table focuses on cost calculations."
           },
-          "summary": "This table presents the annual drug costs and market shares for various treatments from 2020 to 2024 in a scenario with Inotuzumab Ozogamicin (InO). It includes cost data for different drugs and their projected market shares. The data enables comparison of treatment costs and market dynamics over the specified years.",
+          "summary": "This table presents the cost analysis for various treatments in a scenario labeled 'World with InO' over a five-year period. It includes drug costs, costs of adverse events, and other related expenses. The data enables comparison of treatment costs and market share projections for competing therapies.",
           "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Two scenarios with parallel subsections, 13-drug template",
+              "applies_to_tables": [],
+              "generalizable": true
+            },
+            {
+              "pattern_type": "cost_breakdown",
+              "confidence": 0.85,
+              "evidence": "Same entities across different cost types",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23",
@@ -974,15 +1214,20 @@
           "metadata": {
             "title": "Future Situation Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_t48_b16_t23_b15",
             "header_location": {
               "row": 1
             },
@@ -994,7 +1239,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1002,18 +1248,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "calculation",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values across multiple years, suggesting a projection or calculation of future metrics. The presence of year-based headers and numeric data indicates a calculation table."
+            "reasoning": "The table contains year-based columns with numerical data representing patient numbers and costs, typical of a cost analysis."
           },
-          "summary": "This table presents the projected future situation of a health economic model from 2019 to 2024. It includes annual data points that likely represent market share or cost metrics over these years. The data enables comparison of trends and changes in the specified metrics over time.",
+          "summary": "This table presents projected patient numbers and associated costs from 2019 to 2024 under a future situation scenario. It includes annual data for each year, highlighting the progression of patient numbers and total costs over time. The data enables comparison of patient growth and cost implications in a future scenario.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8",
@@ -1026,8 +1281,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "DVP-Asp+Cyclo Cost Analysis",
+            "title": "DVP-Asp+Cyclo Cost and Patient Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Current situation",
               "2019",
@@ -1035,9 +1291,13 @@
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_t48_b16_b23",
             "header_location": {
               "row": 1
             },
@@ -1051,6 +1311,7 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1058,18 +1319,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "patient_population",
+            "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains yearly patient numbers, indicating a focus on patient population estimates rather than cost or market share."
+            "reasoning": "The table includes year-based columns and cost data, indicating a focus on cost analysis over time."
           },
-          "summary": "This table presents the annual patient numbers for the DVP-Asp+Cyclo treatment from 2019 to 2024. It provides a year-by-year breakdown of patient counts, highlighting trends over time. The data is crucial for understanding the treatment's adoption and market penetration.",
+          "summary": "This table presents the annual drug costs and patient numbers for the DVP-Asp+Cyclo treatment from 2019 to 2024. It compares the current situation with projections for future years, highlighting changes in patient numbers and total costs. The data enables analysis of cost trends and patient impact over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8",
@@ -1084,15 +1354,20 @@
           "metadata": {
             "title": "Future Situation Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -1104,7 +1379,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1112,18 +1388,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "cost_analysis",
+            "table_type": "calculation",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing costs over several years, with a clear progression and calculation focus, indicating a cost analysis."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on projections and calculations."
           },
-          "summary": "This table presents projected cost data for a future situation from 2019 to 2024. It includes annual cost values, indicating a trend over the years. The data enables analysis of cost progression in a healthcare scenario.",
+          "summary": "This table presents projected patient numbers and associated costs from 2019 to 2024 under a future situation scenario. It includes annual data for each year, highlighting the number of patients and total costs. The data enables comparison of patient trends and cost implications over the specified period.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
@@ -1136,8 +1421,9 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Drug Costs and Patient Numbers",
-            "title_confidence": 0.85,
+            "title": "Annual Drug Costs and Patient Numbers (2020-2024)",
+            "title_confidence": 0.9,
+            "title_source": "inferred_from_content",
             "header": [
               "hCVAD+MTX",
               "Current situation",
@@ -1145,9 +1431,13 @@
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
-            "header_confidence": 0.9,
+            "header_confidence": 0.95,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -1160,26 +1450,36 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 2,
-              "c_left": 2,
+              "r_top": 0,
+              "c_left": 0,
               "r_bot": 6,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
-            "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing patient numbers across different years, with a clear focus on cost analysis for the hCVAD+MTX treatment."
+            "analysis_confidence": 0.92,
+            "reasoning": "The table contains year-based columns with numerical data representing costs and patient numbers, typical of cost analysis in BIM."
           },
-          "summary": "This table presents annual drug costs and patient numbers from 2019 to 2024 for the hCVAD+MTX treatment. It provides a year-by-year breakdown of patient numbers, highlighting trends over time. The data is crucial for understanding the cost implications and patient reach of this treatment over the specified period.",
-          "summary_confidence": 0.9,
+          "summary": "This table presents annual drug costs and patient numbers from 2020 to 2024 for the hCVAD+MTX treatment scenario. It includes data on the number of patients treated each year and the total number of patients over the period. The data enables comparison of patient numbers and costs across different years.",
+          "summary_confidence": 0.92,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024 with numerical data.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7",
@@ -1192,18 +1492,22 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Cost Analysis",
+            "title": "Future Situation Patient Numbers and Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -1215,7 +1519,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1223,18 +1528,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based data with numeric values representing patient numbers, indicating a focus on patient population projections."
+            "reasoning": "The table contains year-based columns with patient numbers, indicating a focus on patient population projections."
           },
-          "summary": "This table presents projected patient numbers from 2019 to 2024 under a future situation scenario. It includes annual data points that reflect changes in patient numbers over time. The data enables analysis of trends in patient population growth or decline across these years.",
+          "summary": "This table presents projections of patient numbers from 2019 to 2024 under a future situation scenario. It includes annual data for each year and a total column summarizing the projections. The data enables comparison of patient numbers over time, highlighting trends and potential growth.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
@@ -1247,18 +1561,23 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Blinatumomab Cost Analysis",
+            "title": "Blinatumomab Cost and Patient Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
+              "Blinatumomab",
               "Current situation",
-              "2019",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -1271,26 +1590,36 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
+              "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing costs over several years, with a focus on a specific drug, indicating a cost analysis. The presence of year-based columns and patient numbers supports this classification."
+            "reasoning": "The table includes cost data and patient numbers over multiple years, indicating a focus on cost analysis."
           },
-          "summary": "This table presents the annual cost projections for Blinatumomab from 2019 to 2024. It includes data on the number of patients treated each year, reflecting changes in treatment costs over time. The data enables analysis of cost trends and potential budget impacts associated with Blinatumomab treatment.",
+          "summary": "This table presents the annual cost and patient data for Blinatumomab from 2019 to 2024. It includes projections for the number of patients treated each year and the total cost associated with the treatment. The data enables comparison of costs and patient numbers over the specified years.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
@@ -1303,18 +1632,22 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Cost Analysis",
+            "title": "Future Situation Patient Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "1f634d7d13c5e37c_b57_b48_b16_t23_b15",
             "header_location": {
               "row": 1
             },
@@ -1325,7 +1658,8 @@
               "2022",
               "2023"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1333,18 +1667,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 6,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "calculation",
+            "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values across multiple years, suggesting a projection or calculation. The presence of a 'Future situation' header indicates a scenario analysis or projection."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on patient population projections."
           },
-          "summary": "This table presents projected values for a future situation from 2019 to 2023. It includes annual data points that likely represent cost or patient metrics over these years. The data enables comparison of trends over time, potentially for budget impact analysis.",
+          "summary": "This table presents patient projections for future situations from 2019 to 2023. It includes annual data on the number of patients and their distribution over the years. The data enables analysis of trends in patient numbers over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_t17_t9",
@@ -1359,19 +1702,27 @@
           "metadata": {
             "title": "TKI -Ponatinib Cost Analysis",
             "title_confidence": 0.85,
+            "title_source": "detected",
             "header": [
+              "TKI -Ponatinib",
               "Current situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
-            "header_confidence": 0.9,
+            "header_confidence": 0.85,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 2
             },
             "row_names": [
+              "2024",
+              "Current situation",
               "2019",
               "2020",
               "2021",
@@ -1379,26 +1730,36 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
+              "r_top": 2,
               "c_left": 2,
               "r_bot": 8,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric cost values across multiple years, with a focus on drug costs for TKI -Ponatinib, indicating a cost analysis."
+            "reasoning": "The table contains year-based columns and cost data, typical of a cost analysis. The presence of drug names and patient numbers further supports this classification."
           },
-          "summary": "This table presents the annual drug costs for TKI -Ponatinib from 2019 to 2024. It provides a comparison of the current situation across these years, highlighting the number of patients treated each year. The data enables analysis of cost trends over time.",
+          "summary": "This table presents the cost analysis for TKI -Ponatinib from 2019 to 2024. It includes annual data on drug costs and patient numbers, providing insights into the current situation and projections for future years. The data enables comparison of costs over time, highlighting trends and potential budget impacts.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_t17_b9",
@@ -1413,15 +1774,20 @@
           "metadata": {
             "title": "Future Situation Patient Numbers",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "076daba6b93bd14c_t17_t9",
             "header_location": {
               "row": 1
             },
@@ -1433,7 +1799,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1441,18 +1808,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based data with numeric values representing patient numbers, indicating a focus on patient population projections."
+            "reasoning": "The table focuses on patient numbers over a series of years, indicating a patient population analysis."
           },
-          "summary": "This table presents the projected number of patients from 2019 to 2024 under a future situation scenario. It includes annual data points for each year, indicating the expected patient numbers. The data enables analysis of patient trends over time in the context of a future healthcare scenario.",
+          "summary": "This table presents the projected number of patients from 2019 to 2024 under a future situation scenario. It includes annual data for each year, with a focus on the number of patients treated. The data enables analysis of patient trends over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_t15_t7",
@@ -1465,9 +1841,34 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Annual Drug Costs and Patient Numbers",
+            "title": "Patient Population and Treatment Scenario Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
+              "TKI + vincristine",
+              "None",
+              "Current situation",
+              "None",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "None",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "Total"
+            ],
+            "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
+            "header_location": {
+              "row": 0
+            },
+            "row_names": [
               "Current situation",
               "2019",
               "2020",
@@ -1476,34 +1877,36 @@
               "2023",
               "2024"
             ],
-            "header_confidence": 0.9,
-            "header_location": {
-              "row": 0
-            },
-            "row_names": [
-              "TKI + vincristine",
-              "Number of patients t"
-            ],
-            "row_names_confidence": 0.8,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
-              "col": 0
+              "col": 2
             },
             "data_region": {
-              "r_top": 2,
+              "r_top": 1,
               "c_left": 2,
               "r_bot": 6,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "cost_analysis",
+            "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric values representing costs and patient numbers across multiple years, with clear column headers indicating a cost analysis focus."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on patient population estimates over time."
           },
-          "summary": "This table presents the annual drug costs and patient numbers from 2019 to 2024 for the treatment scenario involving TKI + vincristine. It provides a year-by-year breakdown of the current situation, highlighting the number of patients treated each year. The data enables analysis of trends in patient numbers and associated costs over the specified period.",
+          "summary": "This table presents patient population estimates and treatment scenarios from 2019 to 2024. It includes annual data on the number of patients treated under different scenarios, specifically focusing on the 'Current situation' and projections for subsequent years. The data enables comparison of patient numbers across years and scenarios.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024 across the table.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_t15_b7",
@@ -1518,15 +1921,25 @@
           "metadata": {
             "title": "Future Situation Patient Numbers",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
               "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -1539,6 +1952,7 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1546,18 +1960,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based columns with numeric values representing patient counts, indicating a focus on patient population projections."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on patient population projections."
           },
-          "summary": "This table presents the projected number of patients from 2019 to 2024 under a future situation scenario. It includes annual data points for each year, indicating a consistent patient count of zero across all years. The data enables analysis of patient population trends over time in the context of a future scenario.",
+          "summary": "This table presents the projected number of patients from 2019 to 2024 under a future situation scenario. It includes annual data for each year and a total column summarizing the patient numbers over the period. The data enables comparison of patient numbers across different years.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_t23_b15",
@@ -1570,18 +1993,28 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Clofarabine Cost Analysis",
+            "title": "Clofarabine Cost and Patient Analysis",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
+              "Clofarabine",
               "Current situation",
-              "2019",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "Total"
             ],
             "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "076daba6b93bd14c_b17_t23_t15_b7",
             "header_location": {
               "row": 1
             },
@@ -1595,25 +2028,35 @@
               "2024"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
             "data_region": {
-              "r_top": 3,
-              "c_left": 2,
+              "r_top": 1,
+              "c_left": 0,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
             "table_type": "cost_analysis",
-            "analysis_confidence": 0.92,
-            "reasoning": "The table contains numeric values representing costs over several years, with a clear focus on the financial aspects of Clofarabine treatment, indicating a cost analysis."
+            "analysis_confidence": 0.9,
+            "reasoning": "The table contains cost data and patient numbers over a series of years, typical of a cost analysis."
           },
-          "summary": "This table presents the annual cost projections for Clofarabine from 2019 to 2024. It provides a detailed view of the cost evolution over the years, highlighting the changes in patient numbers and associated costs. The data is crucial for understanding the financial impact of Clofarabine treatment over time.",
-          "summary_confidence": 0.92,
+          "summary": "This table presents the annual cost and patient data for Clofarabine from 2019 to 2024. It includes projections of patient numbers and associated costs over the years. The data enables comparison of current and future situations in terms of costs and patient numbers.",
+          "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "076daba6b93bd14c_b17_b23",
@@ -1626,23 +2069,29 @@
             "c_right": 28
           },
           "metadata": {
-            "title": "Future Situation Market Share Projections",
+            "title": "Future Situation Patient Projections",
             "title_confidence": 0.85,
+            "title_source": "inferred_from_content",
             "header": [
-              "Year",
-              "2019",
+              "Future situation",
               "2020",
               "2021",
               "2022",
               "2023",
-              "2024"
+              "2024",
+              "Number of patients t",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024",
+              "Total"
             ],
             "header_confidence": 0.9,
-            "header_location": {
-              "row": 1
-            },
+            "header_source": "inherited",
+            "header_inherited_from": "076daba6b93bd14c_b17_t23_b15",
+            "header_location": null,
             "row_names": [
-              "Future situation",
               "2019",
               "2020",
               "2021",
@@ -1650,7 +2099,8 @@
               "2023",
               "2024"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 2
             },
@@ -1658,18 +2108,27 @@
               "r_top": 2,
               "c_left": 2,
               "r_bot": 7,
-              "c_right": 8
+              "c_right": 15
             },
-            "table_type": "market_share",
+            "table_type": "patient_population",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains year-based columns with numeric values representing market share percentages, indicating a focus on market share data."
+            "reasoning": "The table contains year-based columns and patient numbers, indicating a focus on patient population projections."
           },
-          "summary": "This table presents market share projections for a future situation from 2019 to 2024. It includes annual data showing the progression of market share percentages over the years. The data enables analysis of trends and potential growth in market share over the specified period.",
+          "summary": "This table presents patient projections for future situations from 2019 to 2024. It includes annual data on the number of patients and their distribution over the years. The data enables comparison of patient numbers across different years, highlighting trends and changes over time.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2019 to 2024",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         }
       ]
     },
@@ -1688,15 +2147,18 @@
             "c_right": 14
           },
           "metadata": {
-            "title": "Patient Population and Market Share Analysis",
-            "title_confidence": 0.85,
+            "title": "Budget Impact Model Inputs",
+            "title_confidence": 0.9,
+            "title_source": "inferred_from_content",
             "header": [
+              "Description",
               "Value used in the model",
               "Default",
-              "User input",
-              "Description"
+              "User input"
             ],
-            "header_confidence": 0.9,
+            "header_confidence": 0.95,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -1704,7 +2166,7 @@
               "Patient population",
               "Number of patients in the 1st year",
               "Annual percentage change",
-              "Market shares in world with InO",
+              "Market shares in world without InO",
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -1718,29 +2180,39 @@
               "TKI + vincristine",
               "Clofarabine",
               "CHECK",
-              "Market shares in world without InO",
-              "Inotuzumab Ozogamicin"
+              "Market shares in world with InO",
+              "Annual drug costs"
             ],
             "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
               "r_top": 2,
               "c_left": 1,
-              "r_bot": 19,
+              "r_bot": 44,
               "c_right": 4
             },
-            "table_type": "market_share",
+            "table_type": "scenario_comparison",
             "analysis_confidence": 0.94,
-            "reasoning": "The table contains market share data for different treatments, with clear row names indicating drug names and market share values, fitting the market share category."
+            "reasoning": "Clear column headers with values and assumptions, row names are treatment options and cost categories, structured comparison of scenarios."
           },
-          "summary": "This table presents patient population estimates and market share projections for various treatments, including Inotuzumab Ozogamicin, in scenarios with and without its use. It includes assumptions and default values for market shares and patient numbers. The data enables comparison of treatment adoption rates and potential market dynamics.",
+          "summary": "This table presents inputs for a Budget Impact Model, including patient population estimates, market share projections, and annual drug costs. It compares scenarios with and without Inotuzumab Ozogamicin, providing detailed assumptions and calculations for each treatment option. The data enables analysis of cost implications and market dynamics in different treatment scenarios.",
           "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Two scenarios with parallel subsections for market shares and costs, using a consistent list of treatments.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "9814fc53f594ba29_b45_t24",
@@ -1754,7 +2226,8 @@
           },
           "metadata": {
             "title": "Adverse Events Frequency and Cost Analysis",
-            "title_confidence": 0.85,
+            "title_confidence": 0.95,
+            "title_source": "detected",
             "header": [
               "Adverse events, freq",
               "Inotuzumab Ozogamici",
@@ -1765,9 +2238,14 @@
               "DVP-Asp",
               "DVP-Asp+Cyclo",
               "hCVAD+MTX",
-              "Blinatumomab"
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
             ],
-            "header_confidence": 0.85,
+            "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -1782,10 +2260,10 @@
               "Veno-occlusive liver",
               "Cytokine release syn",
               "Veno-occlusive liver",
-              "Graft-versus-host di",
-              "Adverse events, cost"
+              "Graft-versus-host di"
             ],
             "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -1793,18 +2271,27 @@
               "r_top": 1,
               "c_left": 1,
               "r_bot": 11,
-              "c_right": 9
+              "c_right": 12
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.94,
-            "reasoning": "The table contains numeric values representing frequencies and costs, with clear column headers indicating different chemotherapy regimens, suggesting a cost analysis focus."
+            "reasoning": "Clear column headers with treatment names, row names are adverse events, and the table includes both frequency and cost data."
           },
-          "summary": "This table presents the frequency and cost assumptions of various adverse events associated with different chemotherapy regimens. It compares the incidence rates of adverse events like neutropenia and thrombocytopenia across treatments such as Inotuzumab Ozogamici and FLAG-Ida. The data is crucial for understanding the potential impact of these treatments on patient health and healthcare costs.",
+          "summary": "This table presents the frequency of various adverse events associated with different treatments, including Inotuzumab Ozogamici and FLAG-Ida. It also includes a section on the costs associated with these adverse events. The data enables comparison of adverse event frequencies across multiple treatment options.",
           "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "entity_template",
+              "confidence": 0.88,
+              "evidence": "Repeated list of adverse events across frequency and cost sections",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "9814fc53f594ba29_b45_b24_t46",
@@ -1817,8 +2304,9 @@
             "c_right": 14
           },
           "metadata": {
-            "title": "Subsequent Treatment Costs and Market Shares",
-            "title_confidence": 0.85,
+            "title": "Subsequent Treatment and Cost Analysis",
+            "title_confidence": 0.9,
+            "title_source": "detected",
             "header": [
               "Inotuzumab Ozogamici",
               "FLAG-Ida",
@@ -1828,9 +2316,14 @@
               "DVP-Asp",
               "DVP-Asp+Cyclo",
               "hCVAD+MTX",
-              "Blinatumomab"
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
             ],
-            "header_confidence": 0.85,
+            "header_confidence": 0.95,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 2
             },
@@ -1839,15 +2332,16 @@
               "Blinatumomab (set to",
               "Chemotherapy",
               "TKI",
-              "Subsequent treatment",
               "Inotuzumab Ozogamici",
               "Blinatumomab",
               "Chemotherapy",
-              "TKI",
-              "Hospitalization",
-              "Number of bed days"
+              "TKI (Ponatinib)",
+              "Number of bed days",
+              "Cost of bed days",
+              "SCT rates after induction therapy"
             ],
-            "row_names_confidence": 0.92,
+            "row_names_confidence": 0.9,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -1855,18 +2349,34 @@
               "r_top": 3,
               "c_left": 1,
               "r_bot": 12,
-              "c_right": 9
+              "c_right": 12
             },
-            "table_type": "cost_analysis",
-            "analysis_confidence": 0.94,
-            "reasoning": "The table contains numeric cost values and market share percentages, with clear column headers and row names indicating a cost analysis."
+            "table_type": "scenario_comparison",
+            "analysis_confidence": 0.92,
+            "reasoning": "The table compares treatment scenarios with and without Inotuzumab, using consistent column headers and row names across sections."
           },
-          "summary": "This table presents the costs and market shares of various subsequent treatments in a scenario without Inotuzumab Ozogamici. It includes detailed cost data for different chemotherapy regimens and targeted therapies, as well as their respective market shares. The data enables comparison of treatment costs and market dynamics in the absence of Inotuzumab Ozogamici.",
-          "summary_confidence": 0.94,
+          "summary": "This table presents a detailed analysis of subsequent treatment options and associated costs in scenarios with and without Inotuzumab Ozogamici. It includes cost calculations for various chemotherapy regimens and targeted therapies, as well as hospitalization metrics. The data enables comparison of treatment costs and outcomes across different therapeutic strategies.",
+          "summary_confidence": 0.92,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Two scenarios with parallel subsections and consistent drug templates.",
+              "applies_to_tables": [],
+              "generalizable": true
+            },
+            {
+              "pattern_type": "cost_breakdown",
+              "confidence": 0.85,
+              "evidence": "Consistent cost data structure across different treatment types.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "9814fc53f594ba29_b45_b24_b46_t2",
@@ -1881,18 +2391,32 @@
           "metadata": {
             "title": "SCT Costs Analysis",
             "title_confidence": 0.85,
+            "title_source": "detected",
             "header": [
-              "SCT costs",
-              "2020",
-              "2021",
-              "Assumption"
+              "Inotuzumab Ozogamici",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cyt",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
             ],
-            "header_confidence": 0.5,
+            "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "9814fc53f594ba29_b45_b24_t46",
             "header_location": {
-              "row": 1
+              "row": 0
             },
-            "row_names": [],
-            "row_names_confidence": 0.0,
+            "row_names": [
+              "SCT costs"
+            ],
+            "row_names_confidence": 0.95,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -1900,18 +2424,19 @@
               "r_top": 1,
               "c_left": 1,
               "r_bot": 1,
-              "c_right": 3
+              "c_right": 12
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains numeric cost values and an 'Assumption' column, indicating a focus on cost analysis related to SCT."
+            "reasoning": "The table contains cost data with a specific assumption, indicating a cost analysis focus."
           },
-          "summary": "This table presents the costs associated with SCT (Stem Cell Transplant) over a specified period. It includes assumptions related to these costs. The data enables analysis of cost assumptions for SCT in the context of a budget impact model.",
+          "summary": "This table presents the SCT costs with an assumption value. It includes cost data for different treatments, likely comparing scenarios or assumptions. The data enables analysis of cost implications under specific assumptions.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": []
         },
         {
           "table_id": "9814fc53f594ba29_b45_b24_b46_b2",
@@ -1926,20 +2451,32 @@
           "metadata": {
             "title": "End-of-life Costs Analysis",
             "title_confidence": 0.85,
+            "title_source": "detected",
             "header": [
-              "End-of-life costs",
-              "5000",
-              "5000",
-              "Assumption"
+              "Inotuzumab Ozogamici",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cyt",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
             ],
-            "header_confidence": 0.5,
+            "header_confidence": 0.9,
+            "header_source": "inherited",
+            "header_inherited_from": "9814fc53f594ba29_b45_b24_b46_t2",
             "header_location": {
-              "row": 1
+              "row": 0
             },
             "row_names": [
               "End-of-life costs"
             ],
-            "row_names_confidence": 0.85,
+            "row_names_confidence": 0.95,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -1947,18 +2484,27 @@
               "r_top": 1,
               "c_left": 1,
               "r_bot": 1,
-              "c_right": 3
+              "c_right": 12
             },
             "table_type": "cost_analysis",
             "analysis_confidence": 0.9,
-            "reasoning": "The table contains cost values and assumptions related to end-of-life care, fitting the cost analysis category."
+            "reasoning": "The table focuses on cost calculations for end-of-life scenarios, with inherited headers indicating drug names."
           },
-          "summary": "This table presents the end-of-life costs associated with a specific healthcare scenario. It includes assumptions and cost values, indicating a focus on financial implications at the end of life. The data enables analysis of cost assumptions in healthcare budgeting.",
+          "summary": "This table presents the end-of-life costs associated with different treatments. It includes cost assumptions for various drugs, providing a basis for economic evaluation. The data enables comparison of end-of-life costs across different treatment options.",
           "summary_confidence": 0.9,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "entity_template",
+              "confidence": 0.85,
+              "evidence": "Repeated drug names across sections, indicating a template for cost analysis.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         }
       ]
     },
@@ -1977,13 +2523,16 @@
             "c_right": 5
           },
           "metadata": {
-            "title": "Value Analysis",
+            "title": "Introduction Table",
             "title_confidence": 0.75,
+            "title_source": "inferred_from_content",
             "header": [
               "Value",
-              "The content of"
+              "The content of these"
             ],
             "header_confidence": 0.5,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -1992,25 +2541,27 @@
               "Value"
             ],
             "row_names_confidence": 0.85,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
-              "r_top": 11,
-              "c_left": 2,
-              "r_bot": 13,
-              "c_right": 4
+              "r_top": 0,
+              "c_left": 0,
+              "r_bot": 2,
+              "c_right": 2
             },
             "table_type": "metadata",
-            "analysis_confidence": 0.8,
-            "reasoning": "The table contains minimal data with generic headers and row names, indicating it serves as a metadata or introductory section rather than detailed analysis."
+            "analysis_confidence": 0.7,
+            "reasoning": "The table contains text with no clear numerical data or calculations, indicating it serves as metadata or introductory content."
           },
-          "summary": "This table presents a basic analysis of values and their corresponding content. It appears to be a metadata table with limited data points. The purpose is likely to provide a brief overview or introduction to more detailed sections.",
-          "summary_confidence": 0.8,
+          "summary": "This table presents introductory content with minimal data. It includes text values in the first and last columns, with a blank middle column. The data serves as a placeholder or introductory note.",
+          "summary_confidence": 0.7,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": []
         },
         {
           "table_id": "f57ac8d2e4e4931a_b3",
@@ -2023,37 +2574,42 @@
             "c_right": 5
           },
           "metadata": {
-            "title": "Introduction Table",
+            "title": "Value Analysis",
             "title_confidence": 0.75,
+            "title_source": "detected",
             "header": [
               "Value",
-              "The content of"
+              "The content of these"
             ],
             "header_confidence": 0.5,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
             "row_names": [],
             "row_names_confidence": 0.0,
+            "row_names_source": "missing",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
-              "r_top": 14,
+              "r_top": 1,
               "c_left": 2,
-              "r_bot": 15,
+              "r_bot": 1,
               "c_right": 4
             },
             "table_type": "metadata",
-            "analysis_confidence": 0.85,
-            "reasoning": "The table contains minimal content with generic headers and no specific data entries, indicating it serves as metadata or an introductory placeholder."
+            "analysis_confidence": 0.7,
+            "reasoning": "The table lacks sufficient data to perform a detailed analysis and appears to be a metadata or introductory section."
           },
-          "summary": "This table appears to be an introductory section with limited data, possibly serving as a placeholder or metadata. It lacks detailed content or specific data points typically found in BIM tables. The purpose of this table might be to provide a brief overview or context for subsequent sections.",
-          "summary_confidence": 0.85,
+          "summary": "This table contains a single row with a 'Value' column and a partial description in another column. The data appears to be incomplete or part of a larger dataset. It may serve as a placeholder or introductory section in the workbook.",
+          "summary_confidence": 0.7,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": []
         }
       ]
     },
@@ -2072,8 +2628,9 @@
             "c_right": 5
           },
           "metadata": {
-            "title": "Budget Impact Analysis: With vs Without InO",
+            "title": "Budget Impact Analysis 2020-2024",
             "title_confidence": 0.95,
+            "title_source": "inferred_from_content",
             "header": [
               "Year",
               "Without InO",
@@ -2081,6 +2638,8 @@
               "Budget impact"
             ],
             "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 0
             },
@@ -2093,25 +2652,42 @@
               "Total"
             ],
             "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
             "data_region": {
-              "r_top": 1,
-              "c_left": 0,
-              "r_bot": 6,
-              "c_right": 3
+              "r_top": 4,
+              "c_left": 1,
+              "r_bot": 10,
+              "c_right": 4
             },
             "table_type": "scenario_comparison",
             "analysis_confidence": 0.94,
-            "reasoning": "The table compares costs between two scenarios ('With InO' vs 'Without InO') over multiple years, with a 'Total' row indicating a summary of the budget impact."
+            "reasoning": "The table compares costs between two scenarios over multiple years, with clear column headers and row names."
           },
-          "summary": "This table presents a budget impact analysis comparing the costs associated with scenarios 'Without InO' and 'With InO' from 2020 to 2024. It highlights the annual and total budget impact of introducing InO, showing a consistent increase in costs with InO. The data enables stakeholders to assess the financial implications of adopting InO over the specified period.",
+          "summary": "This table presents the budget impact analysis from 2020 to 2024, comparing costs with and without InO treatment. It highlights the annual and total budget impact over the five-year period. The data enables a clear comparison of financial implications between the two scenarios.",
           "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Two scenarios ('Without InO' vs 'With InO') compared across multiple years.",
+              "applies_to_tables": [],
+              "generalizable": true
+            },
+            {
+              "pattern_type": "time_series",
+              "confidence": 0.85,
+              "evidence": "Consistent year-based columns from 2020 to 2024.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "47ecc07e130eef5f_t10",
@@ -2125,7 +2701,8 @@
           },
           "metadata": {
             "title": "Cost Analysis: World with and without InO",
-            "title_confidence": 0.9,
+            "title_confidence": 0.95,
+            "title_source": "inferred_from_content",
             "header": [
               "Year",
               "2020",
@@ -2136,9 +2713,12 @@
               "2020",
               "2021",
               "2022",
-              "2023"
+              "2023",
+              "2024"
             ],
-            "header_confidence": 0.95,
+            "header_confidence": 0.98,
+            "header_source": "detected",
+            "header_inherited_from": null,
             "header_location": {
               "row": 1
             },
@@ -2152,7 +2732,8 @@
               "Total",
               "Annual budget impact"
             ],
-            "row_names_confidence": 0.95,
+            "row_names_confidence": 0.92,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 0
             },
@@ -2162,16 +2743,32 @@
               "r_bot": 9,
               "c_right": 10
             },
-            "table_type": "cost_analysis",
-            "analysis_confidence": 0.95,
-            "reasoning": "The table contains numeric cost values across different categories and years, with a 'Total' row indicating a cost analysis."
+            "table_type": "scenario_comparison",
+            "analysis_confidence": 0.94,
+            "reasoning": "Clear column headers with years, row names are cost categories, and the table compares two scenarios."
           },
-          "summary": "This table presents a cost analysis comparing scenarios with and without Inotuzumab Ozogamicin (InO) from 2020 to 2024. It includes various cost categories such as drug costs, adverse events, and hospitalization. The data enables a comprehensive understanding of the financial impact of introducing InO into the treatment regimen.",
-          "summary_confidence": 0.95,
+          "summary": "This table presents a cost analysis comparing scenarios with and without Inotuzumab Ozogamicin (InO) from 2020 to 2024. It includes various cost categories such as drug costs, adverse events, and hospitalization. The data enables a comparison of the financial impact of introducing InO into the treatment regimen.",
+          "summary_confidence": 0.94,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "scenario_comparison",
+              "confidence": 0.88,
+              "evidence": "Two scenarios with parallel cost categories for each year",
+              "applies_to_tables": [],
+              "generalizable": true
+            },
+            {
+              "pattern_type": "cost_breakdown",
+              "confidence": 0.85,
+              "evidence": "Consistent cost categories across both scenarios",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         },
         {
           "table_id": "47ecc07e130eef5f_b10",
@@ -2184,20 +2781,21 @@
             "c_right": 12
           },
           "metadata": {
-            "title": "Cost Analysis of Treatment Components",
-            "title_confidence": 0.85,
+            "title": "Cost Analysis for Various Healthcare Expenses",
+            "title_confidence": 0.9,
+            "title_source": "inferred_from_content",
             "header": [
-              "Drug costs",
-              "Adverse events costs",
-              "Subsequent treatment",
-              "Hospitalization cost",
-              "SCT costs",
-              "End-of-life costs"
+              "Year",
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024"
             ],
-            "header_confidence": 0.9,
-            "header_location": {
-              "row": 1
-            },
+            "header_confidence": 0.95,
+            "header_source": "inherited",
+            "header_inherited_from": "47ecc07e130eef5f_t10",
+            "header_location": null,
             "row_names": [
               "Drug costs",
               "Adverse events costs",
@@ -2206,7 +2804,8 @@
               "SCT costs",
               "End-of-life costs"
             ],
-            "row_names_confidence": 0.9,
+            "row_names_confidence": 0.95,
+            "row_names_source": "detected",
             "row_names_location": {
               "col": 5
             },
@@ -2217,15 +2816,24 @@
               "c_right": 10
             },
             "table_type": "cost_analysis",
-            "analysis_confidence": 0.94,
-            "reasoning": "The table contains numeric cost values across different treatment components, indicating a cost analysis. The presence of specific cost categories and numeric data supports this classification."
+            "analysis_confidence": 0.92,
+            "reasoning": "The table clearly lists various cost categories with numerical data across multiple years, fitting the cost analysis type."
           },
-          "summary": "This table presents a breakdown of various cost components associated with treatment, including drug costs, adverse events, and hospitalization. It provides a detailed analysis of costs incurred in different categories, highlighting the financial impact of each component. The data is crucial for understanding the overall budget impact of treatments over a specified period.",
-          "summary_confidence": 0.94,
+          "summary": "This table presents a breakdown of various healthcare-related costs over a five-year period from 2020 to 2024. It includes categories such as drug costs, adverse events costs, and hospitalization costs. The data enables comparison of cost trends across different healthcare expense categories.",
+          "summary_confidence": 0.92,
           "children": [],
           "depth": 0,
           "ontology_tags": [],
-          "ontology_confidence": 0.0
+          "ontology_confidence": 0.0,
+          "pattern_observations": [
+            {
+              "pattern_type": "cost_breakdown",
+              "confidence": 0.85,
+              "evidence": "Consistent structure of cost categories across multiple years.",
+              "applies_to_tables": [],
+              "generalizable": true
+            }
+          ]
         }
       ]
     }
@@ -2234,7 +2842,7 @@
     "n_tables_analyzed": 37,
     "n_children_detected": 1,
     "n_llm_calls": 40,
-    "total_llm_tokens": 96241,
-    "elapsed_seconds": 182.407414
+    "total_llm_tokens": 168707,
+    "elapsed_seconds": 283.611517
   }
 }

@@ -297,6 +297,55 @@ xl_sheetagent:
   v3a_row_names_allow_formulas: true      # Don't reject row names with formulas
   v3a_column_split_classification: true   # Classify column splits as title/rowname
 
+xl_sheetagent_v5:
+  # Row tagging thresholds
+  text_ratio_header: 0.70
+  number_ratio_data: 0.50
+  note_fill_max: 0.20
+  title_max_nonempty: 3
+
+  # Multi-row header detection
+  header_zone_pct: 0.20
+  header_col_tolerance: 1
+
+  # LLM refinement
+  use_llm: true
+  llm_model: "gpt-4o-mini"
+  llm_max_tokens: 2048
+  llm_temperature: 0.1
+  max_retries: 5
+  base_delay: 1.0
+
+  # Core region rules
+  min_component_area: 4
+  component_merge_gap: 1
+
+  # Child rules
+  min_child_rows: 6
+  iou_merge_threshold: 0.30
+
+  # Formatting
+  extract_formatting: true
+
+  # Parallelism
+  max_workers: 4
+
+  # Performance guardrails
+  max_llm_children_per_sheet: 20
+  max_cells_per_prompt: 5000
+  max_tables_per_sheet_warn: 50
+  max_llm_calls_per_sheet: 30
+
+  # Confidence weights
+  w_tags: 0.25
+  w_header: 0.25
+  w_core: 0.20
+  w_llm: 0.15
+  w_role: 0.15
+
+  # Audit
+  emit_audit: true
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2

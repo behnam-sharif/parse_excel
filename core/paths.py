@@ -45,6 +45,11 @@ def get_v4_sheetagent_output_path(run_id: str, base: str = "data/output") -> Pat
     return get_run_root(run_id, base) / "v4_sheetagent_output"
 
 
+def get_v5_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the xl_sheetagent_v5 output directory for a given run."""
+    return get_run_root(run_id, base) / "v5_sheetagent_output"
+
+
 def get_log_path(run_id: str, base: str = "data/output") -> Path:
     """Return the logs directory for a given run."""
     return get_run_root(run_id, base) / "logs"
