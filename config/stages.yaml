@@ -313,7 +313,7 @@ xl_sheetagent_v5:
   use_inherit_header_amend_llm: false
 
   # LLM refinement
-  use_llm: true
+  use_llm: false
   llm_model: "gpt-4o-mini"
   llm_max_tokens: 2048
   llm_temperature: 0.1
@@ -359,7 +359,7 @@ xl_sheetagent_v5:
   blank_inclusion_density_threshold: 0.30
 
   # Enhanced LLM metadata resolution
-  use_llm_metadata_resolution: true
+  use_llm_metadata_resolution: false
   llm_metadata_max_tokens: 3000
   llm_metadata_max_cells: 8000
   include_cut_scores_in_prompt: true

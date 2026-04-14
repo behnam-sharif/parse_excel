@@ -1,291 +1,4 @@
 {
-  "Introduction": {
-    "run_id": "streamlit_run_simple",
-    "sheet_name": "Introduction",
-    "resolved_tables": [
-      {
-        "table_id": "f57ac8d2e4e4931a_t3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_t3",
-          "f57ac8d2e4e4931a_t3_child1",
-          "f57ac8d2e4e4931a_t3_child2"
-        ],
-        "bbox": {
-          "r1": 10,
-          "c1": 2,
-          "r2": 12,
-          "c2": 4,
-          "hierarchy_role": "parent",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_t3"
-        },
-        "title": "Value",
-        "headers": [],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "not_found",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
-          },
-          {
-            "row_index": 1,
-            "layer1_tag": "data_candidate",
-            "layer2_tag": "data",
-            "confidence": 0.3
-          },
-          {
-            "row_index": 2,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "unassigned_context",
-            "confidence": 0.6
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
-          },
-          "borders": {
-            "headers": "none"
-          },
-          "alignment": {
-            "data": "center"
-          },
-          "header_merges": []
-        },
-        "confidence": 0.255,
-        "signals": {
-          "title_source": "local",
-          "header_source": "none",
-          "n_children_absorbed": 0,
-          "n_children_preserved": 2
-        },
-        "child_summaries": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          }
-        ],
-        "metadata_source": "llm_resolved",
-        "child_titles": [
-          "Value",
-          "Value"
-        ],
-        "children": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child1"
-            ],
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "title": "Value",
-            "headers": [],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.6
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
-              },
-              "borders": {
-                "headers": "none"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.265,
-            "signals": {
-              "title_source": "local",
-              "header_source": "inherited"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "child_titles": [],
-            "children": []
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child2"
-            ],
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "title": "Value",
-            "headers": [],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.6
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
-              },
-              "borders": {
-                "headers": "none"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.265,
-            "signals": {
-              "title_source": "local",
-              "header_source": "inherited"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "child_titles": [],
-            "children": []
-          }
-        ]
-      },
-      {
-        "table_id": "f57ac8d2e4e4931a_b3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_b3"
-        ],
-        "bbox": {
-          "r1": 14,
-          "c1": 2,
-          "r2": 14,
-          "c2": 4,
-          "hierarchy_role": "standalone",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_b3"
-        },
-        "title": "Value",
-        "headers": [],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "metadata",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
-          },
-          "borders": {
-            "headers": "none"
-          },
-          "alignment": {},
-          "header_merges": []
-        },
-        "confidence": 0.265,
-        "signals": {
-          "title_source": "local",
-          "header_source": "none"
-        },
-        "child_summaries": [],
-        "metadata_source": "heuristic",
-        "child_titles": [],
-        "children": []
-      }
-    ]
-  },
   "Results": {
     "run_id": "streamlit_run_simple",
     "sheet_name": "Results",
@@ -316,14 +29,7 @@
             "Budget impact"
           ]
         ],
-        "row_names": [
-          "2020",
-          "2021",
-          "2022",
-          "2023",
-          "2024",
-          "Total"
-        ],
+        "row_names": null,
         "notes": [],
         "core_regions": [
           {
@@ -407,8 +113,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.785,
+        "confidence": 0.69,
         "signals": {
+          "excel_range": "B4:E10",
           "title_source": "none",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -450,7 +157,7 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
           null,
           null
@@ -511,6 +218,7 @@
             },
             "confidence": 0.559,
             "signals": {
+              "excel_range": "B4:E4",
               "title_source": "none",
               "header_source": "local"
             },
@@ -628,11 +336,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.902,
+            "confidence": 0.637,
             "signals": {
-              "header_inherited_from": "262a4c0f1d47d09d_child1",
+              "excel_range": "B5:E10",
               "title_source": "none",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -658,32 +366,23 @@
           "split_depth": 0,
           "v3a_table_id": "47ecc07e130eef5f_t10"
         },
-        "title": "Without InO",
+        "title": null,
         "headers": [
           [
+            "",
             "Without InO",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO"
           ]
         ],
-        "row_names": [
-          "Drug costs",
-          "Adverse events costs",
-          "Subsequent treatment cost",
-          "Hospitalization costs",
-          "SCT costs",
-          "End-of-life costs",
-          "Total",
-          "Annual budget impact"
-        ],
+        "row_names": null,
         "notes": [],
         "core_regions": [
           {
@@ -706,14 +405,14 @@
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
           },
           {
             "row_index": 1,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
             "confidence": 0.8
           },
           {
@@ -773,34 +472,38 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
-            "headers": "none",
+            "headers": "outline",
             "core": "outline"
           },
-          "alignment": {},
-          "header_merges": []
+          "alignment": {
+            "data": "center"
+          },
+          "header_merges": [
+            {
+              "r1": 47,
+              "c1": 2,
+              "r2": 47,
+              "c2": 6
+            },
+            {
+              "r1": 47,
+              "c1": 7,
+              "r2": 47,
+              "c2": 11
+            }
+          ]
         },
         "confidence": 0.587,
         "signals": {
-          "llm_tag_overrides": [
-            {
-              "row": 0,
-              "old": "title_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 1,
-              "old": "data_candidate",
-              "new": "header_candidate"
-            }
-          ],
-          "title_source": "local",
-          "header_source": "llm",
-          "n_children_absorbed": 1,
-          "n_children_preserved": 1
+          "excel_range": "B48:L57",
+          "title_source": "none",
+          "header_source": "local",
+          "n_children_absorbed": 0,
+          "n_children_preserved": 2
         },
         "child_summaries": [
           {
@@ -818,7 +521,7 @@
               "v3a_table_id": "47ecc07e130eef5f_t10_child1"
             },
             "has_core_region": false,
-            "absorbed": true
+            "absorbed": false
           },
           {
             "table_id": "47ecc07e130eef5f_t10_child2",
@@ -838,11 +541,91 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
-          "Without InO"
+          null,
+          null
         ],
         "children": [
+          {
+            "table_id": "47ecc07e130eef5f_t10_child1",
+            "source_table_ids": [
+              "47ecc07e130eef5f_t10_child1"
+            ],
+            "bbox": {
+              "r1": 47,
+              "c1": 2,
+              "r2": 47,
+              "c2": 7,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "47ecc07e130eef5f_t10",
+              "split_depth": 1,
+              "v3a_table_id": "47ecc07e130eef5f_t10_child1"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "With InO"
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "outline"
+              },
+              "alignment": {},
+              "header_merges": [
+                {
+                  "r1": 47,
+                  "c1": 2,
+                  "r2": 47,
+                  "c2": 6
+                },
+                {
+                  "r1": 47,
+                  "c1": 7,
+                  "r2": 47,
+                  "c2": 11
+                }
+              ]
+            },
+            "confidence": 0.412,
+            "signals": {
+              "excel_range": "C48:H48",
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          },
           {
             "table_id": "47ecc07e130eef5f_t10_child2",
             "source_table_ids": [
@@ -858,20 +641,20 @@
               "split_depth": 1,
               "v3a_table_id": "47ecc07e130eef5f_t10_child2"
             },
-            "title": "Without InO",
+            "title": null,
             "headers": [
               [
+                "",
                 "Without InO",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "With InO",
+                "With InO",
+                "With InO",
+                "With InO",
+                "With InO"
               ]
             ],
             "row_names": [
@@ -981,9 +764,9 @@
             },
             "confidence": 0.595,
             "signals": {
-              "title_source": "metadata_merged",
-              "header_source": "inherited",
-              "title_donated_from": "47ecc07e130eef5f_t10_child1"
+              "excel_range": "B49:L57",
+              "title_source": "none",
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -1092,8 +875,9 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.65,
+        "confidence": 0.588,
         "signals": {
+          "excel_range": "G59:L64",
           "title_source": "none",
           "header_source": "none"
         },
@@ -1138,25 +922,7 @@
             "Description "
           ]
         ],
-        "row_names": [
-          "Number of patients in the",
-          "Annual percentage change",
-          "Market shares in world wi",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabi",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "CHECK",
-          "Annual drug costs"
-        ],
+        "row_names": null,
         "notes": [],
         "core_regions": [
           {
@@ -1248,9 +1014,9 @@
           },
           {
             "row_index": 4,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 5,
@@ -1332,9 +1098,9 @@
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 19,
@@ -1416,9 +1182,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -1520,8 +1286,9 @@
             }
           ]
         },
-        "confidence": 0.837,
+        "confidence": 0.648,
         "signals": {
+          "excel_range": "B3:F47",
           "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -1614,7 +1381,7 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
           null,
           "Patient population",
@@ -1685,6 +1452,7 @@
             },
             "confidence": 0.618,
             "signals": {
+              "excel_range": "C3:F3",
               "title_source": "none",
               "header_source": "local"
             },
@@ -1711,6 +1479,7 @@
             "title": "Patient population",
             "headers": [
               [
+                "",
                 "Value used in the model",
                 "Default",
                 "User input",
@@ -1778,11 +1547,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.882,
+            "confidence": 0.618,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45_child1",
+              "excel_range": "B4:F6",
               "title_source": "local",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -1807,6 +1576,7 @@
             "title": "Market shares in world without InO",
             "headers": [
               [
+                "",
                 "Value used in the model",
                 "Default",
                 "User input",
@@ -1953,11 +1723,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.881,
+            "confidence": 0.596,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45_child2",
+              "excel_range": "B7:F20",
               "title_source": "local",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -1982,6 +1752,7 @@
             "title": "Market shares in world with InO",
             "headers": [
               [
+                "",
                 "Value used in the model",
                 "Default",
                 "User input",
@@ -2128,11 +1899,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.881,
+            "confidence": 0.596,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45_child3",
+              "excel_range": "B21:F34",
               "title_source": "local",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2157,6 +1928,7 @@
             "title": "Annual drug costs",
             "headers": [
               [
+                "",
                 "Value used in the model",
                 "Default",
                 "User input",
@@ -2294,11 +2066,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.881,
+            "confidence": 0.595,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45_child4",
+              "excel_range": "B35:F47",
               "title_source": "local",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2324,7 +2096,7 @@
           "split_depth": 0,
           "v3a_table_id": "9814fc53f594ba29_b45_t24"
         },
-        "title": "Adverse events, frequenci",
+        "title": null,
         "headers": [
           [
             "Adverse events, frequencies (same as global models)",
@@ -2342,31 +2114,7 @@
             "Clofarabine "
           ]
         ],
-        "row_names": [
-          "Neutropenia",
-          "Thrombocytopenia",
-          "Leukopenia",
-          "Febrile neutropenia",
-          "Anaemia",
-          "Lymphopenia",
-          "White blood cells decreas",
-          "Veno-occlusive liver dise",
-          "Cytokine release syndrome",
-          "Veno-occlusive liver dise",
-          "Graft-versus-host disease",
-          "Adverse events, costs",
-          "Neutropenia",
-          "Thrombocytopenia",
-          "Leukopenia",
-          "Febrile neutropenia",
-          "Anaemia",
-          "Lymphopenia",
-          "White blood cells decreas",
-          "Veno-occlusive liver dise",
-          "Cytokine release syndrome",
-          "Veno-occlusive liver dise",
-          "Graft-versus-host disease"
-        ],
+        "row_names": null,
         "notes": [],
         "core_regions": [
           {
@@ -2476,9 +2224,9 @@
           },
           {
             "row_index": 12,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 13,
@@ -2565,9 +2313,10 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.805,
+        "confidence": 0.821,
         "signals": {
-          "title_source": "llm",
+          "excel_range": "B49:N72",
+          "title_source": "none",
           "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
@@ -2608,7 +2357,7 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
           null,
           "Adverse events, costs"
@@ -2771,8 +2520,9 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.881,
+            "confidence": 0.86,
             "signals": {
+              "excel_range": "B49:N60",
               "title_source": "none",
               "header_source": "local"
             },
@@ -2799,19 +2549,11 @@
             "title": "Adverse events, costs",
             "headers": [
               [
-                "Adverse events, frequencies (same as global models)",
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
               ]
             ],
             "row_names": [
@@ -2938,10 +2680,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.656,
+            "confidence": 0.743,
             "signals": {
+              "excel_range": "B61:F72",
+              "header_inherited_from": "9814fc53f594ba29_t45",
+              "inheritance_kind": "above_parent",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "inherited_above_parent"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2973,8 +2718,23 @@
           "split_depth": 0,
           "v3a_table_id": "9814fc53f594ba29_b45_b24_t46"
         },
-        "title": "Subsequent treatments in world without InO",
+        "title": "Hospitalization",
         "headers": [
+          [
+            "Subsequent treatments in world without InO ",
+            "",
+            "",
+            "",
+            "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
           [
             "",
             "Inotuzumab Ozogamicin ",
@@ -2991,59 +2751,8 @@
             "Clofarabine "
           ]
         ],
-        "row_names": [
-          "Inotuzumab",
-          "Blinatumomab (set to 0%)",
-          "Chemotherapy",
-          "TKI",
-          "Subsequent treatment cost",
-          "Inotuzumab Ozogamicin",
-          "Blinatumomab",
-          "Chemotherapy",
-          "TKI (Ponatinib)",
-          "Hospitalization",
-          "Number of bed days",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabi",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Cost of bed days",
-          "SCT rates after induction",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabi",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine"
-        ],
-        "notes": [
-          {
-            "row_index": 18,
-            "text": "Number of bed days",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 32,
-            "text": "SCT rates after induction therapy",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "row_names": null,
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -3125,9 +2834,9 @@
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.75
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.65
           },
           {
             "row_index": 1,
@@ -3161,9 +2870,9 @@
           },
           {
             "row_index": 6,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 7,
@@ -3197,9 +2906,9 @@
           },
           {
             "row_index": 12,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 13,
@@ -3227,15 +2936,15 @@
           },
           {
             "row_index": 17,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.6
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.8
           },
           {
             "row_index": 19,
@@ -3317,9 +3026,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.6
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -3402,7 +3111,7 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
+            "title": null,
             "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
@@ -3412,12 +3121,13 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.684,
+        "confidence": 0.668,
         "signals": {
-          "title_source": "local",
+          "excel_range": "B74:N118",
+          "title_source": "metadata_merged",
           "header_source": "local",
-          "n_children_absorbed": 2,
-          "n_children_preserved": 6
+          "n_children_absorbed": 0,
+          "n_children_preserved": 8
         },
         "child_summaries": [
           {
@@ -3435,7 +3145,7 @@
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child1"
             },
             "has_core_region": false,
-            "absorbed": true
+            "absorbed": false
           },
           {
             "table_id": "9814fc53f594ba29_b45_b24_t46_child2",
@@ -3469,7 +3179,7 @@
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child3"
             },
             "has_core_region": false,
-            "absorbed": true
+            "absorbed": false
           },
           {
             "table_id": "9814fc53f594ba29_b45_b24_t46_child4",
@@ -3557,16 +3267,83 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
-          "Subsequent treatments in world without InO",
-          "Subsequent treatments in world with InO",
+          null,
+          null,
+          null,
+          null,
           "Subsequent treatment costs",
           "Hospitalization",
           "Number of bed days",
           "SCT rates after induction therapy"
         ],
         "children": [
+          {
+            "table_id": "9814fc53f594ba29_b45_b24_t46_child1",
+            "source_table_ids": [
+              "9814fc53f594ba29_b45_b24_t46_child1"
+            ],
+            "bbox": {
+              "r1": 73,
+              "c1": 1,
+              "r2": 73,
+              "c2": 5,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child1"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Subsequent treatments in world without InO ",
+                "",
+                "",
+                "",
+                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments "
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.65
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "none"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.471,
+            "signals": {
+              "excel_range": "B74:F74",
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          },
           {
             "table_id": "9814fc53f594ba29_b45_b24_t46_child2",
             "source_table_ids": [
@@ -3582,7 +3359,7 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child2"
             },
-            "title": "Subsequent treatments in world without InO",
+            "title": null,
             "headers": [
               [
                 "",
@@ -3677,9 +3454,74 @@
             },
             "confidence": 0.835,
             "signals": {
-              "title_source": "metadata_merged",
-              "header_source": "local",
-              "title_donated_from": "9814fc53f594ba29_b45_b24_t46_child1"
+              "excel_range": "B75:N79",
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_b45_b24_t46_child3",
+            "source_table_ids": [
+              "9814fc53f594ba29_b45_b24_t46_child3"
+            ],
+            "bbox": {
+              "r1": 79,
+              "c1": 1,
+              "r2": 79,
+              "c2": 5,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "split_depth": 1,
+              "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child3"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Subsequent treatments in world with InO ",
+                "",
+                "",
+                "",
+                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments "
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.65
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "none"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.471,
+            "signals": {
+              "excel_range": "B80:F80",
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3701,7 +3543,7 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child4"
             },
-            "title": "Subsequent treatments in world with InO",
+            "title": null,
             "headers": [
               [
                 "",
@@ -3796,9 +3638,9 @@
             },
             "confidence": 0.835,
             "signals": {
-              "title_source": "metadata_merged",
-              "header_source": "local",
-              "title_donated_from": "9814fc53f594ba29_b45_b24_t46_child3"
+              "excel_range": "B81:N85",
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3824,18 +3666,10 @@
             "headers": [
               [
                 "",
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
               ]
             ],
             "row_names": [
@@ -3913,10 +3747,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.606,
+            "confidence": 0.753,
             "signals": {
+              "excel_range": "B86:F90",
+              "header_inherited_from": "9814fc53f594ba29_t45",
+              "inheritance_kind": "above_parent",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "inherited_above_parent"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3940,6 +3777,21 @@
             },
             "title": "Hospitalization",
             "headers": [
+              [
+                "Subsequent treatments in world without InO ",
+                "",
+                "",
+                "",
+                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
               [
                 "",
                 "Inotuzumab Ozogamicin ",
@@ -3987,8 +3839,9 @@
             },
             "confidence": 0.353,
             "signals": {
+              "excel_range": "B91",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4014,18 +3867,10 @@
             "headers": [
               [
                 "",
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
               ]
             ],
             "row_names": [
@@ -4166,10 +4011,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.653,
+            "confidence": 0.738,
             "signals": {
+              "excel_range": "B92:F105",
+              "header_inherited_from": "9814fc53f594ba29_t45",
+              "inheritance_kind": "above_parent",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "inherited_above_parent"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4195,18 +4043,10 @@
             "headers": [
               [
                 "",
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
               ]
             ],
             "row_names": [
@@ -4340,10 +4180,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.656,
+            "confidence": 0.742,
             "signals": {
+              "excel_range": "B106:F118",
+              "header_inherited_from": "9814fc53f594ba29_t45",
+              "inheritance_kind": "above_parent",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "inherited_above_parent"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4368,7 +4211,15 @@
           "v3a_table_id": "9814fc53f594ba29_b45_b24_b46_t2"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "",
+            "Value used in the model",
+            "Default",
+            "User input",
+            "Description "
+          ]
+        ],
         "row_names": [
           "SCT costs"
         ],
@@ -4400,10 +4251,13 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.265,
+        "confidence": 0.412,
         "signals": {
+          "excel_range": "B120:F120",
+          "header_inherited_from": "9814fc53f594ba29_t45",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -4426,7 +4280,15 @@
           "v3a_table_id": "9814fc53f594ba29_b45_b24_b46_b2"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "",
+            "Value used in the model",
+            "Default",
+            "User input",
+            "Description "
+          ]
+        ],
         "row_names": [
           "End-of-life costs"
         ],
@@ -4458,10 +4320,328 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.265,
+        "confidence": 0.412,
         "signals": {
+          "excel_range": "B122:F122",
+          "header_inherited_from": "9814fc53f594ba29_t45",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
+        },
+        "child_summaries": [],
+        "metadata_source": "heuristic",
+        "child_titles": [],
+        "children": []
+      }
+    ]
+  },
+  "Introduction": {
+    "run_id": "streamlit_run_simple",
+    "sheet_name": "Introduction",
+    "resolved_tables": [
+      {
+        "table_id": "f57ac8d2e4e4931a_t3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_t3",
+          "f57ac8d2e4e4931a_t3_child1",
+          "f57ac8d2e4e4931a_t3_child2"
+        ],
+        "bbox": {
+          "r1": 10,
+          "c1": 2,
+          "r2": 12,
+          "c2": 4,
+          "hierarchy_role": "parent",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_t3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value ",
+            "",
+            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          },
+          {
+            "row_index": 1,
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.3
+          },
+          {
+            "row_index": 2,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "none"
+          },
+          "alignment": {
+            "data": "center"
+          },
+          "header_merges": []
+        },
+        "confidence": 0.404,
+        "signals": {
+          "excel_range": "C11:E13",
+          "title_source": "none",
+          "header_source": "local",
+          "n_children_absorbed": 0,
+          "n_children_preserved": 2
+        },
+        "child_summaries": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          }
+        ],
+        "metadata_source": "heuristic",
+        "child_titles": [
+          null,
+          null
+        ],
+        "children": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child1"
+            ],
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "none"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.412,
+            "signals": {
+              "excel_range": "C11:E11",
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child2"
+            ],
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "outline"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.412,
+            "signals": {
+              "excel_range": "C13:E13",
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "table_id": "f57ac8d2e4e4931a_b3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_b3"
+        ],
+        "bbox": {
+          "r1": 14,
+          "c1": 2,
+          "r2": 14,
+          "c2": 4,
+          "hierarchy_role": "standalone",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_b3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "outline"
+          },
+          "alignment": {},
+          "header_merges": []
+        },
+        "confidence": 0.412,
+        "signals": {
+          "excel_range": "C15:E15",
+          "title_source": "none",
+          "header_source": "local"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -4491,77 +4671,20 @@
           "split_depth": 0,
           "v3a_table_id": "94c8c58d611b9e70_t103"
         },
-        "title": "BIM calculation",
+        "title": null,
         "headers": [
           [
-            "None",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
+            "World without InO",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
           ]
         ],
-        "row_names": [
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabi",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs of treatment",
-          "Costs of adverse events",
-          "Subsequent treatment cost",
-          "Total costs of Subsequent",
-          "Costs of hospitalization",
-          "Total costs of hospitaliz",
-          "Total end-of-life costs",
-          "Total costs in world with"
-        ],
-        "notes": [
-          {
-            "row_index": 15,
-            "text": "Drug costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 29,
-            "text": "Costs of adverse events",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 43,
-            "text": "Subsequent treatment costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 57,
-            "text": "Costs of hospitalization",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 71,
-            "text": "Stem cell transplant after induction therapy",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 85,
-            "text": "End-of-life costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "row_names": null,
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -4582,57 +4705,27 @@
             "bbox": {
               "r1": 7,
               "c1": 2,
-              "r2": 14,
+              "r2": 19,
               "c2": 7
             },
-            "n_cells": 48,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 48,
+              "NUMBER": 73,
               "FORMULA": 0
             },
             "density": 1.0,
             "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 16,
-              "c1": 2,
-              "r2": 19,
-              "c2": 7
-            },
-            "n_cells": 24,
-            "cell_type_distribution": {
-              "NUMBER": 19,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "mixed"
           },
           {
             "bbox": {
               "r1": 21,
               "c1": 2,
-              "r2": 28,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 30,
-              "c1": 2,
               "r2": 33,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4642,27 +4735,12 @@
             "bbox": {
               "r1": 35,
               "c1": 2,
-              "r2": 42,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 44,
-              "c1": 2,
               "r2": 47,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4672,27 +4750,12 @@
             "bbox": {
               "r1": 49,
               "c1": 2,
-              "r2": 56,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 58,
-              "c1": 2,
               "r2": 61,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4702,27 +4765,12 @@
             "bbox": {
               "r1": 63,
               "c1": 2,
-              "r2": 70,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 72,
-              "c1": 2,
               "r2": 75,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4732,27 +4780,12 @@
             "bbox": {
               "r1": 77,
               "c1": 2,
-              "r2": 84,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 86,
-              "c1": 2,
               "r2": 89,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4796,15 +4829,15 @@
           },
           {
             "row_index": 3,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.9
           },
           {
             "row_index": 4,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 5,
@@ -4886,9 +4919,9 @@
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 19,
@@ -4970,9 +5003,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -5054,9 +5087,9 @@
           },
           {
             "row_index": 46,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 47,
@@ -5138,9 +5171,9 @@
           },
           {
             "row_index": 60,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 61,
@@ -5222,9 +5255,9 @@
           },
           {
             "row_index": 74,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 75,
@@ -5306,9 +5339,9 @@
           },
           {
             "row_index": 88,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 89,
@@ -5398,16 +5431,16 @@
         "formatting": {
           "bold": {
             "title": false,
-            "headers": false,
+            "headers": true,
             "row_names": false,
-            "notes": true
+            "notes": false
           },
           "fill": {
             "title": null,
-            "headers": null
+            "headers": "FF7CDFA8"
           },
           "borders": {
-            "headers": "none",
+            "headers": "outline",
             "core": "outline"
           },
           "alignment": {
@@ -5415,10 +5448,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.578,
+        "confidence": 0.681,
         "signals": {
-          "title_source": "llm",
-          "header_source": "llm",
+          "excel_range": "B3:H105",
+          "title_source": "none",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -5443,7 +5477,7 @@
           {
             "table_id": "94c8c58d611b9e70_t103_child2",
             "hierarchy_role": "child_numeric",
-            "table_role": "calc",
+            "table_role": "input",
             "bbox": {
               "r1": 5,
               "c1": 1,
@@ -5458,9 +5492,9 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
-          "World without InO",
+          null,
           "World without InO"
         ],
         "children": [
@@ -5479,15 +5513,16 @@
               "split_depth": 1,
               "v3a_table_id": "94c8c58d611b9e70_t103_child1"
             },
-            "title": "World without InO",
+            "title": null,
             "headers": [
               [
-                "None",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "World without InO",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": [
@@ -5547,8 +5582,9 @@
             },
             "confidence": 0.588,
             "signals": {
-              "title_source": "section_migration",
-              "header_source": "inherited"
+              "excel_range": "B3:H4",
+              "title_source": "none",
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -5573,12 +5609,13 @@
             "title": "World without InO",
             "headers": [
               [
-                "None",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "World without InO",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": [
@@ -5675,100 +5712,33 @@
               "Total end-of-life costs",
               "Total costs in world without InO"
             ],
-            "notes": [
-              {
-                "row_index": 15,
-                "text": "Drug costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 29,
-                "text": "Costs of adverse events",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 43,
-                "text": "Subsequent treatment costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 57,
-                "text": "Costs of hospitalization",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 71,
-                "text": "Stem cell transplant after induction therapy",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 85,
-                "text": "End-of-life costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              }
-            ],
+            "notes": [],
             "core_regions": [
               {
                 "bbox": {
                   "r1": 7,
                   "c1": 2,
-                  "r2": 14,
+                  "r2": 19,
                   "c2": 7
                 },
-                "n_cells": 48,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 48,
+                  "NUMBER": 73,
                   "FORMULA": 0
                 },
                 "density": 1.0,
                 "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 16,
-                  "c1": 2,
-                  "r2": 19,
-                  "c2": 7
-                },
-                "n_cells": 24,
-                "cell_type_distribution": {
-                  "NUMBER": 19,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "mixed"
               },
               {
                 "bbox": {
                   "r1": 21,
                   "c1": 2,
-                  "r2": 28,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 30,
-                  "c1": 2,
                   "r2": 33,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5778,27 +5748,12 @@
                 "bbox": {
                   "r1": 35,
                   "c1": 2,
-                  "r2": 42,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 44,
-                  "c1": 2,
                   "r2": 47,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5808,27 +5763,12 @@
                 "bbox": {
                   "r1": 49,
                   "c1": 2,
-                  "r2": 56,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 58,
-                  "c1": 2,
                   "r2": 61,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5838,27 +5778,12 @@
                 "bbox": {
                   "r1": 63,
                   "c1": 2,
-                  "r2": 70,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 72,
-                  "c1": 2,
                   "r2": 75,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5868,27 +5793,12 @@
                 "bbox": {
                   "r1": 77,
                   "c1": 2,
-                  "r2": 84,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 86,
-                  "c1": 2,
                   "r2": 89,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5910,7 +5820,7 @@
                 "role_hint": "input"
               }
             ],
-            "table_role": "calc",
+            "table_role": "input",
             "row_tags": [
               {
                 "row_index": 0,
@@ -6004,9 +5914,9 @@
               },
               {
                 "row_index": 15,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 16,
@@ -6088,9 +5998,9 @@
               },
               {
                 "row_index": 29,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 30,
@@ -6172,9 +6082,9 @@
               },
               {
                 "row_index": 43,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 44,
@@ -6256,9 +6166,9 @@
               },
               {
                 "row_index": 57,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 58,
@@ -6340,9 +6250,9 @@
               },
               {
                 "row_index": 71,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 72,
@@ -6424,9 +6334,9 @@
               },
               {
                 "row_index": 85,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 86,
@@ -6533,10 +6443,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.5,
+            "confidence": 0.595,
             "signals": {
+              "excel_range": "B6:H105",
               "title_source": "local",
-              "header_source": "inherited"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -6580,14 +6491,7 @@
             "Clofarabine"
           ]
         ],
-        "row_names": [
-          "Year 0",
-          "Year 1",
-          "Year 2",
-          "Year 3",
-          "Year 4",
-          "Year 5"
-        ],
+        "row_names": null,
         "notes": [],
         "core_regions": [
           {
@@ -6675,8 +6579,9 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.755,
+        "confidence": 0.658,
         "signals": {
+          "excel_range": "M12:Y19",
           "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -6718,7 +6623,7 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
           "% of patients alive",
           null
@@ -6794,6 +6699,7 @@
             },
             "confidence": 0.551,
             "signals": {
+              "excel_range": "M12:Y13",
               "title_source": "local",
               "header_source": "local"
             },
@@ -6918,11 +6824,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.853,
+            "confidence": 0.588,
             "signals": {
-              "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8_child1",
+              "excel_range": "M14:Y19",
               "title_source": "none",
-              "header_source": "local"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -6951,14 +6857,7 @@
         "row_names": [
           "INO"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7031,9 +6930,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7086,8 +6985,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M22:AB28",
           "title_source": "none",
           "header_source": "none"
         },
@@ -7112,23 +7012,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_t57_t25_b17"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7191,7 +7101,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -7201,9 +7111,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7256,10 +7166,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O30:AB36",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -7286,14 +7199,7 @@
         "row_names": [
           "FLAG-Ida"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7356,7 +7262,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -7366,9 +7272,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7421,8 +7327,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M38:AB44",
           "title_source": "none",
           "header_source": "none"
         },
@@ -7447,23 +7354,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7526,7 +7443,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -7536,9 +7453,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7591,10 +7508,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O46:AB52",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -7621,14 +7541,7 @@
         "row_names": [
           "FLAG"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7691,7 +7604,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -7701,9 +7614,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7756,8 +7669,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M54:AB60",
           "title_source": "none",
           "header_source": "none"
         },
@@ -7782,23 +7696,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_t57_b25_b23"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7861,7 +7785,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -7871,9 +7795,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7926,10 +7850,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O62:AB68",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -7956,14 +7883,7 @@
         "row_names": [
           "MXN & Ara-C"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8026,7 +7946,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -8036,9 +7956,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8091,8 +8011,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M70:AB76",
           "title_source": "none",
           "header_source": "none"
         },
@@ -8117,23 +8038,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_t16_b8"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8196,7 +8127,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -8206,9 +8137,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8261,10 +8192,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O78:AB84",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -8291,14 +8225,7 @@
         "row_names": [
           "HIDAC"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8361,7 +8288,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -8371,9 +8298,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8426,8 +8353,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M86:AB92",
           "title_source": "none",
           "header_source": "none"
         },
@@ -8452,23 +8380,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8531,7 +8469,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -8541,9 +8479,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8596,10 +8534,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O94:AB100",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -8626,14 +8567,7 @@
         "row_names": [
           "DVP-Asp"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8696,7 +8630,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -8706,9 +8640,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8761,8 +8695,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M102:AB108",
           "title_source": "none",
           "header_source": "none"
         },
@@ -9023,8 +8958,8 @@
           },
           {
             "row_index": 5,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "rowname_candidate",
+            "layer2_tag": "consumed_rowname",
             "confidence": 0.6
           },
           {
@@ -9077,15 +9012,15 @@
           },
           {
             "row_index": 14,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
             "confidence": 0.65
           },
           {
             "row_index": 15,
             "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 16,
@@ -9161,15 +9096,15 @@
           },
           {
             "row_index": 28,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "rowname_candidate",
+            "layer2_tag": "consumed_rowname",
             "confidence": 0.6
           },
           {
             "row_index": 29,
             "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 30,
@@ -9245,15 +9180,15 @@
           },
           {
             "row_index": 42,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "rowname_candidate",
+            "layer2_tag": "consumed_rowname",
             "confidence": 0.6
           },
           {
             "row_index": 43,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 44,
@@ -9335,9 +9270,9 @@
           },
           {
             "row_index": 57,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 58,
@@ -9421,7 +9356,7 @@
             "row_index": 71,
             "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 72,
@@ -9497,15 +9432,15 @@
           },
           {
             "row_index": 84,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "rowname_candidate",
+            "layer2_tag": "consumed_rowname",
             "confidence": 0.6
           },
           {
             "row_index": 85,
             "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 86,
@@ -9608,59 +9543,13 @@
             "core": "outline"
           },
           "alignment": {
-            "data": "right"
+            "data": "center"
           },
           "header_merges": []
         },
-        "confidence": 0.576,
+        "confidence": 0.596,
         "signals": {
-          "llm_tag_overrides": [
-            {
-              "row": 5,
-              "old": "rowname_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 14,
-              "old": "data_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 15,
-              "old": "note_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 28,
-              "old": "rowname_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 29,
-              "old": "note_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 42,
-              "old": "rowname_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 71,
-              "old": "note_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 84,
-              "old": "rowname_candidate",
-              "new": "header_candidate"
-            },
-            {
-              "row": 85,
-              "old": "note_candidate",
-              "new": "header_candidate"
-            }
-          ],
+          "excel_range": "B107:H206",
           "title_source": "local",
           "header_source": "none"
         },
@@ -9685,23 +9574,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_b16_b23"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -9764,7 +9663,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -9774,9 +9673,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -9829,10 +9728,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O110:AB116",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -9859,14 +9761,7 @@
         "row_names": [
           "DVP-Asp+Cyclo"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -9929,7 +9824,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -9939,9 +9834,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -9994,8 +9889,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M118:AB124",
           "title_source": "none",
           "header_source": "none"
         },
@@ -10020,23 +9916,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_t16_b8"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10099,7 +10005,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10109,9 +10015,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10164,10 +10070,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O126:AB132",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -10194,14 +10103,7 @@
         "row_names": [
           "hCVAD+MTX"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10264,7 +10166,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10274,9 +10176,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10329,8 +10231,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M134:AB140",
           "title_source": "none",
           "header_source": "none"
         },
@@ -10355,23 +10258,33 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10434,7 +10347,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10444,9 +10357,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10499,10 +10412,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O142:AB148",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -10529,14 +10445,7 @@
         "row_names": [
           "Blinatumomab"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10599,7 +10508,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10609,9 +10518,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10664,8 +10573,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M150:AB156",
           "title_source": "none",
           "header_source": "none"
         },
@@ -10690,22 +10600,32 @@
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_b16_b23"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10783,7 +10703,7 @@
             "role_hint": "input"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10793,9 +10713,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10842,10 +10762,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.527,
+        "confidence": 0.782,
         "signals": {
+          "excel_range": "O158:AB163",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -10872,38 +10795,23 @@
         "title": null,
         "headers": [
           [
-            "Current situation",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024",
-            "Total"
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
           ]
         ],
-        "row_names": [
-          "TKI -Ponatinib",
-          "2019",
-          "2020",
-          "2021",
-          "2022",
-          "2023",
-          "2024"
-        ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 3,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "row_names": null,
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11018,9 +10926,9 @@
           },
           {
             "row_index": 3,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 4,
@@ -11073,10 +10981,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.647,
+        "confidence": 0.685,
         "signals": {
+          "excel_range": "M178:AB186",
           "title_source": "none",
-          "header_source": "llm",
+          "header_source": "inherited",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -11116,7 +11025,7 @@
             "absorbed": false
           }
         ],
-        "metadata_source": "llm_resolved",
+        "metadata_source": "heuristic",
         "child_titles": [
           null,
           null
@@ -11140,13 +11049,19 @@
             "title": null,
             "headers": [
               [
-                "Current situation",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024",
-                "Total"
+                "Year",
+                "INO",
+                "FLAG-Ida",
+                "FLAG",
+                "MXN & Ara-C ",
+                "HIDAC",
+                "DVP-Asp",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX",
+                "Blinatumomab",
+                "TKI -Ponatinib",
+                "TKI + vincristine",
+                "Clofarabine"
               ]
             ],
             "row_names": null,
@@ -11212,10 +11127,13 @@
               },
               "header_merges": []
             },
-            "confidence": 0.647,
+            "confidence": 0.794,
             "signals": {
+              "excel_range": "O178:AB178",
+              "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+              "inheritance_kind": "above_parent",
               "title_source": "none",
-              "header_source": "inherited"
+              "header_source": "inherited_above_parent"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -11240,26 +11158,25 @@
             "title": null,
             "headers": [
               [
-                "Current situation",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024",
-                "Total"
+                "Year",
+                "INO",
+                "FLAG-Ida",
+                "FLAG",
+                "MXN & Ara-C ",
+                "HIDAC",
+                "DVP-Asp",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX",
+                "Blinatumomab",
+                "TKI -Ponatinib",
+                "TKI + vincristine",
+                "Clofarabine"
               ]
             ],
             "row_names": [
               "TKI -Ponatinib"
             ],
-            "notes": [
-              {
-                "row_index": 1,
-                "text": "2019",
-                "note_type": "annotation",
-                "source": "heuristic"
-              }
-            ],
+            "notes": [],
             "core_regions": [
               {
                 "bbox": {
@@ -11332,9 +11249,9 @@
               },
               {
                 "row_index": 1,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "data_candidate",
+                "layer2_tag": "data",
+                "confidence": 0.8
               },
               {
                 "row_index": 2,
@@ -11387,10 +11304,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.624,
+            "confidence": 0.637,
             "signals": {
+              "excel_range": "M180:AB186",
               "title_source": "none",
-              "header_source": "inherited"
+              "header_source": "none"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -11415,23 +11333,33 @@
           "v3a_table_id": "076daba6b93bd14c_t17_b9"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11494,7 +11422,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -11504,9 +11432,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11559,10 +11487,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O188:AB194",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -11589,14 +11520,7 @@
         "row_names": [
           "TKI + vincristine"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11669,9 +11593,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11724,8 +11648,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M196:AB202",
           "title_source": "none",
           "header_source": "none"
         },
@@ -11750,23 +11675,33 @@
           "v3a_table_id": "076daba6b93bd14c_b17_t23_t15_b7"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11839,9 +11774,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11894,10 +11829,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O204:AB210",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -11924,14 +11862,7 @@
         "row_names": [
           "Clofarabine"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -12004,9 +11935,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -12059,8 +11990,9 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
+        "confidence": 0.637,
         "signals": {
+          "excel_range": "M212:AB218",
           "title_source": "none",
           "header_source": "none"
         },
@@ -12085,23 +12017,33 @@
           "v3a_table_id": "076daba6b93bd14c_b17_b23"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Year",
+            "INO",
+            "FLAG-Ida",
+            "FLAG",
+            "MXN & Ara-C ",
+            "HIDAC",
+            "DVP-Asp",
+            "DVP-Asp+Cyclo",
+            "hCVAD+MTX",
+            "Blinatumomab",
+            "TKI -Ponatinib",
+            "TKI + vincristine",
+            "Clofarabine"
+          ]
+        ],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -12164,7 +12106,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -12174,9 +12116,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -12229,10 +12171,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
+        "confidence": 0.784,
         "signals": {
+          "excel_range": "O220:AB226",
+          "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
+          "inheritance_kind": "above_parent",
           "title_source": "none",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",

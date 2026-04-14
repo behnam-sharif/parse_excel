@@ -241,6 +241,7 @@ def _run_v5_sheet(
             resolved = resolve_sheet_tables(
                 all_tables, ws, config, llm_client,
                 cut_scores=cut_scores, audit_records=audit_records,
+                sheet_name=sheet_name,
             )
         except Exception as exc:
             logger.error("Resolution stage failed for %s: %s", sheet_name, exc, exc_info=True)

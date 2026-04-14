@@ -556,8 +556,11 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     elif res is not None and op == "xl_sheetagent_v4":
         # V4 results - show Phase 1 & 2 output (tables, metadata, children)
         _v4_viewer.render_v4_from_json(str(v4_out))
-    elif res is not None and op == "xl_sheetagent_v5":
-        _v5_viewer.render_v5_results(res, str(v5_out))
+    elif op == "xl_sheetagent_v5":
+        # Always show V5 viewer for this op: handles [] / dict-shaped rows and
+        # falls back to tables.json when in-memory results are missing.
+        payload = res if isinstance(res, list) else []
+        _v5_viewer.render_v5_results(payload, str(v5_out))
     elif res is not None and op == "xl_init":
         st.success(
             f"xl_init complete — {len(res.table_sheets)} approved sheet(s). "

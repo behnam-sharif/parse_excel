@@ -25,6 +25,7 @@ from .row_tagger import assign_final_tags, tag_rows
 from .header_detector import detect_headers, find_restricted_header_inheritance
 from .candidate_collector import collect_candidates
 from .core_region_detector import detect_core_regions
+from .llm_audit import record_llm_call
 from .prompt_builder import build_v5_prompt, parse_v5_response
 
 logger = logging.getLogger(__name__)
@@ -381,10 +382,18 @@ def _call_llm(
         elapsed_ms = int((time.time() - start) * 1000)
         parsed = parse_v5_response(raw_text)
 
-        _record_llm_call(
-            audit_records, table_id, sheet_name, bbox,
-            len(prompt), len(raw_text),
-            tokens, elapsed_ms, True, parsed.get("tag_overrides", []),
+        record_llm_call(
+            audit_records,
+            call_kind="tag_refinement",
+            table_id=table_id,
+            sheet=sheet_name,
+            bbox=bbox,
+            prompt=prompt,
+            raw_response=raw_text,
+            tokens=tokens,
+            elapsed_ms=elapsed_ms,
+            success=True,
+            tag_overrides_raw=parsed.get("tag_overrides", []),
         )
 
         return {
@@ -395,9 +404,18 @@ def _call_llm(
     except Exception as exc:
         elapsed_ms = int((time.time() - start) * 1000)
         logger.warning("LLM call failed for %s: %s", table_id, exc)
-        _record_llm_call(
-            audit_records, table_id, sheet_name, bbox,
-            len(prompt), 0, 0, elapsed_ms, False, [],
+        record_llm_call(
+            audit_records,
+            call_kind="tag_refinement",
+            table_id=table_id,
+            sheet=sheet_name,
+            bbox=bbox,
+            prompt=prompt,
+            raw_response=None,
+            tokens=0,
+            elapsed_ms=elapsed_ms,
+            success=False,
+            tag_overrides_raw=[],
         )
         _record_error(audit_records, table_id, "llm_call", str(exc))
         return None
@@ -753,46 +771,6 @@ def _record_decision(
         "n_core_regions": n_core,
         "table_role": table_role,
         "confidence": confidence,
-    })
-
-
-def _record_llm_call(
-    audit: Optional[Dict[str, List]],
-    table_id: str,
-    sheet_name: str,
-    bbox: Dict[str, int],
-    prompt_len: int,
-    response_len: int,
-    tokens: int,
-    elapsed_ms: int,
-    success: bool,
-    tag_overrides_raw: List[Any],
-):
-    if audit is None:
-        return
-    excel_range = bbox_to_excel_range(
-        bbox["r1"], bbox["c1"], bbox["r2"], bbox["c2"],
-    )
-    overrides_applied: List[Dict[str, Any]] = []
-    for o in tag_overrides_raw or []:
-        if isinstance(o, dict):
-            overrides_applied.append({
-                "row": o.get("row"),
-                "new_tag": o.get("new_tag"),
-                "old_tag": o.get("old_tag"),
-            })
-    audit.setdefault("llm_calls", []).append({
-        "table_id": table_id,
-        "sheet": sheet_name,
-        "excel_range": excel_range,
-        "bbox": dict(bbox),
-        "prompt_length": prompt_len,
-        "response_length": response_len,
-        "tokens": tokens,
-        "latency_ms": elapsed_ms,
-        "success": success,
-        "overrides_applied": overrides_applied,
-        "n_overrides": len(overrides_applied),
     })
 
 

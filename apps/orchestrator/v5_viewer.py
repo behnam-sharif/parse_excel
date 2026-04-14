@@ -44,6 +44,43 @@ def _get(table: TableLike, key: str, default: Any = None) -> Any:
     return getattr(table, key, default)
 
 
+def _run_sheet_name(run: Any) -> str:
+    return str(_get(run, "sheet_name", "Unknown") or "Unknown")
+
+
+def _run_tables(run: Any) -> List[Any]:
+    return list(_get(run, "tables", None) or [])
+
+
+def _run_resolved_tables(run: Any) -> List[Any]:
+    return list(_get(run, "resolved_tables", None) or [])
+
+
+def _run_token_count(run: Any) -> int:
+    try:
+        return int(_get(run, "token_count", 0) or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _run_errors(run: Any) -> List[str]:
+    err = _get(run, "errors", None)
+    if not err:
+        return []
+    return list(err)
+
+
+def _unique_tab_labels(names: List[str]) -> List[str]:
+    seen: Dict[str, int] = {}
+    out: List[str] = []
+    for n in names:
+        base = n if n else "Sheet"
+        k = seen.get(base, 0)
+        seen[base] = k + 1
+        out.append(base if k == 0 else f"{base} ({k + 1})")
+    return out
+
+
 def _headers_meaningful(headers: Any) -> bool:
     if not headers:
         return False
@@ -199,7 +236,12 @@ def render_v5_results(
         Path to v5_sheetagent_output/ directory.
     """
     if not results:
-        st.warning("No V5 results to display.")
+        st.warning("No in-memory V5 results for this run.")
+        tables_path = Path(output_dir) / "tables.json"
+        if tables_path.is_file():
+            st.info("Loading **tables.json** from the output folder.")
+            render_v5_from_json(output_dir)
+            return
         st.info(
             "V5 needs table regions to analyze. Run **xl_init** → **xl_parse** → **xl_table** "
             "for this Run ID (so `init_output/cleaned_workbook.xlsx` and table bboxes exist), "
@@ -208,10 +250,18 @@ def render_v5_results(
         )
         return
 
-    total_tables = sum(len(r.tables) for r in results)
-    total_resolved = sum(len(getattr(r, "resolved_tables", [])) for r in results)
-    total_tokens = sum(r.token_count for r in results)
-    total_errors = sum(len(r.errors) for r in results)
+    try:
+        _render_v5_results_body(results, output_dir)
+    except Exception as exc:
+        st.error(f"V5 viewer hit an error ({exc}). Showing saved JSON if available.")
+        render_v5_from_json(output_dir)
+
+
+def _render_v5_results_body(results: List[Any], output_dir: str) -> None:
+    total_tables = sum(len(_run_tables(r)) for r in results)
+    total_resolved = sum(len(_run_resolved_tables(r)) for r in results)
+    total_tokens = sum(_run_token_count(r) for r in results)
+    total_errors = sum(len(_run_errors(r)) for r in results)
 
     st.success(
         f"V5 sheetagent complete — {len(results)} sheet(s), "
@@ -229,7 +279,7 @@ def render_v5_results(
     c5.metric("Errors", total_errors)
 
     # View mode toggle
-    has_resolved = any(getattr(r, "resolved_tables", []) for r in results)
+    has_resolved = any(_run_resolved_tables(r) for r in results)
     if has_resolved:
         view_mode = st.radio(
             "View mode", ["Resolved Tables", "Raw V5 Nodes"],
@@ -238,8 +288,9 @@ def render_v5_results(
     else:
         view_mode = "Raw V5 Nodes"
 
-    sheet_names = [r.sheet_name for r in results]
-    tabs = st.tabs(sheet_names)
+    sheet_names = [_run_sheet_name(r) for r in results]
+    tab_labels = _unique_tab_labels(sheet_names)
+    tabs = st.tabs(tab_labels)
     for tab, result in zip(tabs, results):
         with tab:
             if view_mode == "Resolved Tables":
@@ -251,13 +302,13 @@ def render_v5_results(
 
 
 def _render_v5_sheet_panel(result: Any) -> None:
-    sheet_name = getattr(result, "sheet_name", "Unknown")
-    tables = getattr(result, "tables", []) or []
+    sheet_name = _run_sheet_name(result)
+    tables = _run_tables(result)
 
     st.markdown(f"### Sheet: {sheet_name}")
     st.markdown(f"**Tables**: {len(tables)}")
 
-    errors = getattr(result, "errors", None) or []
+    errors = _run_errors(result)
     if errors:
         for err in errors:
             st.error(err)
@@ -288,13 +339,13 @@ def _render_v5_sheet_panel(result: Any) -> None:
 
 def _render_resolved_sheet_panel(result: Any) -> None:
     """Render resolved tables for a sheet."""
-    sheet_name = getattr(result, "sheet_name", "Unknown")
-    resolved = getattr(result, "resolved_tables", []) or []
+    sheet_name = _run_sheet_name(result)
+    resolved = _run_resolved_tables(result)
 
     st.markdown(f"### Sheet: {sheet_name}")
     st.markdown(f"**Resolved tables**: {len(resolved)}")
 
-    errors = getattr(result, "errors", None) or []
+    errors = _run_errors(result)
     if errors:
         for err in errors:
             st.error(err)
@@ -720,7 +771,50 @@ def _render_audit(output_dir: str) -> None:
                 if entries:
                     import pandas as pd
 
-                    st.dataframe(pd.DataFrame(entries), use_container_width=True)
+                    df = pd.DataFrame(entries)
+                    column_config: Dict[str, Any] = {}
+                    if af.name == "llm_calls.jsonl":
+                        preferred_order = [
+                            "call_kind",
+                            "table_id",
+                            "sheet",
+                            "excel_range",
+                            "bbox",
+                            "prompt",
+                            "response",
+                            "prompt_length",
+                            "response_length",
+                            "tokens",
+                            "latency_ms",
+                            "success",
+                            "n_overrides",
+                            "overrides_applied",
+                        ]
+                        ordered = [c for c in preferred_order if c in df.columns]
+                        ordered.extend(
+                            c for c in df.columns if c not in ordered
+                        )
+                        df = df[ordered]
+                        for col in (
+                            "prompt",
+                            "response",
+                            "bbox",
+                            "overrides_applied",
+                        ):
+                            if col in df.columns:
+                                column_config[col] = st.column_config.JsonColumn(
+                                    col,
+                                    width="large",
+                                )
+                    try:
+                        st.dataframe(
+                            df,
+                            column_config=column_config,
+                            use_container_width=True,
+                        )
+                    except Exception as df_exc:
+                        st.caption(f"Table view failed ({df_exc}); raw entries below.")
+                        st.json(entries[: min(20, len(entries))])
                 else:
                     st.caption("(empty)")
             except Exception as exc:

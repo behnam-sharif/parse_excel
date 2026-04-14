@@ -22,6 +22,7 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Tuple
 
 from .config import XlSheetAgentV5Config
+from .llm_audit import record_llm_call
 from .schemas import (
     CoreRegion,
     NoteEntry,
@@ -44,6 +45,7 @@ def resolve_sheet_tables(
     llm_client: Any = None,
     cut_scores: Optional[List[Dict[str, Any]]] = None,
     audit_records: Optional[Dict[str, List]] = None,
+    sheet_name: Optional[str] = None,
 ) -> List[ResolvedTable]:
     """
     Main entry point.  Groups tables by parent, resolves each group.
@@ -59,6 +61,8 @@ def resolve_sheet_tables(
     cut_scores : list, optional
         Cut scores for this sheet.
     audit_records : dict, optional
+    sheet_name : str, optional
+        Excel sheet name for audit rows (recommended; else derived from ``table_id``).
 
     Returns
     -------
@@ -92,6 +96,7 @@ def resolve_sheet_tables(
             children = parent_groups[t.table_id]
             rt = _resolve_parent_table(
                 t, children, ws, config, llm_client, cut_scores, audit_records,
+                sheet_name,
             )
             resolved.append(rt)
         else:
@@ -191,6 +196,15 @@ def _build_child_resolved(
 # Parent + children → ResolvedTable
 # ---------------------------------------------------------------------------
 
+def _sheet_name_for_audit(parent: V5TableResult, sheet_name: Optional[str]) -> str:
+    if sheet_name:
+        return sheet_name
+    tid = parent.table_id
+    if "_t" in tid:
+        return tid.rsplit("_t", 1)[0]
+    return ""
+
+
 def _resolve_parent_table(
     parent: V5TableResult,
     children: List[V5TableResult],
@@ -199,6 +213,7 @@ def _resolve_parent_table(
     llm_client: Any = None,
     cut_scores: Optional[List[Dict[str, Any]]] = None,
     audit_records: Optional[Dict[str, List]] = None,
+    sheet_name: Optional[str] = None,
 ) -> ResolvedTable:
     """
     Build ONE ResolvedTable from parent + children.
@@ -350,10 +365,12 @@ def _resolve_parent_table(
     # Step 15: Optional LLM metadata resolution (fill-missing-only for title/headers)
     metadata_source = "heuristic"
     llm_metadata = None
+    sheet_for_audit = _sheet_name_for_audit(parent, sheet_name)
     if config.use_llm_metadata_resolution and llm_client is not None:
         llm_result = _call_llm_metadata_resolution(
             parent, children, core_regions, headers, title, row_names,
-            [], table_role, ws, config, llm_client, cut_scores,
+            notes, table_role, ws, config, llm_client, cut_scores,
+            sheet_for_audit, audit_records,
         )
         if llm_result:
             metadata_source = "llm_resolved"
@@ -776,6 +793,8 @@ def _call_llm_metadata_resolution(
     config: XlSheetAgentV5Config,
     llm_client: Any,
     cut_scores: Optional[List[Dict[str, Any]]],
+    sheet: str,
+    audit_records: Optional[Dict[str, List]],
 ) -> Optional[Dict[str, Any]]:
     """Call LLM for metadata resolution on the combined parent+children context."""
     try:
@@ -813,6 +832,10 @@ def _call_llm_metadata_resolution(
         "total_cols": len(grid[0]) if grid else 0,
     }
 
+    sheet_for_prompt = sheet or (
+        parent.table_id.rsplit("_t", 1)[0] if "_t" in parent.table_id else ""
+    )
+
     prompt = build_v5_metadata_prompt(
         grid=grid,
         types=types,
@@ -824,7 +847,7 @@ def _call_llm_metadata_resolution(
         notes=notes,
         hierarchy_role=parent.hierarchy_role,
         split_depth=parent.split_depth,
-        sheet_name=parent.table_id.rsplit("_t", 1)[0] if "_t" in parent.table_id else "",
+        sheet_name=sheet_for_prompt,
         bbox=parent.bbox,
         structural_summary=structural_summary,
         cut_scores=cut_scores,
@@ -840,13 +863,43 @@ def _call_llm_metadata_resolution(
     if _llm_complete is None:
         return None
 
+    start = time.time()
     try:
         raw_text, tokens = _llm_complete(
             llm_client, config.llm_model, prompt,
             config.llm_metadata_max_tokens, config.llm_temperature,
         )
+        elapsed_ms = int((time.time() - start) * 1000)
         parsed = parse_v5_metadata_response(raw_text)
+        ok = parsed is not None
+        record_llm_call(
+            audit_records,
+            call_kind="metadata_resolution",
+            table_id=parent.table_id,
+            sheet=sheet_for_prompt,
+            bbox=parent.bbox,
+            prompt=prompt,
+            raw_response=raw_text,
+            tokens=tokens,
+            elapsed_ms=elapsed_ms,
+            success=ok,
+            tag_overrides_raw=[],
+        )
         return parsed if parsed else None
     except Exception as exc:
+        elapsed_ms = int((time.time() - start) * 1000)
         logger.warning("LLM metadata resolution failed: %s", exc)
+        record_llm_call(
+            audit_records,
+            call_kind="metadata_resolution",
+            table_id=parent.table_id,
+            sheet=sheet_for_prompt,
+            bbox=parent.bbox,
+            prompt=prompt,
+            raw_response=None,
+            tokens=0,
+            elapsed_ms=elapsed_ms,
+            success=False,
+            tag_overrides_raw=[],
+        )
         return None
