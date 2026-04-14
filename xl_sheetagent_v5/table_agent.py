@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .config import XlSheetAgentV5Config
 from .schemas import (
@@ -23,7 +23,12 @@ from .row_tagger import assign_final_tags, tag_rows
 from .header_detector import detect_headers, find_header_inheritance
 from .candidate_collector import collect_candidates
 from .core_region_detector import detect_core_regions
-from .prompt_builder import build_v5_prompt, parse_v5_response
+from .prompt_builder import (
+    build_amend_llm_prompt,
+    build_v5_prompt,
+    parse_amend_llm_response,
+    parse_v5_response,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +57,9 @@ def analyze_table(
     llm_call_counter: Optional[List[int]] = None,
     audit_records: Optional[Dict[str, List]] = None,
     cut_scores: Optional[List[Dict[str, Any]]] = None,
+    above_grid: Optional[List[List[Any]]] = None,
+    above_types: Optional[List[List[str]]] = None,
+    format_grid: Optional[List[List[Dict[str, Any]]]] = None,
 ) -> V5TableResult:
     """
     Full per-table analysis pipeline.
@@ -106,6 +114,9 @@ def analyze_table(
             structural_summary, config, llm_client,
             llm_call_counter, audit_records, signals,
             cut_scores,
+            above_grid,
+            above_types,
+            format_grid,
         )
     except Exception as exc:
         # Fallback: return minimal result with confidence 0
@@ -132,16 +143,26 @@ def _analyze_table_inner(
     structural_summary, config, llm_client,
     llm_call_counter, audit_records, signals,
     cut_scores=None,
+    above_grid=None,
+    above_types=None,
+    format_grid=None,
 ) -> V5TableResult:
     n_rows = len(grid)
 
     # Step 1: Layer 1 row tagging
     row_tags = tag_rows(grid, types, config, bold_rows)
 
-    # Step 2: Detect headers
-    headers, header_indices, header_conf = detect_headers(
-        grid, row_tags, merge_info, config,
+    # Step 2: Detect headers (optional lookback rows above bbox for schema headers)
+    headers, header_indices, header_conf, header_abs_rows = detect_headers(
+        grid,
+        row_tags,
+        merge_info,
+        config,
+        above_grid=above_grid or [],
+        above_types=above_types or [],
+        bbox_r1=bbox.get("r1", 0),
     )
+    signals["header_abs_rows"] = list(header_abs_rows)
 
     # Step 3: Header inheritance (if no local header found)
     inherited_from = None
@@ -156,6 +177,8 @@ def _analyze_table_inner(
             inherited_from = inheritance["source_table_id"]
             header_source = "inherited"
             signals["header_inherited_from"] = inherited_from
+            inh_abs = inheritance.get("source_header_abs_rows") or []
+            signals["header_abs_rows"] = list(inh_abs)
 
     # Step 4: Role-aware candidate collection
     candidates = collect_candidates(
@@ -236,22 +259,78 @@ def _analyze_table_inner(
         structural_summary, llm_overrides, n_rows, consumed,
     )
 
-    # Step 9: Compute confidence
+    # Step 9: Compute confidence (may be updated after amendment LLM)
     confidence = _compute_confidence(
         row_tags, header_conf, core_regions, llm_called,
         llm_overrides, table_role, config,
     )
 
+    amend_llm_applied = False
+    if (
+        config.use_amend_llm
+        and not headers
+        and n_rows >= config.amend_llm_min_rows
+        and hierarchy_role != "child_metadata"
+        and (llm_client is not None or _llm_complete is not None)
+        and (
+            llm_call_counter is None
+            or llm_call_counter[0] < config.max_llm_calls_per_sheet
+        )
+    ):
+        amend_result = _call_amend_llm(
+            grid=grid,
+            types=types,
+            format_grid=format_grid,
+            merge_info=merge_info,
+            candidates=candidates,
+            core_regions=core_regions,
+            hierarchy_role=hierarchy_role,
+            sheet_name=sheet_name,
+            bbox=bbox,
+            config=config,
+            llm_client=llm_client,
+            table_id=table_id,
+            audit_records=audit_records,
+        )
+        if amend_result and amend_result.get("parsed"):
+            if llm_call_counter is not None:
+                llm_call_counter[0] += 1
+            amend_llm_applied = True
+            parsed = amend_result["parsed"]
+            headers, header_source, candidates, core_regions, table_role = (
+                _apply_amend_llm_result(
+                    parsed=parsed,
+                    headers=headers,
+                    header_source=header_source,
+                    candidates=candidates,
+                    core_regions=core_regions,
+                    table_role=table_role,
+                    grid=grid,
+                    types=types,
+                    bbox=bbox,
+                    signals=signals,
+                )
+            )
+            header_conf = max(
+                header_conf,
+                min(0.95, float(parsed.get("confidence") or 0.72)),
+            )
+            confidence = _compute_confidence(
+                row_tags, header_conf, core_regions,
+                llm_called or amend_llm_applied,
+                llm_overrides, table_role, config,
+                amend_llm_applied=amend_llm_applied,
+            )
+
     # Record audit
     _record_decision(
-        audit_records, table_id, hierarchy_role, llm_called,
+        audit_records, table_id, hierarchy_role, llm_called or amend_llm_applied,
         llm_overrides, headers, len(core_regions), table_role, confidence,
     )
 
     # Step 10: Provenance signals (§6)
-    title_source = "local" if candidates["title"] else "none"
-    signals["title_source"] = title_source
-    signals["header_source"] = header_source
+    signals.setdefault("title_source", "local" if candidates["title"] else "none")
+    signals.setdefault("header_source", header_source)
 
     return V5TableResult(
         table_id=table_id,
@@ -311,6 +390,181 @@ def _should_call_llm(
         return False
 
     return True
+
+
+def _call_amend_llm(
+    *,
+    grid: List[List[Any]],
+    types: List[List[str]],
+    format_grid: Optional[List[List[Dict[str, Any]]]],
+    merge_info: List,
+    candidates: Dict[str, Any],
+    core_regions: List[CoreRegion],
+    hierarchy_role: str,
+    sheet_name: str,
+    bbox: Dict[str, int],
+    config: XlSheetAgentV5Config,
+    llm_client: Any,
+    table_id: str,
+    audit_records: Optional[Dict[str, List]],
+) -> Optional[Dict[str, Any]]:
+    """Full-bbox amendment LLM when no headers were found."""
+    if llm_client is None and _llm_complete is None:
+        return None
+
+    prompt, _ = build_amend_llm_prompt(
+        grid=grid,
+        types=types,
+        format_grid=format_grid,
+        merge_info=merge_info,
+        title_hint=candidates.get("title"),
+        row_names_hint=candidates.get("row_names"),
+        core_regions=core_regions,
+        hierarchy_role=hierarchy_role,
+        sheet_name=sheet_name,
+        bbox=bbox,
+        config=config,
+    )
+
+    start = time.time()
+    try:
+        if llm_client is not None and _llm_complete is not None:
+            raw_text, tokens = _llm_complete(
+                llm_client,
+                config.amend_llm_model,
+                prompt,
+                config.amend_llm_max_tokens,
+                config.amend_llm_temperature,
+            )
+        else:
+            return None
+
+        elapsed_ms = int((time.time() - start) * 1000)
+        parsed = parse_amend_llm_response(raw_text)
+
+        _record_llm_call(
+            audit_records, table_id, len(prompt), len(raw_text),
+            tokens, elapsed_ms, True, [], phase="amend_llm",
+        )
+
+        return {"parsed": parsed, "tokens": tokens}
+
+    except Exception as exc:
+        elapsed_ms = int((time.time() - start) * 1000)
+        logger.warning("Amendment LLM failed for %s: %s", table_id, exc)
+        _record_llm_call(
+            audit_records, table_id, len(prompt), 0, 0, elapsed_ms, False, [],
+            phase="amend_llm",
+        )
+        _record_error(audit_records, table_id, "amend_llm", str(exc))
+        return None
+
+
+def _apply_amend_llm_result(
+    *,
+    parsed: Dict[str, Any],
+    headers: List[List[str]],
+    header_source: str,
+    candidates: Dict[str, Any],
+    core_regions: List[CoreRegion],
+    table_role: str,
+    grid: List[List[Any]],
+    types: List[List[str]],
+    bbox: Dict[str, int],
+    signals: Dict[str, Any],
+) -> Tuple[List[List[str]], str, Dict[str, Any], List[CoreRegion], str]:
+    """Merge amendment LLM output into table state."""
+    n_cols = len(grid[0]) if grid else 0
+    new_headers = parsed.get("headers") or []
+    if new_headers and n_cols > 0:
+        padded: List[List[str]] = []
+        for row in new_headers:
+            r = list(row)
+            if len(r) < n_cols:
+                r.extend([""] * (n_cols - len(r)))
+            else:
+                r = r[:n_cols]
+            padded.append(r)
+        headers = padded
+        header_source = "amend_llm"
+        signals["header_source"] = "amend_llm"
+
+    t = parsed.get("title")
+    if t is not None and str(t).strip() and not candidates.get("title"):
+        candidates["title"] = str(t).strip()
+        signals["title_source"] = "amend_llm"
+
+    rn = parsed.get("row_names")
+    if rn and not candidates.get("row_names"):
+        candidates["row_names"] = rn
+        signals["row_names_source"] = "amend_llm"
+
+    tr = parsed.get("table_role")
+    if tr in ("input", "calc", "output", "mixed", "metadata"):
+        table_role = tr
+
+    crd = parsed.get("core_region")
+    if crd and not core_regions:
+        cr = _core_region_from_llm_bbox(crd, grid, types, bbox)
+        if cr:
+            core_regions = [cr]
+
+    fs = parsed.get("formula_summary")
+    if fs:
+        signals["amend_llm_formula_summary"] = str(fs)
+
+    signals["amend_llm"] = True
+    signals["llm_mode"] = "amend_llm"
+    signals["amend_llm_reasoning"] = str(parsed.get("reasoning") or "")
+
+    return headers, header_source, candidates, core_regions, table_role
+
+
+def _core_region_from_llm_bbox(
+    rel: Dict[str, int],
+    grid: List[List[Any]],
+    types: List[List[str]],
+    sheet_bbox: Dict[str, int],
+) -> Optional[CoreRegion]:
+    """Build CoreRegion from amendment LLM relative bbox + type scan."""
+    try:
+        r1, c1, r2, c2 = int(rel["r1"]), int(rel["c1"]), int(rel["r2"]), int(rel["c2"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+    n_r = len(grid)
+    n_c = len(grid[0]) if grid else 0
+    if n_r == 0 or n_c == 0:
+        return None
+
+    r1 = max(0, min(r1, n_r - 1))
+    r2 = max(r1, min(r2, n_r - 1))
+    c1 = max(0, min(c1, n_c - 1))
+    c2 = max(c1, min(c2, n_c - 1))
+
+    dist: Dict[str, int] = {"NUMBER": 0, "FORMULA": 0, "TEXT": 0, "BLANK": 0}
+    for r in range(r1, r2 + 1):
+        row_t = types[r] if r < len(types) else []
+        for c in range(c1, c2 + 1):
+            t = row_t[c] if c < len(row_t) else "BLANK"
+            dist[t] = dist.get(t, 0) + 1
+
+    n_cells = (r2 - r1 + 1) * (c2 - c1 + 1)
+    density = (dist.get("NUMBER", 0) + dist.get("FORMULA", 0)) / max(n_cells, 1)
+    role_hint = "calc" if dist.get("FORMULA", 0) > dist.get("NUMBER", 0) else "input"
+
+    return CoreRegion(
+        bbox={
+            "r1": sheet_bbox["r1"] + r1,
+            "c1": sheet_bbox["c1"] + c1,
+            "r2": sheet_bbox["r1"] + r2,
+            "c2": sheet_bbox["c1"] + c2,
+        },
+        n_cells=n_cells,
+        cell_type_distribution=dist,
+        density=density,
+        role_hint=role_hint,
+    )
 
 
 def _call_llm(
@@ -599,6 +853,7 @@ def _compute_confidence(
     llm_overrides: Dict[str, Any],
     table_role: str,
     config: XlSheetAgentV5Config,
+    amend_llm_applied: bool = False,
 ) -> float:
     """
     Weighted confidence blend:
@@ -623,7 +878,9 @@ def _compute_confidence(
         core_conf = 0.0
 
     # LLM agreement
-    if llm_called:
+    if amend_llm_applied:
+        llm_score = 0.88
+    elif llm_called:
         overrides = llm_overrides.get("tag_overrides", [])
         if not overrides:
             llm_score = 1.0  # Agrees with heuristics
@@ -651,7 +908,8 @@ def _compute_confidence(
     w_llm = config.w_llm
     w_role = config.w_role
 
-    if not llm_called and w_llm > 0:
+    effective_llm = llm_called or amend_llm_applied
+    if not effective_llm and w_llm > 0:
         non_llm = w_tags + w_header + w_core + w_role
         if non_llm > 0:
             scale = (non_llm + w_llm) / non_llm
@@ -698,10 +956,11 @@ def _record_decision(
 def _record_llm_call(
     audit, table_id, prompt_len, response_len,
     tokens, elapsed_ms, success, overrides,
+    phase: Optional[str] = None,
 ):
     if audit is None:
         return
-    audit.setdefault("llm_calls", []).append({
+    entry: Dict[str, Any] = {
         "table_id": table_id,
         "prompt_length": prompt_len,
         "response_length": response_len,
@@ -709,7 +968,10 @@ def _record_llm_call(
         "latency_ms": elapsed_ms,
         "success": success,
         "n_overrides": len(overrides),
-    })
+    }
+    if phase:
+        entry["phase"] = phase
+    audit.setdefault("llm_calls", []).append(entry)
 
 
 def _record_error(audit, table_id, stage, message):

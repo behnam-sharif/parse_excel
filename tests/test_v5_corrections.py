@@ -42,12 +42,20 @@ def _make_config(**overrides):
         title_max_nonempty=3,
         header_zone_pct=0.20,
         header_col_tolerance=1,
+        header_lookback_rows=15,
+        header_schema_above_min_score=0.42,
         use_llm=False,
         llm_model="gpt-4o-mini",
         llm_max_tokens=2048,
         llm_temperature=0.1,
         max_retries=5,
         base_delay=1.0,
+        use_amend_llm=False,
+        amend_llm_model="gpt-4o-mini",
+        amend_llm_max_tokens=4096,
+        amend_llm_temperature=0.1,
+        amend_llm_max_cells=12000,
+        amend_llm_min_rows=2,
         min_component_area=4,
         component_merge_gap=1,
         min_child_rows=6,
@@ -67,6 +75,7 @@ def _make_config(**overrides):
         enable_resolution=True,
         resolve_row_names_with_parent=True,
         absorb_metadata_only_children=True,
+        migrate_section_notes_to_child_titles=False,
         blank_inclusion_density_threshold=0.30,
         use_llm_metadata_resolution=False,
         llm_metadata_max_tokens=3000,
@@ -96,14 +105,20 @@ def _make_table(
     confidence=0.8,
     notes=None,
     row_tags=None,
+    signals=None,
 ) -> V5TableResult:
     """Create a V5TableResult for tests."""
+    bb = bbox or {"r1": 0, "c1": 0, "r2": 10, "c2": 5}
+    sig = dict(signals) if signals else {}
+    if headers and "header_abs_rows" not in sig:
+        # Default: consecutive header rows starting at bbox top (sheet coords)
+        sig["header_abs_rows"] = [bb["r1"] + i for i in range(len(headers))]
     return V5TableResult(
         table_id=table_id,
         hierarchy_role=hierarchy_role,
         parent_table_id=parent_table_id,
         split_depth=split_depth,
-        bbox=bbox or {"r1": 0, "c1": 0, "r2": 10, "c2": 5},
+        bbox=bb,
         title=title,
         headers=headers or [],
         row_names=row_names,
@@ -112,6 +127,7 @@ def _make_table(
         table_role=table_role,
         row_tags=row_tags or [],
         confidence=confidence,
+        signals=sig,
     )
 
 
@@ -579,9 +595,11 @@ class TestResolvedTableNesting(unittest.TestCase):
             table_id="c1", hierarchy_role="child_numeric",
             headers=[],  # no local headers
             core_regions=[_make_core_region()],
+            bbox={"r1": 3, "c1": 0, "r2": 10, "c2": 2},
         )
         parent_headers = [["Col1", "Col2", "Col3"]]
-        rt = _build_child_resolved(child, parent_headers, config)
+        parent_bbox = {"r1": 0, "c1": 0, "r2": 20, "c2": 5}
+        rt = _build_child_resolved(child, parent_headers, parent_bbox, config)
         self.assertEqual(rt.headers, [["Col1", "Col2", "Col3"]])
 
     def test_child_keeps_own_headers(self):
@@ -594,7 +612,8 @@ class TestResolvedTableNesting(unittest.TestCase):
             core_regions=[_make_core_region()],
         )
         parent_headers = [["Parent1", "Parent2"]]
-        rt = _build_child_resolved(child, parent_headers, config)
+        parent_bbox = {"r1": 0, "c1": 0, "r2": 10, "c2": 5}
+        rt = _build_child_resolved(child, parent_headers, parent_bbox, config)
         self.assertEqual(rt.headers, [["Own1", "Own2"]])
 
     def test_titled_metadata_child_preserved_in_children(self):
@@ -895,6 +914,25 @@ class TestSectionLabelMigration(unittest.TestCase):
         self.assertEqual(children[0].title, "Existing Title")
         self.assertEqual(len(remaining), 1)
 
+    def test_migrate_annotation_blocked_when_types_restricted(self):
+        """P1: footnote/source-only filter skips generic annotations."""
+        from xl_sheetagent_v5.table_resolver import _migrate_section_notes_to_children
+
+        notes = [
+            NoteEntry(row_index=5, text="Drug costs", note_type="annotation", source="heuristic"),
+        ]
+        child = ResolvedTable(
+            table_id="c1", source_table_ids=["c1"],
+            bbox={"r1": 5, "c1": 0, "r2": 15, "c2": 5},
+            title=None, headers=[], row_names=None,
+        )
+        remaining, children = _migrate_section_notes_to_children(
+            notes, [child], allowed_note_types=frozenset({"footnote", "source"}),
+        )
+        self.assertIsNone(children[0].title)
+        self.assertEqual(len(remaining), 1)
+        self.assertEqual(remaining[0].note_type, "annotation")
+
 
 class TestCollectNotesExcludesSection(unittest.TestCase):
     """P1: _collect_notes skips section header rows."""
@@ -1081,9 +1119,14 @@ class TestSignalsInfrastructure(unittest.TestCase):
             table_id="c1", hierarchy_role="child_numeric",
             headers=[],
             core_regions=[_make_core_region()],
+            bbox={"r1": 5, "c1": 0, "r2": 10, "c2": 1},
         )
         parent_headers = [["PH1", "PH2"]]
-        rt = _build_child_resolved(child, parent_headers, config)
+        parent_bbox = {"r1": 0, "c1": 0, "r2": 10, "c2": 5}
+        rt = _build_child_resolved(
+            child, parent_headers, parent_bbox, config,
+            {"header_abs_rows": [0]},
+        )
         self.assertEqual(rt.signals["header_source"], "inherited")
 
     def test_child_resolved_local_header_source(self):
@@ -1096,7 +1139,8 @@ class TestSignalsInfrastructure(unittest.TestCase):
             core_regions=[_make_core_region()],
         )
         parent_headers = [["PH1", "PH2"]]
-        rt = _build_child_resolved(child, parent_headers, config)
+        parent_bbox = {"r1": 0, "c1": 0, "r2": 10, "c2": 5}
+        rt = _build_child_resolved(child, parent_headers, parent_bbox, config)
         self.assertEqual(rt.signals["header_source"], "local")
 
     def test_section_migration_updates_title_source(self):
@@ -1579,12 +1623,18 @@ class TestHeaderInheritanceAmbiguity(unittest.TestCase):
     """Tests for find_header_inheritance() ambiguity detection and
     graduated confidence penalties (Issue 4)."""
 
-    def _make_donor(self, table_id, bbox, headers):
+    def _make_donor(self, table_id, bbox, headers, signals=None):
         """Create a minimal mock object with .table_id, .bbox, .headers."""
         t = MagicMock()
         t.table_id = table_id
         t.bbox = bbox
         t.headers = headers
+        if signals is not None:
+            t.signals = signals
+        else:
+            t.signals = {
+                "header_abs_rows": [bbox["r1"] + i for i in range(len(headers))],
+            }
         return t
 
     # --- single candidate → normal inheritance ---
@@ -1600,7 +1650,7 @@ class TestHeaderInheritanceAmbiguity(unittest.TestCase):
         config = _make_config()
         result = find_header_inheritance(
             all_tables=[donor],
-            current_bbox={"r1": 8, "c1": 0, "r2": 15, "c2": 5},
+            current_bbox={"r1": 8, "c1": 0, "r2": 15, "c2": 2},
             current_table_id="t_current",
             config=config,
         )
@@ -1781,6 +1831,241 @@ class TestHeaderInheritanceAmbiguity(unittest.TestCase):
             config=config,
         )
         self.assertIsNone(result, "Misaligned columns should not inherit")
+
+    def test_donor_header_band_not_above_current_skipped(self):
+        """Donor bbox is above, but recorded header rows overlap current → skip."""
+        from xl_sheetagent_v5.header_detector import find_header_inheritance
+
+        donor = self._make_donor(
+            "t_bad",
+            {"r1": 0, "c1": 0, "r2": 5, "c2": 5},
+            [["H1", "H2", "H3"]],
+            signals={"header_abs_rows": [12]},
+        )
+        config = _make_config()
+        result = find_header_inheritance(
+            all_tables=[donor],
+            current_bbox={"r1": 10, "c1": 0, "r2": 20, "c2": 2},
+            current_table_id="t_cur",
+            config=config,
+        )
+        self.assertIsNone(result)
+
+    def test_narrow_subset_inherits_sliced_headers(self):
+        """Wide donor above: inherit only columns overlapping current bbox."""
+        from xl_sheetagent_v5.header_detector import find_header_inheritance
+
+        wide = [chr(ord("A") + i) for i in range(13)]  # 13 cols c1..c13
+        donor = self._make_donor(
+            "t_wide",
+            {"r1": 70, "c1": 1, "r2": 117, "c2": 13},
+            [wide],
+        )
+        config = _make_config()
+        result = find_header_inheritance(
+            all_tables=[donor],
+            current_bbox={"r1": 119, "c1": 1, "r2": 119, "c2": 5},
+            current_table_id="t_narrow",
+            config=config,
+        )
+        self.assertIsNotNone(result)
+        self.assertEqual(
+            result["inherited_header"],
+            [["A", "B", "C", "D", "E"]],
+        )
+
+    def test_offset_subset_inherits_sliced_headers(self):
+        """Donor spans A–L; current is G–L → slice tail of header row."""
+        from xl_sheetagent_v5.header_detector import find_header_inheritance
+
+        letters = [chr(ord("A") + i) for i in range(12)]  # cols 1..12 → A..L
+        donor = self._make_donor(
+            "t_parent",
+            {"r1": 40, "c1": 1, "r2": 56, "c2": 12},
+            [letters],
+        )
+        config = _make_config()
+        result = find_header_inheritance(
+            all_tables=[donor],
+            current_bbox={"r1": 58, "c1": 6, "r2": 63, "c2": 11},
+            current_table_id="t_child",
+            config=config,
+        )
+        self.assertIsNotNone(result)
+        self.assertEqual(len(result["inherited_header"][0]), 6)
+        self.assertEqual(result["inherited_header"][0][0], "F")
+        self.assertEqual(result["inherited_header"][0][-1], "K")
+
+
+class TestRowTaggerP2(unittest.TestCase):
+    """P2: single-cell title, keyword notes, title_header_candidate."""
+
+    def test_single_cell_top_row_is_title_candidate(self):
+        from xl_sheetagent_v5.row_tagger import tag_rows
+
+        config = _make_config()
+        grid = [["Only title"], ["", "",1.0, 2.0]]
+        types = [["TEXT"], ["BLANK", "BLANK", "NUMBER", "NUMBER"]]
+        tags = tag_rows(grid, types, config)
+        self.assertEqual(tags[0].layer1_tag, "title_candidate")
+
+    def test_multi_cell_top_text_is_title_header_candidate(self):
+        from xl_sheetagent_v5.row_tagger import tag_rows
+
+        config = _make_config()
+        grid = [["A", "B", "C"], ["", "", 1.0, 2.0]]
+        types = [
+            ["TEXT", "TEXT", "TEXT"],
+            ["BLANK", "BLANK", "NUMBER", "NUMBER"],
+        ]
+        tags = tag_rows(grid, types, config)
+        self.assertEqual(tags[0].layer1_tag, "title_header_candidate")
+
+    def test_sparse_row_without_keyword_is_not_note(self):
+        from xl_sheetagent_v5.row_tagger import tag_rows
+
+        config = _make_config()
+        grid = [["x"], ["y"], ["", "", 1.0]]
+        types = [["TEXT"], ["TEXT"], ["BLANK", "BLANK", "NUMBER"]]
+        tags = tag_rows(grid, types, config)
+        self.assertNotEqual(tags[1].layer1_tag, "note_candidate")
+
+    def test_keyword_row_is_note_candidate(self):
+        from xl_sheetagent_v5.row_tagger import tag_rows
+
+        config = _make_config()
+        grid = [["See footnote 1"], ["", "", 1.0]]
+        types = [["TEXT"], ["BLANK", "BLANK", "NUMBER"]]
+        tags = tag_rows(grid, types, config)
+        self.assertEqual(tags[0].layer1_tag, "note_candidate")
+
+
+class TestSliceHeadersForColumnSpan(unittest.TestCase):
+    def test_slice_narrow(self):
+        from xl_sheetagent_v5.header_detector import slice_headers_for_column_span
+
+        row = [chr(ord("A") + i) for i in range(13)]
+        out = slice_headers_for_column_span([row], source_c1=1, target_c1=1, target_c2=5)
+        self.assertEqual(out, [["A", "B", "C", "D", "E"]])
+
+    def test_slice_offset(self):
+        from xl_sheetagent_v5.header_detector import slice_headers_for_column_span
+
+        row = [chr(ord("A") + i) for i in range(12)]
+        out = slice_headers_for_column_span([row], source_c1=1, target_c1=6, target_c2=11)
+        self.assertEqual(len(out[0]), 6)
+        self.assertEqual(out[0][0], "F")
+
+    def test_build_child_resolved_slices_to_child_width(self):
+        from xl_sheetagent_v5.table_resolver import _build_child_resolved
+
+        config = _make_config()
+        child = _make_table(
+            table_id="c1",
+            hierarchy_role="child_numeric",
+            headers=[],
+            bbox={"r1": 85, "c1": 1, "r2": 90, "c2": 5},
+            core_regions=[_make_core_region(r1=85, c1=1, r2=90, c2=5)],
+        )
+        parent_headers = [[chr(ord("A") + i) for i in range(13)]]
+        parent_bbox = {"r1": 73, "c1": 1, "r2": 117, "c2": 13}
+        rt = _build_child_resolved(
+            child, parent_headers, parent_bbox, config,
+            {"header_abs_rows": [82]},
+        )
+        self.assertEqual(rt.headers[0], ["A", "B", "C", "D", "E"])
+
+    def test_build_child_skips_inherit_when_parent_header_not_above(self):
+        from xl_sheetagent_v5.table_resolver import _build_child_resolved
+
+        config = _make_config()
+        child = _make_table(
+            table_id="c1",
+            hierarchy_role="child_numeric",
+            headers=[],
+            bbox={"r1": 3, "c1": 0, "r2": 10, "c2": 2},
+            core_regions=[_make_core_region()],
+            signals={},
+        )
+        parent_headers = [["Col1", "Col2", "Col3"]]
+        parent_bbox = {"r1": 0, "c1": 0, "r2": 20, "c2": 5}
+        rt = _build_child_resolved(
+            child, parent_headers, parent_bbox, config,
+            {"header_abs_rows": [5]},
+        )
+        self.assertEqual(rt.headers, [])
+        self.assertEqual(rt.signals["header_source"], "none")
+        self.assertEqual(
+            rt.signals.get("header_inherit_blocked"),
+            "parent_header_not_above_child",
+        )
+
+
+class TestAmendLlmParser(unittest.TestCase):
+    def test_parse_amend_response_normalizes_headers(self):
+        from xl_sheetagent_v5.prompt_builder import parse_amend_llm_response
+
+        raw = """{
+          "title": "T1",
+          "headers": [["", "A", "B"]],
+          "row_names": ["r1"],
+          "core_region": {"r1": 1, "c1": 1, "r2": 2, "c2": 2},
+          "table_role": "input",
+          "formula_summary": "col 2",
+          "confidence": 0.81,
+          "reasoning": "ok"
+        }"""
+        p = parse_amend_llm_response(raw)
+        self.assertEqual(p["title"], "T1")
+        self.assertEqual(p["headers"], [["", "A", "B"]])
+        self.assertEqual(p["row_names"], ["r1"])
+        self.assertEqual(p["core_region"]["r2"], 2)
+        self.assertEqual(p["table_role"], "input")
+        self.assertAlmostEqual(p["confidence"], 0.81)
+
+
+class TestSchemaHeaderLookback(unittest.TestCase):
+    """Schema-style header row read from rows above the V3a bbox."""
+
+    def test_detect_headers_prefers_schema_row_above_bbox(self):
+        from xl_sheetagent_v5.header_detector import detect_headers
+        from xl_sheetagent_v5.row_tagger import tag_rows
+
+        config = _make_config()
+        noise = ["Section", "a", "b", "c", "d"]
+        schema = [
+            "",
+            "Value used in the model",
+            "Default",
+            "User input",
+            "Description",
+        ]
+        above_grid = [noise, schema]
+        above_types = [["TEXT"] * 5, ["TEXT"] * 5]
+        grid = [
+            ["Inotuzumab Ozogamicin", 1.0, 2.0, 3.0, 4.0],
+            ["Blinatumomab", 1.0, 2.0, 3.0, 4.0],
+        ]
+        types = [
+            ["TEXT", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+        ]
+        row_tags = tag_rows(grid, types, config)
+        merge_info = []
+        headers, hidx, conf, absrows = detect_headers(
+            grid,
+            row_tags,
+            merge_info,
+            config,
+            above_grid=above_grid,
+            above_types=above_types,
+            bbox_r1=20,
+        )
+        self.assertTrue(headers)
+        self.assertEqual(hidx, [])
+        self.assertIn("value used in the model", headers[-1][1].lower())
+        self.assertTrue(absrows)
+        self.assertLess(max(absrows), 20)
 
 
 if __name__ == "__main__":

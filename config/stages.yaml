@@ -307,6 +307,8 @@ xl_sheetagent_v5:
   # Multi-row header detection
   header_zone_pct: 0.20
   header_col_tolerance: 1
+  header_lookback_rows: 15
+  header_schema_above_min_score: 0.42
 
   # LLM refinement
   use_llm: true
@@ -315,6 +317,14 @@ xl_sheetagent_v5:
   llm_temperature: 0.1
   max_retries: 5
   base_delay: 1.0
+
+  # Amendment LLM — after all heuristics + inheritance, if still no column header
+  use_amend_llm: true
+  amend_llm_model: "gpt-4o-mini"
+  amend_llm_max_tokens: 4096
+  amend_llm_temperature: 0.1
+  amend_llm_max_cells: 12000
+  amend_llm_min_rows: 2
 
   # Core region rules
   min_component_area: 4
@@ -350,6 +360,8 @@ xl_sheetagent_v5:
   enable_resolution: true
   resolve_row_names_with_parent: true
   absorb_metadata_only_children: true
+  # P1: off by default — avoids scenario labels becoming child titles
+  migrate_section_notes_to_child_titles: false
 
   # Core region blank inclusion
   blank_inclusion_density_threshold: 0.30

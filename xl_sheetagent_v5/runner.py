@@ -277,9 +277,24 @@ def _process_one_bbox(
     # Read grid from worksheet
     grid, types = _read_cell_grid(ws, r_top, c_left, r_bot, c_right)
 
+    # Rows immediately above bbox (same column span) for BIM-style schema headers
+    above_grid: List[List[Any]] = []
+    above_types: List[List[str]] = []
+    if config.header_lookback_rows > 0 and r_top > 0:
+        n_look = min(config.header_lookback_rows, r_top)
+        r_above_top = r_top - n_look
+        r_above_bot = r_top - 1
+        above_grid, above_types = _read_cell_grid(
+            ws, r_above_top, c_left, r_above_bot, c_right,
+        )
+
     # Get bold rows and merge info
     bold_rows = _detect_bold_rows(ws, r_top, c_left, r_bot, c_right)
     merge_info = _get_merge_info(ws, r_top, c_left, r_bot, c_right)
+
+    format_grid: Optional[List[List[Dict[str, Any]]]] = None
+    if config.use_amend_llm:
+        format_grid = _read_cell_format_grid(ws, r_top, c_left, r_bot, c_right)
 
     # Structural summary
     structural_summary = _compute_structural_summary(grid, types, bold_rows)
@@ -309,12 +324,41 @@ def _process_one_bbox(
         llm_call_counter=llm_call_counter,
         audit_records=audit_records,
         cut_scores=cut_scores,
+        above_grid=above_grid,
+        above_types=above_types,
+        format_grid=format_grid,
     )
 
 
 # ---------------------------------------------------------------------------
 # Cell reading (openpyxl)
 # ---------------------------------------------------------------------------
+
+def _read_cell_format_grid(
+    ws: Any, r_top: int, c_left: int, r_bot: int, c_right: int,
+) -> List[List[Dict[str, Any]]]:
+    """Per-cell formatting for amendment LLM (bold / italic / fill)."""
+    out: List[List[Dict[str, Any]]] = []
+    for r in range(r_top, r_bot + 1):
+        row: List[Dict[str, Any]] = []
+        for c in range(c_left, c_right + 1):
+            cell = ws.cell(row=r + 1, column=c + 1)
+            fd: Dict[str, Any] = {}
+            font = cell.font
+            if font:
+                if font.bold:
+                    fd["bold"] = True
+                if font.italic:
+                    fd["italic"] = True
+            fill = cell.fill
+            if fill and fill.fgColor and getattr(fill.fgColor, "rgb", None):
+                rgb = fill.fgColor.rgb
+                if isinstance(rgb, str) and rgb:
+                    fd["fill"] = rgb
+            row.append(fd)
+        out.append(row)
+    return out
+
 
 def _read_cell_grid(
     ws: Any, r_top: int, c_left: int, r_bot: int, c_right: int,

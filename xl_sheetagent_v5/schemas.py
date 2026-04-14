@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional, Set
 
 LAYER1_TAGS = frozenset({
     "title_candidate",
+    "title_header_candidate",
     "header_candidate",
     "rowname_candidate",
     "note_candidate",

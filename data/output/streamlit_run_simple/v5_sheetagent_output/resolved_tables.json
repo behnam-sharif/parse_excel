@@ -20,18 +20,24 @@
           "split_depth": 0,
           "v3a_table_id": "f57ac8d2e4e4931a_t3"
         },
-        "title": "Value",
-        "headers": [],
+        "title": null,
+        "headers": [
+          [
+            "Value ",
+            "",
+            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+          ]
+        ],
         "row_names": null,
         "notes": [],
         "core_regions": [],
-        "table_role": "metadata",
+        "table_role": "not_found",
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
           },
           {
             "row_index": 1,
@@ -41,9 +47,9 @@
           },
           {
             "row_index": 2,
-            "layer1_tag": "title_candidate",
+            "layer1_tag": "title_header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.55
           }
         ],
         "formatting": {
@@ -54,8 +60,8 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
             "headers": "none"
@@ -65,8 +71,10 @@
           },
           "header_merges": []
         },
-        "confidence": 0.255,
+        "confidence": 0.404,
         "signals": {
+          "title_source": "none",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -108,8 +116,8 @@
         ],
         "metadata_source": "llm_resolved",
         "child_titles": [
-          "Value",
-          "Value"
+          null,
+          null
         ],
         "children": [
           {
@@ -127,8 +135,14 @@
               "split_depth": 1,
               "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
             },
-            "title": "Value",
-            "headers": [],
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
             "row_names": null,
             "notes": [],
             "core_regions": [],
@@ -136,9 +150,9 @@
             "row_tags": [
               {
                 "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.6
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
               }
             ],
             "formatting": {
@@ -149,8 +163,8 @@
                 "notes": false
               },
               "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
               },
               "borders": {
                 "headers": "none"
@@ -158,8 +172,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.265,
-            "signals": {},
+            "confidence": 0.412,
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -180,8 +197,14 @@
               "split_depth": 1,
               "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
             },
-            "title": "Value",
-            "headers": [],
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
             "row_names": null,
             "notes": [],
             "core_regions": [],
@@ -189,9 +212,9 @@
             "row_tags": [
               {
                 "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.6
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
               }
             ],
             "formatting": {
@@ -202,17 +225,20 @@
                 "notes": false
               },
               "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
               },
               "borders": {
-                "headers": "none"
+                "headers": "outline"
               },
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.265,
-            "signals": {},
+            "confidence": 0.412,
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -235,8 +261,14 @@
           "split_depth": 0,
           "v3a_table_id": "f57ac8d2e4e4931a_b3"
         },
-        "title": "Value",
-        "headers": [],
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
         "row_names": null,
         "notes": [],
         "core_regions": [],
@@ -244,9 +276,9 @@
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
           }
         ],
         "formatting": {
@@ -257,17 +289,20 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
-            "headers": "none"
+            "headers": "outline"
           },
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.265,
-        "signals": {},
+        "confidence": 0.412,
+        "signals": {
+          "title_source": "none",
+          "header_source": "local"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -398,6 +433,8 @@
         },
         "confidence": 0.785,
         "signals": {
+          "title_source": "none",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -497,7 +534,10 @@
               "header_merges": []
             },
             "confidence": 0.559,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -614,7 +654,9 @@
             },
             "confidence": 0.902,
             "signals": {
-              "header_inherited_from": "262a4c0f1d47d09d"
+              "header_inherited_from": "262a4c0f1d47d09d_child1",
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -640,20 +682,20 @@
           "split_depth": 0,
           "v3a_table_id": "47ecc07e130eef5f_t10"
         },
-        "title": "Without InO",
+        "title": null,
         "headers": [
           [
+            "",
             "Without InO",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO"
           ]
         ],
         "row_names": [
@@ -688,14 +730,14 @@
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.6
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
           },
           {
             "row_index": 1,
-            "layer1_tag": "header_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
             "confidence": 0.8
           },
           {
@@ -755,30 +797,35 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
-            "headers": null
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
-            "headers": "none",
+            "headers": "outline",
             "core": "outline"
           },
-          "alignment": {},
-          "header_merges": []
-        },
-        "confidence": 0.48,
-        "signals": {
-          "llm_tag_overrides": [
+          "alignment": {
+            "data": "center"
+          },
+          "header_merges": [
             {
-              "row": 0,
-              "old": "title_candidate",
-              "new": "header_candidate"
+              "r1": 47,
+              "c1": 2,
+              "r2": 47,
+              "c2": 6
             },
             {
-              "row": 1,
-              "old": "data_candidate",
-              "new": "header_candidate"
+              "r1": 47,
+              "c1": 7,
+              "r2": 47,
+              "c2": 11
             }
-          ],
+          ]
+        },
+        "confidence": 0.599,
+        "signals": {
+          "title_source": "none",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -820,7 +867,7 @@
         ],
         "metadata_source": "llm_resolved",
         "child_titles": [
-          "Without InO",
+          null,
           null
         ],
         "children": [
@@ -839,20 +886,15 @@
               "split_depth": 1,
               "v3a_table_id": "47ecc07e130eef5f_t10_child1"
             },
-            "title": "Without InO",
+            "title": null,
             "headers": [
               [
                 "Without InO",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "With InO"
               ]
             ],
             "row_names": null,
@@ -862,9 +904,9 @@
             "row_tags": [
               {
                 "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.6
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
               }
             ],
             "formatting": {
@@ -875,17 +917,33 @@
                 "notes": false
               },
               "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
               },
               "borders": {
-                "headers": "none"
+                "headers": "outline"
               },
               "alignment": {},
-              "header_merges": []
+              "header_merges": [
+                {
+                  "r1": 47,
+                  "c1": 2,
+                  "r2": 47,
+                  "c2": 6
+                },
+                {
+                  "r1": 47,
+                  "c1": 7,
+                  "r2": 47,
+                  "c2": 11
+                }
+              ]
             },
-            "confidence": 0.265,
-            "signals": {},
+            "confidence": 0.412,
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -909,17 +967,17 @@
             "title": null,
             "headers": [
               [
+                "",
                 "Without InO",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "Without InO",
+                "With InO",
+                "With InO",
+                "With InO",
+                "With InO",
+                "With InO"
               ]
             ],
             "row_names": [
@@ -1028,7 +1086,10 @@
               "header_merges": []
             },
             "confidence": 0.595,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "inherited"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -1052,7 +1113,16 @@
           "v3a_table_id": "47ecc07e130eef5f_b10"
         },
         "title": null,
-        "headers": [],
+        "headers": [
+          [
+            "Without InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO"
+          ]
+        ],
         "row_names": [
           "Drug costs",
           "Adverse events costs",
@@ -1136,8 +1206,12 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.65,
-        "signals": {},
+        "confidence": 0.875,
+        "signals": {
+          "header_inherited_from": "47ecc07e130eef5f_t10",
+          "title_source": "none",
+          "header_source": "inherited"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -1172,29 +1246,16 @@
         "title": "Patient population",
         "headers": [
           [
+            "",
             "Value used in the model",
             "Default",
             "User input",
-            "Description"
+            "Description "
           ]
         ],
         "row_names": [
           "Number of patients in the",
           "Annual percentage change",
-          "Market shares in world wi",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabi",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "CHECK",
           "Market shares in world wi",
           "Inotuzumab Ozogamicin",
           "FLAG-Ida",
@@ -1314,9 +1375,9 @@
           },
           {
             "row_index": 4,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 5,
@@ -1398,9 +1459,9 @@
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 19,
@@ -1482,9 +1543,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -1586,8 +1647,10 @@
             }
           ]
         },
-        "confidence": 0.837,
+        "confidence": 0.838,
         "signals": {
+          "title_source": "local",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 5
         },
@@ -1748,7 +1811,10 @@
               ]
             },
             "confidence": 0.618,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -1772,7 +1838,6 @@
             "title": "Patient population",
             "headers": [
               [
-                "",
                 "Value used in the model",
                 "Default",
                 "User input",
@@ -1842,7 +1907,9 @@
             },
             "confidence": 0.882,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45"
+              "header_inherited_from": "9814fc53f594ba29_t45_child1",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -1867,11 +1934,11 @@
             "title": "Market shares in world without InO",
             "headers": [
               [
-                "",
                 "Value used in the model",
                 "Default",
                 "User input",
-                "Description "
+                "Description ",
+                ""
               ]
             ],
             "row_names": [
@@ -2016,7 +2083,9 @@
             },
             "confidence": 0.881,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45"
+              "header_inherited_from": "9814fc53f594ba29_t45_child2",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2041,11 +2110,11 @@
             "title": "Market shares in world with InO",
             "headers": [
               [
-                "",
                 "Value used in the model",
                 "Default",
                 "User input",
-                "Description "
+                "Description ",
+                ""
               ]
             ],
             "row_names": [
@@ -2190,7 +2259,9 @@
             },
             "confidence": 0.881,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45"
+              "header_inherited_from": "9814fc53f594ba29_t45_child3",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2215,11 +2286,11 @@
             "title": "Annual drug costs",
             "headers": [
               [
-                "",
                 "Value used in the model",
                 "Default",
                 "User input",
-                "Description "
+                "Description ",
+                ""
               ]
             ],
             "row_names": [
@@ -2355,7 +2426,9 @@
             },
             "confidence": 0.881,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45"
+              "header_inherited_from": "9814fc53f594ba29_t45_child4",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -2384,18 +2457,19 @@
         "title": "Adverse events, frequenci",
         "headers": [
           [
-            "Inotuzumab Ozogamicin",
-            "FLAG-Ida",
-            "FLAG",
-            "Mitoxantrone and cytarabi",
-            "HIDAC",
-            "DVP-Asp",
+            "Adverse events, frequencies (same as global models)",
+            "Inotuzumab Ozogamicin ",
+            "FLAG-Ida ",
+            "FLAG ",
+            "Mitoxantrone and cytarabine",
+            "HIDAC ",
+            "DVP-Asp ",
             "DVP-Asp+Cyclo",
-            "hCVAD+MTX",
-            "Blinatumomab",
+            "hCVAD+MTX ",
+            "Blinatumomab ",
             "TKI (Ponatinib)",
             "TKI + vincristine",
-            "Clofarabine"
+            "Clofarabine "
           ]
         ],
         "row_names": [
@@ -2410,7 +2484,6 @@
           "Cytokine release syndrome",
           "Veno-occlusive liver dise",
           "Graft-versus-host disease",
-          "Adverse events, costs",
           "Neutropenia",
           "Thrombocytopenia",
           "Leukopenia",
@@ -2532,9 +2605,9 @@
           },
           {
             "row_index": 12,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 13,
@@ -2621,8 +2694,10 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.863,
+        "confidence": 0.881,
         "signals": {
+          "title_source": "llm",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -2826,7 +2901,10 @@
               "header_merges": []
             },
             "confidence": 0.881,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -2850,11 +2928,11 @@
             "title": "Adverse events, costs",
             "headers": [
               [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "Adverse events, frequencies (same as global models)",
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine"
               ]
             ],
             "row_names": [
@@ -2981,9 +3059,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.831,
+            "confidence": 0.881,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_t45"
+              "header_inherited_from": "9814fc53f594ba29_b45_t24_child1",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3015,22 +3095,37 @@
           "split_depth": 0,
           "v3a_table_id": "9814fc53f594ba29_b45_b24_t46"
         },
-        "title": "Subsequent treatments in",
+        "title": "Hospitalization",
         "headers": [
           [
-            "None",
-            "Inotuzumab Ozogamicin",
-            "FLAG-Ida",
-            "FLAG",
-            "Mitoxantrone and cytarabi",
-            "HIDAC",
-            "DVP-Asp",
+            "Subsequent treatments in world without InO ",
+            "",
+            "",
+            "",
+            "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "Inotuzumab Ozogamicin ",
+            "FLAG-Ida ",
+            "FLAG ",
+            "Mitoxantrone and cytarabine",
+            "HIDAC ",
+            "DVP-Asp ",
             "DVP-Asp+Cyclo",
-            "hCVAD+MTX",
-            "Blinatumomab",
+            "hCVAD+MTX ",
+            "Blinatumomab ",
             "TKI (Ponatinib)",
             "TKI + vincristine",
-            "Clofarabine"
+            "Clofarabine "
           ]
         ],
         "row_names": [
@@ -3039,25 +3134,40 @@
           "Chemotherapy",
           "TKI",
           "Subsequent treatment cost",
+          "Inotuzumab Ozogamicin",
+          "Blinatumomab",
+          "Chemotherapy",
+          "TKI (Ponatinib)",
           "Hospitalization",
           "Number of bed days",
+          "Inotuzumab Ozogamicin",
+          "FLAG-Ida",
+          "FLAG",
+          "Mitoxantrone and cytarabi",
+          "HIDAC",
+          "DVP-Asp",
+          "DVP-Asp+Cyclo",
+          "hCVAD+MTX",
+          "Blinatumomab",
+          "TKI (Ponatinib)",
+          "TKI + vincristine",
+          "Clofarabine",
           "Cost of bed days",
-          "SCT rates after induction"
+          "SCT rates after induction",
+          "Inotuzumab Ozogamicin",
+          "FLAG-Ida",
+          "FLAG",
+          "Mitoxantrone and cytarabi",
+          "HIDAC",
+          "DVP-Asp",
+          "DVP-Asp+Cyclo",
+          "hCVAD+MTX",
+          "Blinatumomab",
+          "TKI (Ponatinib)",
+          "TKI + vincristine",
+          "Clofarabine"
         ],
-        "notes": [
-          {
-            "row_index": 18,
-            "text": "Number of bed days",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 32,
-            "text": "SCT rates after induction therapy",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -3139,9 +3249,9 @@
         "row_tags": [
           {
             "row_index": 0,
-            "layer1_tag": "title_candidate",
-            "layer2_tag": "consumed_title",
-            "confidence": 0.75
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.65
           },
           {
             "row_index": 1,
@@ -3175,9 +3285,9 @@
           },
           {
             "row_index": 6,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 7,
@@ -3211,9 +3321,9 @@
           },
           {
             "row_index": 12,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 13,
@@ -3241,15 +3351,15 @@
           },
           {
             "row_index": 17,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.6
+            "confidence": 0.9
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.6
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.8
           },
           {
             "row_index": 19,
@@ -3331,9 +3441,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.6
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -3416,7 +3526,7 @@
             "notes": false
           },
           "fill": {
-            "title": "Values must be of type <class 'str'>",
+            "title": null,
             "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
@@ -3426,8 +3536,10 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.726,
+        "confidence": 0.745,
         "signals": {
+          "title_source": "metadata_merged",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 8
         },
@@ -3571,9 +3683,9 @@
         ],
         "metadata_source": "llm_resolved",
         "child_titles": [
-          "Subsequent treatments in world without InO",
           null,
-          "Subsequent treatments in world with InO",
+          null,
+          null,
           null,
           "Subsequent treatment costs",
           "Hospitalization",
@@ -3596,14 +3708,14 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child1"
             },
-            "title": "Subsequent treatments in world without InO",
+            "title": null,
             "headers": [
               [
+                "Subsequent treatments in world without InO ",
                 "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "",
+                "",
+                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments "
               ]
             ],
             "row_names": null,
@@ -3613,9 +3725,9 @@
             "row_tags": [
               {
                 "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.75
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.65
               }
             ],
             "formatting": {
@@ -3626,8 +3738,8 @@
                 "notes": false
               },
               "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
               },
               "borders": {
                 "headers": "none"
@@ -3635,9 +3747,10 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.574,
+            "confidence": 0.471,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_b45_t24_child2"
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3753,7 +3866,10 @@
               "header_merges": []
             },
             "confidence": 0.835,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -3774,14 +3890,14 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_b45_b24_t46_child3"
             },
-            "title": "Subsequent treatments in world with InO",
+            "title": null,
             "headers": [
               [
+                "Subsequent treatments in world with InO ",
                 "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "",
+                "",
+                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments "
               ]
             ],
             "row_names": null,
@@ -3791,9 +3907,9 @@
             "row_tags": [
               {
                 "row_index": 0,
-                "layer1_tag": "title_candidate",
-                "layer2_tag": "consumed_title",
-                "confidence": 0.75
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.65
               }
             ],
             "formatting": {
@@ -3804,8 +3920,8 @@
                 "notes": false
               },
               "fill": {
-                "title": "Values must be of type <class 'str'>",
-                "headers": null
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
               },
               "borders": {
                 "headers": "none"
@@ -3813,9 +3929,10 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.515,
+            "confidence": 0.471,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child1"
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -3931,7 +4048,10 @@
               "header_merges": []
             },
             "confidence": 0.835,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -3956,10 +4076,10 @@
             "headers": [
               [
                 "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine"
               ]
             ],
             "row_names": [
@@ -4037,9 +4157,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.812,
+            "confidence": 0.871,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child3"
+              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child4",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4064,19 +4186,7 @@
             "title": "Hospitalization",
             "headers": [
               [
-                "None",
-                "Inotuzumab Ozogamicin",
-                "FLAG-Ida",
-                "FLAG",
-                "Mitoxantrone and cytarabi",
-                "HIDAC",
-                "DVP-Asp",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX",
-                "Blinatumomab",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine"
+                ""
               ]
             ],
             "row_names": null,
@@ -4108,8 +4218,12 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.353,
-            "signals": {},
+            "confidence": 0.618,
+            "signals": {
+              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child5",
+              "title_source": "local",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -4134,10 +4248,10 @@
             "headers": [
               [
                 "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine"
               ]
             ],
             "row_names": [
@@ -4280,7 +4394,9 @@
             },
             "confidence": 0.878,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child5"
+              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child5",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4306,10 +4422,10 @@
             "headers": [
               [
                 "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine"
               ]
             ],
             "row_names": [
@@ -4445,7 +4561,9 @@
             },
             "confidence": 0.881,
             "signals": {
-              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child7"
+              "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child7",
+              "title_source": "local",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -4470,15 +4588,7 @@
           "v3a_table_id": "9814fc53f594ba29_b45_b24_b46_t2"
         },
         "title": null,
-        "headers": [
-          [
-            "",
-            "Value used in the model",
-            "Default",
-            "User input",
-            "Description "
-          ]
-        ],
+        "headers": [],
         "row_names": [
           "SCT costs"
         ],
@@ -4510,9 +4620,10 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.529,
+        "confidence": 0.265,
         "signals": {
-          "header_inherited_from": "9814fc53f594ba29_b45_b24_t46_child8"
+          "title_source": "none",
+          "header_source": "none"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -4535,15 +4646,7 @@
           "v3a_table_id": "9814fc53f594ba29_b45_b24_b46_b2"
         },
         "title": null,
-        "headers": [
-          [
-            "",
-            "Value used in the model",
-            "Default",
-            "User input",
-            "Description "
-          ]
-        ],
+        "headers": [],
         "row_names": [
           "End-of-life costs"
         ],
@@ -4575,9 +4678,10 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.529,
+        "confidence": 0.265,
         "signals": {
-          "header_inherited_from": "9814fc53f594ba29_b45_b24_b46_t2"
+          "title_source": "none",
+          "header_source": "none"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -4610,12 +4714,13 @@
         "title": "BIM calculation",
         "headers": [
           [
-            "None",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
+            "World without InO",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
           ]
         ],
         "row_names": [
@@ -4635,54 +4740,20 @@
           "Clofarabine",
           "Market shares (Total)",
           "Drug costs",
-          "Total costs of treatment",
           "Costs of adverse events",
           "Subsequent treatment cost",
+          "Total costs of treatment",
           "Total costs of adverse events",
           "Costs of hospitalization",
           "Total costs of hospitalization",
-          "Stem cell transplant after",
+          "Stem cell transplant afte",
+          "Total costs of Subsequent",
+          "Costs of an allogeneic st",
+          "End-of-life costs",
           "Total end-of-life costs",
           "Total costs in world with"
         ],
-        "notes": [
-          {
-            "row_index": 15,
-            "text": "Drug costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 29,
-            "text": "Costs of adverse events",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 43,
-            "text": "Subsequent treatment costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 57,
-            "text": "Costs of hospitalization",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 71,
-            "text": "Stem cell transplant after induction therapy",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 85,
-            "text": "End-of-life costs",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -4703,57 +4774,27 @@
             "bbox": {
               "r1": 7,
               "c1": 2,
-              "r2": 14,
+              "r2": 19,
               "c2": 7
             },
-            "n_cells": 48,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 48,
+              "NUMBER": 73,
               "FORMULA": 0
             },
             "density": 1.0,
             "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 16,
-              "c1": 2,
-              "r2": 19,
-              "c2": 7
-            },
-            "n_cells": 24,
-            "cell_type_distribution": {
-              "NUMBER": 19,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "mixed"
           },
           {
             "bbox": {
               "r1": 21,
               "c1": 2,
-              "r2": 28,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 30,
-              "c1": 2,
               "r2": 33,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4763,27 +4804,12 @@
             "bbox": {
               "r1": 35,
               "c1": 2,
-              "r2": 42,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 44,
-              "c1": 2,
               "r2": 47,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4793,27 +4819,12 @@
             "bbox": {
               "r1": 49,
               "c1": 2,
-              "r2": 56,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 58,
-              "c1": 2,
               "r2": 61,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4823,27 +4834,12 @@
             "bbox": {
               "r1": 63,
               "c1": 2,
-              "r2": 70,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 72,
-              "c1": 2,
               "r2": 75,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4853,27 +4849,12 @@
             "bbox": {
               "r1": 77,
               "c1": 2,
-              "r2": 84,
-              "c2": 7
-            },
-            "n_cells": 48,
-            "cell_type_distribution": {
-              "NUMBER": 48,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 86,
-              "c1": 2,
               "r2": 89,
               "c2": 7
             },
-            "n_cells": 24,
+            "n_cells": 78,
             "cell_type_distribution": {
-              "NUMBER": 23,
+              "NUMBER": 77,
               "FORMULA": 0
             },
             "density": 1.0,
@@ -4917,15 +4898,15 @@
           },
           {
             "row_index": 3,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.9
           },
           {
             "row_index": 4,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 5,
@@ -5007,9 +4988,9 @@
           },
           {
             "row_index": 18,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 19,
@@ -5091,9 +5072,9 @@
           },
           {
             "row_index": 32,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 33,
@@ -5175,9 +5156,9 @@
           },
           {
             "row_index": 46,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 47,
@@ -5259,9 +5240,9 @@
           },
           {
             "row_index": 60,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 61,
@@ -5343,9 +5324,9 @@
           },
           {
             "row_index": 74,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 75,
@@ -5427,9 +5408,9 @@
           },
           {
             "row_index": 88,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 89,
@@ -5519,16 +5500,16 @@
         "formatting": {
           "bold": {
             "title": false,
-            "headers": false,
+            "headers": true,
             "row_names": false,
-            "notes": true
+            "notes": false
           },
           "fill": {
             "title": null,
-            "headers": null
+            "headers": "FF7CDFA8"
           },
           "borders": {
-            "headers": "none",
+            "headers": "outline",
             "core": "outline"
           },
           "alignment": {
@@ -5536,8 +5517,10 @@
           },
           "header_merges": []
         },
-        "confidence": 0.578,
+        "confidence": 0.708,
         "signals": {
+          "title_source": "llm",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -5562,7 +5545,7 @@
           {
             "table_id": "94c8c58d611b9e70_t103_child2",
             "hierarchy_role": "child_numeric",
-            "table_role": "calc",
+            "table_role": "input",
             "bbox": {
               "r1": 5,
               "c1": 1,
@@ -5579,7 +5562,7 @@
         ],
         "metadata_source": "llm_resolved",
         "child_titles": [
-          "World without InO",
+          null,
           "World without InO"
         ],
         "children": [
@@ -5598,15 +5581,16 @@
               "split_depth": 1,
               "v3a_table_id": "94c8c58d611b9e70_t103_child1"
             },
-            "title": "World without InO",
+            "title": null,
             "headers": [
               [
-                "None",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "World without InO",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": [
@@ -5665,7 +5649,10 @@
               "header_merges": []
             },
             "confidence": 0.588,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "inherited"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -5689,12 +5676,13 @@
             "title": "World without InO",
             "headers": [
               [
-                "None",
-                "2020",
-                "2021",
-                "2022",
-                "2023",
-                "2024"
+                "World without InO",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": [
@@ -5791,100 +5779,33 @@
               "Total end-of-life costs",
               "Total costs in world without InO"
             ],
-            "notes": [
-              {
-                "row_index": 15,
-                "text": "Drug costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 29,
-                "text": "Costs of adverse events",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 43,
-                "text": "Subsequent treatment costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 57,
-                "text": "Costs of hospitalization",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 71,
-                "text": "Stem cell transplant after induction therapy",
-                "note_type": "annotation",
-                "source": "heuristic"
-              },
-              {
-                "row_index": 85,
-                "text": "End-of-life costs",
-                "note_type": "annotation",
-                "source": "heuristic"
-              }
-            ],
+            "notes": [],
             "core_regions": [
               {
                 "bbox": {
                   "r1": 7,
                   "c1": 2,
-                  "r2": 14,
+                  "r2": 19,
                   "c2": 7
                 },
-                "n_cells": 48,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 48,
+                  "NUMBER": 73,
                   "FORMULA": 0
                 },
                 "density": 1.0,
                 "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 16,
-                  "c1": 2,
-                  "r2": 19,
-                  "c2": 7
-                },
-                "n_cells": 24,
-                "cell_type_distribution": {
-                  "NUMBER": 19,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "mixed"
               },
               {
                 "bbox": {
                   "r1": 21,
                   "c1": 2,
-                  "r2": 28,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 30,
-                  "c1": 2,
                   "r2": 33,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5894,27 +5815,12 @@
                 "bbox": {
                   "r1": 35,
                   "c1": 2,
-                  "r2": 42,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 44,
-                  "c1": 2,
                   "r2": 47,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5924,27 +5830,12 @@
                 "bbox": {
                   "r1": 49,
                   "c1": 2,
-                  "r2": 56,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 58,
-                  "c1": 2,
                   "r2": 61,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5954,27 +5845,12 @@
                 "bbox": {
                   "r1": 63,
                   "c1": 2,
-                  "r2": 70,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 72,
-                  "c1": 2,
                   "r2": 75,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -5984,27 +5860,12 @@
                 "bbox": {
                   "r1": 77,
                   "c1": 2,
-                  "r2": 84,
-                  "c2": 7
-                },
-                "n_cells": 48,
-                "cell_type_distribution": {
-                  "NUMBER": 48,
-                  "FORMULA": 0
-                },
-                "density": 1.0,
-                "role_hint": "input"
-              },
-              {
-                "bbox": {
-                  "r1": 86,
-                  "c1": 2,
                   "r2": 89,
                   "c2": 7
                 },
-                "n_cells": 24,
+                "n_cells": 78,
                 "cell_type_distribution": {
-                  "NUMBER": 23,
+                  "NUMBER": 77,
                   "FORMULA": 0
                 },
                 "density": 1.0,
@@ -6026,7 +5887,7 @@
                 "role_hint": "input"
               }
             ],
-            "table_role": "calc",
+            "table_role": "input",
             "row_tags": [
               {
                 "row_index": 0,
@@ -6120,9 +5981,9 @@
               },
               {
                 "row_index": 15,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 16,
@@ -6204,9 +6065,9 @@
               },
               {
                 "row_index": 29,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 30,
@@ -6288,9 +6149,9 @@
               },
               {
                 "row_index": 43,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 44,
@@ -6372,9 +6233,9 @@
               },
               {
                 "row_index": 57,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 58,
@@ -6456,9 +6317,9 @@
               },
               {
                 "row_index": 71,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 72,
@@ -6540,9 +6401,9 @@
               },
               {
                 "row_index": 85,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "header_candidate",
+                "layer2_tag": "unassigned_context",
+                "confidence": 0.9
               },
               {
                 "row_index": 86,
@@ -6649,8 +6510,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.5,
-            "signals": {},
+            "confidence": 0.656,
+            "signals": {
+              "title_source": "local",
+              "header_source": "inherited"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -6682,7 +6546,7 @@
             "INO",
             "FLAG-Ida",
             "FLAG",
-            "MXN & Ara-C",
+            "MXN & Ara-C ",
             "HIDAC",
             "DVP-Asp",
             "DVP-Asp+Cyclo",
@@ -6790,6 +6654,8 @@
         },
         "confidence": 0.755,
         "signals": {
+          "title_source": "local",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -6904,7 +6770,10 @@
               "header_merges": []
             },
             "confidence": 0.551,
-            "signals": {},
+            "signals": {
+              "title_source": "local",
+              "header_source": "local"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -7028,7 +6897,9 @@
             },
             "confidence": 0.853,
             "signals": {
-              "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8"
+              "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8_child1",
+              "title_source": "none",
+              "header_source": "local"
             },
             "child_summaries": [],
             "metadata_source": "heuristic",
@@ -7057,14 +6928,7 @@
         "row_names": [
           "INO"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7137,9 +7001,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7192,8 +7056,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.691,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -7218,20 +7085,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7304,9 +7165,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7359,8 +7220,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -7386,14 +7250,7 @@
         "row_names": [
           "FLAG-Ida"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7466,9 +7323,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7521,8 +7378,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -7547,20 +7407,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7633,9 +7487,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7688,8 +7542,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -7715,14 +7572,7 @@
         "row_names": [
           "FLAG"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7795,9 +7645,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -7850,8 +7700,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -7876,20 +7729,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -7962,9 +7809,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8017,8 +7864,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8044,14 +7894,7 @@
         "row_names": [
           "MXN & Ara-C"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8124,9 +7967,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8179,8 +8022,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8205,20 +8051,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8291,9 +8131,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8346,8 +8186,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8373,14 +8216,7 @@
         "row_names": [
           "HIDAC"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8453,9 +8289,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8508,8 +8344,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8534,20 +8373,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8620,9 +8453,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8675,8 +8508,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8702,14 +8538,7 @@
         "row_names": [
           "DVP-Asp"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -8782,9 +8611,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -8837,8 +8666,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -8860,7 +8692,17 @@
           "v3a_table_id": "94c8c58d611b9e70_b103"
         },
         "title": "World with InO",
-        "headers": [],
+        "headers": [
+          [
+            "World without InO",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ]
+        ],
         "row_names": [
           "Inotuzumab Ozogamicin",
           "FLAG-Ida",
@@ -9156,9 +8998,9 @@
           },
           {
             "row_index": 15,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 16,
@@ -9240,9 +9082,9 @@
           },
           {
             "row_index": 29,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 30,
@@ -9324,9 +9166,9 @@
           },
           {
             "row_index": 43,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 44,
@@ -9408,9 +9250,9 @@
           },
           {
             "row_index": 57,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 58,
@@ -9492,9 +9334,9 @@
           },
           {
             "row_index": 71,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 72,
@@ -9576,9 +9418,9 @@
           },
           {
             "row_index": 85,
-            "layer1_tag": "note_candidate",
+            "layer1_tag": "header_candidate",
             "layer2_tag": "unassigned_context",
-            "confidence": 0.5
+            "confidence": 0.9
           },
           {
             "row_index": 86,
@@ -9685,8 +9527,12 @@
           },
           "header_merges": []
         },
-        "confidence": 0.651,
-        "signals": {},
+        "confidence": 0.882,
+        "signals": {
+          "header_inherited_from": "94c8c58d611b9e70_t103",
+          "title_source": "local",
+          "header_source": "inherited"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -9711,20 +9557,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -9797,9 +9637,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -9852,8 +9692,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -9879,14 +9722,7 @@
         "row_names": [
           "DVP-Asp+Cyclo"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -9959,9 +9795,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10014,8 +9850,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.691,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10040,20 +9879,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10126,9 +9959,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10181,8 +10014,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10208,14 +10044,7 @@
         "row_names": [
           "hCVAD+MTX"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10278,7 +10107,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "calc",
+        "table_role": "mixed",
         "row_tags": [
           {
             "row_index": 0,
@@ -10288,9 +10117,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10343,8 +10172,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.691,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10369,20 +10201,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10455,9 +10281,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10510,8 +10336,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10537,14 +10366,7 @@
         "row_names": [
           "Blinatumomab"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10617,9 +10439,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10672,8 +10494,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10698,19 +10523,13 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -10798,9 +10617,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -10847,8 +10666,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.527,
-        "signals": {},
+        "confidence": 0.54,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -10874,6 +10696,7 @@
         "title": null,
         "headers": [
           [
+            "TKI -Ponatinib",
             "Current situation",
             "2020",
             "2021",
@@ -10884,28 +10707,9 @@
           ]
         ],
         "row_names": [
-          "TKI -Ponatinib",
-          "2019",
-          "2020",
-          "2021",
-          "2022",
-          "2023",
-          "2024"
+          "not_found"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          },
-          {
-            "row_index": 3,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11020,9 +10824,9 @@
           },
           {
             "row_index": 3,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 4,
@@ -11075,8 +10879,10 @@
           },
           "header_merges": []
         },
-        "confidence": 0.647,
+        "confidence": 0.654,
         "signals": {
+          "title_source": "none",
+          "header_source": "llm",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -11140,13 +10946,20 @@
             "title": null,
             "headers": [
               [
-                "Current situation",
                 "2020",
                 "2021",
                 "2022",
                 "2023",
                 "2024",
-                "Total"
+                "Total",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": null,
@@ -11213,7 +11026,10 @@
               "header_merges": []
             },
             "confidence": 0.647,
-            "signals": {},
+            "signals": {
+              "title_source": "none",
+              "header_source": "inherited"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -11237,26 +11053,28 @@
             "title": null,
             "headers": [
               [
+                "TKI -Ponatinib",
                 "Current situation",
                 "2020",
                 "2021",
                 "2022",
                 "2023",
                 "2024",
-                "Total"
+                "Total",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
               ]
             ],
             "row_names": [
               "TKI -Ponatinib"
             ],
-            "notes": [
-              {
-                "row_index": 1,
-                "text": "2019",
-                "note_type": "annotation",
-                "source": "heuristic"
-              }
-            ],
+            "notes": [],
             "core_regions": [
               {
                 "bbox": {
@@ -11329,9 +11147,9 @@
               },
               {
                 "row_index": 1,
-                "layer1_tag": "note_candidate",
-                "layer2_tag": "consumed_note",
-                "confidence": 0.5
+                "layer1_tag": "data_candidate",
+                "layer2_tag": "data",
+                "confidence": 0.8
               },
               {
                 "row_index": 2,
@@ -11384,8 +11202,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.624,
-            "signals": {},
+            "confidence": 0.637,
+            "signals": {
+              "title_source": "none",
+              "header_source": "inherited"
+            },
             "child_summaries": [],
             "metadata_source": "heuristic",
             "child_titles": [],
@@ -11412,20 +11233,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11488,7 +11303,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "mixed",
+        "table_role": "calc",
         "row_tags": [
           {
             "row_index": 0,
@@ -11498,9 +11313,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11553,8 +11368,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -11580,14 +11398,7 @@
         "row_names": [
           "TKI + vincristine"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11660,9 +11471,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11715,8 +11526,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.691,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -11741,20 +11555,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11827,9 +11635,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -11882,8 +11690,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.691,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -11909,14 +11720,7 @@
         "row_names": [
           "Clofarabine"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -11979,7 +11783,7 @@
             "role_hint": "mixed"
           }
         ],
-        "table_role": "mixed",
+        "table_role": "calc",
         "row_tags": [
           {
             "row_index": 0,
@@ -11989,9 +11793,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -12044,8 +11848,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.68,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],
@@ -12070,20 +11877,14 @@
         "headers": [],
         "row_names": [
           "Future situation",
+          "2019",
           "2020",
           "2021",
           "2022",
           "2023",
           "2024"
         ],
-        "notes": [
-          {
-            "row_index": 1,
-            "text": "2019",
-            "note_type": "annotation",
-            "source": "heuristic"
-          }
-        ],
+        "notes": [],
         "core_regions": [
           {
             "bbox": {
@@ -12156,9 +11957,9 @@
           },
           {
             "row_index": 1,
-            "layer1_tag": "note_candidate",
-            "layer2_tag": "consumed_note",
-            "confidence": 0.5
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.8
           },
           {
             "row_index": 2,
@@ -12211,8 +12012,11 @@
           },
           "header_merges": []
         },
-        "confidence": 0.53,
-        "signals": {},
+        "confidence": 0.541,
+        "signals": {
+          "title_source": "none",
+          "header_source": "none"
+        },
         "child_summaries": [],
         "metadata_source": "heuristic",
         "child_titles": [],

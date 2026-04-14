@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 _NOTE_KEYWORDS = frozenset({
     "note", "notes", "source", "sources", "footnote", "footnotes",
     "reference", "references", "assumption", "assumptions",
+    "appendix",
 })
 
 
@@ -106,31 +107,48 @@ def _classify_row(
     if non_blank == 0:
         return "data_candidate", 0.3, {"reason": "blank_row"}
 
-    # --- title_candidate ---
-    if r < 3 and non_blank <= config.title_max_nonempty and text_count == non_blank:
-        conf = 0.6
-        if r in bold_rows:
-            conf += 0.15
-        if non_blank == 1:
-            conf += 0.15
-        signals = {"reason": "title", "non_blank": non_blank, "bold": r in bold_rows}
-        return "title_candidate", min(conf, 0.95), signals
-
-    # --- note_candidate ---
+    # --- note_candidate (P2: keyword-led; before title so "See footnote …" is a note) ---
     if non_blank > 0 and n_cols > 0:
         fill_ratio = non_blank / n_cols
         first_text = _first_nonempty_text(row_vals)
         has_keyword = first_text is not None and any(
             kw in first_text.lower() for kw in _NOTE_KEYWORDS
         )
-        if fill_ratio <= config.note_fill_max or has_keyword:
+        if has_keyword:
             conf = 0.5
-            if has_keyword:
-                conf += 0.25
+            if fill_ratio <= config.note_fill_max:
+                conf += 0.2
             if fill_ratio <= 0.1:
                 conf += 0.1
-            signals = {"reason": "note", "fill_ratio": round(fill_ratio, 2), "keyword": has_keyword}
+            signals = {"reason": "note", "fill_ratio": round(fill_ratio, 2), "keyword": True}
             return "note_candidate", min(conf, 0.95), signals
+
+    # --- title_candidate (P2: single populated TEXT cell in top band) ---
+    if (
+        r < 3
+        and non_blank <= config.title_max_nonempty
+        and text_count == non_blank
+        and non_blank == 1
+    ):
+        conf = 0.6
+        if r in bold_rows:
+            conf += 0.15
+        conf += 0.15  # single-cell title prior
+        signals = {"reason": "title", "non_blank": non_blank, "bold": r in bold_rows}
+        return "title_candidate", min(conf, 0.95), signals
+
+    # --- title_header_candidate (P2: multi-cell top TEXT band — title/header composite) ---
+    if (
+        r < 3
+        and non_blank <= config.title_max_nonempty
+        and text_count == non_blank
+        and non_blank > 1
+    ):
+        conf = 0.55
+        if r in bold_rows:
+            conf += 0.1
+        signals = {"reason": "title_header_mix", "non_blank": non_blank, "bold": r in bold_rows}
+        return "title_header_candidate", min(conf, 0.95), signals
 
     # --- header_candidate ---
     if total_typed > 0:

@@ -21,6 +21,10 @@ class XlSheetAgentV5Config:
     # Multi-row header detection
     header_zone_pct: float
     header_col_tolerance: int
+    # Rows above table bbox to read for BIM-style schema header rows
+    header_lookback_rows: int
+    # Minimum score (0–1) to prefer a schema row from lookback over local detection
+    header_schema_above_min_score: float
 
     # LLM refinement
     use_llm: bool
@@ -29,6 +33,14 @@ class XlSheetAgentV5Config:
     llm_temperature: float
     max_retries: int
     base_delay: float
+
+    # Amendment LLM — full bbox values + per-cell formatting when no header remains
+    use_amend_llm: bool
+    amend_llm_model: str
+    amend_llm_max_tokens: int
+    amend_llm_temperature: float
+    amend_llm_max_cells: int
+    amend_llm_min_rows: int
 
     # Core region rules
     min_component_area: int
@@ -64,6 +76,8 @@ class XlSheetAgentV5Config:
     enable_resolution: bool
     resolve_row_names_with_parent: bool
     absorb_metadata_only_children: bool
+    # When True, section notes may promote to child titles (narrowed by note type).
+    migrate_section_notes_to_child_titles: bool
 
     # Core region blank inclusion
     blank_inclusion_density_threshold: float

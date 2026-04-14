@@ -59,6 +59,7 @@ class TestConfig(unittest.TestCase):
             xl_image_config_from_pipeline,
             xl_init_config_from_pipeline,
             sheetagent_config_from_pipeline,
+            sheetagent_v5_config_from_pipeline,
         )
 
         pc = load_config()
@@ -67,6 +68,7 @@ class TestConfig(unittest.TestCase):
         xl_table_config_from_pipeline(pc)
         xl_image_config_from_pipeline(pc)
         sheetagent_config_from_pipeline(pc)
+        sheetagent_v5_config_from_pipeline(pc)
 
 
 class TestNoLegacyKgSubstring(unittest.TestCase):
