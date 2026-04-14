@@ -15,12 +15,7 @@ from .schemas import RowTag
 
 logger = logging.getLogger(__name__)
 
-# Substrings typical of column-schema rows (BIM / HEOR layouts)
-_SCHEMA_HEADER_TOKENS = frozenset({
-    "value", "model", "default", "user", "input", "description",
-    "parameter", "unit", "source", "footnote", "assumption",
-    "baseline", "scenario", "label", "notes",
-})
+_HEADER_LIKE_TAGS = frozenset({"header_candidate", "title_header_candidate"})
 
 
 def detect_headers(
@@ -28,10 +23,7 @@ def detect_headers(
     row_tags: List[RowTag],
     merge_info: List[Tuple[int, int, int, int]],
     config: XlSheetAgentV5Config,
-    above_grid: Optional[List[List[Any]]] = None,
-    above_types: Optional[List[List[str]]] = None,
-    bbox_r1: int = 0,
-) -> Tuple[List[List[str]], List[int], float, List[int]]:
+) -> Tuple[List[List[str]], List[int], float]:
     """
     Detect header rows at the top of the data region.
 
@@ -48,15 +40,13 @@ def detect_headers(
 
     Returns
     -------
-    Tuple[List[List[str]], List[int], float, List[int]]
-        (headers, header_row_indices relative to ``grid``, confidence,
-        header_abs_rows — sheet row index per header row).
+    Tuple[List[List[str]], List[int], float]
+        (headers, header_row_indices, confidence)
+        headers = [[cell1, cell2, ...], ...] per header row.
     """
     n_rows = len(grid)
     if n_rows == 0:
-        return [], [], 0.0, []
-
-    n_cols = len(grid[0]) if grid[0] else 0
+        return [], [], 0.0
 
     # Find the first data row (first non-header, non-title, non-note candidate)
     first_data_idx = _find_first_data_row(row_tags)
@@ -71,77 +61,35 @@ def detect_headers(
         header_indices = _fallback_header_scan(grid, row_tags, config)
 
     if not header_indices:
-        headers_loc: List[List[str]] = []
-        conf_loc = 0.0
-    else:
-        # Check for multi-row header pattern
-        if len(header_indices) > 1:
-            header_indices = _validate_multirow_header(
-                grid, header_indices, merge_info,
-            )
+        return [], [], 0.0
 
-        # Build header values
-        headers_loc = []
-        for r in header_indices:
-            if r < len(grid):
-                row_strs = [str(v) if v is not None else "" for v in grid[r]]
-                headers_loc.append(row_strs)
-
-        # Expand merged cells: replicate merged value across all spanned columns/rows
-        if merge_info and headers_loc:
-            headers_loc = _expand_merged_headers(
-                headers_loc, header_indices, merge_info, grid,
-            )
-
-        conf_loc = _compute_header_confidence(
-            row_tags, header_indices, merge_info,
+    # Check for multi-row header pattern
+    if len(header_indices) > 1:
+        header_indices = _validate_multirow_header(
+            grid, header_indices, merge_info,
         )
 
-    above_pick: Optional[Tuple[List[List[str]], List[int], float]] = None
-    if (
-        above_grid
-        and above_types
-        and n_cols > 0
-        and len(above_grid) == len(above_types)
-        and config.header_lookback_rows > 0
-    ):
-        above_pick = _pick_schema_headers_above(
-            above_grid, above_types, n_cols, bbox_r1,
-        )
+    # Build header values
+    headers = []
+    for r in header_indices:
+        if r < len(grid):
+            row_strs = [str(v) if v is not None else "" for v in grid[r]]
+            headers.append(row_strs)
 
-    use_above = False
-    if above_pick is not None:
-        ah, a_abs, a_conf = above_pick
-        if a_conf >= config.header_schema_above_min_score:
-            use_above = _prefer_above_schema_headers(
-                ah,
-                a_conf,
-                headers_loc,
-                header_indices,
-                conf_loc,
-                row_tags,
-                first_data_idx,
-                config,
-            )
+    # Expand merged cells: replicate merged value across all spanned columns/rows
+    if merge_info and headers:
+        headers = _expand_merged_headers(headers, header_indices, merge_info, grid)
 
-    if use_above and above_pick is not None:
-        ah, a_abs, a_conf = above_pick
-        out_conf = round(min(0.95, max(a_conf, 0.55)), 3)
-        logger.debug(
-            "Using schema header(s) from %d row(s) above bbox (conf=%.2f)",
-            len(ah), out_conf,
-        )
-        return ah, [], out_conf, list(a_abs)
-
-    if not header_indices:
-        return [], [], 0.0, []
+    # Compute confidence
+    confidence = _compute_header_confidence(
+        row_tags, header_indices, merge_info,
+    )
 
     logger.debug(
         "Detected %d header row(s) at indices %s (conf=%.2f)",
-        len(headers_loc), header_indices, conf_loc,
+        len(headers), header_indices, confidence,
     )
-    abs_rows = [bbox_r1 + i for i in header_indices]
-    return headers_loc, header_indices, conf_loc, abs_rows
+    return headers, header_indices, confidence
 
 
 def detect_header_candidates_v3a(
@@ -187,151 +135,6 @@ def detect_header_candidates_v3a(
     return candidates
 
 
-def slice_headers_for_column_span(
-    header_rows: List[List[str]],
-    source_c1: int,
-    target_c1: int,
-    target_c2: int,
-) -> List[List[str]]:
-    """
-    Slice each header row so columns align with ``[target_c1, target_c2]`` (absolute).
-
-    Rows are treated as covering ``source_c1 .. source_c1 + len(row) - 1``.
-    """
-    width = target_c2 - target_c1 + 1
-    if width <= 0:
-        return []
-    start = target_c1 - source_c1
-    if start < 0:
-        return []
-    out: List[List[str]] = []
-    for row in header_rows:
-        if not row:
-            out.append([""] * width)
-            continue
-        chunk = row[start : start + width]
-        padded = list(chunk) + [""] * (width - len(chunk))
-        out.append(padded[:width])
-    return out
-
-
-def _schema_token_hits_row(row: List[str]) -> int:
-    joined = " ".join(c.lower() for c in row if c and str(c).strip())
-    return sum(1 for tok in _SCHEMA_HEADER_TOKENS if tok in joined)
-
-
-def _score_above_schema_row(
-    row_vals: List[Any],
-    row_types: List[str],
-    n_cols: int,
-) -> float:
-    """Score a single row above the bbox as a column-schema header candidate."""
-    if not row_types or n_cols <= 0:
-        return 0.0
-    text_count = sum(1 for t in row_types if t == "TEXT")
-    num_count = sum(1 for t in row_types if t in ("NUMBER", "FORMULA"))
-    non_blank = text_count + num_count
-    if non_blank == 0:
-        return 0.0
-    text_ratio = text_count / non_blank
-    row_strs = [str(v) if v is not None else "" for v in row_vals]
-    # Prefer rows whose non-blank count is close to table width (schema spans block)
-    col_fit = 1.0 - min(1.0, abs(non_blank - n_cols) / max(n_cols, 1))
-    token_hits = _schema_token_hits_row(row_strs)
-    token_bonus = min(0.35, 0.12 * token_hits)
-    num_penalty = 0.22 if num_count > non_blank * 0.45 else 0.0
-    score = 0.38 * text_ratio + 0.38 * col_fit + token_bonus - num_penalty
-    return max(0.0, min(1.0, score))
-
-
-def _pick_schema_headers_above(
-    above_grid: List[List[Any]],
-    above_types: List[List[str]],
-    n_cols: int,
-    bbox_r1: int,
-) -> Optional[Tuple[List[List[str]], List[int], float]]:
-    """
-    Scan rows above the table (bottom-up — closest to bbox first) for a
-    schema-style header; optionally attach consecutive rows above the best row.
-    """
-    n_above = len(above_grid)
-    if n_above == 0:
-        return None
-
-    best_i = -1
-    best_s = 0.0
-    for i in range(n_above - 1, -1, -1):
-        row_vals = above_grid[i] if i < len(above_grid) else []
-        row_types = above_types[i] if i < len(above_types) else []
-        if len(row_vals) < n_cols:
-            continue
-        s = _score_above_schema_row(row_vals[:n_cols], row_types[:n_cols], n_cols)
-        if s > best_s:
-            best_s = s
-            best_i = i
-
-    if best_i < 0 or best_s < 0.01:
-        return None
-
-    indices = [best_i]
-    j = best_i - 1
-    while j >= 0:
-        row_vals = above_grid[j]
-        row_types = above_types[j]
-        if len(row_vals) < n_cols:
-            break
-        s2 = _score_above_schema_row(row_vals[:n_cols], row_types[:n_cols], n_cols)
-        if s2 >= best_s - 0.18 and indices[0] == j + 1:
-            indices.insert(0, j)
-            j -= 1
-        else:
-            break
-
-    base = bbox_r1 - n_above
-    abs_rows = [base + i for i in indices]
-    header_rows: List[List[str]] = []
-    for i in indices:
-        row_vals = above_grid[i]
-        cells = [str(v) if v is not None else "" for v in row_vals[:n_cols]]
-        if len(cells) < n_cols:
-            cells = cells + [""] * (n_cols - len(cells))
-        header_rows.append(cells)
-
-    return header_rows, abs_rows, best_s
-
-
-def _prefer_above_schema_headers(
-    above_headers: List[List[str]],
-    above_conf: float,
-    local_headers: List[List[str]],
-    local_indices: List[int],
-    local_conf: float,
-    row_tags: List[RowTag],
-    first_data_idx: int,
-    config: XlSheetAgentV5Config,
-) -> bool:
-    """Decide whether lookback schema row(s) beat in-bbox header detection."""
-    if not local_headers:
-        return True
-    if local_conf >= 0.88 and above_conf < local_conf - 0.03:
-        return False
-
-    above_tokens = sum(_schema_token_hits_row(r) for r in above_headers)
-    local_tokens = sum(_schema_token_hits_row(r) for r in local_headers)
-
-    if above_conf >= local_conf + 0.06:
-        return True
-    if above_tokens >= 2 and above_tokens > local_tokens:
-        return True
-    if (
-        first_data_idx < len(row_tags)
-        and row_tags[first_data_idx].layer1_tag == "rowname_candidate"
-        and first_data_idx <= 3 and above_conf >= config.header_schema_above_min_score - 0.1
-    ):
-        return True
-    return False
-
-
 def find_header_inheritance(
     all_tables: List[Any],
     current_bbox: Dict[str, int],
@@ -339,17 +142,28 @@ def find_header_inheritance(
     config: XlSheetAgentV5Config,
 ) -> Optional[Dict[str, Any]]:
     """
-    Find header from a table above with column alignment.
+    Find header from a table above with matching column alignment.
 
-    P0: In addition to the legacy full-span match (same left/right within
-    tolerance), accepts donors whose column span **contains** the current
-    bbox; inherited headers are **sliced** to ``current`` width so narrow or
-    right-shifted tables match the main header block.
+    Parameters
+    ----------
+    all_tables : List
+        Previously analyzed V5TableResult objects on this sheet.
+    current_bbox : Dict[str, int]
+        Current table bbox {"r1", "c1", "r2", "c2"}.
+    current_table_id : str
+        Current table ID (to skip self).
+    config : XlSheetAgentV5Config
+        Thresholds.
+
+    Returns
+    -------
+    Optional[Dict[str, Any]]
+        {"source_table_id", "inherited_header", "row_distance", "confidence"}
+        or None.
     """
     current_left = current_bbox["c1"]
     current_right = current_bbox["c2"]
     current_top = current_bbox["r1"]
-    tol = config.header_col_tolerance
 
     candidates = []
     for other in all_tables:
@@ -359,51 +173,19 @@ def find_header_inheritance(
         if ob["r1"] >= current_top:
             continue  # Must be above
 
-        row_distance = current_top - ob["r2"]
-        if row_distance < 0:
-            continue  # Overlapping — not above
-
-        if not other.headers:
-            continue
-
-        sig = getattr(other, "signals", None) or {}
-        donor_header_abs: List[int] = []
-        if isinstance(sig, dict):
-            raw = sig.get("header_abs_rows")
-            if raw:
-                donor_header_abs = [int(x) for x in raw]
-        if donor_header_abs and max(donor_header_abs) >= current_top:
-            # Header band must lie strictly above the current table (sheet rows)
-            continue
-
-        d_left, d_right = ob["c1"], ob["c2"]
-        cols_full_span = (
-            abs(d_left - current_left) <= tol
-            and abs(d_right - current_right) <= tol
+        cols_align = (
+            abs(ob["c1"] - current_left) <= config.header_col_tolerance
+            and abs(ob["c2"] - current_right) <= config.header_col_tolerance
         )
-        contained = (
-            current_left >= d_left
-            and current_right <= d_right + tol
-        )
-
-        if contained:
-            sliced = slice_headers_for_column_span(
-                other.headers, d_left, current_left, current_right,
-            )
-            if not sliced:
-                continue
-            inherited: List[List[str]] = sliced
-        elif cols_full_span:
-            inherited = [list(r) for r in other.headers]
-        else:
-            continue
-
-        candidates.append({
-            "source_table_id": other.table_id,
-            "inherited_header": inherited,
-            "row_distance": row_distance,
-            "source_header_abs_rows": list(donor_header_abs),
-        })
+        if cols_align and other.headers:
+            row_distance = current_top - ob["r2"]
+            if row_distance < 0:
+                continue  # Overlapping — not above
+            candidates.append({
+                "source_table_id": other.table_id,
+                "inherited_header": other.headers,
+                "row_distance": row_distance,
+            })
 
     if not candidates:
         return None
@@ -441,8 +223,144 @@ def find_header_inheritance(
         "Header inheritance from %s (distance=%d rows, confidence=%.2f)",
         closest["source_table_id"], closest["row_distance"], confidence,
     )
-    closest.setdefault("source_header_abs_rows", [])
     return closest
+
+
+def find_restricted_header_inheritance(
+    all_tables: List[Any],
+    current_bbox: Dict[str, int],
+    current_table_id: str,
+    parent_table_id: Optional[str],
+    config: XlSheetAgentV5Config,
+) -> Optional[Dict[str, Any]]:
+    """
+    Inherit headers only from (1) direct V3a parent, or (2) other ``parent`` role
+    tables above with established headers. Child-role tables never donate.
+
+    Returns
+    -------
+    Optional[Dict[str, Any]]
+        ``source_table_id``, ``inherited_header``, ``row_distance``, ``confidence``,
+        ``inheritance_kind`` in {``direct_parent``, ``above_parent``}.
+    """
+    current_top = current_bbox["r1"]
+    cr1, cr2 = current_bbox["c1"], current_bbox["c2"]
+    recip_w = _recipient_n_cols(current_bbox)
+
+    def donor_passes_gates(other: Any) -> bool:
+        if other.table_id == current_table_id:
+            return False
+        if not _has_established_headers(other):
+            return False
+        ob = other.bbox
+        if ob["r2"] >= current_top:
+            return False
+        row_distance = current_top - ob["r2"]
+        if row_distance < 0:
+            return False
+        if not _col_ranges_overlap(ob["c1"], ob["c2"], cr1, cr2):
+            return False
+        dw = _header_logical_width(other.headers)
+        if dw == 0:
+            return False
+        if abs(dw - recip_w) > config.inherit_header_col_tolerance:
+            return False
+        return True
+
+    def _confidence_for_distance(dist: int) -> float:
+        if dist <= 2:
+            return 0.9
+        if dist <= 5:
+            return 0.8
+        if dist <= 10:
+            return 0.65
+        return 0.5
+
+    def _finalize(
+        donor: Any,
+        inheritance_kind: str,
+    ) -> Dict[str, Any]:
+        ob = donor.bbox
+        row_distance = current_top - ob["r2"]
+        conf = _confidence_for_distance(row_distance)
+        return {
+            "source_table_id": donor.table_id,
+            "inherited_header": donor.headers,
+            "row_distance": row_distance,
+            "confidence": conf,
+            "inheritance_kind": inheritance_kind,
+        }
+
+    # (A) Direct parent first
+    if parent_table_id:
+        for other in all_tables:
+            if other.table_id != parent_table_id:
+                continue
+            if donor_passes_gates(other):
+                logger.info(
+                    "Restricted header inheritance (direct parent) from %s",
+                    other.table_id,
+                )
+                return _finalize(other, "direct_parent")
+            break
+
+    # (B) Parent-role donors above
+    candidates: List[Any] = []
+    for other in all_tables:
+        if other.table_id == current_table_id:
+            continue
+        if getattr(other, "hierarchy_role", None) != "parent":
+            continue
+        if donor_passes_gates(other):
+            candidates.append(other)
+
+    if not candidates:
+        return None
+
+    candidates.sort(key=lambda t: current_top - t.bbox["r2"])
+    closest = candidates[0]
+    if len(candidates) >= 2:
+        second = candidates[1]
+        d0 = current_top - closest.bbox["r2"]
+        d1 = current_top - second.bbox["r2"]
+        if d1 - d0 <= 2:
+            logger.info(
+                "Restricted header inheritance ambiguous: %s vs %s — skipping",
+                closest.table_id, second.table_id,
+            )
+            return None
+
+    logger.info(
+        "Restricted header inheritance (above parent) from %s",
+        closest.table_id,
+    )
+    return _finalize(closest, "above_parent")
+
+
+def _header_logical_width(headers: List[List[str]]) -> int:
+    max_c = -1
+    for row in headers:
+        for i, cell in enumerate(row):
+            if cell is not None and str(cell).strip():
+                max_c = max(max_c, i)
+    return max_c + 1 if max_c >= 0 else 0
+
+
+def _has_established_headers(other: Any) -> bool:
+    if not getattr(other, "headers", None):
+        return False
+    for row in other.headers:
+        if any(c is not None and str(c).strip() for c in row):
+            return True
+    return False
+
+
+def _recipient_n_cols(bbox: Dict[str, int]) -> int:
+    return bbox["c2"] - bbox["c1"] + 1
+
+
+def _col_ranges_overlap(c1a: int, c2a: int, c1b: int, c2b: int) -> bool:
+    return not (c2a < c1b or c2b < c1a)
 
 
 # ---------------------------------------------------------------------------
@@ -504,12 +422,12 @@ def _find_header_candidates_before_data(
     row_tags: List[RowTag],
     first_data_idx: int,
 ) -> List[int]:
-    """Find consecutive header_candidate rows before first data row."""
+    """Find consecutive header-like rows before first data row."""
     indices = []
     for tag in row_tags:
         if tag.row_index >= first_data_idx:
             break
-        if tag.layer1_tag in ("header_candidate", "title_header_candidate"):
+        if tag.layer1_tag in _HEADER_LIKE_TAGS:
             indices.append(tag.row_index)
 
     # Must be consecutive — break at gaps
@@ -535,7 +453,7 @@ def _fallback_header_scan(
     zone = min(int(n_rows * config.header_zone_pct), 15)
 
     for tag in row_tags[:zone]:
-        if tag.layer1_tag in ("header_candidate", "title_header_candidate"):
+        if tag.layer1_tag in _HEADER_LIKE_TAGS:
             return [tag.row_index]
     return []
 

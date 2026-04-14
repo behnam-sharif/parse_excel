@@ -9,7 +9,6 @@ v5.1 child-centric rules:
   - Default is PRESERVE children (not absorb).
   - _should_preserve_child() implements a 5-rule "do not absorb" check.
   - Parent row_names = None when parent is a container with children.
-  - Section labels migrate from notes to child titles.
 
 Standalone tables (no children) pass through as ResolvedTables directly.
 Hard invariant: if multiple core regions exist, children MUST exist.
@@ -20,7 +19,7 @@ from __future__ import annotations
 import logging
 import time
 from collections import Counter
-from typing import AbstractSet, Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .config import XlSheetAgentV5Config
 from .schemas import (
@@ -143,53 +142,18 @@ def _resolve_standalone(table: V5TableResult) -> ResolvedTable:
     )
 
 
-def _parent_header_band_above_child(
-    parent_signals: Optional[Dict[str, Any]],
-    child_bbox: Dict[str, int],
-) -> bool:
-    """
-    Allow parent→child header inheritance only when we know the parent's
-    header rows are strictly above the child's bbox on the sheet.
-    """
-    if not parent_signals:
-        return True
-    rows = parent_signals.get("header_abs_rows")
-    if not rows:
-        return True
-    return max(int(x) for x in rows) < int(child_bbox["r1"])
-
-
 def _build_child_resolved(
     child: V5TableResult,
     parent_headers: List[List[str]],
-    parent_bbox: Dict[str, int],
     config: XlSheetAgentV5Config,
-    parent_signals: Optional[Dict[str, Any]] = None,
 ) -> ResolvedTable:
     """Build a leaf ResolvedTable from a non-absorbed child V5TableResult.
 
     The child keeps its own title, row_names, core_regions, notes, and row_tags.
-    If the child has no headers, it inherits the parent's shared headers,
-    sliced to the child's column span when the child lies inside the parent.
+    If the child has no headers, it inherits the parent's shared headers.
     """
     has_local_headers = bool(child.headers)
-    inherit_ok = _parent_header_band_above_child(parent_signals, child.bbox)
-
-    if has_local_headers:
-        headers = list(child.headers)
-    elif parent_headers and inherit_ok:
-        from .header_detector import slice_headers_for_column_span
-
-        cb = child.bbox
-        sliced = slice_headers_for_column_span(
-            parent_headers,
-            parent_bbox["c1"],
-            cb["c1"],
-            cb["c2"],
-        )
-        headers = sliced if sliced else [list(r) for r in parent_headers]
-    else:
-        headers = []
+    headers = list(child.headers) if has_local_headers else list(parent_headers)
 
     # Build signals with provenance tracking (§6)
     child_signals = dict(child.signals)
@@ -198,16 +162,9 @@ def _build_child_resolved(
         "local" if child.title else "none",
     )
     if has_local_headers:
-        hdr_src = "local"
-    elif parent_headers and inherit_ok:
-        hdr_src = "inherited"
-    elif parent_headers and not inherit_ok:
-        hdr_src = "none"
-        child_signals["header_inherit_blocked"] = "parent_header_not_above_child"
+        child_signals["header_source"] = child_signals.get("header_source", "local")
     else:
-        hdr_src = "none"
-
-    child_signals["header_source"] = hdr_src
+        child_signals["header_source"] = child_signals.get("header_source") or "inherited"
 
     return ResolvedTable(
         table_id=child.table_id,
@@ -332,15 +289,8 @@ def _resolve_parent_table(
             parent, substantive_children, ws, config, cut_scores,
         )
 
-    # Step 7: notes — union
+    # Step 7: notes — parent only (children keep notes on nested ResolvedTables)
     notes: List[NoteEntry] = list(parent.notes)
-    seen_rows = {n.row_index for n in notes}
-    for child in children:
-        for note in child.notes:
-            if note.row_index not in seen_rows:
-                notes.append(note)
-                seen_rows.add(note.row_index)
-    notes.sort(key=lambda n: n.row_index)
 
     # Step 8: table role — dominant among substantive children
     table_role = _determine_dominant_role(substantive_children)
@@ -403,7 +353,7 @@ def _resolve_parent_table(
     if config.use_llm_metadata_resolution and llm_client is not None:
         llm_result = _call_llm_metadata_resolution(
             parent, children, core_regions, headers, title, row_names,
-            notes, table_role, ws, config, llm_client, cut_scores,
+            [], table_role, ws, config, llm_client, cut_scores,
         )
         if llm_result:
             metadata_source = "llm_resolved"
@@ -429,16 +379,9 @@ def _resolve_parent_table(
     resolved_children: List[ResolvedTable] = []
     for sc in preserved_children:
         resolved_children.append(
-            _build_child_resolved(sc, headers, bbox, config, parent.signals),
+            _build_child_resolved(sc, headers, config),
         )
 
-    # Step 17: Migrate section-label notes → child titles (v5.1, P1 gated)
-    if config.migrate_section_notes_to_child_titles:
-        notes, resolved_children = _migrate_section_notes_to_children(
-            notes,
-            resolved_children,
-            allowed_note_types=frozenset({"footnote", "source"}),
-        )
     resolved_child_titles = [c.title for c in resolved_children]
 
     return ResolvedTable(
@@ -494,7 +437,7 @@ def _should_preserve_child(
     if child.title and str(child.title).strip():
         return True
     for tag in child.row_tags:
-        if tag.layer1_tag in ("title_candidate", "title_header_candidate") and tag.confidence >= 0.5:
+        if tag.layer1_tag == "title_candidate" and tag.confidence >= 0.5:
             return True
     # Bold short text row at top of child (section-title signal)
     if child.signals.get("has_bold_title_row"):
@@ -523,9 +466,7 @@ def _should_preserve_child(
         if child.title and str(child.title).strip():
             return True
         for tag in child.row_tags:
-            if tag.layer1_tag in (
-                "title_candidate", "title_header_candidate", "header_candidate",
-            ):
+            if tag.layer1_tag in ("title_candidate", "header_candidate"):
                 return True
 
     # Rule 4 — has core regions, or bridges two core regions
@@ -592,55 +533,6 @@ def _is_metadata_only_child(
     if child.hierarchy_role == "child_metadata":
         return True
     return False
-
-
-# ---------------------------------------------------------------------------
-# Section-label note → child title migration (v5.1)
-# ---------------------------------------------------------------------------
-
-def _migrate_section_notes_to_children(
-    notes: List[NoteEntry],
-    resolved_children: List[ResolvedTable],
-    allowed_note_types: Optional[AbstractSet[str]] = None,
-) -> tuple:
-    """Move notes that fall inside a child's leading rows to that child's title.
-
-    A note is considered a section label (not a real note) if:
-      - Its row_index falls within the first 3 rows of a child's bbox, AND
-      - The child currently has no title.
-
-    If ``allowed_note_types`` is set, only those ``note_type`` values may migrate
-    (P1: blocks generic ``annotation`` notes from becoming child titles).
-
-    Returns (remaining_notes, updated_children).
-    """
-    if not resolved_children or not notes:
-        return notes, resolved_children
-
-    remaining: List[NoteEntry] = []
-    claimed_rows: set = set()
-
-    for note in notes:
-        if allowed_note_types is not None and note.note_type not in allowed_note_types:
-            remaining.append(note)
-            continue
-
-        migrated = False
-        for child in resolved_children:
-            if child.title and str(child.title).strip():
-                continue  # child already has a title
-            cr1 = child.bbox.get("r1", 0)
-            # Note must be in the first 3 rows of the child's bbox
-            if cr1 <= note.row_index <= cr1 + 2:
-                child.title = note.text
-                child.signals["title_source"] = "section_migration"
-                claimed_rows.add(note.row_index)
-                migrated = True
-                break
-        if not migrated:
-            remaining.append(note)
-
-    return remaining, resolved_children
 
 
 # ---------------------------------------------------------------------------

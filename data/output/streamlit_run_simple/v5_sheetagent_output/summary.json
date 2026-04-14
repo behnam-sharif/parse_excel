@@ -55,15 +55,15 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 11,
+        "input": 9,
+        "calc": 21,
         "metadata": 2,
-        "mixed": 8,
-        "calc": 18
+        "mixed": 7
       },
       "resolved_table_roles": {
         "input": 3,
-        "mixed": 6,
-        "calc": 18
+        "mixed": 5,
+        "calc": 19
       }
     }
   ]

@@ -22,11 +22,6 @@ _SECTION_KEYWORDS = frozenset({
     "market share", "patient", "calculation", "total", "subtotal",
 })
 
-_NOTE_KEYWORDS = frozenset({
-    "note", "notes", "source", "sources", "footnote", "footnotes",
-    "reference", "references", "assumption", "assumptions",
-})
-
 
 def collect_candidates(
     hierarchy_role: str,
