@@ -294,6 +294,31 @@ def _resolve_parent_table(
         core_regions = list(parent.core_regions)
     core_regions.sort(key=lambda cr: (cr.bbox.get("r1", 0), cr.bbox.get("c1", 0)))
 
+    # Normalize core regions to start below the resolved header band.
+    #
+    # Rationale:
+    # - LLM Rule 1 (parent_header_formula) may shift core-start down.
+    # - In v5.1 resolution we often union child core regions; those children can
+    #   still carry small "top bands" that overlap the parent's header rows.
+    # - For consumers (and the orchestrator UI), core regions should never
+    #   include header rows.
+    if headers and bbox:
+        try:
+            header_band_abs_end = int(bbox.get("r1", 0)) + len(headers)
+            updated_core: List[CoreRegion] = []
+            for cr in core_regions:
+                r1 = int(cr.bbox.get("r1", 0))
+                r2 = int(cr.bbox.get("r2", 0))
+                if r2 < header_band_abs_end:
+                    continue
+                if r1 < header_band_abs_end:
+                    cr.bbox["r1"] = header_band_abs_end
+                updated_core.append(cr)
+            core_regions = updated_core
+        except Exception:
+            # Best-effort normalization; do not fail resolution.
+            pass
+
     # Step 6: row names — container vs leaf semantics (v5.1)
     # If parent has preserved children, it is a pure container: row_names = None.
     # Each child keeps its own row_names from collect_candidates().

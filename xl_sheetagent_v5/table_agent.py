@@ -47,6 +47,7 @@ def analyze_table(
     llm_call_counter: Optional[List[int]] = None,
     audit_records: Optional[Dict[str, List]] = None,
     cut_scores: Optional[List[Dict[str, Any]]] = None,
+    formula_peek: Any = None,
 ) -> V5TableResult:
     """
     Full per-table analysis pipeline.
@@ -101,6 +102,7 @@ def analyze_table(
             structural_summary, config, llm_client,
             llm_call_counter, audit_records, signals,
             cut_scores,
+            formula_peek,
         )
     except Exception as exc:
         # Fallback: return minimal result with confidence 0
@@ -127,6 +129,7 @@ def _analyze_table_inner(
     structural_summary, config, llm_client,
     llm_call_counter, audit_records, signals,
     cut_scores=None,
+    formula_peek=None,
 ) -> V5TableResult:
     n_rows = len(grid)
 
@@ -230,6 +233,7 @@ def _analyze_table_inner(
             llm_call_counter=llm_call_counter,
             audit_records=audit_records, signals=signals,
             formatting_data=None,
+            formula_peek=formula_peek,
         )
 
     # Step 7: Layer 2 tag resolution

@@ -1,4 +1,327 @@
 {
+  "Introduction": {
+    "run_id": "streamlit_run_simple",
+    "sheet_name": "Introduction",
+    "resolved_tables": [
+      {
+        "table_id": "f57ac8d2e4e4931a_t3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_t3",
+          "f57ac8d2e4e4931a_t3_child1",
+          "f57ac8d2e4e4931a_t3_child2"
+        ],
+        "bbox": {
+          "r1": 10,
+          "c1": 2,
+          "r2": 12,
+          "c2": 4,
+          "hierarchy_role": "parent",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_t3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value ",
+            "",
+            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          },
+          {
+            "row_index": 1,
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.3
+          },
+          {
+            "row_index": 2,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "none"
+          },
+          "alignment": {
+            "data": "center"
+          },
+          "header_merges": []
+        },
+        "confidence": 0.422,
+        "signals": {
+          "excel_range": "C11:E13",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
+          "title_source": "none",
+          "header_source": "local",
+          "n_children_absorbed": 0,
+          "n_children_preserved": 2
+        },
+        "child_summaries": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          }
+        ],
+        "metadata_source": "heuristic",
+        "child_titles": [
+          null,
+          null
+        ],
+        "children": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child1"
+            ],
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "none"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.43,
+            "signals": {
+              "excel_range": "C11:E11",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child2"
+            ],
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "outline"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.43,
+            "signals": {
+              "excel_range": "C13:E13",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "child_titles": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "table_id": "f57ac8d2e4e4931a_b3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_b3"
+        ],
+        "bbox": {
+          "r1": 14,
+          "c1": 2,
+          "r2": 14,
+          "c2": 4,
+          "hierarchy_role": "standalone",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_b3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "outline"
+          },
+          "alignment": {},
+          "header_merges": []
+        },
+        "confidence": 0.43,
+        "signals": {
+          "excel_range": "C15:E15",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
+          "title_source": "none",
+          "header_source": "local"
+        },
+        "child_summaries": [],
+        "metadata_source": "heuristic",
+        "child_titles": [],
+        "children": []
+      }
+    ]
+  },
   "Results": {
     "run_id": "streamlit_run_simple",
     "sheet_name": "Results",
@@ -113,9 +436,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.69,
+        "confidence": 0.694,
         "signals": {
           "excel_range": "B4:E10",
+          "llm_rules_triggered": [
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -216,9 +543,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.559,
+            "confidence": 0.58,
             "signals": {
               "excel_range": "B4:E4",
+              "llm_rules_triggered": [
+                "header_title_collision"
+              ],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -336,9 +667,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.637,
+            "confidence": 0.63,
             "signals": {
               "excel_range": "B5:E10",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "none"
             },
@@ -497,9 +830,11 @@
             }
           ]
         },
-        "confidence": 0.587,
+        "confidence": 0.589,
         "signals": {
           "excel_range": "B48:L57",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -615,9 +950,11 @@
                 }
               ]
             },
-            "confidence": 0.412,
+            "confidence": 0.43,
             "signals": {
               "excel_range": "C48:H48",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -762,9 +1099,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.595,
+            "confidence": 0.587,
             "signals": {
               "excel_range": "B49:L57",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "none"
             },
@@ -875,9 +1214,11 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.588,
+        "confidence": 0.58,
         "signals": {
           "excel_range": "G59:L64",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "none"
         },
@@ -1286,9 +1627,11 @@
             }
           ]
         },
-        "confidence": 0.648,
+        "confidence": 0.654,
         "signals": {
           "excel_range": "B3:F47",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -1383,7 +1726,7 @@
         ],
         "metadata_source": "heuristic",
         "child_titles": [
-          null,
+          "Value used in the model",
           "Patient population",
           "Market shares in world without InO",
           "Market shares in world with InO",
@@ -1405,10 +1748,10 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_t45_child1"
             },
-            "title": null,
+            "title": "Value used in the model",
             "headers": [
               [
-                "Value used in the model",
+                "",
                 "Default",
                 "User input",
                 "Description "
@@ -1422,38 +1765,39 @@
               {
                 "row_index": 0,
                 "layer1_tag": "header_candidate",
-                "layer2_tag": "consumed_header",
+                "layer2_tag": "consumed_title",
                 "confidence": 0.9
               }
             ],
             "formatting": {
               "bold": {
-                "title": false,
-                "headers": true,
+                "title": true,
+                "headers": false,
                 "row_names": false,
                 "notes": false
               },
               "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
+                "title": "Values must be of type <class 'str'>",
+                "headers": null
               },
               "borders": {
-                "headers": "full_grid"
+                "headers": "none"
               },
               "alignment": {},
-              "header_merges": [
-                {
-                  "r1": 2,
-                  "c1": 5,
-                  "r2": 2,
-                  "c2": 8
-                }
-              ]
+              "header_merges": []
             },
-            "confidence": 0.618,
+            "confidence": 0.69,
             "signals": {
               "excel_range": "C3:F3",
-              "title_source": "none",
+              "llm_header_title_collision_applied": true,
+              "llm_composite_title_col": 0,
+              "llm_rules_triggered": [
+                "header_title_collision"
+              ],
+              "llm_rules_applied": [
+                "header_title_collision"
+              ],
+              "title_source": "local",
               "header_source": "local"
             },
             "child_summaries": [],
@@ -1547,9 +1891,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.618,
+            "confidence": 0.61,
             "signals": {
               "excel_range": "B4:F6",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -1723,9 +2069,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.596,
+            "confidence": 0.588,
             "signals": {
               "excel_range": "B7:F20",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -1899,9 +2247,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.596,
+            "confidence": 0.588,
             "signals": {
               "excel_range": "B21:F34",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -2066,9 +2416,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.595,
+            "confidence": 0.587,
             "signals": {
               "excel_range": "B35:F47",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -2096,10 +2448,10 @@
           "split_depth": 0,
           "v3a_table_id": "9814fc53f594ba29_b45_t24"
         },
-        "title": null,
+        "title": "Adverse events, frequencies (same as global models)",
         "headers": [
           [
-            "Adverse events, frequencies (same as global models)",
+            "",
             "Inotuzumab Ozogamicin ",
             "FLAG-Ida ",
             "FLAG ",
@@ -2153,7 +2505,7 @@
           {
             "row_index": 0,
             "layer1_tag": "header_candidate",
-            "layer2_tag": "consumed_header",
+            "layer2_tag": "consumed_title",
             "confidence": 0.9
           },
           {
@@ -2303,8 +2655,8 @@
             "notes": false
           },
           "fill": {
-            "title": null,
-            "headers": "Values must be of type <class 'str'>"
+            "title": "Values must be of type <class 'str'>",
+            "headers": null
           },
           "borders": {
             "headers": "none",
@@ -2313,10 +2665,18 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.821,
+        "confidence": 0.851,
         "signals": {
           "excel_range": "B49:N72",
-          "title_source": "none",
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
@@ -2359,7 +2719,7 @@
         ],
         "metadata_source": "heuristic",
         "child_titles": [
-          null,
+          "Adverse events, frequencies (same as global models)",
           "Adverse events, costs"
         ],
         "children": [
@@ -2378,10 +2738,10 @@
               "split_depth": 1,
               "v3a_table_id": "9814fc53f594ba29_b45_t24_child1"
             },
-            "title": null,
+            "title": "Adverse events, frequencies (same as global models)",
             "headers": [
               [
-                "Adverse events, frequencies (same as global models)",
+                "",
                 "Inotuzumab Ozogamicin ",
                 "FLAG-Ida ",
                 "FLAG ",
@@ -2432,7 +2792,7 @@
               {
                 "row_index": 0,
                 "layer1_tag": "header_candidate",
-                "layer2_tag": "consumed_header",
+                "layer2_tag": "consumed_title",
                 "confidence": 0.9
               },
               {
@@ -2510,8 +2870,8 @@
                 "notes": false
               },
               "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
+                "title": "Values must be of type <class 'str'>",
+                "headers": null
               },
               "borders": {
                 "headers": "none",
@@ -2520,10 +2880,18 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.86,
+            "confidence": 0.907,
             "signals": {
               "excel_range": "B49:N60",
-              "title_source": "none",
+              "llm_header_title_collision_applied": true,
+              "llm_composite_title_col": 0,
+              "llm_rules_triggered": [
+                "header_title_collision"
+              ],
+              "llm_rules_applied": [
+                "header_title_collision"
+              ],
+              "title_source": "local",
               "header_source": "local"
             },
             "child_summaries": [],
@@ -2680,11 +3048,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.743,
+            "confidence": 0.738,
             "signals": {
               "excel_range": "B61:F72",
               "header_inherited_from": "9814fc53f594ba29_t45",
               "inheritance_kind": "above_parent",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "inherited_above_parent"
             },
@@ -3121,9 +3491,11 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.668,
+        "confidence": 0.671,
         "signals": {
           "excel_range": "B74:N118",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "metadata_merged",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -3333,9 +3705,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.471,
+            "confidence": 0.49,
             "signals": {
               "excel_range": "B74:F74",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -3452,9 +3826,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.835,
+            "confidence": 0.832,
             "signals": {
               "excel_range": "B75:N79",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -3517,9 +3893,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.471,
+            "confidence": 0.49,
             "signals": {
               "excel_range": "B80:F80",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -3636,9 +4014,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.835,
+            "confidence": 0.832,
             "signals": {
               "excel_range": "B81:N85",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "local"
             },
@@ -3747,11 +4127,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.753,
+            "confidence": 0.748,
             "signals": {
               "excel_range": "B86:F90",
               "header_inherited_from": "9814fc53f594ba29_t45",
               "inheritance_kind": "above_parent",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "inherited_above_parent"
             },
@@ -3837,9 +4219,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.353,
+            "confidence": 0.37,
             "signals": {
               "excel_range": "B91",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -4011,11 +4395,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.738,
+            "confidence": 0.733,
             "signals": {
               "excel_range": "B92:F105",
               "header_inherited_from": "9814fc53f594ba29_t45",
               "inheritance_kind": "above_parent",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "inherited_above_parent"
             },
@@ -4180,11 +4566,13 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.742,
+            "confidence": 0.737,
             "signals": {
               "excel_range": "B106:F118",
               "header_inherited_from": "9814fc53f594ba29_t45",
               "inheritance_kind": "above_parent",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "inherited_above_parent"
             },
@@ -4251,11 +4639,13 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.412,
+        "confidence": 0.43,
         "signals": {
           "excel_range": "B120:F120",
           "header_inherited_from": "9814fc53f594ba29_t45",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -4320,328 +4710,15 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.412,
+        "confidence": 0.43,
         "signals": {
           "excel_range": "B122:F122",
           "header_inherited_from": "9814fc53f594ba29_t45",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
-        },
-        "child_summaries": [],
-        "metadata_source": "heuristic",
-        "child_titles": [],
-        "children": []
-      }
-    ]
-  },
-  "Introduction": {
-    "run_id": "streamlit_run_simple",
-    "sheet_name": "Introduction",
-    "resolved_tables": [
-      {
-        "table_id": "f57ac8d2e4e4931a_t3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_t3",
-          "f57ac8d2e4e4931a_t3_child1",
-          "f57ac8d2e4e4931a_t3_child2"
-        ],
-        "bbox": {
-          "r1": 10,
-          "c1": 2,
-          "r2": 12,
-          "c2": 4,
-          "hierarchy_role": "parent",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_t3"
-        },
-        "title": null,
-        "headers": [
-          [
-            "Value ",
-            "",
-            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-          ]
-        ],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "metadata",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "consumed_header",
-            "confidence": 0.55
-          },
-          {
-            "row_index": 1,
-            "layer1_tag": "data_candidate",
-            "layer2_tag": "data",
-            "confidence": 0.3
-          },
-          {
-            "row_index": 2,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "unassigned_context",
-            "confidence": 0.55
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": null,
-            "headers": "Values must be of type <class 'str'>"
-          },
-          "borders": {
-            "headers": "none"
-          },
-          "alignment": {
-            "data": "center"
-          },
-          "header_merges": []
-        },
-        "confidence": 0.404,
-        "signals": {
-          "excel_range": "C11:E13",
-          "title_source": "none",
-          "header_source": "local",
-          "n_children_absorbed": 0,
-          "n_children_preserved": 2
-        },
-        "child_summaries": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          }
-        ],
-        "metadata_source": "heuristic",
-        "child_titles": [
-          null,
-          null
-        ],
-        "children": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child1"
-            ],
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-              ]
-            ],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_header_candidate",
-                "layer2_tag": "consumed_header",
-                "confidence": 0.55
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
-              },
-              "borders": {
-                "headers": "none"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.412,
-            "signals": {
-              "excel_range": "C11:E11",
-              "title_source": "none",
-              "header_source": "local"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "child_titles": [],
-            "children": []
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child2"
-            ],
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells can be changed to accommodate user inputs"
-              ]
-            ],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_header_candidate",
-                "layer2_tag": "consumed_header",
-                "confidence": 0.55
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
-              },
-              "borders": {
-                "headers": "outline"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.412,
-            "signals": {
-              "excel_range": "C13:E13",
-              "title_source": "none",
-              "header_source": "local"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "child_titles": [],
-            "children": []
-          }
-        ]
-      },
-      {
-        "table_id": "f57ac8d2e4e4931a_b3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_b3"
-        ],
-        "bbox": {
-          "r1": 14,
-          "c1": 2,
-          "r2": 14,
-          "c2": 4,
-          "hierarchy_role": "standalone",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_b3"
-        },
-        "title": null,
-        "headers": [
-          [
-            "Value",
-            "",
-            "The content of these cells is used in the model and can not be changed"
-          ]
-        ],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "metadata",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "consumed_header",
-            "confidence": 0.55
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": null,
-            "headers": "Values must be of type <class 'str'>"
-          },
-          "borders": {
-            "headers": "outline"
-          },
-          "alignment": {},
-          "header_merges": []
-        },
-        "confidence": 0.412,
-        "signals": {
-          "excel_range": "C15:E15",
-          "title_source": "none",
-          "header_source": "local"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -4671,16 +4748,16 @@
           "split_depth": 0,
           "v3a_table_id": "94c8c58d611b9e70_t103"
         },
-        "title": null,
+        "title": "BIM calculation",
         "headers": [
           [
-            "World without InO",
             "",
             "",
-            "",
-            "",
-            "",
-            ""
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024"
           ]
         ],
         "row_names": null,
@@ -4688,7 +4765,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 2,
+              "r1": 3,
               "c1": 3,
               "r2": 3,
               "c2": 7
@@ -4812,7 +4889,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -4830,7 +4907,7 @@
           {
             "row_index": 3,
             "layer1_tag": "header_candidate",
-            "layer2_tag": "consumed_header",
+            "layer2_tag": "unassigned_context",
             "confidence": 0.9
           },
           {
@@ -5430,17 +5507,17 @@
         ],
         "formatting": {
           "bold": {
-            "title": false,
-            "headers": true,
+            "title": true,
+            "headers": false,
             "row_names": false,
             "notes": false
           },
           "fill": {
-            "title": null,
-            "headers": "FF7CDFA8"
+            "title": "Values must be of type <class 'str'>",
+            "headers": null
           },
           "borders": {
-            "headers": "outline",
+            "headers": "none",
             "core": "outline"
           },
           "alignment": {
@@ -5448,10 +5525,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.681,
+        "confidence": 0.691,
         "signals": {
           "excel_range": "B3:H105",
-          "title_source": "none",
+          "llm_parent_header_formula_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_formula",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_formula",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
@@ -5516,13 +5604,13 @@
             "title": null,
             "headers": [
               [
-                "World without InO",
                 "",
                 "",
-                "",
-                "",
-                "",
-                ""
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
               ]
             ],
             "row_names": [
@@ -5533,7 +5621,7 @@
             "core_regions": [
               {
                 "bbox": {
-                  "r1": 2,
+                  "r1": 3,
                   "c1": 3,
                   "r2": 3,
                   "c2": 7
@@ -5580,9 +5668,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.588,
+            "confidence": 0.58,
             "signals": {
               "excel_range": "B3:H4",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "none"
             },
@@ -5609,13 +5699,13 @@
             "title": "World without InO",
             "headers": [
               [
-                "World without InO",
                 "",
                 "",
-                "",
-                "",
-                "",
-                ""
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
               ]
             ],
             "row_names": [
@@ -6443,9 +6533,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.595,
+            "confidence": 0.587,
             "signals": {
               "excel_range": "B6:H105",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "none"
             },
@@ -6579,9 +6671,11 @@
           "alignment": {},
           "header_merges": []
         },
-        "confidence": 0.658,
+        "confidence": 0.662,
         "signals": {
           "excel_range": "M12:Y19",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "local",
           "header_source": "local",
           "n_children_absorbed": 0,
@@ -6697,9 +6791,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.551,
+            "confidence": 0.573,
             "signals": {
               "excel_range": "M12:Y13",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "local",
               "header_source": "local"
             },
@@ -6824,9 +6920,11 @@
               "alignment": {},
               "header_merges": []
             },
-            "confidence": 0.588,
+            "confidence": 0.58,
             "signals": {
               "excel_range": "M14:Y19",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "none"
             },
@@ -6852,8 +6950,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_t57_t25_t17_b8"
         },
-        "title": null,
-        "headers": [],
+        "title": "Current situation",
+        "headers": [
+          [
+            "INO",
+            "",
+            "",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "INO"
         ],
@@ -6861,7 +6978,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 21,
+              "r1": 22,
               "c1": 16,
               "r2": 27,
               "c2": 20
@@ -6873,21 +6990,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 21,
-              "c1": 22,
-              "r2": 21,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -6925,7 +7027,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -6973,7 +7075,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -6985,10 +7087,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M22:AB28",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 2,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -7166,11 +7279,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O30:AB36",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -7194,8 +7309,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7"
         },
-        "title": null,
-        "headers": [],
+        "title": "FLAG-Ida",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "FLAG-Ida"
         ],
@@ -7203,7 +7337,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 37,
+              "r1": 38,
               "c1": 16,
               "r2": 43,
               "c2": 20
@@ -7215,21 +7349,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 37,
-              "c1": 22,
-              "r2": 37,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -7267,7 +7386,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -7315,7 +7434,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -7327,10 +7446,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M38:AB44",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -7508,11 +7638,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O46:AB52",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -7536,8 +7668,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_t57_b25_t23_b15"
         },
-        "title": null,
-        "headers": [],
+        "title": "Current situation",
+        "headers": [
+          [
+            "FLAG",
+            "",
+            "",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "FLAG"
         ],
@@ -7545,7 +7696,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 53,
+              "r1": 54,
               "c1": 16,
               "r2": 59,
               "c2": 20
@@ -7557,21 +7708,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 53,
-              "c1": 22,
-              "r2": 53,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -7609,7 +7745,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -7657,7 +7793,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -7669,10 +7805,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M54:AB60",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 2,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -7850,11 +7997,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O62:AB68",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -7878,8 +8027,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_t16_t8"
         },
-        "title": null,
-        "headers": [],
+        "title": "MXN & Ara-C",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "MXN & Ara-C"
         ],
@@ -7887,7 +8055,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 69,
+              "r1": 70,
               "c1": 16,
               "r2": 75,
               "c2": 20
@@ -7899,21 +8067,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 69,
-              "c1": 22,
-              "r2": 69,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -7951,7 +8104,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -7999,7 +8152,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -8011,10 +8164,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M70:AB76",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -8192,11 +8356,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O78:AB84",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -8220,8 +8386,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7"
         },
-        "title": null,
-        "headers": [],
+        "title": "HIDAC",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "HIDAC"
         ],
@@ -8229,7 +8414,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 85,
+              "r1": 86,
               "c1": 16,
               "r2": 91,
               "c2": 20
@@ -8241,21 +8426,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 85,
-              "c1": 22,
-              "r2": 85,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -8293,7 +8463,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -8341,7 +8511,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -8353,10 +8523,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M86:AB92",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -8534,11 +8715,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O94:AB100",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -8562,8 +8745,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15"
         },
-        "title": null,
-        "headers": [],
+        "title": "DVP-Asp",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "DVP-Asp"
         ],
@@ -8571,7 +8773,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 101,
+              "r1": 102,
               "c1": 16,
               "r2": 107,
               "c2": 20
@@ -8583,21 +8785,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 101,
-              "c1": 22,
-              "r2": 101,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -8635,7 +8822,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -8683,7 +8870,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -8695,10 +8882,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M102:AB108",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -8722,7 +8920,17 @@
           "v3a_table_id": "94c8c58d611b9e70_b103"
         },
         "title": "World with InO",
-        "headers": [],
+        "headers": [
+          [
+            "Current treatments used ",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ]
+        ],
         "row_names": [
           "Inotuzumab Ozogamicin",
           "FLAG-Ida",
@@ -8935,7 +9143,7 @@
           {
             "row_index": 1,
             "layer1_tag": "title_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer2_tag": "consumed_header",
             "confidence": 0.9
           },
           {
@@ -9536,10 +9744,10 @@
           },
           "fill": {
             "title": "FF781450",
-            "headers": null
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
-            "headers": "none",
+            "headers": "outline",
             "core": "outline"
           },
           "alignment": {
@@ -9547,11 +9755,20 @@
           },
           "header_merges": []
         },
-        "confidence": 0.596,
+        "confidence": 0.908,
         "signals": {
           "excel_range": "B107:H206",
+          "header_inherited_from": "94c8c58d611b9e70_t103",
+          "inheritance_kind": "above_parent",
+          "llm_parent_header_composite_applied": true,
+          "llm_rules_triggered": [
+            "parent_header_composite"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite"
+          ],
           "title_source": "local",
-          "header_source": "none"
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -9728,11 +9945,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O110:AB116",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -9756,8 +9975,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_t16_t8"
         },
-        "title": null,
-        "headers": [],
+        "title": "DVP-Asp+Cyclo",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "DVP-Asp+Cyclo"
         ],
@@ -9765,7 +10003,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 117,
+              "r1": 118,
               "c1": 16,
               "r2": 123,
               "c2": 20
@@ -9777,21 +10015,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 117,
-              "c1": 22,
-              "r2": 117,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -9829,7 +10052,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -9877,7 +10100,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -9889,10 +10112,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M118:AB124",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -10070,11 +10304,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O126:AB132",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -10098,8 +10334,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7"
         },
-        "title": null,
-        "headers": [],
+        "title": "hCVAD+MTX",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "hCVAD+MTX"
         ],
@@ -10107,7 +10362,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 133,
+              "r1": 134,
               "c1": 16,
               "r2": 139,
               "c2": 20
@@ -10119,21 +10374,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 133,
-              "c1": 22,
-              "r2": 133,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -10171,7 +10411,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -10219,7 +10459,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -10231,10 +10471,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M134:AB140",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -10412,11 +10663,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O142:AB148",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -10440,8 +10693,27 @@
           "split_depth": 0,
           "v3a_table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15"
         },
-        "title": null,
-        "headers": [],
+        "title": "Blinatumomab",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "Blinatumomab"
         ],
@@ -10449,7 +10721,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 149,
+              "r1": 150,
               "c1": 16,
               "r2": 155,
               "c2": 20
@@ -10461,21 +10733,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 149,
-              "c1": 22,
-              "r2": 149,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -10513,7 +10770,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -10561,7 +10818,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -10573,10 +10830,21 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.679,
         "signals": {
           "excel_range": "M150:AB156",
-          "title_source": "none",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
           "header_source": "none"
         },
         "child_summaries": [],
@@ -10762,11 +11030,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.782,
+        "confidence": 0.777,
         "signals": {
           "excel_range": "O158:AB163",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -10795,54 +11065,27 @@
         "title": null,
         "headers": [
           [
-            "Year",
-            "INO",
-            "FLAG-Ida",
-            "FLAG",
-            "MXN & Ara-C ",
-            "HIDAC",
-            "DVP-Asp",
-            "DVP-Asp+Cyclo",
-            "hCVAD+MTX",
-            "Blinatumomab",
-            "TKI -Ponatinib",
-            "TKI + vincristine",
-            "Clofarabine"
+            "",
+            "",
+            "2024",
+            "",
+            "0.052536285713814",
+            "0.058918201416406954",
+            "0.09455366378651747",
+            "0.175607838426471",
+            "0.5235",
+            "",
+            "0.006381915702592951",
+            "0.03563546237011052",
+            "0.08105417463995354",
+            "0.347892161573529",
+            "0.9765",
+            "1.4474637142861861"
           ]
         ],
         "row_names": null,
         "notes": [],
         "core_regions": [
-          {
-            "bbox": {
-              "r1": 177,
-              "c1": 16,
-              "r2": 177,
-              "c2": 20
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
-          {
-            "bbox": {
-              "r1": 177,
-              "c1": 22,
-              "r2": 177,
-              "c2": 27
-            },
-            "n_cells": 6,
-            "cell_type_distribution": {
-              "NUMBER": 6,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
-          },
           {
             "bbox": {
               "r1": 179,
@@ -10909,7 +11152,7 @@
           {
             "row_index": 0,
             "layer1_tag": "data_candidate",
-            "layer2_tag": "data",
+            "layer2_tag": "consumed_header",
             "confidence": 0.8
           },
           {
@@ -10921,7 +11164,7 @@
           {
             "row_index": 2,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "unassigned_context",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -10969,11 +11212,11 @@
             "notes": false
           },
           "fill": {
-            "title": null,
-            "headers": null
+            "title": "Values must be of type <class 'str'>",
+            "headers": "Values must be of type <class 'str'>"
           },
           "borders": {
-            "headers": "none",
+            "headers": "horizontal_only",
             "core": "none"
           },
           "alignment": {
@@ -10981,11 +11224,18 @@
           },
           "header_merges": []
         },
-        "confidence": 0.685,
+        "confidence": 0.695,
         "signals": {
           "excel_range": "M178:AB186",
+          "llm_parent_header_formula_applied": true,
+          "llm_rules_triggered": [
+            "parent_header_formula"
+          ],
+          "llm_rules_applied": [
+            "parent_header_formula"
+          ],
           "title_source": "none",
-          "header_source": "inherited",
+          "header_source": "local",
           "n_children_absorbed": 0,
           "n_children_preserved": 2
         },
@@ -11127,11 +11377,13 @@
               },
               "header_merges": []
             },
-            "confidence": 0.794,
+            "confidence": 0.79,
             "signals": {
               "excel_range": "O178:AB178",
               "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
               "inheritance_kind": "above_parent",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "inherited_above_parent"
             },
@@ -11158,19 +11410,22 @@
             "title": null,
             "headers": [
               [
-                "Year",
-                "INO",
-                "FLAG-Ida",
-                "FLAG",
-                "MXN & Ara-C ",
-                "HIDAC",
-                "DVP-Asp",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX",
-                "Blinatumomab",
-                "TKI -Ponatinib",
-                "TKI + vincristine",
-                "Clofarabine"
+                "",
+                "",
+                "2024",
+                "",
+                "0.052536285713814",
+                "0.058918201416406954",
+                "0.09455366378651747",
+                "0.175607838426471",
+                "0.5235",
+                "",
+                "0.006381915702592951",
+                "0.03563546237011052",
+                "0.08105417463995354",
+                "0.347892161573529",
+                "0.9765",
+                "1.4474637142861861"
               ]
             ],
             "row_names": [
@@ -11304,9 +11559,11 @@
               },
               "header_merges": []
             },
-            "confidence": 0.637,
+            "confidence": 0.629,
             "signals": {
               "excel_range": "M180:AB186",
+              "llm_rules_triggered": [],
+              "llm_rules_applied": [],
               "title_source": "none",
               "header_source": "none"
             },
@@ -11487,11 +11744,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O188:AB194",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -11515,8 +11774,27 @@
           "split_depth": 0,
           "v3a_table_id": "076daba6b93bd14c_b17_t23_t15_t7"
         },
-        "title": null,
-        "headers": [],
+        "title": "TKI + vincristine",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "TKI + vincristine"
         ],
@@ -11524,7 +11802,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 195,
+              "r1": 196,
               "c1": 16,
               "r2": 201,
               "c2": 20
@@ -11536,21 +11814,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 195,
-              "c1": 22,
-              "r2": 195,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -11588,7 +11851,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -11636,7 +11899,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -11648,11 +11911,24 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.874,
         "signals": {
           "excel_range": "M196:AB202",
-          "title_source": "none",
-          "header_source": "none"
+          "header_inherited_from": "076daba6b93bd14c_t17_t9",
+          "inheritance_kind": "above_parent",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -11829,11 +12105,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O204:AB210",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },
@@ -11857,8 +12135,27 @@
           "split_depth": 0,
           "v3a_table_id": "076daba6b93bd14c_b17_t23_b15"
         },
-        "title": null,
-        "headers": [],
+        "title": "Clofarabine",
+        "headers": [
+          [
+            "",
+            "",
+            "Current situation",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "Total "
+          ]
+        ],
         "row_names": [
           "Clofarabine"
         ],
@@ -11866,7 +12163,7 @@
         "core_regions": [
           {
             "bbox": {
-              "r1": 211,
+              "r1": 212,
               "c1": 16,
               "r2": 217,
               "c2": 20
@@ -11878,21 +12175,6 @@
             },
             "density": 1.0,
             "role_hint": "mixed"
-          },
-          {
-            "bbox": {
-              "r1": 211,
-              "c1": 22,
-              "r2": 211,
-              "c2": 26
-            },
-            "n_cells": 5,
-            "cell_type_distribution": {
-              "NUMBER": 5,
-              "FORMULA": 0
-            },
-            "density": 1.0,
-            "role_hint": "input"
           },
           {
             "bbox": {
@@ -11930,7 +12212,7 @@
           {
             "row_index": 0,
             "layer1_tag": "rowname_candidate",
-            "layer2_tag": "consumed_rowname",
+            "layer2_tag": "consumed_title",
             "confidence": 0.6
           },
           {
@@ -11978,7 +12260,7 @@
             "notes": false
           },
           "fill": {
-            "title": null,
+            "title": "Values must be of type <class 'str'>",
             "headers": null
           },
           "borders": {
@@ -11990,11 +12272,24 @@
           },
           "header_merges": []
         },
-        "confidence": 0.637,
+        "confidence": 0.829,
         "signals": {
           "excel_range": "M212:AB218",
-          "title_source": "none",
-          "header_source": "none"
+          "header_inherited_from": "076daba6b93bd14c_t17_t9",
+          "inheritance_kind": "above_parent",
+          "llm_parent_header_composite_applied": true,
+          "llm_header_title_collision_applied": true,
+          "llm_composite_title_col": 0,
+          "llm_rules_triggered": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "llm_rules_applied": [
+            "parent_header_composite",
+            "header_title_collision"
+          ],
+          "title_source": "local",
+          "header_source": "inherited_above_parent"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",
@@ -12171,11 +12466,13 @@
           },
           "header_merges": []
         },
-        "confidence": 0.784,
+        "confidence": 0.779,
         "signals": {
           "excel_range": "O220:AB226",
           "header_inherited_from": "1f634d7d13c5e37c_t57_t25_t17_t8",
           "inheritance_kind": "above_parent",
+          "llm_rules_triggered": [],
+          "llm_rules_applied": [],
           "title_source": "none",
           "header_source": "inherited_above_parent"
         },

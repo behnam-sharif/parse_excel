@@ -82,6 +82,7 @@ def run_llm_rules(
     audit_records: Optional[Dict[str, List]],
     signals: Dict[str, Any],
     formatting_data: Optional[Dict[str, Any]] = None,
+    formula_peek: Any = None,
 ) -> List[LLMRuleResult]:
     """
     Run all registered LLM rules against the current table state.
@@ -120,6 +121,7 @@ def run_llm_rules(
             candidates=candidates, bbox=bbox,
             hierarchy_role=hierarchy_role, merge_info=merge_info,
             bold_rows=bold_rows, config=config,
+            formula_peek=formula_peek,
         )
 
         if not triggered:
@@ -199,6 +201,9 @@ def run_llm_rules(
                 header_indices=header_indices, consumed=consumed,
                 candidates=candidates, row_tags=row_tags,
                 signals=signals, config=config,
+                bbox=bbox,
+                grid=grid,
+                merge_info=merge_info,
             )
 
             if was_applied:
@@ -248,7 +253,7 @@ def _detect_parent_header_formula(
     header_indices, consumed, candidates, bbox,
     hierarchy_role, merge_info, bold_rows, config, **kw,
 ) -> Tuple[bool, Dict[str, Any]]:
-    """Trigger when parent bbox row 0 is inside a core region and has formulas."""
+    """Trigger when parent bbox row 0 is inside a core region and has number/formula cells."""
     if hierarchy_role != "parent":
         return False, {}
     if not core_regions:
@@ -257,17 +262,33 @@ def _detect_parent_header_formula(
     # Check if row 0 is inside a core region
     cr = core_regions[0]
     cr_r1 = cr.bbox.get("r1", 0)
-    if cr_r1 != 0:
+    # core_region bbox is stored in ABSOLUTE sheet coordinates; bbox["r1"] is the
+    # ABSOLUTE top row of the table.  Row 0 (local) corresponds to bbox["r1"].
+    if cr_r1 != bbox.get("r1", 0):
         return False, {}
 
-    # Check for FORMULA cells in row 0
+    # Row 0 must look like core material: NUMBER or FORMULA in types (cached
+    # formula results often appear as NUMBER under data_only=True).
     if not types or not types[0]:
         return False, {}
-    formula_cols = [c for c, t in enumerate(types[0]) if t == "FORMULA"]
-    if not formula_cols:
-        return False, {}
+    signal_cols = [
+        c for c, t in enumerate(types[0])
+        if t in ("NUMBER", "FORMULA")
+    ]
+    if not signal_cols:
+        # Optional: true formula columns when types lack FORMULA (future / edge cases).
+        formula_peek = kw.get("formula_peek")
+        if formula_peek is not None:
+            try:
+                peeked = formula_peek(bbox, 0)
+                if isinstance(peeked, list):
+                    signal_cols = [int(c) for c in peeked if isinstance(c, int)]
+            except Exception:
+                signal_cols = []
+        if not signal_cols:
+            return False, {}
 
-    return True, {"formula_cols": formula_cols, "core_region_idx": 0}
+    return True, {"formula_cols": signal_cols, "core_region_idx": 0}
 
 
 def _build_context_parent_header_formula(
@@ -300,9 +321,9 @@ def _build_context_parent_header_formula(
 def _build_prompt_parent_header_formula(context: Dict[str, Any]) -> str:
     """Render prompt for parent_header_formula."""
     cr_bbox = context["core_region_bbox"]
-    return f"""You are analyzing an Excel table region. The first row of this table contains formulas and may be a header row rather than data.
+    return f"""You are analyzing an Excel table region. The first row of this table contains numeric or formula-driven values and may be a header row rather than data.
 
-RULE: The first row of a parent table region CANNOT be inside the core data region. If the first row contains formulas and looks like a header, the core region must start below it.
+RULE: The first row of a parent table region CANNOT be inside the core data region. If the first row looks like a header (including year labels or column titles) rather than data, the core region must start below it.
 
 Here is the table data:
 {context["grid_preview"]}
@@ -310,7 +331,7 @@ Here is the table data:
 Cell types:
 {context["types_preview"]}
 
-Formula columns in row 0: {context["formula_cols"]}
+Columns in row 0 typed as NUMBER or FORMULA (or detected via optional formula peek): {context["formula_cols"]}
 Bold rows: {context["bold_rows"]}
 Merged cells: {context["merge_info"]}
 
@@ -341,33 +362,58 @@ def _parse_response_parent_header_formula(raw_text: str) -> Optional[Dict[str, A
 
 def _apply_parent_header_formula(
     *, parsed, core_regions, headers, header_indices,
-    consumed, candidates, row_tags, signals, config, **kw,
+    consumed, candidates, row_tags, signals, config, bbox, grid, merge_info, **kw,
 ) -> bool:
     """Apply parent_header_formula result: adjust headers and core region."""
     if not parsed.get("is_header"):
         return False
 
     new_header_rows = parsed.get("header_rows", [])
-    core_start = parsed.get("core_start_row")
     title_row = parsed.get("title_row")
 
-    if not new_header_rows or core_start is None:
+    if not new_header_rows:
         return False
 
     # Validate: new_header_rows must be within grid bounds
     if not all(isinstance(r, int) and r >= 0 for r in new_header_rows):
         return False
-    if not isinstance(core_start, int) or core_start < 0:
+
+    # Product policy: keep a single header row — the topmost row the LLM listed.
+    top_header_row = min(new_header_rows)
+    if top_header_row >= len(grid):
         return False
 
-    # Update header_indices in place
+    # Core starts on the first row after that single header row (local indices).
+    new_rel_core_start = top_header_row + 1
+
+    # Update header_indices in place (one row only)
     header_indices.clear()
-    header_indices.extend(new_header_rows)
-    consumed.header_rows = list(new_header_rows)
+    header_indices.append(top_header_row)
+    consumed.header_rows = [top_header_row]
+
+    # Rebuild headers to match the new header_indices (grid is local-to-bbox).
+    headers.clear()
+    if 0 <= top_header_row < len(grid):
+        headers.append(
+            [str(v) if v is not None else "" for v in grid[top_header_row]],
+        )
 
     # Adjust core region start
     if core_regions:
-        core_regions[0].bbox["r1"] = core_start
+        # new_rel_core_start is relative-to-bbox; core_regions bbox is absolute
+        new_abs_start = bbox.get("r1", 0) + new_rel_core_start
+        # Drop/trim core regions that fall above the new start. This is critical
+        # when the old first core region was entirely in the header band.
+        updated = []
+        for cr in core_regions:
+            r1 = int(cr.bbox.get("r1", 0))
+            r2 = int(cr.bbox.get("r2", 0))
+            if r2 < new_abs_start:
+                continue
+            if r1 < new_abs_start:
+                cr.bbox["r1"] = new_abs_start
+            updated.append(cr)
+        core_regions[:] = updated
 
     # Handle title
     if title_row is not None and isinstance(title_row, int):
@@ -399,8 +445,6 @@ def _detect_parent_header_composite(
     hierarchy_role, merge_info, bold_rows, config, **kw,
 ) -> Tuple[bool, Dict[str, Any]]:
     """Trigger when core row count mismatches row_names count."""
-    if hierarchy_role not in ("parent", "standalone"):
-        return False, {}
     if not core_regions:
         return False, {}
 
@@ -437,15 +481,19 @@ def _build_context_parent_header_composite(
     cr = core_regions[0]
     cr_r1 = cr.bbox.get("r1", 0)
     cr_r2 = cr.bbox.get("r2", 0)
+    # core_region bbox is ABSOLUTE; grid/types are LOCAL to bbox
+    bbox_r1 = bbox.get("r1", 0)
+    cr_r1_rel = max(0, cr_r1 - bbox_r1)
+    cr_r2_rel = max(cr_r1_rel, cr_r2 - bbox_r1)
     # Show first N rows of core region
-    max_rows = min(config.llm_rule_max_context_rows, cr_r2 - cr_r1 + 1)
-    core_row_indices = list(range(cr_r1, cr_r1 + max_rows))
+    max_rows = min(config.llm_rule_max_context_rows, cr_r2_rel - cr_r1_rel + 1)
+    core_row_indices = list(range(cr_r1_rel, cr_r1_rel + max_rows))
 
     context = {
         "title": candidates.get("title"),
         "headers": headers,
-        "core_r1": cr_r1,
-        "core_r2": cr_r2,
+        "core_r1": cr_r1_rel,
+        "core_r2": cr_r2_rel,
         "core_row_count": evidence["core_row_count"],
         "row_names": candidates.get("row_names"),
         "row_name_count": evidence["row_name_count"],
@@ -500,7 +548,7 @@ def _parse_response_parent_header_composite(raw_text: str) -> Optional[Dict[str,
 
 def _apply_parent_header_composite(
     *, parsed, core_regions, headers, header_indices,
-    consumed, candidates, row_tags, signals, config, **kw,
+    consumed, candidates, row_tags, signals, config, bbox, grid, merge_info, **kw,
 ) -> bool:
     """Apply parent_header_composite result: extend headers, adjust core start."""
     if not parsed.get("has_composite_header"):
@@ -524,9 +572,26 @@ def _apply_parent_header_composite(
     header_indices.sort()
     consumed.header_rows = list(header_indices)
 
+    # Rebuild headers to match the updated header_indices.
+    headers.clear()
+    for r in header_indices:
+        if 0 <= r < len(grid):
+            headers.append([str(v) if v is not None else "" for v in grid[r]])
+
     # Adjust core region start
     if core_regions:
-        core_regions[0].bbox["r1"] = adjusted_start
+        # adjusted_start is relative-to-bbox; core_regions bbox is absolute
+        new_abs_start = bbox.get("r1", 0) + adjusted_start
+        updated = []
+        for cr in core_regions:
+            r1 = int(cr.bbox.get("r1", 0))
+            r2 = int(cr.bbox.get("r2", 0))
+            if r2 < new_abs_start:
+                continue
+            if r1 < new_abs_start:
+                cr.bbox["r1"] = new_abs_start
+            updated.append(cr)
+        core_regions[:] = updated
 
     signals["llm_parent_header_composite_applied"] = True
     return True

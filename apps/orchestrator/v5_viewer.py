@@ -44,6 +44,53 @@ def _get(table: TableLike, key: str, default: Any = None) -> Any:
     return getattr(table, key, default)
 
 
+def _load_audit_jsonl(path: Path) -> List[Dict[str, Any]]:
+    """Best-effort load JSONL audit file."""
+    try:
+        if not path.exists():
+            return []
+        text = path.read_text(encoding="utf-8").strip()
+        if not text:
+            return []
+        out: List[Dict[str, Any]] = []
+        for line in text.split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            if isinstance(obj, dict):
+                out.append(obj)
+        return out
+    except Exception:
+        return []
+
+
+def _audit_calls_for_sheet(
+    audit_calls: List[Dict[str, Any]],
+    sheet_name: str,
+) -> List[Dict[str, Any]]:
+    if not audit_calls:
+        return []
+    return [c for c in audit_calls if str(c.get("sheet", "")) == str(sheet_name)]
+
+
+def _audit_calls_for_table(
+    audit_calls: List[Dict[str, Any]],
+    sheet_name: str,
+    table_id: str,
+) -> List[Dict[str, Any]]:
+    if not audit_calls:
+        return []
+    out = []
+    for c in audit_calls:
+        if str(c.get("sheet", "")) != str(sheet_name):
+            continue
+        if str(c.get("table_id", "")) != str(table_id):
+            continue
+        out.append(c)
+    return out
+
+
 def _run_sheet_name(run: Any) -> str:
     return str(_get(run, "sheet_name", "Unknown") or "Unknown")
 
@@ -251,13 +298,19 @@ def render_v5_results(
         return
 
     try:
-        _render_v5_results_body(results, output_dir)
+        audit_calls = _load_audit_jsonl(Path(output_dir) / "audit" / "llm_calls.jsonl")
+        _render_v5_results_body(results, output_dir, audit_calls=audit_calls)
     except Exception as exc:
         st.error(f"V5 viewer hit an error ({exc}). Showing saved JSON if available.")
         render_v5_from_json(output_dir)
 
 
-def _render_v5_results_body(results: List[Any], output_dir: str) -> None:
+def _render_v5_results_body(
+    results: List[Any],
+    output_dir: str,
+    *,
+    audit_calls: List[Dict[str, Any]],
+) -> None:
     total_tables = sum(len(_run_tables(r)) for r in results)
     total_resolved = sum(len(_run_resolved_tables(r)) for r in results)
     total_tokens = sum(_run_token_count(r) for r in results)
@@ -294,14 +347,15 @@ def _render_v5_results_body(results: List[Any], output_dir: str) -> None:
     for tab, result in zip(tabs, results):
         with tab:
             if view_mode == "Resolved Tables":
-                _render_resolved_sheet_panel(result)
+                _render_resolved_sheet_panel(result, audit_calls=audit_calls)
             else:
-                _render_v5_sheet_panel(result)
+                _render_v5_sheet_panel(result, audit_calls=audit_calls)
 
-    _render_audit(output_dir)
+    # Note: we no longer render global audit artifacts here. Each sheet panel
+    # shows the audit calls belonging to that sheet.
 
 
-def _render_v5_sheet_panel(result: Any) -> None:
+def _render_v5_sheet_panel(result: Any, *, audit_calls: List[Dict[str, Any]]) -> None:
     sheet_name = _run_sheet_name(result)
     tables = _run_tables(result)
 
@@ -316,6 +370,27 @@ def _render_v5_sheet_panel(result: Any) -> None:
     if not tables:
         st.info("No tables found in this sheet.")
         return
+
+    sheet_calls = _audit_calls_for_sheet(audit_calls, sheet_name)
+    if sheet_calls:
+        with st.expander(f"LLM calls (this sheet) ({len(sheet_calls)})", expanded=False):
+            try:
+                import pandas as pd
+
+                df = pd.DataFrame(sheet_calls)
+                preferred = [
+                    "call_kind",
+                    "table_id",
+                    "excel_range",
+                    "success",
+                    "tokens",
+                    "latency_ms",
+                ]
+                cols = [c for c in preferred if c in df.columns]
+                cols.extend([c for c in df.columns if c not in cols])
+                st.dataframe(df[cols], use_container_width=True)
+            except Exception:
+                st.json(sheet_calls[: min(50, len(sheet_calls))])
 
     for i, table in enumerate(tables):
         excel_rng = _bbox_dict_to_excel(_get(table, "bbox"))
@@ -334,10 +409,15 @@ def _render_v5_sheet_panel(result: Any) -> None:
             f"Table {i + 1} `{table_id}`: {title_for_label}{role_str} (`{excel_rng}`){badge_str}",
             expanded=(i == 0),
         ):
-            _render_v5_table_detail(table, depth=0)
+            _render_v5_table_detail(
+                table,
+                depth=0,
+                sheet_name=sheet_name,
+                audit_calls=audit_calls,
+            )
 
 
-def _render_resolved_sheet_panel(result: Any) -> None:
+def _render_resolved_sheet_panel(result: Any, *, audit_calls: List[Dict[str, Any]]) -> None:
     """Render resolved tables for a sheet."""
     sheet_name = _run_sheet_name(result)
     resolved = _run_resolved_tables(result)
@@ -353,6 +433,27 @@ def _render_resolved_sheet_panel(result: Any) -> None:
     if not resolved:
         st.info("No resolved tables. Check the Raw V5 Nodes view.")
         return
+
+    sheet_calls = _audit_calls_for_sheet(audit_calls, sheet_name)
+    if sheet_calls:
+        with st.expander(f"LLM calls (this sheet) ({len(sheet_calls)})", expanded=False):
+            try:
+                import pandas as pd
+
+                df = pd.DataFrame(sheet_calls)
+                preferred = [
+                    "call_kind",
+                    "table_id",
+                    "excel_range",
+                    "success",
+                    "tokens",
+                    "latency_ms",
+                ]
+                cols = [c for c in preferred if c in df.columns]
+                cols.extend([c for c in df.columns if c not in cols])
+                st.dataframe(df[cols], use_container_width=True)
+            except Exception:
+                st.json(sheet_calls[: min(50, len(sheet_calls))])
 
     for i, rt in enumerate(resolved):
         excel_rng = _bbox_dict_to_excel(_get(rt, "bbox"))
@@ -370,10 +471,19 @@ def _render_resolved_sheet_panel(result: Any) -> None:
             f"Table {i + 1} `{table_id}`: {title_for_label}{role_str} (`{excel_rng}`){src_badge}",
             expanded=(i == 0),
         ):
-            _render_resolved_table_detail(rt)
+            _render_resolved_table_detail(
+                rt,
+                sheet_name=sheet_name,
+                audit_calls=audit_calls,
+            )
 
 
-def _render_resolved_table_detail(table: TableLike) -> None:
+def _render_resolved_table_detail(
+    table: TableLike,
+    *,
+    sheet_name: Optional[str] = None,
+    audit_calls: Optional[List[Dict[str, Any]]] = None,
+) -> None:
     """Render one ResolvedTable with provenance."""
     table_id = _get(table, "table_id", "unknown")
     bbox_excel = _bbox_dict_to_excel(_get(table, "bbox"))
@@ -515,6 +625,28 @@ def _render_resolved_table_detail(table: TableLike) -> None:
         with st.expander("Signals", expanded=False):
             st.json(signals)
 
+    # LLM calls for this table (prompt + response)
+    if sheet_name and audit_calls:
+        calls = _audit_calls_for_table(audit_calls, sheet_name, table_id)
+        if calls:
+            with st.expander(f"LLM calls for this table ({len(calls)})", expanded=False):
+                for idx, c in enumerate(calls):
+                    ck = c.get("call_kind", "llm_call")
+                    st.markdown(f"**{ck}** ({idx + 1})")
+                    tab_p, tab_r = st.tabs(["Prompt", "Response"])
+                    with tab_p:
+                        p = c.get("prompt", {})
+                        if isinstance(p, dict) and "text" in p:
+                            st.code(p.get("text", ""), language="text")
+                        else:
+                            st.json(p)
+                    with tab_r:
+                        r = c.get("response")
+                        if isinstance(r, dict) and "text" in r:
+                            st.code(r.get("text", ""), language="text")
+                        else:
+                            st.json(r)
+
 
 def render_v5_from_json(output_dir: str) -> None:
     """Render V5 results from saved JSON files."""
@@ -572,17 +704,29 @@ def render_v5_from_json(output_dir: str) -> None:
         return
 
     tabs = st.tabs(sheet_names)
+    audit_calls = _load_audit_jsonl(out / "audit" / "llm_calls.jsonl")
     for tab, sheet_name in zip(tabs, sheet_names):
         with tab:
             if view_mode == "Resolved Tables" and sheet_name in resolved_data:
-                _render_resolved_sheet_json(resolved_data[sheet_name], sheet_name)
+                _render_resolved_sheet_json(
+                    resolved_data[sheet_name],
+                    sheet_name,
+                    audit_calls=audit_calls,
+                )
             else:
-                _render_raw_sheet_json(tables_data[sheet_name], sheet_name)
+                _render_raw_sheet_json(
+                    tables_data[sheet_name],
+                    sheet_name,
+                    audit_calls=audit_calls,
+                )
 
-    _render_audit(output_dir)
 
-
-def _render_resolved_sheet_json(sheet_block: Dict, sheet_name: str) -> None:
+def _render_resolved_sheet_json(
+    sheet_block: Dict,
+    sheet_name: str,
+    *,
+    audit_calls: List[Dict[str, Any]],
+) -> None:
     """Render resolved tables from JSON for a single sheet."""
     resolved = sheet_block.get("resolved_tables", []) if isinstance(sheet_block, dict) else []
     st.markdown(f"### Sheet: {sheet_name}")
@@ -605,10 +749,15 @@ def _render_resolved_sheet_json(sheet_block: Dict, sheet_name: str) -> None:
             f"Table {i + 1} `{table_id}`: {title_for_label}{role_str} (`{excel_rng}`){src_badge}",
             expanded=(i == 0),
         ):
-            _render_resolved_table_detail(rt)
+            _render_resolved_table_detail(rt, sheet_name=sheet_name, audit_calls=audit_calls)
 
 
-def _render_raw_sheet_json(sheet_block: Dict, sheet_name: str) -> None:
+def _render_raw_sheet_json(
+    sheet_block: Dict,
+    sheet_name: str,
+    *,
+    audit_calls: List[Dict[str, Any]],
+) -> None:
     """Render raw V5 nodes from JSON for a single sheet."""
     tables = sheet_block.get("tables", []) if isinstance(sheet_block, dict) else []
     st.markdown(f"### Sheet: {sheet_name}")
@@ -638,10 +787,21 @@ def _render_raw_sheet_json(sheet_block: Dict, sheet_name: str) -> None:
             f"Table {i + 1} `{table_id}`: {title_for_label}{role_str} (`{excel_rng}`){badge_str}",
             expanded=(i == 0),
         ):
-            _render_v5_table_detail(table_dict, depth=0)
+            _render_v5_table_detail(
+                table_dict,
+                depth=0,
+                sheet_name=sheet_name,
+                audit_calls=audit_calls,
+            )
 
 
-def _render_v5_table_detail(table: TableLike, depth: int = 0) -> None:
+def _render_v5_table_detail(
+    table: TableLike,
+    depth: int = 0,
+    *,
+    sheet_name: Optional[str] = None,
+    audit_calls: Optional[List[Dict[str, Any]]] = None,
+) -> None:
     """One table block: same field order/style as v4_viewer._render_table."""
     indent = "  " * depth
 
@@ -750,6 +910,34 @@ def _render_v5_table_detail(table: TableLike, depth: int = 0) -> None:
                 _render_v5_table_detail(child, depth + 1)
     else:
         st.markdown(f"{indent}**Children**: None")
+
+    # Signals (if present)
+    signals = _get(table, "signals", {}) or {}
+    if signals:
+        with st.expander(f"{indent}Signals", expanded=False):
+            st.json(signals)
+
+    # LLM calls for this table (prompt + response)
+    if sheet_name and audit_calls:
+        calls = _audit_calls_for_table(audit_calls, sheet_name, table_id)
+        if calls:
+            with st.expander(f"{indent}LLM calls for this table ({len(calls)})", expanded=False):
+                for idx, c in enumerate(calls):
+                    ck = c.get("call_kind", "llm_call")
+                    st.markdown(f"{indent}**{ck}** ({idx + 1})")
+                    tab_p, tab_r = st.tabs(["Prompt", "Response"])
+                    with tab_p:
+                        p = c.get("prompt", {})
+                        if isinstance(p, dict) and "text" in p:
+                            st.code(p.get("text", ""), language="text")
+                        else:
+                            st.json(p)
+                    with tab_r:
+                        r = c.get("response")
+                        if isinstance(r, dict) and "text" in r:
+                            st.code(r.get("text", ""), language="text")
+                        else:
+                            st.json(r)
 
 
 def _render_audit(output_dir: str) -> None:

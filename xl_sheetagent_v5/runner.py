@@ -12,7 +12,7 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import openpyxl
 
@@ -70,6 +70,17 @@ def run_v5_analysis(
     from core.paths import get_v5_sheetagent_output_path
     output_dir = get_v5_sheetagent_output_path(run_id, output_base)
     output_dir.mkdir(parents=True, exist_ok=True)
+    # Audit policy: avoid stale audit files when re-running the same run_id.
+    # If this run produces no LLM calls (or fails early), we still want the
+    # output to reflect *this* run, not a previous one.
+    if config.emit_audit:
+        audit_dir = output_dir / "audit"
+        audit_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            (audit_dir / "llm_calls.jsonl").unlink(missing_ok=True)
+        except Exception:
+            # Best-effort cleanup; never fail the run for audit cleanup.
+            pass
 
     # Resolve workbook path
     if workbook_path is None:
@@ -191,6 +202,43 @@ def _run_v5_sheet(
         logger.error("Failed to open workbook for sheet %s: %s", sheet_name, exc)
         return V5RunResult(run_id=run_id, sheet_name=sheet_name, errors=[str(exc)])
 
+    # Lazy "formula view" workbook handle (data_only=False) for rule-triggered peeks.
+    # Openpyxl cannot truly stream a single cell without opening the file, but we
+    # defer this second handle until a rule actually asks for formula inspection.
+    wb_formula = None
+    ws_formula = None
+
+    def _peek_formula_cols_in_local_row(
+        bbox: Dict[str, int],
+        local_row_idx: int = 0,
+    ) -> List[int]:
+        """
+        Return local column indices whose cells are formulas in the given local row.
+
+        This re-opens the workbook with data_only=False on first use, then reads only
+        the specific cells needed.
+        """
+        nonlocal wb_formula, ws_formula
+        if wb_formula is None:
+            wb_formula = openpyxl.load_workbook(
+                workbook_path, data_only=False, read_only=True
+            )
+            ws_formula = wb_formula[sheet_name]
+
+        abs_r = int(bbox["r1"]) + int(local_row_idx)
+        c1 = int(bbox["c1"])
+        c2 = int(bbox["c2"])
+        out: List[int] = []
+        for c in range(c1, c2 + 1):
+            cell = ws_formula.cell(row=abs_r + 1, column=c + 1)  # 1-indexed
+            if cell.data_type == "f":
+                out.append(c - c1)
+                continue
+            v = cell.value
+            if isinstance(v, str) and v.lstrip().startswith("="):
+                out.append(c - c1)
+        return out
+
     try:
         ws = wb[sheet_name]
     except KeyError:
@@ -212,6 +260,7 @@ def _run_v5_sheet(
                 ws, bbox, sheet_name, bbox_idx,
                 all_tables, cut_scores, config,
                 llm_client, llm_call_counter, audit_records,
+                formula_peek=_peek_formula_cols_in_local_row,
             )
             all_tables.append(table_result)
 
@@ -248,6 +297,8 @@ def _run_v5_sheet(
             errors.append(f"resolution: {exc}")
 
     wb.close()
+    if wb_formula is not None:
+        wb_formula.close()
 
     return V5RunResult(
         run_id=run_id,
@@ -270,6 +321,7 @@ def _process_one_bbox(
     llm_client: Any,
     llm_call_counter: List[int],
     audit_records: Dict[str, List],
+    formula_peek: Optional[Callable[[Dict[str, int], int], List[int]]] = None,
 ) -> V5TableResult:
     """Process a single bbox: read grid, run V3a-style analysis, enrich with V5."""
     r_top = bbox["r1"]
@@ -312,6 +364,7 @@ def _process_one_bbox(
         llm_call_counter=llm_call_counter,
         audit_records=audit_records,
         cut_scores=cut_scores,
+        formula_peek=formula_peek,
     )
 
 

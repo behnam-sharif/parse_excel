@@ -68,8 +68,21 @@ def export_results(
     _write_json(output_dir / "summary.json", summary)
 
     # Audit artifacts
-    if config.emit_audit and audit_records:
-        _write_audit(output_dir / "audit", audit_records)
+    if config.emit_audit:
+        # Always write (or at least clear) audit artifacts so re-runs of the same
+        # run_id don't accidentally show stale LLM calls from a prior attempt.
+        audit_dir = output_dir / "audit"
+        audit_dir.mkdir(parents=True, exist_ok=True)
+
+        # Ensure llm_calls.jsonl always represents *this* run.
+        llm_calls = []
+        if audit_records and isinstance(audit_records, dict):
+            llm_calls = audit_records.get("llm_calls", []) or []
+        _write_jsonl(audit_dir / "llm_calls.jsonl", llm_calls)
+
+        # Write the remaining audit JSONL files (if any)
+        if audit_records:
+            _write_audit(audit_dir, audit_records, skip_names={"llm_calls"})
 
     logger.info("Exported V5 results to %s", output_dir)
 
@@ -262,15 +275,26 @@ def _write_json(path: Path, data: Any) -> None:
     logger.debug("Wrote %s", path)
 
 
-def _write_audit(audit_dir: Path, records: Dict[str, List]) -> None:
+def _write_jsonl(path: Path, entries: List[Any]) -> None:
+    """Write a JSONL file (overwrites)."""
+    with open(path, "w", encoding="utf-8") as f:
+        for entry in entries or []:
+            f.write(json.dumps(entry, default=str) + "\n")
+    logger.debug("Wrote %d audit records to %s", len(entries or []), path)
+
+def _write_audit(
+    audit_dir: Path,
+    records: Dict[str, List],
+    skip_names: set = None,
+) -> None:
     """Write audit JSONL files."""
     audit_dir.mkdir(parents=True, exist_ok=True)
+    skip_names = skip_names or set()
 
     for name, entries in records.items():
+        if name in skip_names:
+            continue
         if not entries:
             continue
         path = audit_dir / f"{name}.jsonl"
-        with open(path, "w", encoding="utf-8") as f:
-            for entry in entries:
-                f.write(json.dumps(entry, default=str) + "\n")
-        logger.debug("Wrote %d audit records to %s", len(entries), path)
+        _write_jsonl(path, entries)
