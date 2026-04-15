@@ -459,7 +459,7 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
             v5_cfg = sheetagent_v5_config_from_pipeline(pc)
 
             llm_client = None
-            if v5_cfg.use_llm:
+            if v5_cfg.enable_llm_rules:
                 api_key = os.environ.get("OPENAI_API_KEY", "").strip()
                 if api_key:
                     import openai
@@ -469,7 +469,7 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                     import logging
 
                     logging.getLogger(__name__).warning(
-                        "OPENAI_API_KEY not set — V5 will run heuristic-only"
+                        "OPENAI_API_KEY not set — V5 LLM rules will be skipped"
                     )
 
             from xl_sheetagent_v5 import run_v5_analysis

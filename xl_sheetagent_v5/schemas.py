@@ -97,6 +97,23 @@ class ConsumedMap:
 
 
 # ---------------------------------------------------------------------------
+# LLM rule result
+# ---------------------------------------------------------------------------
+
+@dataclass
+class LLMRuleResult:
+    """Result of a single LLM rule evaluation."""
+    rule_name: str
+    triggered: bool
+    llm_called: bool
+    llm_response: Optional[Dict[str, Any]]
+    applied: bool
+    reason: str
+    tokens_used: int = 0
+    elapsed_ms: int = 0
+
+
+# ---------------------------------------------------------------------------
 # Table result
 # ---------------------------------------------------------------------------
 
@@ -114,6 +131,7 @@ class V5TableResult:
     core_regions: List[CoreRegion] = field(default_factory=list)
     table_role: str = "mixed"               # "input" | "calc" | "output" | "mixed" | "metadata"
     row_tags: List[RowTag] = field(default_factory=list)
+    llm_rule_results: List[LLMRuleResult] = field(default_factory=list)
     formatting: Optional[FormattingInfo] = None
     children: List["V5TableResult"] = field(default_factory=list)
     confidence: float = 0.0

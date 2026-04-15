@@ -310,10 +310,8 @@ xl_sheetagent_v5:
 
   # Header inheritance (width vs donor header span, inclusive ±)
   inherit_header_col_tolerance: 1
-  use_inherit_header_amend_llm: false
 
-  # LLM refinement
-  use_llm: false
+  # LLM transport (used by rules engine)
   llm_model: "gpt-4o-mini"
   llm_max_tokens: 2048
   llm_temperature: 0.1
@@ -341,11 +339,10 @@ xl_sheetagent_v5:
   max_llm_calls_per_sheet: 30
 
   # Confidence weights
-  w_tags: 0.25
-  w_header: 0.25
+  w_tags: 0.30
+  w_header: 0.30
   w_core: 0.20
-  w_llm: 0.15
-  w_role: 0.15
+  w_role: 0.20
 
   # Audit
   emit_audit: true
@@ -370,10 +367,16 @@ xl_sheetagent_v5:
 
   # Core-to-children consistency
   enforce_multi_core_children: true
-  llm_children_fallback: true
 
   # Export mode (v5.1): "flat" | "hierarchical" (default: hierarchical)
   export_mode: "hierarchical"
+
+  # LLM Rules Engine
+  enable_llm_rules: false
+  rule_parent_header_formula: true
+  rule_parent_header_composite: true
+  rule_header_title_collision: true
+  llm_rule_max_context_rows: 6
 
 xl_image:
   adaptive_enabled: true

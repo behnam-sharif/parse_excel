@@ -24,10 +24,8 @@ class XlSheetAgentV5Config:
 
     # Header inheritance (recipient width vs donor header span, inclusive ±)
     inherit_header_col_tolerance: int
-    use_inherit_header_amend_llm: bool
 
-    # LLM refinement
-    use_llm: bool
+    # LLM transport (used by rules engine)
     llm_model: str
     llm_max_tokens: int
     llm_temperature: float
@@ -58,7 +56,6 @@ class XlSheetAgentV5Config:
     w_tags: float
     w_header: float
     w_core: float
-    w_llm: float
     w_role: float
 
     # Audit
@@ -84,7 +81,13 @@ class XlSheetAgentV5Config:
 
     # Core-to-children consistency
     enforce_multi_core_children: bool
-    llm_children_fallback: bool
 
     # Export mode (v5.1): "flat" (legacy) | "hierarchical" (nested children)
-    export_mode: str = "hierarchical"
+    export_mode: str
+
+    # LLM Rules Engine
+    enable_llm_rules: bool
+    rule_parent_header_formula: bool
+    rule_parent_header_composite: bool
+    rule_header_title_collision: bool
+    llm_rule_max_context_rows: int

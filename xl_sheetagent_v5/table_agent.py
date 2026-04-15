@@ -8,7 +8,6 @@ core region detection, selective LLM refinement, and table role assignment.
 from __future__ import annotations
 
 import logging
-import time
 from typing import Any, Dict, List, Optional, Set
 
 from xl_table.coords import bbox_to_excel_range
@@ -17,6 +16,7 @@ from .config import XlSheetAgentV5Config
 from .schemas import (
     ConsumedMap,
     CoreRegion,
+    LLMRuleResult,
     NoteEntry,
     RowTag,
     V5TableResult,
@@ -25,16 +25,8 @@ from .row_tagger import assign_final_tags, tag_rows
 from .header_detector import detect_headers, find_restricted_header_inheritance
 from .candidate_collector import collect_candidates
 from .core_region_detector import detect_core_regions
-from .llm_audit import record_llm_call
-from .prompt_builder import build_v5_prompt, parse_v5_response
 
 logger = logging.getLogger(__name__)
-
-# LLM dispatch — imported from V4 directly (already has retry/backoff)
-try:
-    from xl_sheetagent_v4.llm_dispatch import complete_text as _llm_complete
-except ImportError:
-    _llm_complete = None
 
 
 def analyze_table(
@@ -173,10 +165,6 @@ def _analyze_table_inner(
                 "Table %s: header inherited from %s (%s)",
                 table_id, inherited_from, inheritance_kind,
             )
-            if config.use_inherit_header_amend_llm and llm_client is not None:
-                logger.debug(
-                    "use_inherit_header_amend_llm is true; amend pass not implemented",
-                )
 
     # Step 4: Role-aware candidate collection
     candidates = collect_candidates(
@@ -226,31 +214,23 @@ def _analyze_table_inner(
                     consumed.rowname_cols = rn_cols
                     signals["row_names_source"] = "column_cuts"
 
-    # Step 6: Selective LLM refinement
-    llm_called = False
-    llm_overrides = {}
-    llm_tokens = 0
-
-    if _should_call_llm(
-        config, hierarchy_role, n_rows, row_tags, headers,
-        llm_client, llm_call_counter,
-    ):
-        llm_result = _call_llm(
-            grid, types, row_tags, core_regions, headers,
-            candidates["title"], candidates["row_names"],
-            len(candidates["notes"]), hierarchy_role, split_depth,
-            sheet_name, bbox, structural_summary, config,
-            llm_client, table_id, audit_records,
+    # Step 6: LLM Rules Engine (targeted structural arbitration)
+    llm_rule_results: List[LLMRuleResult] = []
+    if config.enable_llm_rules:
+        from .llm_rules import run_llm_rules
+        llm_rule_results = run_llm_rules(
+            grid=grid, types=types, row_tags=row_tags,
+            core_regions=core_regions, headers=headers,
+            header_indices=header_indices, consumed=consumed,
+            candidates=candidates, bbox=bbox,
+            hierarchy_role=hierarchy_role, merge_info=merge_info,
+            bold_rows=bold_rows, table_id=table_id,
+            sheet_name=sheet_name, config=config,
+            llm_client=llm_client,
+            llm_call_counter=llm_call_counter,
+            audit_records=audit_records, signals=signals,
+            formatting_data=None,
         )
-        if llm_result:
-            llm_called = True
-            llm_overrides = llm_result.get("overrides", {})
-            llm_tokens = llm_result.get("tokens", 0)
-            if llm_call_counter is not None:
-                llm_call_counter[0] += 1
-
-            # Apply tag overrides (soft constraints)
-            _apply_llm_overrides(row_tags, llm_overrides, signals)
 
     # Step 7: Layer 2 tag resolution
     assign_final_tags(row_tags, consumed)
@@ -258,13 +238,13 @@ def _analyze_table_inner(
     # Step 8: Determine table role
     table_role = _determine_table_role(
         hierarchy_role, core_regions, grid, types,
-        structural_summary, llm_overrides, n_rows, consumed,
+        structural_summary, n_rows, consumed,
     )
 
     # Step 9: Compute confidence
     confidence = _compute_confidence(
-        row_tags, header_conf, core_regions, llm_called,
-        llm_overrides, table_role, config,
+        row_tags, header_conf, core_regions, table_role, config,
+        llm_rule_results=llm_rule_results,
     )
 
     # Record audit
@@ -274,8 +254,7 @@ def _analyze_table_inner(
         sheet_name,
         bbox,
         hierarchy_role,
-        llm_called,
-        llm_overrides,
+        llm_rule_results,
         headers,
         len(core_regions),
         table_role,
@@ -302,149 +281,10 @@ def _analyze_table_inner(
         core_regions=core_regions,
         table_role=table_role,
         row_tags=row_tags,
+        llm_rule_results=llm_rule_results,
         confidence=confidence,
         signals=signals,
     )
-
-
-# ---------------------------------------------------------------------------
-# LLM gating
-# ---------------------------------------------------------------------------
-
-def _should_call_llm(
-    config: XlSheetAgentV5Config,
-    hierarchy_role: str,
-    n_rows: int,
-    row_tags: List[RowTag],
-    headers: List[List[str]],
-    llm_client: Any,
-    llm_call_counter: Optional[List[int]],
-) -> bool:
-    """Decide whether to invoke LLM for this table."""
-    if not config.use_llm:
-        return False
-    if llm_client is None and _llm_complete is None:
-        return False
-
-    # Rate limit check
-    if llm_call_counter is not None and llm_call_counter[0] >= config.max_llm_calls_per_sheet:
-        logger.warning("LLM call limit reached for sheet")
-        return False
-
-    has_title_header_mix = any(
-        t.layer1_tag == "title_header_candidate" for t in row_tags
-    )
-    if has_title_header_mix and hierarchy_role != "child_metadata":
-        return True
-
-    # Skip small tables
-    if n_rows < 5:
-        return False
-
-    # Skip trivial data-only tables
-    all_data = all(t.layer1_tag == "data_candidate" for t in row_tags)
-    if all_data and headers:
-        return False
-
-    # Child LLM policy
-    if hierarchy_role == "child_metadata":
-        return False
-    if hierarchy_role == "child_numeric" and n_rows < 10:
-        return False
-
-    return True
-
-
-def _call_llm(
-    grid, types, row_tags, core_regions, headers,
-    title, row_names, notes_count, hierarchy_role,
-    split_depth, sheet_name, bbox, structural_summary,
-    config, llm_client, table_id, audit_records,
-) -> Optional[Dict[str, Any]]:
-    """Call LLM and return parsed overrides."""
-    prompt = build_v5_prompt(
-        grid, types, row_tags, core_regions, headers,
-        title, row_names, notes_count, hierarchy_role,
-        split_depth, sheet_name, bbox, structural_summary, config,
-    )
-
-    start = time.time()
-    try:
-        if llm_client is not None and _llm_complete is not None:
-            raw_text, tokens = _llm_complete(
-                llm_client, config.llm_model, prompt,
-                config.llm_max_tokens, config.llm_temperature,
-            )
-        else:
-            logger.warning("No LLM client available")
-            return None
-
-        elapsed_ms = int((time.time() - start) * 1000)
-        parsed = parse_v5_response(raw_text)
-
-        record_llm_call(
-            audit_records,
-            call_kind="tag_refinement",
-            table_id=table_id,
-            sheet=sheet_name,
-            bbox=bbox,
-            prompt=prompt,
-            raw_response=raw_text,
-            tokens=tokens,
-            elapsed_ms=elapsed_ms,
-            success=True,
-            tag_overrides_raw=parsed.get("tag_overrides", []),
-        )
-
-        return {
-            "overrides": parsed,
-            "tokens": tokens,
-        }
-
-    except Exception as exc:
-        elapsed_ms = int((time.time() - start) * 1000)
-        logger.warning("LLM call failed for %s: %s", table_id, exc)
-        record_llm_call(
-            audit_records,
-            call_kind="tag_refinement",
-            table_id=table_id,
-            sheet=sheet_name,
-            bbox=bbox,
-            prompt=prompt,
-            raw_response=None,
-            tokens=0,
-            elapsed_ms=elapsed_ms,
-            success=False,
-            tag_overrides_raw=[],
-        )
-        _record_error(audit_records, table_id, "llm_call", str(exc))
-        return None
-
-
-def _apply_llm_overrides(
-    row_tags: List[RowTag],
-    llm_overrides: Dict[str, Any],
-    signals: Dict[str, Any],
-) -> None:
-    """Apply LLM tag overrides to row tags (soft constraints)."""
-    overrides = llm_overrides.get("tag_overrides", [])
-    if not overrides:
-        return
-
-    tag_by_row = {t.row_index: t for t in row_tags}
-    applied = []
-
-    for override in overrides:
-        row = override.get("row")
-        new_tag = override.get("new_tag")
-        if row is not None and new_tag and row in tag_by_row:
-            old_tag = tag_by_row[row].layer1_tag
-            tag_by_row[row].layer1_tag = new_tag
-            applied.append({"row": row, "old": old_tag, "new": new_tag})
-
-    if applied:
-        signals["llm_tag_overrides"] = applied
-        logger.info("LLM overrode %d row tags", len(applied))
 
 
 # ---------------------------------------------------------------------------
@@ -561,26 +401,17 @@ def _determine_table_role(
     grid: List[List[Any]],
     types: List[List[str]],
     structural_summary: Dict[str, Any],
-    llm_overrides: Dict[str, Any],
     n_rows: int,
     consumed: Optional[ConsumedMap] = None,
 ) -> str:
-    """
-    Deterministic-first table role assignment.
-    LLM refines only when result is "mixed".
-    """
+    """Deterministic table role assignment."""
     # Metadata child with no core region
     if hierarchy_role == "child_metadata" and not core_regions:
         return "metadata"
 
     if not core_regions:
-        # Check if mostly text rows → metadata
         if _is_mostly_text(types, consumed):
             return "metadata"
-        # LLM might have an opinion
-        llm_role = llm_overrides.get("table_role")
-        if llm_role and llm_role in ("input", "calc", "output", "mixed", "metadata"):
-            return llm_role
         return "mixed"
 
     # Check if all regions are input
@@ -599,15 +430,7 @@ def _determine_table_role(
     if len(core_regions) == 1 and hints[0] == "output":
         return "output"
 
-    # Mixed signals
-    role = "mixed"
-
-    # LLM can refine ambiguous cases
-    llm_role = llm_overrides.get("table_role")
-    if llm_role and llm_role in ("input", "calc", "output", "mixed", "metadata"):
-        role = llm_role
-
-    return role
+    return "mixed"
 
 
 def _is_mostly_text(
@@ -655,18 +478,15 @@ def _compute_confidence(
     row_tags: List[RowTag],
     header_conf: float,
     core_regions: List[CoreRegion],
-    llm_called: bool,
-    llm_overrides: Dict[str, Any],
     table_role: str,
     config: XlSheetAgentV5Config,
+    llm_rule_results: Optional[List[LLMRuleResult]] = None,
 ) -> float:
     """
-    Weighted confidence blend:
-        w_tags * avg_row_tag_conf
-      + w_header * header_conf
-      + w_core * core_region_conf
-      + w_llm * llm_agreement
-      + w_role * role_consistency
+    Weighted confidence blend (w_tags, w_header, w_core, w_role).
+
+    If any LLM rule was applied, add a small bonus (+0.05).
+    If any rule was triggered but LLM was unavailable, penalize slightly (-0.05).
     """
     # Avg row tag confidence
     avg_tag = (
@@ -682,16 +502,6 @@ def _compute_confidence(
     else:
         core_conf = 0.0
 
-    # LLM agreement
-    if llm_called:
-        overrides = llm_overrides.get("tag_overrides", [])
-        if not overrides:
-            llm_score = 1.0  # Agrees with heuristics
-        else:
-            llm_score = 0.5  # Had overrides
-    else:
-        llm_score = 0.0  # Skipped
-
     # Role consistency
     if core_regions:
         hints = [cr.role_hint for cr in core_regions]
@@ -704,30 +514,23 @@ def _compute_confidence(
     else:
         role_score = 0.5  # No regions to compare
 
-    # Weights — redistribute LLM weight if LLM not called
-    w_tags = config.w_tags
-    w_header = config.w_header
-    w_core = config.w_core
-    w_llm = config.w_llm
-    w_role = config.w_role
-
-    if not llm_called and w_llm > 0:
-        non_llm = w_tags + w_header + w_core + w_role
-        if non_llm > 0:
-            scale = (non_llm + w_llm) / non_llm
-            w_tags *= scale
-            w_header *= scale
-            w_core *= scale
-            w_role *= scale
-            w_llm = 0.0
-
     confidence = (
-        w_tags * avg_tag
-        + w_header * header_conf
-        + w_core * core_conf
-        + w_llm * llm_score
-        + w_role * role_score
+        config.w_tags * avg_tag
+        + config.w_header * header_conf
+        + config.w_core * core_conf
+        + config.w_role * role_score
     )
+
+    # LLM rule bonus/penalty
+    if llm_rule_results:
+        any_applied = any(r.applied for r in llm_rule_results)
+        any_triggered_no_llm = any(
+            r.triggered and not r.llm_called for r in llm_rule_results
+        )
+        if any_applied:
+            confidence += 0.05
+        elif any_triggered_no_llm:
+            confidence -= 0.05
 
     return round(min(max(confidence, 0.0), 1.0), 3)
 
@@ -742,8 +545,7 @@ def _record_decision(
     sheet_name: str,
     bbox: Dict[str, int],
     hierarchy_role: str,
-    llm_called: bool,
-    llm_overrides: Dict[str, Any],
+    llm_rule_results: List[LLMRuleResult],
     headers: List[List[str]],
     n_core: int,
     table_role: str,
@@ -756,14 +558,16 @@ def _record_decision(
     excel_range = bbox_to_excel_range(
         bbox["r1"], bbox["c1"], bbox["r2"], bbox["c2"],
     )
+    rules_triggered = [r.rule_name for r in llm_rule_results if r.triggered]
+    rules_applied = [r.rule_name for r in llm_rule_results if r.applied]
     audit.setdefault("table_decisions", []).append({
         "table_id": table_id,
         "sheet": sheet_name,
         "excel_range": excel_range,
         "bbox": dict(bbox),
         "hierarchy_role": hierarchy_role,
-        "llm_called": llm_called,
-        "llm_overrides": bool(llm_overrides.get("tag_overrides")),
+        "llm_rules_triggered": rules_triggered,
+        "llm_rules_applied": rules_applied,
         "header_rows": len(headers),
         "header_source": header_source,
         "header_donor_table_id": header_donor_table_id,
