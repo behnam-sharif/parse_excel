@@ -253,8 +253,8 @@ def _detect_parent_header_formula(
     header_indices, consumed, candidates, bbox,
     hierarchy_role, merge_info, bold_rows, config, **kw,
 ) -> Tuple[bool, Dict[str, Any]]:
-    """Trigger when parent bbox row 0 is inside a core region and has number/formula cells."""
-    if hierarchy_role != "parent":
+    """Trigger when parent/standalone bbox row 0 is inside a core region and has number/formula cells."""
+    if hierarchy_role not in ("parent", "standalone"):
         return False, {}
     if not core_regions:
         return False, {}
@@ -323,7 +323,7 @@ def _build_prompt_parent_header_formula(context: Dict[str, Any]) -> str:
     cr_bbox = context["core_region_bbox"]
     return f"""You are analyzing an Excel table region. The first row of this table contains numeric or formula-driven values and may be a header row rather than data.
 
-RULE: The first row of a parent table region CANNOT be inside the core data region. If the first row looks like a header (including year labels or column titles) rather than data, the core region must start below it.
+RULE: The first row of a parent or standalone table region CANNOT be inside the core data region. If the first row looks like a header (including year labels or column titles) rather than data, the core region must start below it.
 
 Here is the table data:
 {context["grid_preview"]}
@@ -420,13 +420,13 @@ def _apply_parent_header_formula(
         candidates["title_rows"] = [title_row]
         consumed.title_rows = [title_row]
 
-    signals["llm_parent_header_formula_applied"] = True
+    signals["llm_header_number_parent_standalone_applied"] = True
     return True
 
 
 register_rule(LLMRule(
-    name="parent_header_formula",
-    config_flag="rule_parent_header_formula",
+    name="header_number_parent_standalone",
+    config_flag="rule_header_number_parent_standalone",
     detect=_detect_parent_header_formula,
     build_context=_build_context_parent_header_formula,
     build_prompt=_build_prompt_parent_header_formula,
@@ -593,13 +593,13 @@ def _apply_parent_header_composite(
             updated.append(cr)
         core_regions[:] = updated
 
-    signals["llm_parent_header_composite_applied"] = True
+    signals["llm_header_composite_all_applied"] = True
     return True
 
 
 register_rule(LLMRule(
-    name="parent_header_composite",
-    config_flag="rule_parent_header_composite",
+    name="header_composite_all",
+    config_flag="rule_header_composite_all",
     detect=_detect_parent_header_composite,
     build_context=_build_context_parent_header_composite,
     build_prompt=_build_prompt_parent_header_composite,
@@ -618,6 +618,8 @@ def _detect_header_title_collision(
     hierarchy_role, merge_info, bold_rows, config, **kw,
 ) -> Tuple[bool, Dict[str, Any]]:
     """Trigger when no title found but first header row looks like title + headers."""
+    if hierarchy_role not in ("parent", "child_numeric", "standalone"):
+        return False, {}
     if candidates.get("title") is not None:
         return False, {}
     if not headers or not header_indices:
@@ -749,14 +751,14 @@ def _apply_header_title_collision(
     if headers and title_col < len(headers[0]):
         headers[0][title_col] = ""
 
-    signals["llm_header_title_collision_applied"] = True
+    signals["llm_header_title_collision_parent_childnum_standalone_applied"] = True
     signals["llm_composite_title_col"] = title_col
     return True
 
 
 register_rule(LLMRule(
-    name="header_title_collision",
-    config_flag="rule_header_title_collision",
+    name="header_title_collision_parent_childnum_standalone",
+    config_flag="rule_header_title_collision_parent_childnum_standalone",
     detect=_detect_header_title_collision,
     build_context=_build_context_header_title_collision,
     build_prompt=_build_prompt_header_title_collision,

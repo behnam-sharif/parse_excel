@@ -76,9 +76,9 @@ def _make_config(**overrides):
         export_mode="hierarchical",
         inherit_header_col_tolerance=1,
         enable_llm_rules=False,
-        rule_parent_header_formula=True,
-        rule_parent_header_composite=True,
-        rule_header_title_collision=True,
+        rule_header_number_parent_standalone=True,
+        rule_header_composite_all=True,
+        rule_header_title_collision_parent_childnum_standalone=True,
         llm_rule_max_context_rows=6,
     )
     defaults.update(overrides)

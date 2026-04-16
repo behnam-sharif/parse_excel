@@ -648,8 +648,123 @@ def _render_resolved_table_detail(
                             st.json(r)
 
 
+def v5_tables_json_path(output_dir: str) -> Path:
+    return Path(output_dir) / "tables.json"
+
+
+def v5_has_tables_json(output_dir: str) -> bool:
+    return v5_tables_json_path(output_dir).is_file()
+
+
+def load_v5_summary(output_dir: str) -> Optional[Dict[str, Any]]:
+    """Load summary.json if present (small file — use for sheet list without tables.json)."""
+    p = Path(output_dir) / "summary.json"
+    if not p.is_file():
+        return None
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        return raw if isinstance(raw, dict) else None
+    except Exception:
+        return None
+
+
+def list_v5_sheet_names(output_dir: str) -> List[str]:
+    """Sheet names for the run, preferring summary.json to avoid loading tables.json."""
+    summary = load_v5_summary(output_dir)
+    if summary and isinstance(summary.get("sheets"), list):
+        names = []
+        for row in summary["sheets"]:
+            if isinstance(row, dict) and row.get("sheet_name"):
+                names.append(str(row["sheet_name"]))
+        if names:
+            return names
+    tables_path = v5_tables_json_path(output_dir)
+    if not tables_path.is_file():
+        return []
+    try:
+        with open(tables_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            return list(data.keys())
+    except Exception:
+        pass
+    return []
+
+
+def _summary_banner(summary: Optional[Dict[str, Any]], *, showing_n_sheets: Optional[int] = None) -> None:
+    if not summary:
+        return
+    n_resolved = summary.get("total_resolved_tables", 0)
+    extra = f", {n_resolved} resolved" if n_resolved else ""
+    msg = (
+        f"V5 results — {summary.get('total_sheets', '?')} sheet(s), "
+        f"{summary.get('total_tables', '?')} table(s){extra}, "
+        f"{summary.get('total_tokens', '?')} tokens"
+    )
+    if showing_n_sheets is not None:
+        msg += f" — **displaying {showing_n_sheets} sheet(s)**"
+    st.success(msg)
+
+
+def _render_v5_from_json_maps(
+    tables_data: Dict[str, Any],
+    resolved_data: Dict[str, Any],
+    output_dir: Path,
+    sheet_names: List[str],
+    *,
+    summary: Optional[Dict[str, Any]] = None,
+    audit_calls: Optional[List[Dict[str, Any]]] = None,
+    view_mode_key: str = "json_view_mode",
+) -> None:
+    """Render a subset (or full) of V5 JSON by sheet name order."""
+    if not sheet_names:
+        st.info("No sheets to display.")
+        return
+
+    _summary_banner(summary, showing_n_sheets=len(sheet_names))
+
+    has_resolved = bool(resolved_data) and any(
+        sn in resolved_data for sn in sheet_names
+    )
+    if has_resolved:
+        view_mode = st.radio(
+            "View mode",
+            ["Resolved Tables", "Raw V5 Nodes"],
+            index=0,
+            horizontal=True,
+            key=view_mode_key,
+        )
+    else:
+        view_mode = "Raw V5 Nodes"
+
+    if audit_calls is None:
+        audit_calls = _load_audit_jsonl(output_dir / "audit" / "llm_calls.jsonl")
+    sheets_set = set(sheet_names)
+    audit_f = [c for c in audit_calls if str(c.get("sheet", "")) in sheets_set]
+
+    tab_labels = _unique_tab_labels(sheet_names)
+    tabs = st.tabs(tab_labels)
+    for tab, sheet_name in zip(tabs, sheet_names):
+        with tab:
+            if view_mode == "Resolved Tables" and sheet_name in resolved_data:
+                _render_resolved_sheet_json(
+                    resolved_data[sheet_name],
+                    sheet_name,
+                    audit_calls=audit_f,
+                )
+            elif sheet_name in tables_data:
+                _render_raw_sheet_json(
+                    tables_data[sheet_name],
+                    sheet_name,
+                    audit_calls=audit_f,
+                )
+            else:
+                st.warning(f"No tables.json block for sheet `{sheet_name}`.")
+
+
 def render_v5_from_json(output_dir: str) -> None:
-    """Render V5 results from saved JSON files."""
+    """Render V5 results from saved JSON files (all sheets — can be heavy)."""
     out = Path(output_dir)
     tables_path = out / "tables.json"
     resolved_path = out / "resolved_tables.json"
@@ -666,7 +781,7 @@ def render_v5_from_json(output_dir: str) -> None:
         st.error(f"Failed to load tables.json: {exc}")
         return
 
-    resolved_data = {}
+    resolved_data: Dict[str, Any] = {}
     if resolved_path.exists():
         try:
             with open(resolved_path, "r", encoding="utf-8") as f:
@@ -674,51 +789,210 @@ def render_v5_from_json(output_dir: str) -> None:
         except Exception:
             pass
 
+    summary: Optional[Dict[str, Any]] = None
     if summary_path.exists():
         try:
             with open(summary_path, "r", encoding="utf-8") as f:
                 summary = json.load(f)
-            n_resolved = summary.get("total_resolved_tables", 0)
-            extra = f", {n_resolved} resolved" if n_resolved else ""
-            st.success(
-                f"V5 results — {summary.get('total_sheets', '?')} sheet(s), "
-                f"{summary.get('total_tables', '?')} table(s){extra}, "
-                f"{summary.get('total_tokens', '?')} tokens"
-            )
         except Exception:
-            pass
-
-    # View mode toggle
-    has_resolved = bool(resolved_data)
-    if has_resolved:
-        view_mode = st.radio(
-            "View mode", ["Resolved Tables", "Raw V5 Nodes"],
-            index=0, horizontal=True, key="json_view_mode",
-        )
-    else:
-        view_mode = "Raw V5 Nodes"
+            summary = None
 
     sheet_names = list(tables_data.keys())
     if not sheet_names:
         st.info("No sheets in tables.json.")
         return
 
-    tabs = st.tabs(sheet_names)
-    audit_calls = _load_audit_jsonl(out / "audit" / "llm_calls.jsonl")
-    for tab, sheet_name in zip(tabs, sheet_names):
-        with tab:
-            if view_mode == "Resolved Tables" and sheet_name in resolved_data:
-                _render_resolved_sheet_json(
-                    resolved_data[sheet_name],
-                    sheet_name,
-                    audit_calls=audit_calls,
-                )
-            else:
-                _render_raw_sheet_json(
-                    tables_data[sheet_name],
-                    sheet_name,
-                    audit_calls=audit_calls,
-                )
+    _render_v5_from_json_maps(
+        tables_data,
+        resolved_data,
+        out,
+        sheet_names,
+        summary=summary,
+        view_mode_key="json_view_mode",
+    )
+
+
+def render_v5_selective_view(
+    output_dir: str,
+    run_id: str,
+    *,
+    in_memory: Optional[List[Any]] = None,
+) -> None:
+    """
+    V4-style saved viewer: pick sheets first, then load/render only those.
+
+    Avoids creating tabs for every sheet until the user asks. From disk, sheet
+    names come from summary.json when possible so tables.json is not read until
+    display. Full tables.json / resolved_tables.json is still loaded once when
+    displaying a selection (large runs may take a moment).
+    """
+    out = Path(output_dir)
+    st.markdown("### V5 sheetagent — selective viewer")
+    st.caption(
+        "Add sheets below, then **Display selected sheets**. "
+        "Listing uses `summary.json` when present so the UI stays light."
+    )
+
+    if in_memory:
+        all_names = [_run_sheet_name(r) for r in in_memory]
+    else:
+        if not v5_has_tables_json(str(out)):
+            st.warning(f"No V5 `tables.json` at `{out}`. Run V5 sheetagent for this Run ID first.")
+            return
+        all_names = list_v5_sheet_names(str(out))
+
+    if not all_names:
+        st.info("No V5 sheets found for this run.")
+        return
+
+    summary = load_v5_summary(str(out))
+
+    # --- session: selection + display request --------------------------------
+    sel_key = f"v5_pick_sheets_{run_id}"
+    track_key = f"v5_pick_track_{run_id}"
+    show_key = f"v5_pick_show_{run_id}"
+
+    if st.session_state.get(track_key) != run_id:
+        st.session_state[track_key] = run_id
+        st.session_state[sel_key] = []
+        st.session_state.pop(show_key, None)
+
+    selected: List[str] = list(st.session_state.get(sel_key) or [])
+
+    pool = [s for s in all_names if s not in selected]
+    choice = st.selectbox(
+        "Add sheet to selection",
+        options=["— pick a sheet —"] + pool,
+        key=f"v5_addsb_{run_id}",
+    )
+    row_a = st.columns([1, 1, 2])
+    with row_a[0]:
+        if st.button(
+            "Add sheet",
+            key=f"v5_addbtn_{run_id}",
+            disabled=choice.startswith("—"),
+        ):
+            if choice not in selected:
+                selected.append(choice)
+                st.session_state[sel_key] = selected
+                st.rerun()
+    with row_a[1]:
+        if st.button("Clear selection", key=f"v5_clrsel_{run_id}", disabled=not selected):
+            st.session_state[sel_key] = []
+            st.session_state.pop(show_key, None)
+            st.rerun()
+
+    st.markdown("**Selected sheets** (use X on the right to remove one)")
+    if not selected:
+        st.caption("None — add at least one sheet, then click **Display selected sheets**.")
+    else:
+        to_drop: Optional[int] = None
+        for i, sn in enumerate(selected):
+            c1, c2 = st.columns([10, 1])
+            with c1:
+                st.markdown(f"`{sn}`")
+            with c2:
+                if st.button("X", key=f"v5_rm_{run_id}_{i}", help=f"Remove {sn!r}"):
+                    to_drop = i
+        if to_drop is not None:
+            selected.pop(to_drop)
+            st.session_state[sel_key] = selected
+            st.session_state.pop(show_key, None)
+            st.rerun()
+
+    row_b = st.columns([1, 1, 2])
+    with row_b[0]:
+        go = st.button(
+            "Display selected sheets",
+            key=f"v5_disp_{run_id}",
+            disabled=not selected,
+            type="primary",
+        )
+    with row_b[1]:
+        if st.button(
+            "Hide results",
+            key=f"v5_hide_{run_id}",
+            disabled=st.session_state.get(show_key) is None,
+        ):
+            st.session_state.pop(show_key, None)
+            st.rerun()
+
+    if go and selected:
+        st.session_state[show_key] = tuple(selected)
+
+    show_tuple = st.session_state.get(show_key)
+    if not show_tuple:
+        if summary:
+            _summary_banner(summary, showing_n_sheets=None)
+        return
+
+    show_list = list(show_tuple)
+
+    # ---- render body -------------------------------------------------------
+    if in_memory:
+        by_name = {_run_sheet_name(r): r for r in in_memory}
+        filtered_runs = []
+        for sn in show_list:
+            if sn in by_name:
+                filtered_runs.append(by_name[sn])
+        if not filtered_runs:
+            st.error("Selected sheets are not present in in-memory V5 results.")
+            return
+        try:
+            audit_all = _load_audit_jsonl(out / "audit" / "llm_calls.jsonl")
+            sheets_set = set(show_list)
+            audit_f = [c for c in audit_all if str(c.get("sheet", "")) in sheets_set]
+            _render_v5_results_body(filtered_runs, str(out), audit_calls=audit_f)
+        except Exception as exc:
+            st.error(f"V5 viewer error: {exc}")
+        _render_audit(str(out))
+        return
+
+    tables_path = out / "tables.json"
+    resolved_path = out / "resolved_tables.json"
+    try:
+        with open(tables_path, "r", encoding="utf-8") as f:
+            full_tables = json.load(f)
+    except Exception as exc:
+        st.error(f"Failed to load tables.json: {exc}")
+        return
+
+    if not isinstance(full_tables, dict):
+        st.error("Invalid tables.json shape.")
+        return
+
+    resolved_full: Dict[str, Any] = {}
+    if resolved_path.is_file():
+        try:
+            with open(resolved_path, "r", encoding="utf-8") as f:
+                resolved_full = json.load(f)
+        except Exception:
+            resolved_full = {}
+
+    tables_sub = {k: full_tables[k] for k in show_list if k in full_tables}
+    missing = [k for k in show_list if k not in full_tables]
+    if missing:
+        st.warning("Sheets not found in tables.json: " + ", ".join(f"`{m}`" for m in missing))
+
+    if not tables_sub:
+        st.error("Nothing to display — selected sheets are missing from tables.json.")
+        return
+
+    resolved_sub = {k: resolved_full[k] for k in show_list if k in resolved_full}
+
+    try:
+        _render_v5_from_json_maps(
+            tables_sub,
+            resolved_sub,
+            out,
+            show_list,
+            summary=summary,
+            view_mode_key=f"v5_vm_sel_{run_id}",
+        )
+    except Exception as exc:
+        st.error(f"V5 viewer error: {exc}")
+
+    _render_audit(str(out))
 
 
 def _render_resolved_sheet_json(

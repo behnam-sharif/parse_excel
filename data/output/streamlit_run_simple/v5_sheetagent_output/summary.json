@@ -14,7 +14,8 @@
         "metadata": 6
       },
       "resolved_table_roles": {
-        "metadata": 2
+        "not_found": 1,
+        "metadata": 1
       }
     },
     {
@@ -59,8 +60,8 @@
         "mixed": 26
       },
       "resolved_table_roles": {
-        "input": 3,
-        "mixed": 24
+        "input": 4,
+        "mixed": 23
       }
     }
   ]

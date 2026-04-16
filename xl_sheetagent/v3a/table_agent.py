@@ -163,7 +163,9 @@ def run_table_agent(
             header_cands = _scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config)
 
         # Phase 2: Formatting analysis - unpack tuple return and handle split flag
-        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        rowname_cands, rowname_split_flag = _scan_row_names(
+            grid, types, r_top, c_left, r_bot, c_right, core, tid, ws, config,
+        )
         if rowname_split_flag:
             split_cands.append(SplitCandidate(
                 axis="unknown",
@@ -516,7 +518,7 @@ def _scan_numeric_header(
 
 
 def _scan_row_names(
-    grid, types, r_top, c_left, r_bot, c_right, core, tid, ws=None,
+    grid, types, r_top, c_left, r_bot, c_right, core, tid, ws, config,
 ):
     """Scan columns left of the core for row-name candidates.
 
@@ -819,7 +821,9 @@ def _collect_candidates_by_role(
         # Data child → TITLE + ROW_NAME + FOOTNOTE (no HEADER - inherited from parent)
         _log.debug("Table %s: child_numeric role - collecting title+rowname+footnote", tid)
         candidates.extend(_scan_title(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
-        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        rowname_cands, rowname_split_flag = _scan_row_names(
+            grid, types, r_top, c_left, r_bot, c_right, core, tid, ws, config,
+        )
         candidates.extend(rowname_cands)
         if rowname_split_flag:
             split_cands.append(SplitCandidate(
@@ -840,7 +844,9 @@ def _collect_candidates_by_role(
         candidates.extend(_scan_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
         if not any(c.piece_type == "header_row" for c in candidates):
             candidates.extend(_scan_numeric_header(grid, types, r_top, c_left, r_bot, c_right, core, tid, config))
-        rowname_cands, rowname_split_flag = _scan_row_names(grid, types, r_top, c_left, r_bot, c_right, core, tid, ws)
+        rowname_cands, rowname_split_flag = _scan_row_names(
+            grid, types, r_top, c_left, r_bot, c_right, core, tid, ws, config,
+        )
         candidates.extend(rowname_cands)
         if rowname_split_flag:
             split_cands.append(SplitCandidate(

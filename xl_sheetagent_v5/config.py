@@ -87,7 +87,7 @@ class XlSheetAgentV5Config:
 
     # LLM Rules Engine
     enable_llm_rules: bool
-    rule_parent_header_formula: bool
-    rule_parent_header_composite: bool
-    rule_header_title_collision: bool
+    rule_header_number_parent_standalone: bool
+    rule_header_composite_all: bool
+    rule_header_title_collision_parent_childnum_standalone: bool
     llm_rule_max_context_rows: int

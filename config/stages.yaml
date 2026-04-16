@@ -356,7 +356,7 @@ xl_sheetagent_v5:
   blank_inclusion_density_threshold: 0.30
 
   # Enhanced LLM metadata resolution
-  use_llm_metadata_resolution: false
+  use_llm_metadata_resolution: true
   llm_metadata_max_tokens: 3000
   llm_metadata_max_cells: 8000
   include_cut_scores_in_prompt: true
@@ -373,9 +373,9 @@ xl_sheetagent_v5:
 
   # LLM Rules Engine
   enable_llm_rules: true
-  rule_parent_header_formula: true
-  rule_parent_header_composite: true
-  rule_header_title_collision: true
+  rule_header_number_parent_standalone: true
+  rule_header_composite_all: true
+  rule_header_title_collision_parent_childnum_standalone: true
   llm_rule_max_context_rows: 6
 
 xl_image:

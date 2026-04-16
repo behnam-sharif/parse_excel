@@ -297,7 +297,7 @@ def _resolve_parent_table(
     # Normalize core regions to start below the resolved header band.
     #
     # Rationale:
-    # - LLM Rule 1 (parent_header_formula) may shift core-start down.
+    # - LLM rule header_number_parent_standalone may shift core-start down.
     # - In v5.1 resolution we often union child core regions; those children can
     #   still carry small "top bands" that overlap the parent's header rows.
     # - For consumers (and the orchestrator UI), core regions should never
