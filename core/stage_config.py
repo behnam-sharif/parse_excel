@@ -141,3 +141,17 @@ def sheetagent_v5_config_from_pipeline(
     overrides: Optional[Dict[str, Any]] = None,
 ):
     return sheetagent_v5_config_from_mapping(merge_stage_dict(pc.xl_sheetagent_v5, overrides))
+
+
+def sheetagent_v6_config_from_mapping(d: Mapping[str, Any]):
+    from xl_sheetagent_v6.config import XlSheetAgentV6Config
+
+    data = _require_exact_keys(XlSheetAgentV6Config, d, "stages.yaml xl_sheetagent_v6")
+    return XlSheetAgentV6Config(**data)
+
+
+def sheetagent_v6_config_from_pipeline(
+    pc: PipelineConfig,
+    overrides: Optional[Dict[str, Any]] = None,
+):
+    return sheetagent_v6_config_from_mapping(merge_stage_dict(pc.xl_sheetagent_v6, overrides))

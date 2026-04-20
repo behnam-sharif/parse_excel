@@ -18,12 +18,14 @@ class TestImports(unittest.TestCase):
         from xl_parse import run_parse
         from xl_table import run_table
         from xl_sheetagent import run_sheetagent
+        from xl_sheetagent_v6 import run_v6_analysis
 
         self.assertTrue(callable(run_init))
         self.assertTrue(callable(run_parse))
         self.assertTrue(callable(run_table))
         self.assertTrue(callable(run_image))
         self.assertTrue(callable(run_sheetagent))
+        self.assertTrue(callable(run_v6_analysis))
 
     def test_sheetagent_v1b_schemas_import(self) -> None:
         from xl_sheetagent.schemas import (
@@ -60,6 +62,7 @@ class TestConfig(unittest.TestCase):
             xl_init_config_from_pipeline,
             sheetagent_config_from_pipeline,
             sheetagent_v5_config_from_pipeline,
+            sheetagent_v6_config_from_pipeline,
         )
 
         pc = load_config()
@@ -69,6 +72,7 @@ class TestConfig(unittest.TestCase):
         xl_image_config_from_pipeline(pc)
         sheetagent_config_from_pipeline(pc)
         sheetagent_v5_config_from_pipeline(pc)
+        sheetagent_v6_config_from_pipeline(pc)
 
 
 class TestNoLegacyKgSubstring(unittest.TestCase):
@@ -79,6 +83,7 @@ class TestNoLegacyKgSubstring(unittest.TestCase):
             _ROOT / "xl_table",
             _ROOT / "xl_image",
             _ROOT / "xl_sheetagent",
+            _ROOT / "xl_sheetagent_v6",
             _ROOT / "core",
             _ROOT / "apps",
             _ROOT / "scripts",

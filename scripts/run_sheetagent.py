@@ -35,9 +35,33 @@ def main():
             "V5 wraps V3a hierarchy + deterministic row tagging + selective LLM."
         ),
     )
+    parser.add_argument(
+        "--v6",
+        action="store_true",
+        help=(
+            "Run the V6 pipeline (writes v6_sheetagent_output/). "
+            "V6 uses core-first metadata algorithm with V3a hierarchy preserved."
+        ),
+    )
     args = parser.parse_args()
 
-    if args.v5:
+    if args.v6:
+        from core.config import load_config
+        from core.stage_config import sheetagent_v6_config_from_pipeline
+
+        pc = load_config()
+        v6_cfg = sheetagent_v6_config_from_pipeline(pc)
+
+        from xl_sheetagent_v6 import run_v6_analysis
+
+        results = run_v6_analysis(
+            run_id=args.run_id,
+            output_base=args.output_base,
+            config=v6_cfg,
+        )
+        total = sum(len(r.tables) for r in results)
+        print(f"xl_sheetagent (V6): {total} tables — see v6_sheetagent_output/")
+    elif args.v5:
         from core.config import load_config
         from core.stage_config import sheetagent_v5_config_from_pipeline
 

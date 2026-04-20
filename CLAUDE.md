@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **xlgen_v3** is a monorepo Excel-to-Structural-Table pipeline for health economics and financial modeling. It deterministically converts multi-sheet Excel workbooks into structured table data for downstream ML/LLM processing.
 
-**Pipeline stages:** `xl_init` -> `xl_parse` -> `xl_table` -> `xl_image` (optional) -> `xl_sheetagent` (optional, V3a or V5)
+**Pipeline stages:** `xl_init` -> `xl_parse` -> `xl_table` -> `xl_image` (optional) -> `xl_sheetagent` (optional, V3a, V5, or V6)
 
 | Stage | Package | Entry Point | Purpose |
 |-------|---------|-------------|---------|
@@ -18,6 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 4 | `xl_image` | `run_image(parse_output_path, output_path, config)` | Visual rendering, feature extraction, split candidates (optional) |
 | 5 | `xl_sheetagent` | `run_sheetagent(run_id, output_base, config)` | V3a: LLM-driven semantic enrichment of structural tables (optional) |
 | 5 | `xl_sheetagent_v5` | `run_v5_analysis(run_id, output_base, config, ...)` | V5: deterministic row tagging, header detection, core regions, optional LLM refinement (optional) |
+| 5 | `xl_sheetagent_v6` | `run_v6_analysis(run_id, output_base, config, ...)` | V6: core-first metadata algorithm, directional walks, LLM gate, optional LLM per-bbox (optional) |
 
 The string `xl_kg` must not appear in any `.py` file under the stage directories (enforced by `TestNoLegacyKgSubstring`).
 
@@ -50,6 +51,9 @@ py -3 scripts/run_sheetagent.py --run-id myrun --v3a
 # Sheet agent (V5 — deterministic + optional LLM)
 py -3 scripts/run_sheetagent.py --run-id myrun --v5
 
+# Sheet agent (V6 — core-first + LLM gate)
+py -3 scripts/run_sheetagent.py --run-id myrun --v6
+
 # Streamlit orchestrator
 py -3 -m streamlit run apps/orchestrator/app.py
 
@@ -72,16 +76,17 @@ All artifacts for a run live under `data/output/<run_id>/` with subfolders:
 | `image_output/` | xl_image | `images/`, `features/`, `features_index.jsonl`, `qc/` |
 | `sheetagent_output/` | xl_sheetagent (V3a) | `v3a_results.json` |
 | `v5_sheetagent_output/` | xl_sheetagent_v5 | `tables.json`, `resolved_tables.json`, `summary.json`, `audit/llm_calls.jsonl` |
+| `v6_sheetagent_output/` | xl_sheetagent_v6 | `tables.json`, `resolved_tables.json`, `summary.json`, `audit/llm_calls.jsonl` |
 | `logs/` | all | `pipeline.log`, `xl_image.log` |
 
 Stages must use `core/paths.py` for all path construction -- never invent alternate output roots.
 
 ### Configuration (Two-File YAML)
 
-- `config/stages.yaml` -- all stage parameters (nested under `xl_init`, `xl_parse`, `xl_table`, `xl_image`, `xl_sheetagent`, `xl_sheetagent_v5`)
+- `config/stages.yaml` -- all stage parameters (nested under `xl_init`, `xl_parse`, `xl_table`, `xl_image`, `xl_sheetagent`, `xl_sheetagent_v5`, `xl_sheetagent_v6`)
 - `config/general.yaml` -- logging level/filename, output_base, orchestrator defaults
 
-`core/config.py` loads both files into `PipelineConfig` (with `GeneralConfig` + raw dicts per stage). `core/stage_config.py` provides typed builders (`xl_init_config_from_pipeline`, `parse_config_from_pipeline`, `sheetagent_config_from_pipeline`, `sheetagent_v5_config_from_pipeline`, etc.) that map YAML dicts onto stage dataclasses with **exact key matching** -- unknown keys raise errors, no silent Python defaults in production. YAML is the single source of truth for all thresholds.
+`core/config.py` loads both files into `PipelineConfig` (with `GeneralConfig` + raw dicts per stage). `core/stage_config.py` provides typed builders (`xl_init_config_from_pipeline`, `parse_config_from_pipeline`, `sheetagent_config_from_pipeline`, `sheetagent_v5_config_from_pipeline`, `sheetagent_v6_config_from_pipeline`, etc.) that map YAML dicts onto stage dataclasses with **exact key matching** -- unknown keys raise errors, no silent Python defaults in production. YAML is the single source of truth for all thresholds.
 
 ### Environment Bootstrap
 
@@ -102,15 +107,17 @@ Cross-package shared types use absolute imports from core: `from core.visual_typ
 
 ### Key Invariants
 
-- **All thresholds in config dataclasses** -- no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `XlTableConfig` (in `config.py`), `xl_image` uses `XlImageConfig` (in `config.py`), `xl_sheetagent_v5` uses `XlSheetAgentV5Config` (in `config.py`, 91 fields).
+- **All thresholds in config dataclasses** -- no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `XlTableConfig` (in `config.py`), `xl_image` uses `XlImageConfig` (in `config.py`), `xl_sheetagent_v5` uses `XlSheetAgentV5Config` (in `config.py`, 91 fields), `xl_sheetagent_v6` uses `XlSheetAgentV6Config` (in `config.py`, 60 fields).
 - **BBox convention**: All bounding boxes use 0-indexed inclusive coordinates. xl_parse: `(r1, c1, r2, c2)` via `BBox`. xl_table: `(r_top, c_left, r_bot, c_right)` via `BBoxInput`.
 - **Thread safety**: `SheetAccessor` (in both xl_parse and xl_table) opens a separate openpyxl workbook per thread. Never share workbook objects across threads. xl_table's accessor caches per-sheet sparse cell data.
 - **Provenance tracking**: `BlockCandidate.provenance` records the transformation chain (e.g., `"cc+bridge+expand+shrink"`). Append when mutating blocks.
 - **`formula_ratio` is always 0.0** in xl_table -- workbook opened `data_only=True`; `c10_bonus_weight` must stay 0.0.
 - **Cell classification** (xl_table): `_BLANK`, `_TEXT`, `_NUMBER`. Bool -> number, date -> text, `#REF!` -> text (Section 9.2 rules).
 - **Loose coupling**: xl_table and xl_image never import each other directly; shared state goes through `core.visual_types`.
-- **V5 is an enricher, not a splitter**: `xl_sheetagent_v5` consumes V3a structural hierarchy from `xl_table` (or `xl_sheetagent` V3a) and adds semantic annotations. It does not re-split tables.
+- **V5/V6 are enrichers, not splitters**: `xl_sheetagent_v5` and `xl_sheetagent_v6` consume V3a structural hierarchy from `xl_table` (or `xl_sheetagent` V3a) and add semantic annotations. They do not re-split tables.
 - **Row tagging is V5's backbone**: Layer 1 heuristic tags (`title_candidate`, `header_candidate`, `data_candidate`, etc.) feed into all downstream V5 logic; Layer 2 tags (`consumed_title`, `consumed_header`, etc.) are resolved after hierarchy + candidate collection.
+- **Core region is V6's anchor**: V6 inverts V5's order — detects core regions first (NUMBER + FORMULA connected components), validates them (strip header-like/note-like rows), then walks outward for metadata. Row tags are Layer 1 priors only; Layer 2 is resolved after walks.
+- **V6 coordinate convention**: `CoreRegion.bbox` uses ABSOLUTE coordinates; `ConsumedMap` rows and grid/types arrays are LOCAL (0-indexed relative to parent bbox). Convert with `local_r = abs_r - bbox["r1"]`.
 
 ## Stage Details
 
@@ -226,6 +233,56 @@ Load V3a hierarchy (from xl_table or xl_sheetagent V3a)
 
 **Active development plan**: `xl_sheetagent_v5/plan_sheetagent_v5_1.md` -- child-centric hierarchy, coverage recovery, multi-core materialization (phased P0-P4).
 
+### xl_sheetagent_v6 Pipeline (per sheet, parallel)
+
+V6 is a **core-first, deterministic + LLM-gated** enricher. It inverts V5's per-bbox algorithm: detect core regions first, validate them, then walk outward for metadata. V3a hierarchy, parent/child resolution, and ResolvedTable assembly are identical to V5.
+
+```
+Load V3a hierarchy (from xl_table or xl_sheetagent V3a)
+  -> Per-sheet parallel (ThreadPoolExecutor)
+    -> Per-table sequential (depth-first, parent before child)
+      -> Step 0: Row Tagging (Layer 1 priors only)         [row_tagger.py]
+      -> Step 1: Core Region Detection (connected components) [core_region_detector.py]
+      -> Step 1b: Zero cores → return empty metadata
+      -> Step 2: Core Region Validation (strip top/bottom)    [core_region_validator.py]
+      -> Step 3: Upward Walk (header + title from core)       [upward_walk.py]
+      -> Step 4: Leftward Walk (row names from core)          [leftward_walk.py]
+      -> Step 5: Note Scanner (right + below core)            [note_scanner.py]
+      -> Step 6: ConsumedMap + Layer 2 tag resolution
+      -> Step 7: Table Role Assignment
+      -> Step 7b: LLM Gate evaluation (6 triggers)            [llm_gate.py]
+      -> Step 7c: Optional LLM call (consolidated per-bbox)   [prompt_builder.py]
+      -> Step 7d: Merge LLM result into heuristic output
+      -> Step 8: Confidence computation + Formatting           [formatting_agent.py]
+    -> Reconstruct V3a hierarchy tree
+    -> ResolvedTable assembly (parent + children)              [table_resolver.py]
+  -> Export (tables.json, resolved_tables.json, summary.json)  [exporter.py]
+```
+
+**Config**: `XlSheetAgentV6Config` (60 fields) -- row tagging thresholds, core region detection, core validation (top/bottom row checks, sequence detection for years/months/cycles/quarters, formula divergence, ambiguity threshold), directional walk limits (upward max rows, leftward max cols, note scan bounds), LLM gate (6 toggle flags per trigger, payload max cells, context max rows, per-sheet call limit), LLM transport (model, max tokens, temperature, retries), confidence weights (w_tags=0.25, w_header=0.25, w_core=0.20, w_llm=0.15, w_role=0.15), resolution, formatting, parallelism, audit, export mode.
+
+**Data models** (`schemas.py`): `RowTag`, `NoteEntry`, `CoreRegion` (bbox, density, role_hint, validation_result), `FormattingInfo`, `ConsumedMap`, `V6TableResult` (adds `llm_result`, `llm_gate_triggers` vs V5), `V6ResolvedTable` (adds `metadata_source`, `llm_metadata`), `V6RunResult`.
+
+**Key modules**: `runner.py` (entry point + sheet-level parallelization), `table_agent.py` (per-table orchestrator — core-first pipeline), `core_region_detector.py` (NUMBER + FORMULA connected components, density expansion), `core_region_validator.py` (4 top-row checks + 3 bottom-row checks), `upward_walk.py` (header + title detection walking up from validated core), `leftward_walk.py` (row name detection walking left), `note_scanner.py` (right-of-core + below-last-core), `llm_gate.py` (6 gate triggers + should_call_llm), `prompt_builder.py` (per-bbox + metadata resolution prompts, response parsing, merge_llm_result), `row_tagger.py` (Layer 1+2), `table_resolver.py` (ResolvedTable assembly — identical to V5), `formatting_agent.py`, `llm_audit.py`, `exporter.py`, `note_keywords.py`, `config.py`.
+
+**LLM gate triggers** (at most 1 consolidated LLM call per bbox):
+1. `core_validation_ambiguous` — any core region flagged ambiguous by validator
+2. `multi_core_ambiguity` — multiple cores with inconsistent role hints
+3. `missing_header` — no headers found (local or inherited)
+4. `ambiguous_inter_core_rows` — rows between cores not consumed, not clearly data
+5. `coverage_gap` — >30% of bbox rows not covered by metadata or core
+6. `overlap` — core regions or metadata claims overlap
+
+**LLM dispatch**: Uses `xl_sheetagent_v4.llm_dispatch.complete_text(client, model, prompt, max_tokens, temperature)` → `(raw_text, tokens)`.
+
+**Thread safety**: Same as V5 — sheets in parallel, per-thread openpyxl workbook.
+
+**Hierarchy processing**: Same as V5 — parent-before-child order, V3a relationships preserved.
+
+**Outputs**: `v6_sheetagent_output/tables.json`, `resolved_tables.json`, `summary.json`, `audit/llm_calls.jsonl`.
+
+**Orchestrator**: `apps/orchestrator/v6_viewer.py` — selective viewer with sheet picker, Raw V6 Nodes view (gate trigger badges), Resolved Tables view (metadata_source badges), core validation display.
+
 ## Dependencies
 
 Core: `openpyxl`, `pandas`, `numpy`, `pyyaml`, `python-dotenv`
@@ -235,13 +292,20 @@ UI: `streamlit` (orchestrator)
 
 ## Streamlit Orchestrator
 
-`apps/orchestrator/app.py` -- upload workbook, set run ID, run stages in tabs. Session-state config overrides (not persisted to YAML). ThreadPoolExecutor-based async execution with polling/rerun.
+`apps/orchestrator/app.py` -- upload workbook, set run ID, run stages in tabs. Session-state config overrides (not persisted to YAML). ThreadPoolExecutor-based async execution with polling/rerun. Supports V3a, V4, V5, and V6 sheetagent runs + saved-result viewers. Viewer modules loaded via `importlib.util` (sibling files: `v3a_viewer.py`, `v4_viewer.py`, `v5_viewer.py`, `v6_viewer.py`).
 
 ## Test Infrastructure
 
 - `conftest.py` at repo root adds xlgen_v3 to `sys.path`
-- `tests/test_smoke.py` validates: stage imports work (including V5), YAML loads into dataclasses, no `xl_kg` substring in source files
+- `tests/test_smoke.py` validates: stage imports work (including V5, V6), YAML loads into dataclasses, no `xl_kg` substring in source files
 - `tests/test_v5_corrections.py` -- V5-specific tests: ResolvedTable schema, core region blank inclusion, table role rules, column-cut-based row names, multi-core children consistency, table resolver
+- `tests/test_v6_core.py` -- V6 P0: package skeleton, core region detection
+- `tests/test_v6_core_validator.py` -- V6 P1: core region validation (top/bottom row checks)
+- `tests/test_v6_walks.py` -- V6 P1: upward walk (header/title), leftward walk (row names)
+- `tests/test_v6_notes.py` -- V6 P1: note scanner (right + below core)
+- `tests/test_v6_hierarchy.py` -- V6 P1: hierarchy processing, parent-before-child order
+- `tests/test_v6_llm_gate.py` -- V6 P2: LLM gate triggers, prompt builder, response parsing, merge logic
+- `tests/test_v6_p3_integration.py` -- V6 P3: table_resolver+prompt_builder import, exporter serialization (llm_result/llm_gate_triggers/metadata_source/llm_metadata), config pipeline, paths, orchestrator viewer, round-trip export
 - `tests/test_v3a_*.py` -- V3a candidate rules, hierarchy, multi-split, row names with formulas
 - `xl_sheetagent/tests/` -- internal V3a tests (section assignment, tree assembly, coordinator, step3 row headers, scoring, viewer loads, e2e deterministic, v1d regression)
 - No pytest.ini -- run with `py -3 -m pytest tests/`
@@ -254,5 +318,6 @@ UI: `streamlit` (orchestrator)
 4. **Per-stage typed configs** -- each stage has its own dataclass + YAML section
 5. **Flat parse export** -- no timestamp subdirectories in parse_output
 6. **Graceful degradation** -- xl_image falls back from COM to matplotlib
-7. **Deterministic first, LLM optional** -- xl_sheetagent_v5 runs all heuristics deterministically; LLM only refines if `use_llm=true`
-8. **V3a hierarchy preserved** -- V5 respects parent/child relationships from V3a; ResolvedTable merges for consumers
+7. **Deterministic first, LLM optional** -- xl_sheetagent_v5 runs all heuristics deterministically; LLM only refines if `use_llm=true`. V6 uses a 6-trigger LLM gate; LLM fires only when `enable_llm=true` and at least one trigger fires.
+8. **V3a hierarchy preserved** -- V5 and V6 respect parent/child relationships from V3a; ResolvedTable merges for consumers
+9. **V5 is frozen** -- no edits to `xl_sheetagent_v5/`. V6 is the active development version.
