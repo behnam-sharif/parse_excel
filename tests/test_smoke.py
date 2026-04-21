@@ -51,6 +51,31 @@ class TestImports(unittest.TestCase):
         self.assertTrue(TraceAccumulator is not None)
         self.assertTrue(ToolCallRecorder is not None)
 
+    def test_v6_finalize_imports(self) -> None:
+        from xl_sheetagent_v6.coordinates import bbox_to_coords
+        from xl_sheetagent_v6.finalize import finalize_sheet
+        from xl_sheetagent_v6.final_map_exporter import (
+            export_final_map,
+            serialize_final_map,
+        )
+        from xl_sheetagent_v6.schemas import (
+            FinalMapChildEntry,
+            FinalMapEntryParent,
+            FinalMapEntryStandalone,
+            FinalTableMap,
+        )
+        from core.paths import get_v6_final_table_map_path
+
+        self.assertTrue(callable(bbox_to_coords))
+        self.assertTrue(callable(finalize_sheet))
+        self.assertTrue(callable(export_final_map))
+        self.assertTrue(callable(serialize_final_map))
+        self.assertTrue(callable(get_v6_final_table_map_path))
+        self.assertTrue(FinalMapChildEntry is not None)
+        self.assertTrue(FinalMapEntryParent is not None)
+        self.assertTrue(FinalMapEntryStandalone is not None)
+        self.assertTrue(FinalTableMap is not None)
+
 
 class TestConfig(unittest.TestCase):
     def test_load_yaml_maps_to_dataclasses(self) -> None:

@@ -629,6 +629,213 @@ def _render_resolved_sheet_panel(result: Any, *, audit_calls: List[Dict[str, Any
 
 
 # ---------------------------------------------------------------------------
+# Finalize rendering (final_table_map.json)
+# ---------------------------------------------------------------------------
+
+# Flag severity buckets per spec §"Orchestrator Integration":
+#   yellow → soft (missing fields, benign propagation)
+#   orange → structural (conflicts, nesting, footnote-like titles)
+#   red    → critical (all three of title/headers/row_names absent)
+_FLAG_RED = {"low_context_node"}
+_FLAG_ORANGE = {
+    "title_looks_like_footnote",
+    "multiple_header_candidates",
+    "header_conflict",
+    "orphan_metadata",
+    "all_metadata_no_numeric",
+    "nested_parent_flattened",
+    "deep_nesting_unflattened",
+    "no_core_region",
+    "title_differs_from_metadata_child",
+}
+
+
+def _flag_badge(flag: str) -> str:
+    if flag in _FLAG_RED:
+        color = "#c0392b"  # red
+    elif flag in _FLAG_ORANGE:
+        color = "#d35400"  # orange
+    else:
+        color = "#b7950b"  # yellow/amber
+    return (
+        f"<span style='background:{color};color:white;padding:2px 6px;"
+        f"border-radius:4px;font-size:0.80em;margin-right:4px;'>{flag}</span>"
+    )
+
+
+def _render_flags(flags: List[str]) -> None:
+    if not flags:
+        return
+    html = "".join(_flag_badge(f) for f in flags)
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def _render_headers_block(headers: Any, indent: str = "") -> None:
+    if _headers_meaningful(headers):
+        st.markdown(f"{indent}**Headers** ({len(headers)} row(s)):")
+        for ri, h_row in enumerate(headers):
+            cells = [str(h) for h in h_row]
+            header_str = ", ".join(f"`{h}`" for h in cells[:12])
+            if len(cells) > 12:
+                header_str += f" ... ({len(cells) - 12} more)"
+            st.markdown(f"{indent}  Row {ri + 1}: {header_str}")
+    else:
+        st.markdown(f"{indent}**Headers**: not found")
+
+
+def _render_row_names_block(row_names: Any, indent: str = "") -> None:
+    if _row_names_meaningful(row_names):
+        rn = list(row_names)
+        row_str = ", ".join(f"`{r}`" for r in rn[:12])
+        if len(rn) > 12:
+            row_str += f" ... ({len(rn) - 12} more)"
+        st.markdown(f"{indent}**Row names** ({len(rn)}): {row_str}")
+    else:
+        st.markdown(f"{indent}**Row names**: not found")
+
+
+def _render_core_region_block(cr: Optional[Dict[str, Any]], indent: str = "") -> None:
+    if cr:
+        st.markdown(f"{indent}**Core region**: `{_bbox_dict_to_excel(cr)}`")
+    else:
+        st.markdown(f"{indent}**Core region**: null")
+
+
+def _render_notes_block(notes: List[Any], indent: str = "") -> None:
+    if not notes:
+        return
+    st.markdown(f"{indent}**Notes** ({len(notes)}):")
+    for note in notes[:6]:
+        st.markdown(f"{indent}  - row {_note_row(note)}: {_note_text(note)[:120]}")
+    if len(notes) > 6:
+        st.caption(f"{indent}... and {len(notes) - 6} more note(s)")
+
+
+def _render_finalize_leaf_body(entry: Dict[str, Any], indent: str = "") -> None:
+    """Render body of a standalone entry or child entry (both share leaf fields)."""
+    title = entry.get("title")
+    if title and str(title).strip():
+        st.markdown(f"{indent}**Title**: {title}")
+    else:
+        st.markdown(f"{indent}**Title**: not found")
+
+    _render_headers_block(entry.get("headers", []), indent)
+    _render_row_names_block(entry.get("row_names"), indent)
+    _render_core_region_block(entry.get("core_region"), indent)
+
+    node_type = entry.get("node_type", "")
+    parent_path = entry.get("parent_path", []) or []
+    st.markdown(
+        f"{indent}**node_type**: `{node_type or 'unknown'}` | "
+        f"**parent_path**: {' / '.join(parent_path) if parent_path else '(root)'}"
+    )
+
+    notes = entry.get("notes") or []
+    _render_notes_block(notes, indent)
+
+
+def _render_finalize_standalone(entry: Dict[str, Any]) -> None:
+    table_id = entry.get("table_id", "?")
+    coords = entry.get("coordinates", "?")
+    title = entry.get("title")
+    label = title.strip() if title and str(title).strip() else "not found"
+    flags = entry.get("source_flags", []) or []
+    with st.expander(
+        f"Standalone `{table_id}`: {label} (`{coords}`)",
+        expanded=False,
+    ):
+        if flags:
+            _render_flags(flags)
+        _render_finalize_leaf_body(entry)
+
+
+def _render_finalize_child(child: Dict[str, Any], indent: str = "  ") -> None:
+    table_id = child.get("table_id", "?")
+    coords = child.get("coordinates", "?")
+    title = child.get("title")
+    label = title.strip() if title and str(title).strip() else "not found"
+    flags = child.get("source_flags", []) or []
+    node_type = child.get("node_type", "")
+    node_badge = f" | {node_type}" if node_type else ""
+    st.markdown(
+        f"{indent}**Child** `{table_id}`: {label}{node_badge} "
+        f"(`{coords}`)"
+    )
+    if flags:
+        _render_flags(flags)
+    _render_finalize_leaf_body(child, indent=indent + "  ")
+
+
+def _render_finalize_parent(entry: Dict[str, Any]) -> None:
+    table_id = entry.get("table_id", "?")
+    coords = entry.get("coordinates", "?")
+    title = entry.get("title")
+    label = title.strip() if title and str(title).strip() else "not found"
+    flags = entry.get("source_flags", []) or []
+    children = entry.get("children", []) or []
+    with st.expander(
+        f"Parent `{table_id}`: {label} (`{coords}`) — {len(children)} child(ren)",
+        expanded=False,
+    ):
+        if flags:
+            _render_flags(flags)
+        parent_path = entry.get("parent_path", []) or []
+        st.markdown(
+            f"**parent_path**: {' / '.join(parent_path) if parent_path else '(root)'}"
+        )
+        st.markdown("---")
+        if not children:
+            st.info("No children emitted.")
+            return
+        for i, ch in enumerate(children):
+            _render_finalize_child(ch)
+            if i != len(children) - 1:
+                st.markdown("")
+
+
+def _render_finalize_entry(entry: Dict[str, Any]) -> None:
+    kind = entry.get("kind")
+    if kind == "standalone":
+        _render_finalize_standalone(entry)
+    elif kind == "parent":
+        _render_finalize_parent(entry)
+    else:
+        st.warning(f"Unknown finalize entry kind: {kind!r}")
+
+
+def _render_finalize_sheet(sheet_block: Dict[str, Any], sheet_name: str) -> None:
+    entries = sheet_block.get("entries", []) if isinstance(sheet_block, dict) else []
+    stats = sheet_block.get("stats", {}) if isinstance(sheet_block, dict) else {}
+    finalize_version = sheet_block.get("finalize_version", "?") if isinstance(sheet_block, dict) else "?"
+
+    st.markdown(f"### Sheet: {sheet_name}")
+    st.caption(f"finalize_version: `{finalize_version}`")
+
+    if stats:
+        standalone = stats.get("standalone_count", 0)
+        parent = stats.get("parent_count", 0)
+        total_children = stats.get("total_children", 0)
+        cols = st.columns(3)
+        cols[0].metric("Standalone", standalone)
+        cols[1].metric("Parent", parent)
+        cols[2].metric("Total children", total_children)
+
+        flag_freq = stats.get("flag_frequency", {}) or {}
+        if flag_freq:
+            with st.expander(f"Flag frequency ({sum(flag_freq.values())} occurrence(s))", expanded=False):
+                for flag, count in sorted(flag_freq.items(), key=lambda kv: -kv[1]):
+                    st.markdown(f"- {_flag_badge(flag)} × **{count}**", unsafe_allow_html=True)
+
+    if not entries:
+        st.info("No finalize entries for this sheet.")
+        return
+
+    st.markdown(f"**Entries**: {len(entries)}")
+    for entry in entries:
+        _render_finalize_entry(entry)
+
+
+# ---------------------------------------------------------------------------
 # JSON-based rendering (from saved files)
 # ---------------------------------------------------------------------------
 
@@ -638,6 +845,26 @@ def v6_tables_json_path(output_dir: str) -> Path:
 
 def v6_has_tables_json(output_dir: str) -> bool:
     return v6_tables_json_path(output_dir).is_file()
+
+
+def v6_final_map_path(output_dir: str) -> Path:
+    return Path(output_dir) / "final_table_map.json"
+
+
+def v6_has_final_map(output_dir: str) -> bool:
+    return v6_final_map_path(output_dir).is_file()
+
+
+def _load_final_map(output_dir: Path) -> Dict[str, Any]:
+    p = output_dir / "final_table_map.json"
+    if not p.is_file():
+        return {}
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
 
 
 def load_v6_summary(output_dir: str) -> Optional[Dict[str, Any]]:
@@ -698,6 +925,7 @@ def _render_v6_from_json_maps(
     summary: Optional[Dict[str, Any]] = None,
     audit_calls: Optional[List[Dict[str, Any]]] = None,
     view_mode_key: str = "v6_json_view_mode",
+    final_map_data: Optional[Dict[str, Any]] = None,
 ) -> None:
     if not sheet_names:
         st.info("No sheets to display.")
@@ -706,13 +934,25 @@ def _render_v6_from_json_maps(
     _summary_banner(summary, showing_n_sheets=len(sheet_names))
 
     has_resolved = bool(resolved_data) and any(sn in resolved_data for sn in sheet_names)
+    has_finalize = bool(final_map_data) and any(sn in final_map_data for sn in sheet_names)
+
+    view_options: List[str] = []
     if has_resolved:
+        view_options.append("Resolved Tables")
+    view_options.append("Raw V6 Nodes")
+    if has_finalize:
+        view_options.append("Finalize")
+
+    if len(view_options) > 1:
         view_mode = st.radio(
-            "View mode", ["Resolved Tables", "Raw V6 Nodes"],
+            "View mode", view_options,
             index=0, horizontal=True, key=view_mode_key,
         )
     else:
-        view_mode = "Raw V6 Nodes"
+        view_mode = view_options[0]
+
+    if not has_finalize:
+        st.caption("Finalize not available for this run.")
 
     if audit_calls is None:
         audit_calls = _load_audit_jsonl(output_dir / "audit" / "llm_calls.jsonl")
@@ -723,7 +963,12 @@ def _render_v6_from_json_maps(
     tabs = st.tabs(tab_labels)
     for tab, sheet_name in zip(tabs, sheet_names):
         with tab:
-            if view_mode == "Resolved Tables" and sheet_name in resolved_data:
+            if view_mode == "Finalize":
+                if final_map_data and sheet_name in final_map_data:
+                    _render_finalize_sheet(final_map_data[sheet_name], sheet_name)
+                else:
+                    st.warning(f"No finalize block for sheet `{sheet_name}`.")
+            elif view_mode == "Resolved Tables" and sheet_name in resolved_data:
                 _render_resolved_sheet_json(resolved_data[sheet_name], sheet_name, audit_calls=audit_f)
             elif sheet_name in tables_data:
                 _render_raw_sheet_json(tables_data[sheet_name], sheet_name, audit_calls=audit_f)
@@ -822,7 +1067,13 @@ def render_v6_from_json(output_dir: str) -> None:
         st.info("No sheets in tables.json.")
         return
 
-    _render_v6_from_json_maps(tables_data, resolved_data, out, sheet_names, summary=summary)
+    final_map_data = _load_final_map(out)
+
+    _render_v6_from_json_maps(
+        tables_data, resolved_data, out, sheet_names,
+        summary=summary,
+        final_map_data=final_map_data if final_map_data else None,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -854,18 +1105,38 @@ def _render_v6_results_body(
     c4.metric("Tokens", total_tokens)
     c5.metric("Errors", total_errors)
 
+    out = Path(output_dir)
+    final_map_data = _load_final_map(out)
+
     has_resolved = any(_run_resolved_tables(r) for r in results)
+    has_finalize = bool(final_map_data)
+
+    view_options: List[str] = []
     if has_resolved:
-        view_mode = st.radio("View mode", ["Resolved Tables", "Raw V6 Nodes"], index=0, horizontal=True)
+        view_options.append("Resolved Tables")
+    view_options.append("Raw V6 Nodes")
+    if has_finalize:
+        view_options.append("Finalize")
+
+    if len(view_options) > 1:
+        view_mode = st.radio("View mode", view_options, index=0, horizontal=True)
     else:
-        view_mode = "Raw V6 Nodes"
+        view_mode = view_options[0]
+
+    if not has_finalize:
+        st.caption("Finalize not available for this run.")
 
     sheet_names = [_run_sheet_name(r) for r in results]
     tab_labels = _unique_tab_labels(sheet_names)
     tabs = st.tabs(tab_labels)
-    for tab, result in zip(tabs, results):
+    for tab, result, sheet_name in zip(tabs, results, sheet_names):
         with tab:
-            if view_mode == "Resolved Tables":
+            if view_mode == "Finalize":
+                if sheet_name in final_map_data:
+                    _render_finalize_sheet(final_map_data[sheet_name], sheet_name)
+                else:
+                    st.warning(f"No finalize block for sheet `{sheet_name}`.")
+            elif view_mode == "Resolved Tables":
                 _render_resolved_sheet_panel(result, audit_calls=audit_calls)
             else:
                 _render_v6_sheet_panel(result, audit_calls=audit_calls)
@@ -1040,10 +1311,14 @@ def render_v6_selective_view(
 
     resolved_sub = {k: resolved_full[k] for k in show_list if k in resolved_full}
 
+    final_full = _load_final_map(out)
+    final_sub = {k: final_full[k] for k in show_list if k in final_full} if final_full else {}
+
     try:
         _render_v6_from_json_maps(
             tables_sub, resolved_sub, out, show_list,
             summary=summary, view_mode_key=f"v6_vm_sel_{run_id}",
+            final_map_data=final_sub if final_sub else None,
         )
     except Exception as exc:
         st.error(f"V6 viewer error: {exc}")

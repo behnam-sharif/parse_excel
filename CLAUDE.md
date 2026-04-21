@@ -107,7 +107,7 @@ Cross-package shared types use absolute imports from core: `from core.visual_typ
 
 ### Key Invariants
 
-- **All thresholds in config dataclasses** -- no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `XlTableConfig` (in `config.py`), `xl_image` uses `XlImageConfig` (in `config.py`), `xl_sheetagent_v5` uses `XlSheetAgentV5Config` (in `config.py`, 91 fields), `xl_sheetagent_v6` uses `XlSheetAgentV6Config` (in `config.py`, 60 fields).
+- **All thresholds in config dataclasses** -- no magic numbers in heuristic code. `xl_parse` uses `Config` (in `parse_tools/models.py`), `xl_table` uses `XlTableConfig` (in `config.py`), `xl_image` uses `XlImageConfig` (in `config.py`), `xl_sheetagent_v5` uses `XlSheetAgentV5Config` (in `config.py`, 91 fields), `xl_sheetagent_v6` uses `XlSheetAgentV6Config` (in `config.py`, 62 fields).
 - **BBox convention**: All bounding boxes use 0-indexed inclusive coordinates. xl_parse: `(r1, c1, r2, c2)` via `BBox`. xl_table: `(r_top, c_left, r_bot, c_right)` via `BBoxInput`.
 - **Thread safety**: `SheetAccessor` (in both xl_parse and xl_table) opens a separate openpyxl workbook per thread. Never share workbook objects across threads. xl_table's accessor caches per-sheet sparse cell data.
 - **Provenance tracking**: `BlockCandidate.provenance` records the transformation chain (e.g., `"cc+bridge+expand+shrink"`). Append when mutating blocks.
@@ -116,7 +116,7 @@ Cross-package shared types use absolute imports from core: `from core.visual_typ
 - **Loose coupling**: xl_table and xl_image never import each other directly; shared state goes through `core.visual_types`.
 - **V5/V6 are enrichers, not splitters**: `xl_sheetagent_v5` and `xl_sheetagent_v6` consume V3a structural hierarchy from `xl_table` (or `xl_sheetagent` V3a) and add semantic annotations. They do not re-split tables.
 - **Row tagging is V5's backbone**: Layer 1 heuristic tags (`title_candidate`, `header_candidate`, `data_candidate`, etc.) feed into all downstream V5 logic; Layer 2 tags (`consumed_title`, `consumed_header`, etc.) are resolved after hierarchy + candidate collection.
-- **Core region is V6's anchor**: V6 inverts V5's order — detects core regions first (NUMBER + FORMULA connected components), validates them (strip header-like/note-like rows), then walks outward for metadata. Row tags are Layer 1 priors only; Layer 2 is resolved after walks.
+- **Core region is V6's anchor**: V6 inverts V5's order — detects core regions first (NUMBER + FORMULA connected components), validates them (strip header-like/note-like rows), then walks outward for metadata. Row tags are Layer 1 priors only; Layer 2 is resolved after walks. Headers are sliced to core column span. Title detection priority: above-header → beside-header (text left of core in header rows) → None.
 - **V6 coordinate convention**: `CoreRegion.bbox` uses ABSOLUTE coordinates; `ConsumedMap` rows and grid/types arrays are LOCAL (0-indexed relative to parent bbox). Convert with `local_r = abs_r - bbox["r1"]`.
 
 ## Stage Details
@@ -246,6 +246,7 @@ Load V3a hierarchy (from xl_table or xl_sheetagent V3a)
       -> Step 1b: Zero cores → return empty metadata
       -> Step 2: Core Region Validation (strip top/bottom)    [core_region_validator.py]
       -> Step 3: Upward Walk (header + title from core)       [upward_walk.py]
+      -> Step 3b: Beside-header title fallback (if no above-header title) [upward_walk.py]
       -> Step 4: Leftward Walk (row names from core)          [leftward_walk.py]
       -> Step 5: Note Scanner (right + below core)            [note_scanner.py]
       -> Step 6: ConsumedMap + Layer 2 tag resolution
@@ -259,11 +260,11 @@ Load V3a hierarchy (from xl_table or xl_sheetagent V3a)
   -> Export (tables.json, resolved_tables.json, summary.json)  [exporter.py]
 ```
 
-**Config**: `XlSheetAgentV6Config` (60 fields) -- row tagging thresholds, core region detection, core validation (top/bottom row checks, sequence detection for years/months/cycles/quarters, formula divergence, ambiguity threshold), directional walk limits (upward max rows, leftward max cols, note scan bounds), LLM gate (6 toggle flags per trigger, payload max cells, context max rows, per-sheet call limit), LLM transport (model, max tokens, temperature, retries), confidence weights (w_tags=0.25, w_header=0.25, w_core=0.20, w_llm=0.15, w_role=0.15), resolution, formatting, parallelism, audit, export mode.
+**Config**: `XlSheetAgentV6Config` (62 fields) -- row tagging thresholds, core region detection, core validation (top/bottom row checks, sequence detection for years/months/cycles/quarters, formula divergence, ambiguity threshold), directional walk limits (upward max rows, leftward max cols, note scan bounds), beside-header title detection (`detect_beside_header_title`, `beside_header_title_max_nonempty`), LLM gate (6 toggle flags per trigger, payload max cells, context max rows, per-sheet call limit), LLM transport (model, max tokens, temperature, retries), confidence weights (w_tags=0.25, w_header=0.25, w_core=0.20, w_llm=0.15, w_role=0.15), resolution, formatting, parallelism, audit, export mode.
 
 **Data models** (`schemas.py`): `RowTag`, `NoteEntry`, `CoreRegion` (bbox, density, role_hint, validation_result), `FormattingInfo`, `ConsumedMap`, `V6TableResult` (adds `llm_result`, `llm_gate_triggers` vs V5), `V6ResolvedTable` (adds `metadata_source`, `llm_metadata`), `V6RunResult`.
 
-**Key modules**: `runner.py` (entry point + sheet-level parallelization), `table_agent.py` (per-table orchestrator — core-first pipeline), `core_region_detector.py` (NUMBER + FORMULA connected components, density expansion), `core_region_validator.py` (4 top-row checks + 3 bottom-row checks), `upward_walk.py` (header + title detection walking up from validated core), `leftward_walk.py` (row name detection walking left), `note_scanner.py` (right-of-core + below-last-core), `llm_gate.py` (6 gate triggers + should_call_llm), `prompt_builder.py` (per-bbox + metadata resolution prompts, response parsing, merge_llm_result), `row_tagger.py` (Layer 1+2), `table_resolver.py` (ResolvedTable assembly — identical to V5), `formatting_agent.py`, `llm_audit.py`, `exporter.py`, `note_keywords.py`, `config.py`.
+**Key modules**: `runner.py` (entry point + sheet-level parallelization), `table_agent.py` (per-table orchestrator — core-first pipeline), `core_region_detector.py` (NUMBER + FORMULA connected components, density expansion), `core_region_validator.py` (4 top-row checks + 3 bottom-row checks), `upward_walk.py` (header + title detection walking up from validated core; headers sliced to core column span; beside-header title fallback for HEOR composite rows), `leftward_walk.py` (row name detection walking left), `note_scanner.py` (right-of-core + below-last-core), `llm_gate.py` (6 gate triggers + should_call_llm), `prompt_builder.py` (per-bbox + metadata resolution prompts, response parsing, merge_llm_result), `row_tagger.py` (Layer 1+2), `table_resolver.py` (ResolvedTable assembly — identical to V5), `formatting_agent.py`, `llm_audit.py`, `exporter.py`, `note_keywords.py`, `config.py`.
 
 **LLM gate triggers** (at most 1 consolidated LLM call per bbox):
 1. `core_validation_ambiguous` — any core region flagged ambiguous by validator

@@ -101,3 +101,10 @@ class XlSheetAgentV6Config:
     # Beside-header title detection
     detect_beside_header_title: bool
     beside_header_title_max_nonempty: int
+
+    # Finalize stage (deterministic, no LLM)
+    enable_finalize: bool
+    finalize_title_max_chars: int
+    finalize_note_keywords: list
+    finalize_flatten_depth: int
+    finalize_emit_stats: bool

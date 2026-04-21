@@ -166,6 +166,71 @@ class V6ResolvedTable:
 
 
 # ---------------------------------------------------------------------------
+# Finalize (deterministic, no LLM) — simple final table map entries.
+#
+# Contract: every leaf entry (``kind == "standalone"`` or any child with
+# ``core_region`` populated) becomes a DAG node.  Parents contribute zero
+# DAG nodes — they are navigation-only containers.
+# ---------------------------------------------------------------------------
+
+@dataclass
+class FinalMapChildEntry:
+    """One child slot inside a ``FinalMapEntryParent.children`` list."""
+    table_id: str
+    coordinates: str
+    bbox: Dict[str, int]
+    sheet_name: str
+    title: Optional[str]
+    headers: List[List[str]]
+    row_names: Optional[List[str]]
+    core_region: Optional[Dict[str, int]]
+    node_type: str
+    parent_path: List[str]
+    source_flags: List[str] = field(default_factory=list)
+
+
+@dataclass
+class FinalMapEntryStandalone:
+    """Leaf entry — DAG-attachable."""
+    table_id: str
+    coordinates: str
+    bbox: Dict[str, int]
+    sheet_name: str
+    title: Optional[str]
+    headers: List[List[str]]
+    row_names: Optional[List[str]]
+    core_region: Optional[Dict[str, int]]
+    node_type: str
+    parent_path: List[str]
+    notes: List[NoteEntry] = field(default_factory=list)
+    source_flags: List[str] = field(default_factory=list)
+    kind: str = "standalone"
+
+
+@dataclass
+class FinalMapEntryParent:
+    """Navigation container — contributes zero DAG nodes."""
+    table_id: str
+    coordinates: str
+    bbox: Dict[str, int]
+    sheet_name: str
+    title: Optional[str]
+    parent_path: List[str]
+    children: List[FinalMapChildEntry] = field(default_factory=list)
+    source_flags: List[str] = field(default_factory=list)
+    kind: str = "parent"
+
+
+@dataclass
+class FinalTableMap:
+    """Per-sheet final table map."""
+    sheet_name: str
+    finalize_version: str
+    entries: List[Any] = field(default_factory=list)  # standalone | parent entries
+    stats: Dict[str, Any] = field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
 # Run result
 # ---------------------------------------------------------------------------
 
@@ -177,3 +242,4 @@ class V6RunResult:
     resolved_tables: List[V6ResolvedTable] = field(default_factory=list)
     token_count: int = 0
     errors: List[str] = field(default_factory=list)
+    final_map: Optional[FinalTableMap] = None

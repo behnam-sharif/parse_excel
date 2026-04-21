@@ -55,6 +55,11 @@ def get_v6_sheetagent_output_path(run_id: str, base: str = "data/output") -> Pat
     return get_run_root(run_id, base) / "v6_sheetagent_output"
 
 
+def get_v6_final_table_map_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the v6 finalize output file for a given run."""
+    return get_v6_sheetagent_output_path(run_id, base) / "final_table_map.json"
+
+
 def get_log_path(run_id: str, base: str = "data/output") -> Path:
     """Return the logs directory for a given run."""
     return get_run_root(run_id, base) / "logs"

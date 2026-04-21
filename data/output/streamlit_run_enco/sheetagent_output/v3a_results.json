@@ -1,6 +1,6 @@
 {
   "run_id": "streamlit_run_enco",
-  "run_ts": "2026-04-16T19:27:23.529279+00:00",
+  "run_ts": "2026-04-21T17:30:36.357735+00:00",
   "version": "3a.1.0",
   "sheets": [
     {
@@ -76075,7 +76075,7 @@
           "header_row_candidates": [
             {
               "piece_type": "header_row",
-              "text": "Trametinib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E95430> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E94E30> | #NAME? | #NAME? | #NAME? | Trametinib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E94E90> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E94050> | #NAME? | #NAME? | #NAME?",
+              "text": "Trametinib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE387830> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE384890> | #NAME? | #NAME? | #NAME? | Trametinib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE385A90> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE3853D0> | #NAME? | #NAME? | #NAME?",
               "location": {
                 "r_top": 249,
                 "c_left": 3,
@@ -76088,7 +76088,7 @@
             },
             {
               "piece_type": "header_row",
-              "text": "Dabrafenib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E957F0> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E95BB0> | #NAME? | #NAME? | #NAME? | Dabrafenib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E95670> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E95490> | #NAME? | #NAME? | #NAME?",
+              "text": "Dabrafenib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE385AF0> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE386750> | #NAME? | #NAME? | #NAME? | Dabrafenib | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE385CD0> | #NAME? | #NAME? | #NAME? | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE3855B0> | #NAME? | #NAME? | #NAME?",
               "location": {
                 "r_top": 248,
                 "c_left": 3,
@@ -76101,7 +76101,7 @@
             },
             {
               "piece_type": "header_row",
-              "text": "Enco + Bini | 0 | 0 | 0 | 0 | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E95130> | 0 | 0 | 0 | Enco + Bini | 0 | 0 | 0 | 0 | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AE07E96E70> | 499695.42302330426 | 516780.6192146909 | 534739.3544603864",
+              "text": "Enco + Bini | 0 | 0 | 0 | 0 | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE387770> | 0 | 0 | 0 | Enco + Bini | 0 | 0 | 0 | 0 | <openpyxl.worksheet.formula.ArrayFormula object at 0x000002AAFE386510> | 499695.42302330426 | 516780.6192146909 | 534739.3544603864",
               "location": {
                 "r_top": 247,
                 "c_left": 3,
@@ -82374,7 +82374,7 @@
       }
     }
   ],
-  "elapsed_seconds": 52.27,
+  "elapsed_seconds": 55.94,
   "n_tables_processed": 517,
   "n_llm_calls": 0
 }

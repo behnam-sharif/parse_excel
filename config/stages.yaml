@@ -36,7 +36,7 @@ xl_parse:
   hdr_text_ratio: 0.60
   hdr_bold_ratio: 0.40
   hdr_fill_ratio: 0.30
-  hdr_min_filled: 0.50
+  hdr_min_filled: 0.01
   body_numeric_ratio: 0.50
   body_min_rows_before: 3
 
@@ -327,10 +327,10 @@ xl_sheetagent_v5:
   iou_merge_threshold: 0.30
 
   # Formatting
-  extract_formatting: true
+  extract_formatting: false
 
   # Parallelism
-  max_workers: 4
+  max_workers: 10
 
   # Performance guardrails
   max_llm_children_per_sheet: 20
@@ -468,6 +468,13 @@ xl_sheetagent_v6:
   # Beside-header title detection
   detect_beside_header_title: true
   beside_header_title_max_nonempty: 3
+
+  # Finalize stage (deterministic, no LLM)
+  enable_finalize: true
+  finalize_title_max_chars: 200
+  finalize_note_keywords: ["source", "note", "*", "†", "ref", "footnote"]
+  finalize_flatten_depth: 1
+  finalize_emit_stats: true
 
 xl_image:
   adaptive_enabled: true

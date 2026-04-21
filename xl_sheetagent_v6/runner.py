@@ -21,6 +21,8 @@ from .schemas import V6RunResult, V6TableResult
 from .table_agent import analyze_table
 from .formatting_agent import extract_table_formatting
 from .exporter import export_results
+from .finalize import finalize_sheet
+from .final_map_exporter import export_final_map
 
 logger = logging.getLogger(__name__)
 
@@ -152,6 +154,10 @@ def run_v6_analysis(
 
     # Export
     export_results(results, output_dir, config, audit_records)
+
+    # Finalize export (deterministic flat map for DAG consumption)
+    if getattr(config, "enable_finalize", False):
+        export_final_map(results, output_dir / "final_table_map.json")
 
     total_tables = sum(len(r.tables) for r in results)
     total_tokens = sum(r.token_count for r in results)
@@ -286,6 +292,15 @@ def _run_v6_sheet(
             logger.error("Resolution stage failed for %s: %s", sheet_name, exc, exc_info=True)
             errors.append(f"resolution: {exc}")
 
+    # Finalize stage: deterministic flat map for DAG consumption
+    final_map = None
+    if getattr(config, "enable_finalize", False) and resolved:
+        try:
+            final_map = finalize_sheet(sheet_name, resolved, config)
+        except Exception as exc:
+            logger.error("Finalize stage failed for %s: %s", sheet_name, exc, exc_info=True)
+            errors.append(f"finalize: {exc}")
+
     wb.close()
     if wb_formula is not None:
         wb_formula.close()
@@ -297,6 +312,7 @@ def _run_v6_sheet(
         resolved_tables=resolved,
         token_count=total_tokens,
         errors=errors,
+        final_map=final_map,
     )
 
 
