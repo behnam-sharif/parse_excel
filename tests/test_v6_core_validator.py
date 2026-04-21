@@ -45,6 +45,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         upward_walk_max_rows=10, upward_walk_blank_row_stop=True,
         leftward_walk_max_cols=5, note_scan_right_max_cols=3,
         note_scan_below_max_rows=10,
+        detect_beside_header_title=True, beside_header_title_max_nonempty=3,
     )
     defaults.update(overrides)
     return XlSheetAgentV6Config(**defaults)

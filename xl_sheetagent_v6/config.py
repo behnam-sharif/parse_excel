@@ -97,3 +97,7 @@ class XlSheetAgentV6Config:
     leftward_walk_max_cols: int
     note_scan_right_max_cols: int
     note_scan_below_max_rows: int
+
+    # Beside-header title detection
+    detect_beside_header_title: bool
+    beside_header_title_max_nonempty: int

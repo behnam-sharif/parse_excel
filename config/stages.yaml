@@ -393,7 +393,7 @@ xl_sheetagent_v6:
   inherit_header_col_tolerance: 1
 
   # Core region rules (v5 semantics UNCHANGED)
-  min_component_area: 4
+  min_component_area: 2
   component_merge_gap: 1
   blank_inclusion_density_threshold: 0.30
 
@@ -464,6 +464,10 @@ xl_sheetagent_v6:
   leftward_walk_max_cols: 5
   note_scan_right_max_cols: 3
   note_scan_below_max_rows: 10
+
+  # Beside-header title detection
+  detect_beside_header_title: true
+  beside_header_title_max_nonempty: 3
 
 xl_image:
   adaptive_enabled: true

@@ -45,6 +45,7 @@ from .prompt_builder import (
     parse_v6_per_bbox_response,
     merge_llm_result,
 )
+from xl_sheetagent_v5.candidate_collector import _collect_title
 from xl_sheetagent_v5.header_detector import (
     detect_headers as v5_detect_headers,
     find_restricted_header_inheritance as v5_find_header_inheritance,
@@ -201,8 +202,12 @@ def _analyze_table_inner(
                 )
                 header_indices = []
 
+        # Match V5: title from best title_candidate row (required for e.g.
+        # child_metadata section labels with no numeric core).
+        title, title_rows = _collect_title(row_tags, grid)
+
         consumed = ConsumedMap(
-            title_rows=[],
+            title_rows=title_rows,
             header_rows=header_indices,
             rowname_cols=[],
             note_rows=[],
@@ -216,7 +221,7 @@ def _analyze_table_inner(
             row_tags, header_conf, core_regions, table_role, config,
         )
         signals["no_core_regions"] = True
-        signals["title_source"] = "none"
+        signals["title_source"] = "local" if title else "none"
         signals["header_source"] = header_source
         if inherited_from:
             signals.setdefault("header_inherited_from", inherited_from)
@@ -226,7 +231,7 @@ def _analyze_table_inner(
             parent_table_id=parent_table_id,
             split_depth=split_depth,
             bbox=bbox,
-            title=None,
+            title=title,
             headers=headers,
             row_names=None,
             notes=[],

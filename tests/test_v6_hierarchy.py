@@ -24,6 +24,7 @@ from xl_sheetagent_v6.core_region_validator import validate_core_regions
 from xl_sheetagent_v6.upward_walk import walk_up_for_metadata
 from xl_sheetagent_v6.leftward_walk import walk_left_for_row_names
 from xl_sheetagent_v6.note_scanner import scan_notes
+from xl_sheetagent_v6.table_agent import analyze_table
 
 
 def _make_config(**overrides) -> XlSheetAgentV6Config:
@@ -55,6 +56,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         upward_walk_max_rows=10, upward_walk_blank_row_stop=True,
         leftward_walk_max_cols=5, note_scan_right_max_cols=3,
         note_scan_below_max_rows=10,
+        detect_beside_header_title=True, beside_header_title_max_nonempty=3,
     )
     defaults.update(overrides)
     return XlSheetAgentV6Config(**defaults)
@@ -235,6 +237,34 @@ class TestFullPipelineIntegration(unittest.TestCase):
         self.assertGreaterEqual(len(note_result["notes"]), 1)
         note_texts = [n.text for n in note_result["notes"]]
         self.assertTrue(any("NICE" in t for t in note_texts))
+
+
+class TestZeroCoreMetadataTitle(unittest.TestCase):
+    """child_metadata with no numeric core still gets title like V5 (collect_candidates)."""
+
+    def test_single_cell_section_title(self):
+        cfg = _make_config()
+        grid = [["Hospitalization"]]
+        types = [["TEXT"]]
+        row_tags = [_make_tag(0, "title_candidate", 0.9)]
+        bbox = {"r1": 90, "c1": 1, "r2": 90, "c2": 1}
+        result = analyze_table(
+            "9814fc53f594ba29_b45_b24_t46_child6",
+            bbox,
+            grid,
+            types,
+            "child_metadata",
+            "9814fc53f594ba29_b45_b24_t46",
+            1,
+            "Inputs",
+            [],
+            set(),
+            [],
+            {},
+            cfg,
+        )
+        self.assertEqual(result.title, "Hospitalization")
+        self.assertEqual(result.row_tags[0].layer2_tag, "consumed_title")
 
 
 class TestMultiCoreConsistency(unittest.TestCase):

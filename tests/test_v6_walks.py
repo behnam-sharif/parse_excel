@@ -45,6 +45,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         upward_walk_max_rows=10, upward_walk_blank_row_stop=True,
         leftward_walk_max_cols=5, note_scan_right_max_cols=3,
         note_scan_below_max_rows=10,
+        detect_beside_header_title=True, beside_header_title_max_nonempty=3,
     )
     defaults.update(overrides)
     return XlSheetAgentV6Config(**defaults)
@@ -375,6 +376,319 @@ class TestLeftwardWalkRowNames(unittest.TestCase):
         self.assertIsNotNone(result["row_names"])
         # Both cols 0 and 1 should be row-name cols
         self.assertEqual(sorted(result["rowname_cols"]), [0, 1])
+
+
+# ==========================================================================
+# Core-span header slicing tests
+# ==========================================================================
+
+class TestHeaderCoreSpanSlicing(unittest.TestCase):
+    """Headers must be detected and emitted within core column span only."""
+
+    def test_title_above_header_with_offset_core(self):
+        """
+        bbox cols A-H (0-7), core at rows 4-6 cols C-H (2-7).
+        Row 2: "Table 1" in col A only (title).
+        Row 3: "Cost","2023","2024","2025","2026","2027","2028" in cols B-H.
+        Core cells: rows 4-6, cols C-H numeric.
+
+        Expected:
+        - headers length 1, row length 6 (core span C-H), values from C3-H3.
+        - title = "Table 1".
+        - headers[0] must NOT contain "Table 1".
+        """
+        # 7 rows, 8 cols (A=0 through H=7)
+        grid = [
+            [None] * 8,                                                    # row 0: empty
+            [None] * 8,                                                    # row 1: empty
+            ["Table 1", None, None, None, None, None, None, None],         # row 2: title in A
+            [None, "Cost", "2023", "2024", "2025", "2026", "2027", "2028"],# row 3: header B-H
+            [None, None, 100, 110, 120, 130, 140, 150],                    # row 4: data
+            [None, None, 200, 210, 220, 230, 240, 250],                    # row 5: data
+            [None, None, 300, 310, 320, 330, 340, 350],                    # row 6: data
+        ]
+        types = [
+            ["BLANK"] * 8,
+            ["BLANK"] * 8,
+            ["TEXT"] + ["BLANK"] * 7,
+            ["BLANK", "TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "TEXT"],
+            ["BLANK", "BLANK"] + ["NUMBER"] * 6,
+            ["BLANK", "BLANK"] + ["NUMBER"] * 6,
+            ["BLANK", "BLANK"] + ["NUMBER"] * 6,
+        ]
+        row_tags = [
+            _make_tag(0, "data_candidate"),
+            _make_tag(1, "data_candidate"),
+            _make_tag(2, "title_candidate", 0.85),
+            _make_tag(3, "header_candidate", 0.8),
+            _make_tag(4, "data_candidate"),
+            _make_tag(5, "data_candidate"),
+            _make_tag(6, "data_candidate"),
+        ]
+        # bbox = entire area (absolute coords = local since r1=0, c1=0)
+        bbox = {"r1": 0, "c1": 0, "r2": 6, "c2": 7}
+        # Core at rows 4-6, cols C-H (2-7) — absolute = local here
+        core = _make_region(4, 2, 6, 7)
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        # Header should be sliced to core span (cols 2-7)
+        self.assertEqual(len(result["headers"]), 1, "Expected exactly 1 header row")
+        header_row = result["headers"][0]
+        self.assertEqual(len(header_row), 6, "Header width must match core span (6 cols)")
+        # Values from row 3, cols 2-7: "2023","2024","2025","2026","2027","2028"
+        self.assertEqual(header_row, ["2023", "2024", "2025", "2026", "2027", "2028"])
+        # "Table 1" must NOT appear in header
+        self.assertNotIn("Table 1", header_row)
+        # Title must be found
+        self.assertEqual(result["title"], "Table 1")
+        self.assertEqual(result["header_source"], "local")
+
+    def test_header_width_matches_core_width(self):
+        """Every emitted header row's length must equal core_lc2 - core_lc1 + 1."""
+        # bbox cols 0-5, core at cols 1-4 (width=4)
+        grid = [
+            ["Label", "A", "B", "C", "D", "Notes"],  # row 0: header
+            [None, 10, 20, 30, 40, None],             # row 1: data
+            [None, 11, 21, 31, 41, None],             # row 2: data
+        ]
+        types = [
+            ["TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "TEXT"],
+            ["BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER", "BLANK"],
+            ["BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER", "BLANK"],
+        ]
+        row_tags = [
+            _make_tag(0, "header_candidate", 0.8),
+            _make_tag(1, "data_candidate"),
+            _make_tag(2, "data_candidate"),
+        ]
+        bbox = {"r1": 0, "c1": 0, "r2": 2, "c2": 5}
+        core = _make_region(1, 1, 2, 4)  # core cols 1-4
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        self.assertEqual(len(result["headers"]), 1)
+        header_row = result["headers"][0]
+        core_width = 4  # cols 1-4
+        self.assertEqual(len(header_row), core_width)
+        self.assertEqual(header_row, ["A", "B", "C", "D"])
+
+    def test_blank_core_span_disqualifies_header(self):
+        """A header_candidate row that's all blank within core span is NOT a header."""
+        # Row 2 is tagged header_candidate but has content only in col A (outside core)
+        grid = [
+            [None] * 6,
+            [None] * 6,
+            ["Some Label", None, None, None, None, None],  # row 2: content only in col 0
+            [None, None, 100, 200, 300, 400],               # row 3: data
+            [None, None, 110, 210, 310, 410],               # row 4: data
+        ]
+        types = [
+            ["BLANK"] * 6,
+            ["BLANK"] * 6,
+            ["TEXT"] + ["BLANK"] * 5,
+            ["BLANK", "BLANK"] + ["NUMBER"] * 4,
+            ["BLANK", "BLANK"] + ["NUMBER"] * 4,
+        ]
+        row_tags = [
+            _make_tag(0, "data_candidate"),
+            _make_tag(1, "data_candidate"),
+            _make_tag(2, "header_candidate", 0.8),  # tagged but blank in core span
+            _make_tag(3, "data_candidate"),
+            _make_tag(4, "data_candidate"),
+        ]
+        bbox = {"r1": 0, "c1": 0, "r2": 4, "c2": 5}
+        core = _make_region(3, 2, 4, 5)  # core at cols 2-5
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        # Row 2 should NOT qualify as header (blank within core span)
+        self.assertEqual(result["headers"], [])
+        self.assertNotEqual(result["header_source"], "local")
+
+    def test_inherited_header_sliced_to_child_core_span(self):
+        """Parent header spans 6 cols, child bbox=6 cols, child core at local cols 3-5.
+
+        Parent header: ["A", "B", "C", "D", "E", "F"] (bbox cols 0-5).
+        Child bbox: cols 0-5 (same width as parent).
+        Child core: absolute cols 3-5 → local cols 3-5.
+        Expected inherited header: ["D", "E", "F"] (sliced to core span).
+        """
+        parent = V6TableResult(
+            table_id="parent_001",
+            hierarchy_role="parent",
+            parent_table_id=None,
+            split_depth=0,
+            bbox={"r1": 0, "c1": 0, "r2": 3, "c2": 5},
+            title="Parent",
+            headers=[["A", "B", "C", "D", "E", "F"]],
+            row_names=None,
+            confidence=0.9,
+        )
+
+        # Child grid: no local headers, just data (local 2 rows x 6 cols)
+        grid = [[None, None, None, 10, 20, 30], [None, None, None, 11, 21, 31]]
+        types = [["BLANK"] * 3 + ["NUMBER"] * 3] * 2
+        row_tags = [_make_tag(0, "data_candidate"), _make_tag(1, "data_candidate")]
+        # Child bbox at rows 5-6, cols 0-5 (same width as parent)
+        child_bbox = {"r1": 5, "c1": 0, "r2": 6, "c2": 5}
+        # Core at absolute cols 3-5 (local cols 3-5)
+        core = _make_region(5, 3, 6, 5)
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, child_bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+            all_tables_in_sheet=[parent],
+            table_id="child_001",
+            parent_table_id="parent_001",
+        )
+
+        # Should inherit and slice to core span (local cols 3-5 → "D", "E", "F")
+        self.assertIn(result["header_source"], ("inherited_direct_parent", "inherited_above_parent"))
+        self.assertEqual(len(result["headers"]), 1)
+        header_row = result["headers"][0]
+        self.assertEqual(len(header_row), 3, "Inherited header must be sliced to core width")
+        self.assertEqual(header_row, ["D", "E", "F"])
+
+
+# ---------------------------------------------------------------------------
+# Beside-header title detection
+# ---------------------------------------------------------------------------
+
+class TestBesideHeaderTitle(unittest.TestCase):
+    """Title text embedded to the left of the core span in header rows."""
+
+    def test_title_beside_header_composite_row(self):
+        """HEOR pattern: row has 'Costs' in col 0 (title) + year headers in cols 2-5 (core)."""
+        # Grid: 6 rows x 6 cols.  Row 0 = composite header/title row.
+        # Core occupies local cols 2-5, rows 1-5.
+        grid = [
+            ["Costs", None, 2024, 2025, 2026, 2027],  # row 0: title beside + header
+            ["Drug A", None, 100,  200,  300,  400],
+            ["Drug B", None, 110,  210,  310,  410],
+            ["Drug C", None, 120,  220,  320,  420],
+            ["Drug D", None, 130,  230,  330,  430],
+            ["Total",  None, 460,  860,  1260, 1660],
+        ]
+        types = [
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+        ]
+        row_tags = [
+            _make_tag(0, "header_candidate"),
+            _make_tag(1, "data_candidate"),
+            _make_tag(2, "data_candidate"),
+            _make_tag(3, "data_candidate"),
+            _make_tag(4, "data_candidate"),
+            _make_tag(5, "data_candidate"),
+        ]
+        bbox = {"r1": 0, "c1": 0, "r2": 5, "c2": 5}
+        core = _make_region(1, 2, 5, 5)
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        # Header detected: row 0, sliced to core span [2024, 2025, 2026, 2027]
+        self.assertEqual(len(result["headers"]), 1)
+        self.assertEqual(result["headers"][0], ["2024", "2025", "2026", "2027"])
+        # Title found beside header
+        self.assertEqual(result["title"], "Costs")
+        self.assertEqual(result.get("title_source"), "beside_header")
+
+    def test_title_above_header_still_works(self):
+        """When a title_candidate exists above, above-header wins over beside-header."""
+        # Row 0 = title, row 1 = header (with text left of core), rows 2-5 = data.
+        # Core occupies local cols 2-5.
+        grid = [
+            ["Table 1", None, None, None, None, None],   # title above
+            ["Label",   None, 2024, 2025, 2026, 2027],   # header + text left
+            ["Drug A",  None, 100,  200,  300,  400],
+            ["Drug B",  None, 110,  210,  310,  410],
+            ["Drug C",  None, 120,  220,  320,  420],
+            ["Drug D",  None, 130,  230,  330,  430],
+        ]
+        types = [
+            ["TEXT", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["TEXT", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+        ]
+        row_tags = [
+            _make_tag(0, "title_candidate"),
+            _make_tag(1, "header_candidate"),
+            _make_tag(2, "data_candidate"),
+            _make_tag(3, "data_candidate"),
+            _make_tag(4, "data_candidate"),
+            _make_tag(5, "data_candidate"),
+        ]
+        bbox = {"r1": 0, "c1": 0, "r2": 5, "c2": 5}
+        core = _make_region(2, 2, 5, 5)
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        # Title comes from above, not beside
+        self.assertEqual(result["title"], "Table 1")
+        self.assertEqual(result.get("title_source"), "above_header")
+
+    def test_no_title_when_left_of_core_is_empty(self):
+        """No beside-header title when cols left of core are blank."""
+        grid = [
+            [None, None, 2024, 2025, 2026, 2027],
+            [None, None, 100,  200,  300,  400],
+            [None, None, 110,  210,  310,  410],
+            [None, None, 120,  220,  320,  420],
+        ]
+        types = [
+            ["BLANK", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["BLANK", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["BLANK", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+            ["BLANK", "BLANK", "NUMBER", "NUMBER", "NUMBER", "NUMBER"],
+        ]
+        row_tags = [
+            _make_tag(0, "header_candidate"),
+            _make_tag(1, "data_candidate"),
+            _make_tag(2, "data_candidate"),
+            _make_tag(3, "data_candidate"),
+        ]
+        bbox = {"r1": 0, "c1": 0, "r2": 3, "c2": 5}
+        core = _make_region(1, 2, 3, 5)
+        cfg = _make_config()
+
+        result = walk_up_for_metadata(
+            [core], grid, types, row_tags, bbox,
+            merge_info=[], bold_rows=set(), config=cfg,
+        )
+
+        # Headers found but no title — left of core is all blank
+        self.assertEqual(len(result["headers"]), 1)
+        self.assertIsNone(result["title"])
+        self.assertNotIn("title_source", result)
 
 
 if __name__ == "__main__":

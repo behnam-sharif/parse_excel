@@ -79,6 +79,7 @@ def walk_up_for_metadata(
         # Core starts at row 0 — no room above; try inheritance
         return _try_inheritance(
             all_tables_in_sheet, bbox, table_id, parent_table_id, config,
+            core_lc1=core_lc1, core_lc2=core_lc2, c_offset=c_offset,
         )
 
     # Walk zone (local indices)
@@ -94,25 +95,48 @@ def walk_up_for_metadata(
     if len(header_indices) > 1:
         header_indices = _validate_multirow_header(grid, header_indices, merge_info)
 
-    # Step 3: Build header values (full row width, not restricted to core cols)
+    # Step 3: Build header values — sliced to core column span
     headers: List[List[str]] = []
     for r in header_indices:
         if r < len(grid):
-            row_strs = [str(v) if v is not None else "" for v in grid[r]]
+            row_strs = [
+                str(grid[r][c]) if c < len(grid[r]) and grid[r][c] is not None else ""
+                for c in range(core_lc1, core_lc2 + 1)
+            ]
             headers.append(row_strs)
 
-    # Expand merged cells across header rows
+    # Expand merged cells across header rows (within core span)
     if merge_info and headers:
-        headers = _expand_merged_headers(headers, header_indices, merge_info, grid)
+        headers = _expand_merged_headers(
+            headers, header_indices, merge_info, grid, core_lc1, core_lc2,
+        )
 
     # Step 4: Find title above headers (or above walk zone if no headers)
     title: Optional[str] = None
     title_rows: List[int] = []
+    title_source: Optional[str] = None
     title_search_start = (min(header_indices) - 1) if header_indices else (core_lr1 - 1)
     if title_search_start >= walk_top:
         title, title_rows = _find_title_above(
             row_tags, grid, types, title_search_start, walk_top, config,
         )
+        if title:
+            title_source = "above_header"
+
+    # Step 4b: Beside-header title — look for title text left of core in header rows
+    if (
+        not title
+        and header_indices
+        and core_lc1 > 0
+        and getattr(config, "detect_beside_header_title", True)
+    ):
+        beside_title = _find_title_beside_header(
+            grid, types, header_indices, core_lc1, config,
+        )
+        if beside_title:
+            title = beside_title
+            title_rows = list(header_indices)
+            title_source = "beside_header"
 
     # Compute header confidence
     header_conf = _compute_header_confidence(row_tags, header_indices, merge_info)
@@ -130,6 +154,7 @@ def walk_up_for_metadata(
     if not headers and all_tables_in_sheet:
         inh = _try_inheritance(
             all_tables_in_sheet, bbox, table_id, parent_table_id, config,
+            core_lc1=core_lc1, core_lc2=core_lc2, c_offset=c_offset,
         )
         if inh["headers"]:
             # Preserve locally found title
@@ -138,7 +163,7 @@ def walk_up_for_metadata(
                 inh["title_rows"] = title_rows
             return inh
 
-    return {
+    result_dict = {
         "headers": headers,
         "header_indices": header_indices,
         "header_conf": header_conf,
@@ -147,6 +172,9 @@ def walk_up_for_metadata(
         "header_source": header_source,
         "inherited_from": inherited_from,
     }
+    if title_source:
+        result_dict["title_source"] = title_source
+    return result_dict
 
 
 # ---------------------------------------------------------------------------
@@ -176,10 +204,13 @@ def _find_headers_above_core(
 
         tag = row_tags[r] if r < len(row_tags) else None
 
-        # Check row_tag first
+        # Check row_tag first — but qualify against core column span.
+        # A row tagged header_candidate by the full-row tagger only counts
+        # if it has meaningful content within the core's columns.
         if tag and tag.layer1_tag in _HEADER_LIKE_TAGS:
-            candidates.append(r)
-            continue
+            if _core_span_has_content(grid, types, r, core_lc1, core_lc2):
+                candidates.append(r)
+                continue
 
         # Core-column context: row might be a header (e.g. year row) even
         # if the full-row tagger missed it because numbers dominate.
@@ -293,6 +324,57 @@ def _find_title_above(
     return None, []
 
 
+def _find_title_beside_header(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    header_indices: List[int],
+    core_lc1: int,
+    config: XlSheetAgentV6Config,
+) -> Optional[str]:
+    """Detect a title embedded to the left of the core span in header rows.
+
+    In HEOR models, a table's title is sometimes placed in the same row(s) as
+    the header, in the columns to the left of the numeric core (e.g. the row-
+    name column).  This helper scans the rectangle
+    ``[min(header_indices)..max(header_indices), 0..core_lc1-1]`` and returns
+    the concatenated non-empty text if it qualifies.
+
+    Qualification:
+      1. At least one non-empty cell in the rectangle.
+      2. Sparse: total non-empty cells <= ``beside_header_title_max_nonempty``.
+      3. All non-empty cells are TEXT (not NUMBER).
+      4. Not a row-name pattern (only 1 non-empty cell per row at the leftmost
+         column is ambiguous — but we accept it if the header search already
+         consumed those rows as headers).
+    """
+    if core_lc1 <= 0:
+        return None
+
+    max_nonempty = getattr(config, "beside_header_title_max_nonempty", 3)
+
+    texts: List[str] = []
+    for r in header_indices:
+        if r >= len(grid) or r >= len(types):
+            continue
+        for c in range(0, core_lc1):
+            if c >= len(types[r]):
+                continue
+            if types[r][c] == "NUMBER":
+                # Numeric cell in this zone disqualifies
+                return None
+            if types[r][c] != "BLANK" and c < len(grid[r]) and grid[r][c] is not None:
+                val = str(grid[r][c]).strip()
+                if val:
+                    texts.append(val)
+
+    if not texts:
+        return None
+    if len(texts) > max_nonempty:
+        return None
+
+    return " ".join(texts)
+
+
 # ---------------------------------------------------------------------------
 # Multi-row header validation (adapted from v5 header_detector)
 # ---------------------------------------------------------------------------
@@ -327,11 +409,25 @@ def _expand_merged_headers(
     header_indices: List[int],
     merge_info: List[Tuple[int, int, int, int]],
     grid: List[List[Any]],
+    core_lc1: int = 0,
+    core_lc2: Optional[int] = None,
 ) -> List[List[str]]:
-    """Replicate merged cell values across spanned columns in header rows."""
+    """Replicate merged cell values across spanned columns in header rows.
+
+    Headers are sliced to [core_lc1, core_lc2], so grid column ``c`` maps
+    to header position ``c - core_lc1``.  Only the intersection of the merge
+    range with the core span is touched.
+    """
+    if core_lc2 is None:
+        core_lc2 = core_lc1 + (len(headers[0]) - 1) if headers else core_lc1
+
     row_to_idx = {r: i for i, r in enumerate(header_indices)}
 
     for mr1, mc1, mr2, mc2 in merge_info:
+        # Skip merges entirely outside the core span
+        if mc2 < core_lc1 or mc1 > core_lc2:
+            continue
+
         if mr1 < len(grid) and mc1 < len(grid[mr1]):
             merge_val = grid[mr1][mc1]
         else:
@@ -340,13 +436,17 @@ def _expand_merged_headers(
         if not val_str.strip():
             continue
 
+        # Clamp merge columns to core span, then offset into header list
+        fill_start = max(mc1, core_lc1) - core_lc1
+        fill_end = min(mc2, core_lc2) - core_lc1
+
         for r in range(mr1, mr2 + 1):
             if r not in row_to_idx:
                 continue
             h_idx = row_to_idx[r]
-            for c in range(mc1, mc2 + 1):
-                if c < len(headers[h_idx]) and not headers[h_idx][c].strip():
-                    headers[h_idx][c] = val_str
+            for pos in range(fill_start, fill_end + 1):
+                if pos < len(headers[h_idx]) and not headers[h_idx][pos].strip():
+                    headers[h_idx][pos] = val_str
 
     return headers
 
@@ -389,8 +489,20 @@ def _try_inheritance(
     current_table_id: Optional[str],
     parent_table_id: Optional[str],
     config: XlSheetAgentV6Config,
+    core_lc1: Optional[int] = None,
+    core_lc2: Optional[int] = None,
+    c_offset: int = 0,
 ) -> Dict[str, Any]:
-    """Attempt restricted header inheritance (same rules as V5)."""
+    """Attempt restricted header inheritance, sliced to core column span.
+
+    V5's ``find_restricted_header_inheritance`` does donor qualification
+    (overlap, distance, width tolerance) against the child bbox.  We call it
+    as-is, then **slice** the returned header rows to the child's core column
+    span so the emitted headers are always core-sized.
+
+    When called without core span info (no cores found), headers are returned
+    unsliced — the caller has nothing to align against anyway.
+    """
     empty = {
         "headers": [],
         "header_indices": [],
@@ -417,6 +529,40 @@ def _try_inheritance(
     if result is None:
         return empty
 
+    raw_headers = [list(row) for row in result["inherited_header"]]
+
+    # Slice inherited headers to the child's core column span.
+    #
+    # Donor headers are aligned to the donor's own bbox: header[i]
+    # corresponds to absolute column ``donor.c1 + i``.  The child's
+    # core occupies absolute columns ``current_bbox.c1 + core_lc1``
+    # through ``current_bbox.c1 + core_lc2``.  To extract the right
+    # slice, map each absolute core column to a donor-header index:
+    #   donor_idx = abs_core_col - donor.c1
+    #
+    # Look up the donor's c1 from the all_tables list.
+    if core_lc1 is not None and core_lc2 is not None and raw_headers:
+        abs_core_c1 = current_bbox["c1"] + core_lc1
+        abs_core_c2 = current_bbox["c1"] + core_lc2
+
+        # Find donor c1 to convert absolute cols → donor header indices
+        donor_id = result["source_table_id"]
+        donor_c1 = current_bbox["c1"]  # fallback: assume aligned with child
+        if all_tables:
+            for t in all_tables:
+                if getattr(t, "table_id", None) == donor_id:
+                    donor_c1 = t.bbox.get("c1", donor_c1)
+                    break
+
+        sliced: List[List[str]] = []
+        for row in raw_headers:
+            sliced_row = [
+                row[ac - donor_c1] if 0 <= ac - donor_c1 < len(row) else ""
+                for ac in range(abs_core_c1, abs_core_c2 + 1)
+            ]
+            sliced.append(sliced_row)
+        raw_headers = sliced
+
     kind = result.get("inheritance_kind", "above_parent")
     header_source = (
         "inherited_direct_parent"
@@ -424,7 +570,7 @@ def _try_inheritance(
         else "inherited_above_parent"
     )
     return {
-        "headers": [list(row) for row in result["inherited_header"]],
+        "headers": raw_headers,
         "header_indices": [],
         "header_conf": result["confidence"],
         "title": None,
@@ -438,6 +584,23 @@ def _try_inheritance(
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def _core_span_has_content(
+    grid: List[List[Any]],
+    types: List[List[str]],
+    r: int,
+    core_lc1: int,
+    core_lc2: int,
+) -> bool:
+    """Return True if the row has at least 2 non-blank cells within [core_lc1, core_lc2]."""
+    if r >= len(types) or r >= len(grid):
+        return False
+    non_blank = 0
+    for c in range(core_lc1, core_lc2 + 1):
+        if c < len(types[r]) and types[r][c] != "BLANK":
+            non_blank += 1
+    return non_blank >= 2
+
 
 def _is_blank_row(types: List[List[str]], r: int) -> bool:
     if r >= len(types):
