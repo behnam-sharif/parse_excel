@@ -34,6 +34,11 @@ class XlSheetAgentV6Config:
     core_formula_expansion_enabled: bool
     core_formula_expansion_ring: int
 
+    # When false, never opens data_only=False for cell typing: formulas count as
+    # NUMBER (cached values). role_hint / table_role / node_type use that grid.
+    # Incompatible with core_formula_expansion_enabled=true (expansion is forced off).
+    use_formula_view_for_types: bool
+
     # Child rules / hierarchy / resolution (KEPT from v5)
     min_child_rows: int
     iou_merge_threshold: float

@@ -45,13 +45,71 @@ from .prompt_builder import (
     parse_v6_per_bbox_response,
     merge_llm_result,
 )
-from xl_sheetagent_v5.candidate_collector import _collect_title
 from xl_sheetagent_v5.header_detector import (
     detect_headers as v5_detect_headers,
     find_restricted_header_inheritance as v5_find_header_inheritance,
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _first_nonempty_text(row_vals: List[Any]) -> Optional[str]:
+    for v in row_vals:
+        if v is None:
+            continue
+        s = str(v).strip()
+        if s:
+            return s
+    return None
+
+
+def collect_joined_title(row_tags: List[RowTag], grid: List[List[Any]]) -> tuple[Optional[str], List[int]]:
+    """
+    Join multiple consecutive title rows (top→bottom) into a single emitted title.
+
+    We take the first contiguous block of title_candidate rows that has text.
+    Example: ["World without InO", "Current treatments used"] → joined title.
+    """
+    if not row_tags or not grid:
+        return None, []
+
+    # Find first title_candidate row with text (smallest row_index).
+    title_rows = sorted(
+        [
+            t.row_index
+            for t in row_tags
+            if getattr(t, "layer1_tag", None) == "title_candidate"
+        ]
+    )
+    if not title_rows:
+        return None, []
+
+    start = None
+    for r in title_rows:
+        if 0 <= r < len(grid) and _first_nonempty_text(grid[r]):
+            start = r
+            break
+    if start is None:
+        return None, []
+
+    # Extend downward through consecutive title_candidate rows.
+    title_set = set(title_rows)
+    rows_block = [start]
+    r = start + 1
+    while r in title_set:
+        if r < len(grid) and _first_nonempty_text(grid[r]):
+            rows_block.append(r)
+            r += 1
+            continue
+        break
+
+    parts: List[str] = []
+    for rr in rows_block:
+        txt = _first_nonempty_text(grid[rr]) if rr < len(grid) else None
+        if txt:
+            parts.append(txt)
+    joined = " | ".join(parts) if parts else None
+    return joined, rows_block
 
 
 def analyze_table(
@@ -207,7 +265,7 @@ def _analyze_table_inner(
 
         # Match V5: title from best title_candidate row (required for e.g.
         # child_metadata section labels with no numeric core).
-        title, title_rows = _collect_title(row_tags, grid)
+        title, title_rows = collect_joined_title(row_tags, grid)
 
         consumed = ConsumedMap(
             title_rows=title_rows,

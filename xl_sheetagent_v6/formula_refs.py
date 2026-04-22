@@ -1,11 +1,9 @@
 """
-xl_sheetagent_v6/formula_refs.py — Per-sheet formula dependency map.
+xl_sheetagent_v6/formula_refs.py — Pure formula-reference extraction.
 
-Walks every cell in a given bbox on a workbook opened with
-``data_only=False``, extracts A1 references from each formula cell, and
-converts them to 0-indexed ``(row, col)`` tuples.  Used by
-``core_region_detector._expand_with_formula_refs`` to pull empty cells
-referenced by in-bbox formulas into the adjacent core component.
+Converts an Excel formula string into a list of same-sheet ``(row, col)`` refs
+(0-indexed).  Workbook-opening is done by :class:`core.workbook_accessor.WorkbookAccessor`;
+this module only contains the pure parser.
 
 MVP scope:
   - Same-sheet references only (cross-sheet refs dropped).
@@ -18,7 +16,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Any, Dict, List, Tuple
+from typing import List, Tuple
 
 from openpyxl.utils import column_index_from_string
 
@@ -37,56 +35,12 @@ _RANGE_REF = re.compile(
 )
 
 
-def build_formula_refs(
-    worksheet: Any,
-    bbox: Dict[str, int],
-) -> Dict[Tuple[int, int], List[Tuple[int, int]]]:
-    """Scan ``bbox`` on ``worksheet`` and return a formula→refs map.
-
-    The worksheet must be opened with ``data_only=False`` so that cells
-    carry their formula text.  Returns ``{(r, c): [(r_ref, c_ref), ...]}``
-    with both keys and values as 0-indexed absolute coords.
-    """
-    r1 = int(bbox["r1"])
-    c1 = int(bbox["c1"])
-    r2 = int(bbox["r2"])
-    c2 = int(bbox["c2"])
-
-    out: Dict[Tuple[int, int], List[Tuple[int, int]]] = {}
-    if not _HAS_TOKENIZER:
-        return out
-
-    for r in range(r1, r2 + 1):
-        for c in range(c1, c2 + 1):
-            try:
-                cell = worksheet.cell(row=r + 1, column=c + 1)
-            except Exception:
-                continue
-            if cell.data_type != "f":
-                val = cell.value
-                if not (isinstance(val, str) and val.lstrip().startswith("=")):
-                    continue
-                formula_text = val
-            else:
-                formula_text = cell.value
-                if formula_text is None:
-                    continue
-                formula_text = str(formula_text)
-                if not formula_text.startswith("="):
-                    formula_text = "=" + formula_text
-
-            try:
-                refs = _extract_refs(formula_text)
-            except Exception:
-                continue
-            if refs:
-                out[(r, c)] = refs
-
-    return out
-
-
 def _extract_refs(formula_text: str) -> List[Tuple[int, int]]:
-    """Tokenize ``formula_text`` and return same-sheet cell refs."""
+    """Tokenize ``formula_text`` and return same-sheet cell refs.
+
+    Returns a list of ``(row, col)`` tuples, 0-indexed, in order of first
+    appearance.  Cross-sheet, named-range, and malformed refs are dropped.
+    """
     if Tokenizer is None:
         return []
     try:

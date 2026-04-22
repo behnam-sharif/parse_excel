@@ -2,7 +2,7 @@
   "workbook_path": "data\\output\\streamlit_run_simple\\init_output\\cleaned_workbook.xlsx",
   "workbook_id": "e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "xl_table_version": "3.1.0",
-  "run_ts": "2026-04-21T21:34:19.240002+00:00",
+  "run_ts": "2026-04-22T15:09:47.998497+00:00",
   "sheets": [
     {
       "sheet_name": "Calculations",
@@ -1387,7 +1387,7 @@
     "total_final_tables": 37,
     "xl_image_available": false,
     "cut_scores_available": true,
-    "elapsed_seconds": 0.927788257598877,
+    "elapsed_seconds": 0.9535660743713379,
     "per_sheet": {
       "Calculations": {
         "n_original_bboxes": 3,

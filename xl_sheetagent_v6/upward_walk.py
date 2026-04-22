@@ -303,7 +303,7 @@ def _find_title_above(
     walk_top: int,
     config: XlSheetAgentV6Config,
 ) -> Tuple[Optional[str], List[int]]:
-    """Find title_candidate row above the headers."""
+    """Find and join consecutive title_candidate rows above the headers."""
     for r in range(start_row, walk_top - 1, -1):
         if r < 0:
             break
@@ -313,9 +313,28 @@ def _find_title_above(
             continue
 
         if tag.layer1_tag == "title_candidate":
-            text = _first_nonempty_text(grid[r] if r < len(grid) else [])
-            if text:
-                return text, [r]
+            # Found a title row. Join any consecutive title rows immediately
+            # below it (toward the core) so multi-line titles are preserved.
+            rows: List[int] = []
+            parts: List[str] = []
+
+            # Walk upward within the title block (r, r-1, ...) until non-title.
+            rr = r
+            while rr >= walk_top:
+                t2 = row_tags[rr] if rr < len(row_tags) else None
+                if t2 is None or t2.layer1_tag != "title_candidate":
+                    break
+                txt = _first_nonempty_text(grid[rr] if rr < len(grid) else [])
+                if txt:
+                    rows.append(rr)
+                    parts.append(txt)
+                rr -= 1
+
+            # We collected in bottom→top order; flip to top→bottom.
+            rows = list(reversed(rows))
+            parts = list(reversed(parts))
+            if parts:
+                return " | ".join(parts), rows
 
         # Blank row → stop title search
         if config.upward_walk_blank_row_stop and _is_blank_row(types, r):

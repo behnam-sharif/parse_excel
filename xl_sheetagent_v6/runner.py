@@ -9,16 +9,14 @@ within a sheet, tables processed sequentially (depth-first).
 from __future__ import annotations
 
 import logging
-import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
 
-import openpyxl
+from core.workbook_accessor import WorkbookAccessor
 
 from .config import XlSheetAgentV6Config
 from .schemas import V6RunResult, V6TableResult
-from .formula_refs import build_formula_refs
 from .table_agent import analyze_table
 from .formatting_agent import extract_table_formatting
 from .exporter import export_results
@@ -26,6 +24,30 @@ from .finalize import finalize_sheet
 from .final_map_exporter import export_final_map
 
 logger = logging.getLogger(__name__)
+
+
+def _v6_formula_snapshot_flags(
+    config: XlSheetAgentV6Config,
+) -> Tuple[bool, bool, bool]:
+    """Return (use_formula_typing, effective_expansion, open_formula_workbook).
+
+    *use_formula_typing* — classify formula cells as FORMULA vs cached NUMBER.
+    *effective_expansion* — formula-dependency core expansion (refs); forced
+    off when typing is values-only because that mode never builds formula refs.
+    *open_formula_workbook* — whether to scan ``data_only=False`` once per sheet.
+    """
+    use_typing = bool(getattr(config, "use_formula_view_for_types", True))
+    raw_exp = bool(getattr(config, "core_formula_expansion_enabled", False))
+    effective_exp = raw_exp
+    if raw_exp and not use_typing:
+        logger.warning(
+            "xl_sheetagent_v6: core_formula_expansion_enabled=true is incompatible "
+            "with use_formula_view_for_types=false; formula dependency expansion "
+            "is disabled (values-only typing).",
+        )
+        effective_exp = False
+    need_wb = use_typing or effective_exp
+    return use_typing, effective_exp, need_wb
 
 
 def run_v6_analysis(
@@ -37,6 +59,7 @@ def run_v6_analysis(
     sheets: Optional[List[str]] = None,
     all_bboxes: Optional[Dict[str, List[Dict[str, int]]]] = None,
     all_cut_scores: Optional[Dict[str, List[Dict[str, Any]]]] = None,
+    accessor: Optional[WorkbookAccessor] = None,
 ) -> List[V6RunResult]:
     """
     Top-level V6 entry point.
@@ -109,49 +132,66 @@ def run_v6_analysis(
         "V6 analysis: %d sheets, workbook=%s", len(sheets), workbook_path,
     )
 
+    # Auto-construct accessor when called standalone.
+    # When the pipeline runner hands us one, reuse so snapshots stay warm.
+    accessor_owned = False
+    if accessor is None:
+        logger.info(
+            "WorkbookAccessor auto-constructed for standalone V6 run: %s",
+            workbook_path,
+        )
+        accessor = WorkbookAccessor(workbook_path)
+        accessor_owned = True
+
     # Audit accumulator (thread-safe via per-sheet dicts merged after)
     audit_records: Dict[str, List] = {}
 
     # Dispatch sheets in parallel
     results: List[V6RunResult] = []
 
-    if config.max_workers <= 1 or len(sheets) == 1:
-        for sheet_name in sheets:
-            bboxes = all_bboxes.get(sheet_name, [])
-            cuts = all_cut_scores.get(sheet_name, [])
-            result = _run_v6_sheet(
-                workbook_path, sheet_name, bboxes, cuts,
-                config, llm_client, run_id, audit_records,
-            )
-            results.append(result)
-    else:
-        with ThreadPoolExecutor(max_workers=config.max_workers) as pool:
-            futures = {}
+    try:
+        if config.max_workers <= 1 or len(sheets) == 1:
             for sheet_name in sheets:
                 bboxes = all_bboxes.get(sheet_name, [])
                 cuts = all_cut_scores.get(sheet_name, [])
-                sheet_audit: Dict[str, List] = {}
-                fut = pool.submit(
-                    _run_v6_sheet,
+                result = _run_v6_sheet(
                     workbook_path, sheet_name, bboxes, cuts,
-                    config, llm_client, run_id, sheet_audit,
+                    config, llm_client, run_id, audit_records,
+                    accessor=accessor,
                 )
-                futures[fut] = (sheet_name, sheet_audit)
+                results.append(result)
+        else:
+            with ThreadPoolExecutor(max_workers=config.max_workers) as pool:
+                futures = {}
+                for sheet_name in sheets:
+                    bboxes = all_bboxes.get(sheet_name, [])
+                    cuts = all_cut_scores.get(sheet_name, [])
+                    sheet_audit: Dict[str, List] = {}
+                    fut = pool.submit(
+                        _run_v6_sheet,
+                        workbook_path, sheet_name, bboxes, cuts,
+                        config, llm_client, run_id, sheet_audit,
+                        accessor,
+                    )
+                    futures[fut] = (sheet_name, sheet_audit)
 
-            for fut in as_completed(futures):
-                sheet_name, sheet_audit = futures[fut]
-                try:
-                    result = fut.result()
-                    results.append(result)
-                    for key, entries in sheet_audit.items():
-                        audit_records.setdefault(key, []).extend(entries)
-                except Exception as exc:
-                    logger.error("Sheet %s failed: %s", sheet_name, exc, exc_info=True)
-                    results.append(V6RunResult(
-                        run_id=run_id,
-                        sheet_name=sheet_name,
-                        errors=[str(exc)],
-                    ))
+                for fut in as_completed(futures):
+                    sheet_name, sheet_audit = futures[fut]
+                    try:
+                        result = fut.result()
+                        results.append(result)
+                        for key, entries in sheet_audit.items():
+                            audit_records.setdefault(key, []).extend(entries)
+                    except Exception as exc:
+                        logger.error("Sheet %s failed: %s", sheet_name, exc, exc_info=True)
+                        results.append(V6RunResult(
+                            run_id=run_id,
+                            sheet_name=sheet_name,
+                            errors=[str(exc)],
+                        ))
+    finally:
+        if accessor_owned:
+            accessor.close()
 
     # Export
     export_results(results, output_dir, config, audit_records)
@@ -183,9 +223,10 @@ def _run_v6_sheet(
     llm_client: Any,
     run_id: str,
     audit_records: Dict[str, List],
+    accessor: Optional[WorkbookAccessor] = None,
 ) -> V6RunResult:
     """
-    Per-sheet worker. Opens its own workbook handle (thread safety).
+    Per-sheet worker. Reads through the shared :class:`WorkbookAccessor`.
     Processes tables sequentially (depth-first through V3a hierarchy).
     """
     logger.info("V6 processing sheet: %s (%d bboxes)", sheet_name, len(bboxes))
@@ -196,50 +237,35 @@ def _run_v6_sheet(
             sheet_name, len(bboxes), config.max_tables_per_sheet_warn,
         )
 
-    # Open own workbook handle
+    if accessor is None:
+        # Defensive fallback — parent code always supplies one today,
+        # but keep stage-callable-standalone semantics intact.
+        logger.info(
+            "WorkbookAccessor auto-constructed in _run_v6_sheet: %s",
+            workbook_path,
+        )
+        accessor = WorkbookAccessor(workbook_path)
+        accessor_owned = True
+    else:
+        accessor_owned = False
+
+    # Resolve formula-view flag bundle. Neither workbook opens here — the
+    # values ws opens lazily via accessor.get_worksheet; the formula wb +
+    # formula cache build on first demand below.
+    use_formula_typing, effective_expansion, _need_formula_wb = (
+        _v6_formula_snapshot_flags(config)
+    )
+
     try:
-        wb = openpyxl.load_workbook(workbook_path, data_only=True, read_only=False)
+        ws = accessor.get_worksheet(sheet_name)
     except Exception as exc:
-        logger.error("Failed to open workbook for sheet %s: %s", sheet_name, exc)
+        logger.error("Failed to open sheet %s: %s", sheet_name, exc)
+        if accessor_owned:
+            accessor.close()
         return V6RunResult(run_id=run_id, sheet_name=sheet_name, errors=[str(exc)])
-
-    # Lazy "formula view" workbook handle (data_only=False) for core validation.
-    wb_formula = None
-    ws_formula = None
-
-    def _peek_formula_cols_in_local_row(
-        bbox: Dict[str, int],
-        local_row_idx: int = 0,
-    ) -> List[int]:
-        """
-        Return local column indices whose cells are formulas in the given local row.
-        Re-opens the workbook with data_only=False on first use.
-        """
-        nonlocal wb_formula, ws_formula
-        if wb_formula is None:
-            wb_formula = openpyxl.load_workbook(
-                workbook_path, data_only=False, read_only=True
-            )
-            ws_formula = wb_formula[sheet_name]
-
-        abs_r = int(bbox["r1"]) + int(local_row_idx)
-        c1 = int(bbox["c1"])
-        c2 = int(bbox["c2"])
-        out: List[int] = []
-        for c in range(c1, c2 + 1):
-            cell = ws_formula.cell(row=abs_r + 1, column=c + 1)  # 1-indexed
-            if cell.data_type == "f":
-                out.append(c - c1)
-                continue
-            v = cell.value
-            if isinstance(v, str) and v.lstrip().startswith("="):
-                out.append(c - c1)
-        return out
-
-    try:
-        ws = wb[sheet_name]
-    except KeyError:
-        wb.close()
+    if ws is None:
+        if accessor_owned:
+            accessor.close()
         msg = f"Sheet '{sheet_name}' not found in workbook"
         logger.error(msg)
         return V6RunResult(run_id=run_id, sheet_name=sheet_name, errors=[msg])
@@ -251,37 +277,53 @@ def _run_v6_sheet(
 
     bboxes = _sort_bboxes_parent_before_child(bboxes)
 
-    def _get_ws_formula():
-        nonlocal wb_formula, ws_formula
-        if wb_formula is None:
-            wb_formula = openpyxl.load_workbook(
-                workbook_path, data_only=False, read_only=True
+    # Build formula_refs ONCE per sheet over the union of all bbox extents.
+    # Per-bbox consumers filter down to their own footprint.
+    sheet_formula_refs: Optional[Dict[Tuple[int, int], List[Tuple[int, int]]]] = None
+    if effective_expansion and bboxes:
+        try:
+            r1 = min(int(b["r1"]) for b in bboxes)
+            c1 = min(int(b["c1"]) for b in bboxes)
+            r2 = max(int(b["r2"]) for b in bboxes)
+            c2 = max(int(b["c2"]) for b in bboxes)
+            sheet_formula_refs = accessor.formula_refs_in(
+                sheet_name, {"r1": r1, "c1": c1, "r2": r2, "c2": c2},
             )
-            ws_formula = wb_formula[sheet_name]
-        return ws_formula
+            logger.info(
+                "Sheet %s: built formula_refs once over bbox union (%d formulas)",
+                sheet_name, len(sheet_formula_refs),
+            )
+        except Exception as exc:
+            logger.warning(
+                "Failed to build sheet-level formula_refs for %s: %s",
+                sheet_name, exc,
+            )
+            sheet_formula_refs = None
+
+    # formula_peek: closure over accessor preserves the original
+    # (bbox, local_row_idx) -> List[int] contract the validator expects.
+    def _formula_peek(bbox: Dict[str, int], local_row_idx: int = 0) -> List[int]:
+        if not use_formula_typing:
+            return []
+        return accessor.peek_formula_cols_in_local_row(
+            sheet_name, bbox, local_row_idx,
+        )
 
     for bbox_idx, bbox in enumerate(bboxes):
         try:
-            formula_refs = None
-            if getattr(config, "core_formula_expansion_enabled", False):
-                try:
-                    formula_refs = build_formula_refs(_get_ws_formula(), bbox)
-                except Exception as exc:
-                    logger.warning(
-                        "formula_refs build failed for %s bbox %d: %s",
-                        sheet_name, bbox_idx, exc,
-                    )
-                    formula_refs = None
             table_result = _process_one_bbox(
-                ws, bbox, sheet_name, bbox_idx,
+                accessor, ws, sheet_name, bbox, bbox_idx,
                 all_tables, cut_scores, config,
                 llm_client, llm_call_counter, audit_records,
-                formula_peek=_peek_formula_cols_in_local_row,
-                formula_refs=formula_refs,
+                formula_peek=_formula_peek,
+                sheet_formula_refs=sheet_formula_refs,
+                use_formula_typing=use_formula_typing,
+                effective_expansion=effective_expansion,
             )
             all_tables.append(table_result)
 
-            # Formatting (runs after semantic assignment)
+            # Formatting (runs after semantic assignment). Uses the raw
+            # worksheet handle because it reads cell-level styling.
             if config.extract_formatting:
                 fmt = extract_table_formatting(ws, bbox, table_result, config)
                 table_result.formatting = fmt
@@ -329,9 +371,8 @@ def _run_v6_sheet(
             logger.error("Finalize stage failed for %s: %s", sheet_name, exc, exc_info=True)
             errors.append(f"finalize: {exc}")
 
-    wb.close()
-    if wb_formula is not None:
-        wb_formula.close()
+    if accessor_owned:
+        accessor.close()
 
     return V6RunResult(
         run_id=run_id,
@@ -345,9 +386,10 @@ def _run_v6_sheet(
 
 
 def _process_one_bbox(
+    accessor: WorkbookAccessor,
     ws: Any,
-    bbox: Dict[str, int],
     sheet_name: str,
+    bbox: Dict[str, int],
     bbox_idx: int,
     all_tables: List[V6TableResult],
     cut_scores: List[Dict[str, Any]],
@@ -355,19 +397,43 @@ def _process_one_bbox(
     llm_client: Any,
     llm_call_counter: List[int],
     audit_records: Dict[str, List],
-    formula_peek: Optional[Callable[[Dict[str, int], int], List[int]]] = None,
-    formula_refs: Optional[Dict[Any, Any]] = None,
+    formula_peek: Any = None,
+    sheet_formula_refs: Optional[Dict[Tuple[int, int], List[Tuple[int, int]]]] = None,
+    use_formula_typing: bool = True,
+    effective_expansion: bool = False,
 ) -> V6TableResult:
-    """Process a single bbox: read grid, run core-first analysis."""
+    """Process a single bbox: read grid, run core-first analysis.
+
+    Values are read directly off the already-open ``data_only=True``,
+    ``read_only=False`` worksheet (``.cell()`` is O(1) in that mode).
+    Formula typing, if enabled, consults the accessor's per-sheet formula
+    cache built once via a single ``iter_rows`` pass on the formula workbook.
+    """
     r_top = bbox["r1"]
     c_left = bbox["c1"]
     r_bot = bbox["r2"]
     c_right = bbox["c2"]
 
-    # Read grid from worksheet
-    grid, types = _read_cell_grid(ws, r_top, c_left, r_bot, c_right)
+    # Lazy-build the formula cache on first need; subsequent bboxes reuse it.
+    is_formula_set: FrozenSet[Tuple[int, int]] = frozenset()
+    if use_formula_typing:
+        is_formula_set = accessor._formula_cache(sheet_name).is_formula_set
 
-    # Get bold rows and merge info
+    grid, types = _read_cell_grid(
+        ws, r_top, c_left, r_bot, c_right,
+        is_formula_set=is_formula_set if use_formula_typing else None,
+    )
+
+    # Formula-ref gating: only pay for expansion when the bbox has at least
+    # one fully-blank column. Dense tables skip the cost entirely.
+    formula_refs: Optional[Dict[Tuple[int, int], List[Tuple[int, int]]]] = None
+    if (
+        sheet_formula_refs
+        and effective_expansion
+        and _bbox_has_empty_column(types)
+    ):
+        formula_refs = _filter_formula_refs_to_bbox(sheet_formula_refs, bbox)
+
     bold_rows = _detect_bold_rows(ws, r_top, c_left, r_bot, c_right)
     merge_info = _get_merge_info(ws, r_top, c_left, r_bot, c_right)
 
@@ -404,6 +470,44 @@ def _process_one_bbox(
     )
 
 
+def _bbox_has_empty_column(types: List[List[str]]) -> bool:
+    """True if any column inside ``types`` is entirely BLANK.
+
+    Cheap O(rows*cols) pre-check used to gate formula-dependency core
+    expansion: if every column already has some NUMBER/FORMULA/TEXT cell,
+    there is no gap for expansion to fill and the (expensive) dict iteration
+    can be skipped.
+    """
+    if not types:
+        return False
+    n_rows = len(types)
+    n_cols = max((len(r) for r in types), default=0)
+    for c in range(n_cols):
+        all_blank = True
+        for r in range(n_rows):
+            row = types[r]
+            if c < len(row) and row[c] != "BLANK":
+                all_blank = False
+                break
+        if all_blank:
+            return True
+    return False
+
+
+def _filter_formula_refs_to_bbox(
+    refs: Dict[Tuple[int, int], List[Tuple[int, int]]],
+    bbox: Dict[str, int],
+) -> Dict[Tuple[int, int], List[Tuple[int, int]]]:
+    """Return the subset of ``refs`` whose formula-cell keys sit inside ``bbox``."""
+    r1 = int(bbox["r1"]); c1 = int(bbox["c1"])
+    r2 = int(bbox["r2"]); c2 = int(bbox["c2"])
+    return {
+        k: v
+        for k, v in refs.items()
+        if r1 <= k[0] <= r2 and c1 <= k[1] <= c2
+    }
+
+
 def _sort_bboxes_parent_before_child(bboxes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Process parents before children so header inheritance sees donor tables."""
     if len(bboxes) <= 1:
@@ -415,32 +519,44 @@ def _sort_bboxes_parent_before_child(bboxes: List[Dict[str, Any]]) -> List[Dict[
 
 
 # ---------------------------------------------------------------------------
-# Cell reading (openpyxl)
+# Cell reading (direct ws.cell() — O(1) on a read_only=False worksheet)
 # ---------------------------------------------------------------------------
 
 def _read_cell_grid(
-    ws: Any, r_top: int, c_left: int, r_bot: int, c_right: int,
+    ws: Any,
+    r_top: int,
+    c_left: int,
+    r_bot: int,
+    c_right: int,
+    *,
+    is_formula_set: Optional[FrozenSet[Tuple[int, int]]] = None,
 ) -> Tuple[List[List[Any]], List[List[str]]]:
-    """Read cell values and classify types. Coords are 0-indexed inclusive."""
-    grid = []
-    types = []
+    """Read cell values and classify types. Coords are 0-indexed inclusive.
+
+    ``is_formula_set`` (absolute coords) is consulted to recover FORMULA
+    typing.  When ``None`` (``use_formula_view_for_types=false``), formula
+    cells classify as NUMBER or BLANK from their cached values.
+    """
+    grid: List[List[Any]] = []
+    types: List[List[str]] = []
     for r in range(r_top, r_bot + 1):
-        row_vals = []
-        row_types = []
+        row_vals: List[Any] = []
+        row_types: List[str] = []
         for c in range(c_left, c_right + 1):
-            cell = ws.cell(row=r + 1, column=c + 1)  # openpyxl is 1-indexed
+            cell = ws.cell(row=r + 1, column=c + 1)
             val = cell.value
             row_vals.append(val)
-            row_types.append(_classify_cell(val, cell.data_type))
+            if is_formula_set is not None and (r, c) in is_formula_set:
+                row_types.append("FORMULA")
+            else:
+                row_types.append(_classify_cell(val))
         grid.append(row_vals)
         types.append(row_types)
     return grid, types
 
 
-def _classify_cell(value: Any, data_type: str = None) -> str:
-    """Classify cell: BLANK, FORMULA, NUMBER, TEXT."""
-    if data_type == "f":
-        return "FORMULA"
+def _classify_cell(value: Any) -> str:
+    """Classify cell without formula typing: BLANK, NUMBER, or TEXT."""
     if value is None or (isinstance(value, str) and not value.strip()):
         return "BLANK"
     if isinstance(value, bool):
@@ -453,7 +569,7 @@ def _classify_cell(value: Any, data_type: str = None) -> str:
 def _detect_bold_rows(
     ws: Any, r_top: int, c_left: int, r_bot: int, c_right: int,
 ) -> Set[int]:
-    """Detect rows where the first non-empty cell is bold (relative indices)."""
+    """Row indices (bbox-relative) whose first non-empty cell is bold."""
     bold_rows: Set[int] = set()
     for r in range(r_top, r_bot + 1):
         for c in range(c_left, c_right + 1):
@@ -468,15 +584,14 @@ def _detect_bold_rows(
 def _get_merge_info(
     ws: Any, r_top: int, c_left: int, r_bot: int, c_right: int,
 ) -> List[Tuple[int, int, int, int]]:
-    """Get merged cell ranges overlapping the bbox (relative coords)."""
-    merges = []
+    """Merged cell ranges overlapping ``bbox``, in bbox-relative coords."""
+    merges: List[Tuple[int, int, int, int]] = []
     try:
         for merged_range in ws.merged_cells.ranges:
-            mr_top = merged_range.min_row - 1  # to 0-indexed
+            mr_top = merged_range.min_row - 1
             mc_left = merged_range.min_col - 1
             mr_bot = merged_range.max_row - 1
             mc_right = merged_range.max_col - 1
-
             if mr_bot >= r_top and mr_top <= r_bot and mc_right >= c_left and mc_left <= c_right:
                 merges.append((
                     max(0, mr_top - r_top),
@@ -488,6 +603,10 @@ def _get_merge_info(
         pass
     return merges
 
+
+# ---------------------------------------------------------------------------
+# Structural summary (pure compute over cached grid/types)
+# ---------------------------------------------------------------------------
 
 def _compute_structural_summary(
     grid: List[List[Any]],

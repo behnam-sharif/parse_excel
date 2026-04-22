@@ -11,12 +11,14 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 6,
-        "metadata": 9
+        "calc": 3,
+        "metadata": 9,
+        "mixed": 3
       },
       "resolved_table_roles": {
-        "input": 2,
-        "metadata": 1
+        "calc": 1,
+        "metadata": 1,
+        "mixed": 1
       }
     },
     {
@@ -26,31 +28,15 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
-      }
-    },
-    {
-      "sheet_name": "BI calculation_Alberta",
-      "n_tables": 147,
-      "n_resolved_tables": 37,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
-      },
-      "resolved_table_roles": {
-        "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -60,14 +46,33 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
+      }
+    },
+    {
+      "sheet_name": "BI calculation_Alberta",
+      "n_tables": 147,
+      "n_resolved_tables": 37,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
+      },
+      "resolved_table_roles": {
+        "metadata": 2,
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -77,48 +82,15 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
-      }
-    },
-    {
-      "sheet_name": "BI calculation_Newfoundland",
-      "n_tables": 147,
-      "n_resolved_tables": 37,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
-      },
-      "resolved_table_roles": {
-        "metadata": 2,
-        "input": 33,
-        "mixed": 2
-      }
-    },
-    {
-      "sheet_name": "BI calculation_Nova Scotia",
-      "n_tables": 147,
-      "n_resolved_tables": 37,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
-      },
-      "resolved_table_roles": {
-        "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -128,48 +100,51 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
-      "sheet_name": "BI calculation_PEI",
+      "sheet_name": "BI calculation_Newfoundland",
       "n_tables": 147,
       "n_resolved_tables": 37,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
-      "sheet_name": "BI calculation_YK",
+      "sheet_name": "BI calculation_Nova Scotia",
       "n_tables": 147,
       "n_resolved_tables": 37,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -179,31 +154,15 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 33,
-        "mixed": 2
-      }
-    },
-    {
-      "sheet_name": "BI calculation_Sask.",
-      "n_tables": 147,
-      "n_resolved_tables": 37,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "metadata": 48,
-        "input": 95,
-        "mixed": 4
-      },
-      "resolved_table_roles": {
-        "metadata": 2,
-        "input": 33,
-        "mixed": 2
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -213,29 +172,34 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 17,
+        "metadata": 14,
         "input": 2,
+        "calc": 3,
         "mixed": 3
       },
       "resolved_table_roles": {
-        "metadata": 11,
+        "metadata": 10,
         "input": 2,
+        "calc": 1,
         "mixed": 1
       }
     },
     {
-      "sheet_name": "Cost calculations",
-      "n_tables": 65,
-      "n_resolved_tables": 5,
+      "sheet_name": "BI calculation_PEI",
+      "n_tables": 147,
+      "n_resolved_tables": 37,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 23,
-        "metadata": 40,
-        "mixed": 2
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
-        "input": 5
+        "metadata": 2,
+        "calc": 29,
+        "output": 6
       }
     },
     {
@@ -245,11 +209,11 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 5,
-        "mixed": 2
+        "input": 3,
+        "metadata": 4
       },
       "resolved_table_roles": {
-        "metadata": 1
+        "input": 1
       }
     },
     {
@@ -268,31 +232,53 @@
       }
     },
     {
-      "sheet_name": "Epidemiology",
-      "n_tables": 27,
-      "n_resolved_tables": 7,
+      "sheet_name": "BI calculation_Sask.",
+      "n_tables": 147,
+      "n_resolved_tables": 37,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 1,
-        "input": 26
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
-        "metadata": 1,
-        "input": 6
+        "metadata": 2,
+        "calc": 29,
+        "output": 6
       }
     },
     {
-      "sheet_name": "Introduction",
-      "n_tables": 23,
-      "n_resolved_tables": 7,
+      "sheet_name": "BI calculation_YK",
+      "n_tables": 147,
+      "n_resolved_tables": 37,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 23
+        "metadata": 44,
+        "calc": 81,
+        "output": 18,
+        "input": 4
       },
       "resolved_table_roles": {
-        "metadata": 7
+        "metadata": 2,
+        "calc": 29,
+        "output": 6
+      }
+    },
+    {
+      "sheet_name": "Cost calculations",
+      "n_tables": 65,
+      "n_resolved_tables": 5,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "calc": 33,
+        "metadata": 32
+      },
+      "resolved_table_roles": {
+        "calc": 5
       }
     },
     {
@@ -302,28 +288,28 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "mixed": 1,
-        "input": 4,
-        "metadata": 3
+        "calc": 5,
+        "metadata": 2,
+        "input": 1
       },
       "resolved_table_roles": {
-        "mixed": 1,
-        "input": 2,
-        "metadata": 1
+        "calc": 3,
+        "input": 1
       }
     },
     {
-      "sheet_name": "Market shares",
-      "n_tables": 14,
-      "n_resolved_tables": 6,
+      "sheet_name": "Introduction",
+      "n_tables": 23,
+      "n_resolved_tables": 7,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 10,
-        "metadata": 4
+        "metadata": 20,
+        "calc": 3
       },
       "resolved_table_roles": {
-        "input": 6
+        "metadata": 6,
+        "calc": 1
       }
     },
     {
@@ -333,13 +319,11 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "mixed": 5,
-        "metadata": 4,
-        "input": 5
+        "calc": 10,
+        "metadata": 4
       },
       "resolved_table_roles": {
-        "mixed": 1,
-        "input": 1
+        "calc": 2
       }
     },
     {
@@ -349,44 +333,43 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 9,
-        "metadata": 12
-      },
-      "resolved_table_roles": {
+        "calc": 6,
+        "metadata": 12,
         "input": 3
+      },
+      "resolved_table_roles": {
+        "calc": 2,
+        "input": 1
       }
     },
     {
-      "sheet_name": "Results ",
-      "n_tables": 163,
-      "n_resolved_tables": 31,
+      "sheet_name": "Market shares",
+      "n_tables": 14,
+      "n_resolved_tables": 6,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "metadata": 62,
-        "input": 100,
-        "mixed": 1
+        "output": 10,
+        "calc": 2,
+        "metadata": 2
       },
       "resolved_table_roles": {
-        "metadata": 2,
-        "input": 28,
-        "mixed": 1
+        "output": 6
       }
     },
     {
-      "sheet_name": "Subsequent tx",
-      "n_tables": 41,
-      "n_resolved_tables": 5,
+      "sheet_name": "Epidemiology",
+      "n_tables": 27,
+      "n_resolved_tables": 7,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 16,
-        "metadata": 22,
-        "mixed": 3
+        "metadata": 1,
+        "calc": 26
       },
       "resolved_table_roles": {
-        "input": 4,
-        "mixed": 1
+        "metadata": 1,
+        "calc": 6
       }
     },
     {
@@ -397,11 +380,11 @@
       "n_errors": 0,
       "table_roles": {
         "metadata": 6,
-        "input": 6
+        "calc": 6
       },
       "resolved_table_roles": {
         "metadata": 2,
-        "input": 2
+        "calc": 2
       }
     },
     {
@@ -411,14 +394,27 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 6,
-        "metadata": 9,
-        "mixed": 1
+        "calc": 9,
+        "output": 2,
+        "metadata": 5
       },
       "resolved_table_roles": {
-        "input": 2,
-        "metadata": 1,
-        "mixed": 1
+        "calc": 3,
+        "metadata": 1
+      }
+    },
+    {
+      "sheet_name": "Subsequent tx",
+      "n_tables": 41,
+      "n_resolved_tables": 5,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "calc": 19,
+        "metadata": 22
+      },
+      "resolved_table_roles": {
+        "calc": 5
       }
     },
     {
@@ -428,12 +424,30 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "input": 23,
-        "metadata": 14,
+        "calc": 27,
+        "metadata": 12
+      },
+      "resolved_table_roles": {
+        "calc": 3
+      }
+    },
+    {
+      "sheet_name": "Results ",
+      "n_tables": 163,
+      "n_resolved_tables": 31,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "metadata": 50,
+        "calc": 90,
+        "input": 4,
+        "output": 17,
         "mixed": 2
       },
       "resolved_table_roles": {
-        "input": 3
+        "metadata": 2,
+        "calc": 24,
+        "output": 5
       }
     }
   ]

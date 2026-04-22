@@ -401,6 +401,9 @@ xl_sheetagent_v6:
   # Formula-dependency core expansion (Batch 3a)
   core_formula_expansion_enabled: true
   core_formula_expansion_ring: 1
+  # When false: values-only typing (no FORMULA cells); node_type/role from numbers.
+  # Must be true if core_formula_expansion_enabled is true.
+  use_formula_view_for_types: true
 
   # Child rules / hierarchy / resolution (KEPT from v5)
   min_child_rows: 6
