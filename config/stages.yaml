@@ -392,10 +392,15 @@ xl_sheetagent_v6:
   # Header inheritance
   inherit_header_col_tolerance: 1
 
-  # Core region rules (v5 semantics UNCHANGED)
-  min_component_area: 2
+  # Core region rules
+  # must stay at 1 to allow single-cell cores (see Batch 3c)
+  min_component_area: 1
   component_merge_gap: 1
   blank_inclusion_density_threshold: 0.30
+
+  # Formula-dependency core expansion (Batch 3a)
+  core_formula_expansion_enabled: true
+  core_formula_expansion_ring: 1
 
   # Child rules / hierarchy / resolution (KEPT from v5)
   min_child_rows: 6

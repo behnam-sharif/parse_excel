@@ -18,6 +18,7 @@ import openpyxl
 
 from .config import XlSheetAgentV6Config
 from .schemas import V6RunResult, V6TableResult
+from .formula_refs import build_formula_refs
 from .table_agent import analyze_table
 from .formatting_agent import extract_table_formatting
 from .exporter import export_results
@@ -250,13 +251,33 @@ def _run_v6_sheet(
 
     bboxes = _sort_bboxes_parent_before_child(bboxes)
 
+    def _get_ws_formula():
+        nonlocal wb_formula, ws_formula
+        if wb_formula is None:
+            wb_formula = openpyxl.load_workbook(
+                workbook_path, data_only=False, read_only=True
+            )
+            ws_formula = wb_formula[sheet_name]
+        return ws_formula
+
     for bbox_idx, bbox in enumerate(bboxes):
         try:
+            formula_refs = None
+            if getattr(config, "core_formula_expansion_enabled", False):
+                try:
+                    formula_refs = build_formula_refs(_get_ws_formula(), bbox)
+                except Exception as exc:
+                    logger.warning(
+                        "formula_refs build failed for %s bbox %d: %s",
+                        sheet_name, bbox_idx, exc,
+                    )
+                    formula_refs = None
             table_result = _process_one_bbox(
                 ws, bbox, sheet_name, bbox_idx,
                 all_tables, cut_scores, config,
                 llm_client, llm_call_counter, audit_records,
                 formula_peek=_peek_formula_cols_in_local_row,
+                formula_refs=formula_refs,
             )
             all_tables.append(table_result)
 
@@ -296,7 +317,14 @@ def _run_v6_sheet(
     final_map = None
     if getattr(config, "enable_finalize", False) and resolved:
         try:
-            final_map = finalize_sheet(sheet_name, resolved, config)
+            def _grid_reader(abs_r: int, abs_c: int, _ws=ws) -> Any:
+                try:
+                    return _ws.cell(row=abs_r + 1, column=abs_c + 1).value
+                except Exception:
+                    return None
+            final_map = finalize_sheet(
+                sheet_name, resolved, config, grid_reader=_grid_reader,
+            )
         except Exception as exc:
             logger.error("Finalize stage failed for %s: %s", sheet_name, exc, exc_info=True)
             errors.append(f"finalize: {exc}")
@@ -328,6 +356,7 @@ def _process_one_bbox(
     llm_call_counter: List[int],
     audit_records: Dict[str, List],
     formula_peek: Optional[Callable[[Dict[str, int], int], List[int]]] = None,
+    formula_refs: Optional[Dict[Any, Any]] = None,
 ) -> V6TableResult:
     """Process a single bbox: read grid, run core-first analysis."""
     r_top = bbox["r1"]
@@ -371,6 +400,7 @@ def _process_one_bbox(
         audit_records=audit_records,
         cut_scores=cut_scores,
         formula_peek=formula_peek,
+        formula_refs=formula_refs,
     )
 
 

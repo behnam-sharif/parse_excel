@@ -25,10 +25,14 @@ class XlSheetAgentV6Config:
     # Header inheritance (recipient width vs donor header span, inclusive ±)
     inherit_header_col_tolerance: int
 
-    # Core region rules (v5 semantics UNCHANGED)
+    # Core region rules
     min_component_area: int
     component_merge_gap: int
     blank_inclusion_density_threshold: float
+
+    # Formula-dependency core expansion (Batch 3a)
+    core_formula_expansion_enabled: bool
+    core_formula_expansion_ring: int
 
     # Child rules / hierarchy / resolution (KEPT from v5)
     min_child_rows: int

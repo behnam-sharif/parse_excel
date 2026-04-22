@@ -137,8 +137,6 @@ def _validate_single(
     lc2 = region.bbox["c2"] - c_offset
 
     n_core_rows = lr2 - lr1 + 1
-    if n_core_rows <= 1:
-        return _passthrough(region)
 
     max_strip = min(config.core_validator_max_strip_rows, n_core_rows - 1)
     reasons: List[str] = []

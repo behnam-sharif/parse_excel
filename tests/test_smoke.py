@@ -58,6 +58,7 @@ class TestImports(unittest.TestCase):
             export_final_map,
             serialize_final_map,
         )
+        from xl_sheetagent_v6.formula_refs import build_formula_refs
         from xl_sheetagent_v6.schemas import (
             FinalMapChildEntry,
             FinalMapEntryParent,
@@ -70,6 +71,7 @@ class TestImports(unittest.TestCase):
         self.assertTrue(callable(finalize_sheet))
         self.assertTrue(callable(export_final_map))
         self.assertTrue(callable(serialize_final_map))
+        self.assertTrue(callable(build_formula_refs))
         self.assertTrue(callable(get_v6_final_table_map_path))
         self.assertTrue(FinalMapChildEntry is not None)
         self.assertTrue(FinalMapEntryParent is not None)

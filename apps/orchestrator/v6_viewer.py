@@ -701,14 +701,48 @@ def _render_core_region_block(cr: Optional[Dict[str, Any]], indent: str = "") ->
         st.markdown(f"{indent}**Core region**: null")
 
 
-def _render_notes_block(notes: List[Any], indent: str = "") -> None:
+def _render_footnotes_block(notes: List[Any], indent: str = "") -> None:
     if not notes:
         return
-    st.markdown(f"{indent}**Notes** ({len(notes)}):")
-    for note in notes[:6]:
-        st.markdown(f"{indent}  - row {_note_row(note)}: {_note_text(note)[:120]}")
-    if len(notes) > 6:
-        st.caption(f"{indent}... and {len(notes) - 6} more note(s)")
+    st.markdown(f"{indent}**Footnotes / notes / refs** ({len(notes)}):")
+    for item in notes[:10]:
+        row = item.get("row") if isinstance(item, dict) else None
+        col = item.get("col") if isinstance(item, dict) else None
+        text = item.get("text") if isinstance(item, dict) else str(item)
+        coord = _cell_a1(row, col) if row is not None and col is not None else "?"
+        st.markdown(f"{indent}  - `{coord}`: {str(text)[:160]}")
+    if len(notes) > 10:
+        st.caption(f"{indent}... and {len(notes) - 10} more")
+
+
+def _render_triggers_block(triggers: List[Any], indent: str = "") -> None:
+    if not triggers:
+        return
+    parts: List[str] = []
+    for t in triggers:
+        if isinstance(t, dict):
+            name = t.get("name", "?")
+            source = t.get("source", "?")
+        else:
+            name = str(t)
+            source = "raw_v6"
+        parts.append(
+            f"<span style='background:#fff4e5;color:#8a4b00;border-radius:4px;"
+            f"padding:2px 6px;margin-right:4px;font-size:11px;'>{name} · {source}</span>"
+        )
+    st.markdown(f"{indent}**LLM gate triggers**: " + "".join(parts), unsafe_allow_html=True)
+
+
+def _cell_a1(row: Optional[int], col: Optional[int]) -> str:
+    if row is None or col is None:
+        return "?"
+    letters = ""
+    c = int(col)
+    n = c + 1
+    while n > 0:
+        n, rem = divmod(n - 1, 26)
+        letters = chr(65 + rem) + letters
+    return f"{letters}{int(row) + 1}"
 
 
 def _render_finalize_leaf_body(entry: Dict[str, Any], indent: str = "") -> None:
@@ -730,8 +764,8 @@ def _render_finalize_leaf_body(entry: Dict[str, Any], indent: str = "") -> None:
         f"**parent_path**: {' / '.join(parent_path) if parent_path else '(root)'}"
     )
 
-    notes = entry.get("notes") or []
-    _render_notes_block(notes, indent)
+    _render_triggers_block(entry.get("llm_gate_triggers") or [], indent)
+    _render_footnotes_block(entry.get("footnotes_notes_refs") or [], indent)
 
 
 def _render_finalize_standalone(entry: Dict[str, Any]) -> None:
@@ -783,6 +817,8 @@ def _render_finalize_parent(entry: Dict[str, Any]) -> None:
         st.markdown(
             f"**parent_path**: {' / '.join(parent_path) if parent_path else '(root)'}"
         )
+        _render_triggers_block(entry.get("llm_gate_triggers") or [])
+        _render_footnotes_block(entry.get("footnotes_notes_refs") or [])
         st.markdown("---")
         if not children:
             st.info("No children emitted.")

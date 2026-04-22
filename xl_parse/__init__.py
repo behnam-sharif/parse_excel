@@ -52,6 +52,7 @@ def run_parse(input_path: str, output_path: str, config=None):
     results = parse_workbook(
         file_path=input_path,
         sheet_names=approved,
+        max_workers=max(1, config.max_workers),
         config=config,
         export_base_dir=output_path,
     )

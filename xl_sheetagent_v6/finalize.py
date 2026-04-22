@@ -14,7 +14,7 @@ carry a stable ``table_id``, ``sheet_name``, ``bbox``, ``core_region``,
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 
 from .config import XlSheetAgentV6Config
 from .coordinates import bbox_dict_copy, bbox_to_coords
@@ -24,9 +24,10 @@ from .schemas import (
     FinalMapEntryParent,
     FinalMapEntryStandalone,
     FinalTableMap,
-    NoteEntry,
     V6ResolvedTable,
 )
+
+GridReader = Callable[[int, int], Any]
 
 logger = logging.getLogger(__name__)
 
@@ -41,16 +42,24 @@ def finalize_sheet(
     sheet_name: str,
     resolved_tables: List[V6ResolvedTable],
     config: XlSheetAgentV6Config,
+    grid_reader: Optional[GridReader] = None,
 ) -> FinalTableMap:
-    """Run finalize rules on one sheet's resolved tables."""
+    """Run finalize rules on one sheet's resolved tables.
+
+    ``grid_reader`` takes absolute 0-indexed ``(row, col)`` and returns the
+    cell value (or ``None``).  When ``None``, footnote computation is
+    skipped — the resulting entries have ``footnotes_notes_refs == []``.
+    """
     ordered = sorted(
         resolved_tables,
         key=lambda r: (r.bbox.get("r1", 0), r.bbox.get("c1", 0)),
     )
 
+    reader: GridReader = grid_reader if grid_reader is not None else (lambda r, c: None)
+
     entries: List[Union[FinalMapEntryStandalone, FinalMapEntryParent]] = []
     for rt in ordered:
-        entries.append(_finalize_one(rt, sheet_name, config))
+        entries.append(_finalize_one(rt, sheet_name, config, reader))
 
     # Rule 6 — flag violations (applied to all leaves: standalones + child entries)
     for entry in entries:
@@ -73,32 +82,41 @@ def _finalize_one(
     rt: V6ResolvedTable,
     sheet_name: str,
     config: XlSheetAgentV6Config,
+    grid_reader: GridReader,
 ) -> Union[FinalMapEntryStandalone, FinalMapEntryParent]:
     child_summaries = rt.child_summaries or []
 
+    # Multi-core without preserved children — synthesize one child per core.
+    # (rt with > 1 core AND preserved children keeps the normal rule path; each
+    # preserved child already carries a single core.)
+    if len(rt.core_regions) > 1 and not rt.children:
+        return _emit_parent_multi_core_split(rt, sheet_name, grid_reader)
+
     # Rule 1 — V3a standalone (never had children)
     if not child_summaries:
-        return _emit_standalone_rule1(rt, sheet_name)
+        return _emit_standalone_rule1(rt, sheet_name, grid_reader)
 
     # Rule 2 — exactly 1 child_metadata + 1 child_numeric in V3a
     if _is_rule2_case(child_summaries):
-        return _emit_standalone_rule2(rt, sheet_name, child_summaries)
+        return _emit_standalone_rule2(rt, sheet_name, child_summaries, grid_reader)
 
     # Rule 5 — a preserved child is itself a parent (flatten one level)
     if rt.children and any(c.children for c in rt.children):
-        return _emit_parent_rule5(rt, sheet_name, config)
+        return _emit_parent_rule5(rt, sheet_name, config, grid_reader)
 
     # No preserved children but V3a had children (all absorbed) — treat as standalone.
     if not rt.children:
         flags = ["merged_from_metadata_and_numeric_child"]
-        return _emit_standalone_from_resolved(rt, sheet_name, flags=flags)
+        return _emit_standalone_from_resolved(rt, sheet_name, flags=flags, grid_reader=grid_reader)
 
     # Rule 4 — all preserved children are metadata
     if all(_is_metadata_child(c) for c in rt.children):
-        return _emit_parent_rule4(rt, sheet_name)
+        return _emit_parent_rule4(rt, sheet_name, grid_reader)
 
     # Rule 3 — default: parent with numeric children (metadata may interleave)
-    return _emit_parent_rule3(rt, sheet_name, rt.children, extra_parent_flags=[])
+    return _emit_parent_rule3(
+        rt, sheet_name, rt.children, extra_parent_flags=[], grid_reader=grid_reader,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -108,8 +126,9 @@ def _finalize_one(
 def _emit_standalone_rule1(
     rt: V6ResolvedTable,
     sheet_name: str,
+    grid_reader: GridReader,
 ) -> FinalMapEntryStandalone:
-    return _emit_standalone_from_resolved(rt, sheet_name, flags=[])
+    return _emit_standalone_from_resolved(rt, sheet_name, flags=[], grid_reader=grid_reader)
 
 
 # ---------------------------------------------------------------------------
@@ -127,6 +146,7 @@ def _emit_standalone_rule2(
     rt: V6ResolvedTable,
     sheet_name: str,
     child_summaries: List[Dict[str, Any]],
+    grid_reader: GridReader,
 ) -> FinalMapEntryStandalone:
     """
     Collapse a 1-meta + 1-numeric V3a parent into a standalone entry.
@@ -166,18 +186,24 @@ def _emit_standalone_rule2(
     ):
         flags.append("header_conflict")
 
-    # row_names / core_region / notes / node_type — from numeric source.
+    # row_names / core_region / node_type — from numeric source.
     if preserved_numeric is not None:
         row_names = _clone_row_names(preserved_numeric.row_names)
         core_region = _first_core_bbox(preserved_numeric.core_regions)
-        notes = list(preserved_numeric.notes)
         node_type = preserved_numeric.table_role
     else:
         # Both absorbed — resolver merged everything into rt-level fields.
         row_names = _clone_row_names(rt.row_names)
         core_region = _first_core_bbox(rt.core_regions)
-        notes = list(rt.notes)
         node_type = rt.table_role
+
+    footnotes = compute_footnotes(rt.bbox, core_region, grid_reader)
+
+    # Rule 2: merge parent triggers with whichever child contributed the core.
+    triggers = _clone_triggers(rt.llm_gate_triggers)
+    source_for_triggers = preserved_numeric if preserved_numeric is not None else None
+    if source_for_triggers is not None:
+        triggers = _merge_triggers(triggers, source_for_triggers.llm_gate_triggers)
 
     return FinalMapEntryStandalone(
         table_id=rt.table_id,
@@ -190,7 +216,8 @@ def _emit_standalone_rule2(
         core_region=core_region,
         node_type=node_type,
         parent_path=[sheet_name],
-        notes=notes,
+        footnotes_notes_refs=footnotes,
+        llm_gate_triggers=triggers,
         source_flags=flags,
     )
 
@@ -204,6 +231,7 @@ def _emit_parent_rule3(
     sheet_name: str,
     children_pool: List[V6ResolvedTable],
     extra_parent_flags: List[str],
+    grid_reader: GridReader,
 ) -> FinalMapEntryParent:
     ordered = sorted(
         children_pool,
@@ -254,6 +282,8 @@ def _emit_parent_rule3(
             core_region = _first_core_bbox(child.core_regions)
             node_type = child.table_role
 
+            child_footnotes = compute_footnotes(child.bbox, core_region, grid_reader)
+
             emitted_children.append(FinalMapChildEntry(
                 table_id=child.table_id,
                 coordinates=bbox_to_coords(sheet_name, child.bbox),
@@ -265,10 +295,13 @@ def _emit_parent_rule3(
                 core_region=core_region,
                 node_type=node_type,
                 parent_path=list(parent_path_for_children),
+                footnotes_notes_refs=child_footnotes,
+                llm_gate_triggers=_clone_triggers(child.llm_gate_triggers),
                 source_flags=child_flags,
             ))
         else:
             # Orphan metadata — not consumed by any following numeric.
+            child_footnotes = compute_footnotes(child.bbox, None, grid_reader)
             emitted_children.append(FinalMapChildEntry(
                 table_id=child.table_id,
                 coordinates=bbox_to_coords(sheet_name, child.bbox),
@@ -280,8 +313,14 @@ def _emit_parent_rule3(
                 core_region=None,
                 node_type="metadata",
                 parent_path=list(parent_path_for_children),
+                footnotes_notes_refs=child_footnotes,
+                llm_gate_triggers=_clone_triggers(child.llm_gate_triggers),
                 source_flags=["orphan_metadata"],
             ))
+
+    parent_footnotes = _compute_parent_footnotes(
+        rt.bbox, emitted_children, grid_reader,
+    )
 
     return FinalMapEntryParent(
         table_id=rt.table_id,
@@ -291,8 +330,109 @@ def _emit_parent_rule3(
         title=rt.title,
         parent_path=[sheet_name],
         children=emitted_children,
+        footnotes_notes_refs=parent_footnotes,
+        llm_gate_triggers=_clone_triggers(rt.llm_gate_triggers),
         source_flags=list(extra_parent_flags),
     )
+
+
+# ---------------------------------------------------------------------------
+# Multi-core split — synthesize one child per core
+# ---------------------------------------------------------------------------
+
+def _emit_parent_multi_core_split(
+    rt: V6ResolvedTable,
+    sheet_name: str,
+    grid_reader: GridReader,
+) -> FinalMapEntryParent:
+    """Synthesize one FinalMapChildEntry per core region.
+
+    Used when a V6ResolvedTable carries multiple core regions but has no
+    preserved children to distribute them across.  Each synthesized child
+    gets the core's bbox, the parent's title + headers (headers optionally
+    sliced to the core's column span), and a ``derived_from_parent_core_split``
+    flag.  The parent is flagged ``multi_core_split``.
+    """
+    parent_path_for_children = _child_parent_path(sheet_name, rt)
+    ordered = sorted(
+        list(enumerate(rt.core_regions)),
+        key=lambda ix: (
+            int(ix[1].bbox.get("r1", 0)),
+            int(ix[1].bbox.get("c1", 0)),
+        ),
+    )
+
+    emitted_children: List[FinalMapChildEntry] = []
+    for i, core in ordered:
+        core_bbox = bbox_dict_copy(core.bbox)
+        headers = _slice_headers_for_core(rt, core)
+        node_type = core.role_hint or "calc"
+        child_footnotes = compute_footnotes(core_bbox, core_bbox, grid_reader)
+        emitted_children.append(FinalMapChildEntry(
+            table_id=f"{rt.table_id}__core{i}",
+            coordinates=bbox_to_coords(sheet_name, core_bbox),
+            bbox=bbox_dict_copy(core_bbox),
+            sheet_name=sheet_name,
+            title=rt.title,
+            headers=headers,
+            row_names=None,
+            core_region=bbox_dict_copy(core_bbox),
+            node_type=node_type,
+            parent_path=list(parent_path_for_children),
+            footnotes_notes_refs=child_footnotes,
+            llm_gate_triggers=_clone_triggers(rt.llm_gate_triggers),
+            source_flags=["derived_from_parent_core_split"],
+        ))
+
+    parent_footnotes = _compute_parent_footnotes(
+        rt.bbox, emitted_children, grid_reader,
+    )
+
+    return FinalMapEntryParent(
+        table_id=rt.table_id,
+        coordinates=bbox_to_coords(sheet_name, rt.bbox),
+        bbox=bbox_dict_copy(rt.bbox),
+        sheet_name=sheet_name,
+        title=rt.title,
+        parent_path=[sheet_name],
+        children=emitted_children,
+        footnotes_notes_refs=parent_footnotes,
+        llm_gate_triggers=_clone_triggers(rt.llm_gate_triggers),
+        source_flags=["multi_core_split"],
+    )
+
+
+def _slice_headers_for_core(
+    rt: V6ResolvedTable,
+    core: CoreRegion,
+) -> List[List[str]]:
+    """Slice ``rt.headers`` to the core's column span when possible.
+
+    ``rt.headers`` in V6 are indexed by the first core's column span.  For
+    MVP multi-core split we take a best-effort slice: if every header row's
+    width matches the parent bbox width, index by absolute columns; otherwise
+    pass headers through as-is (flag tells downstream the mapping is coarse).
+    """
+    if not rt.headers:
+        return []
+    bb = rt.bbox
+    parent_c1 = int(bb.get("c1", 0))
+    parent_c2 = int(bb.get("c2", 0))
+    parent_span = parent_c2 - parent_c1 + 1
+    cc1 = int(core.bbox.get("c1", parent_c1))
+    cc2 = int(core.bbox.get("c2", parent_c2))
+    start = max(0, cc1 - parent_c1)
+    end = max(start, cc2 - parent_c1 + 1)
+    out: List[List[str]] = []
+    for row in rt.headers:
+        if not isinstance(row, list):
+            out.append([])
+            continue
+        if len(row) == parent_span and end <= len(row):
+            out.append(list(row[start:end]))
+        else:
+            out.append(list(row))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -302,6 +442,7 @@ def _emit_parent_rule3(
 def _emit_parent_rule4(
     rt: V6ResolvedTable,
     sheet_name: str,
+    grid_reader: GridReader,
 ) -> FinalMapEntryParent:
     ordered = sorted(
         rt.children,
@@ -311,6 +452,7 @@ def _emit_parent_rule4(
 
     emitted_children: List[FinalMapChildEntry] = []
     for child in ordered:
+        child_footnotes = compute_footnotes(child.bbox, None, grid_reader)
         emitted_children.append(FinalMapChildEntry(
             table_id=child.table_id,
             coordinates=bbox_to_coords(sheet_name, child.bbox),
@@ -322,8 +464,14 @@ def _emit_parent_rule4(
             core_region=None,
             node_type="metadata",
             parent_path=list(parent_path_for_children),
+            footnotes_notes_refs=child_footnotes,
+            llm_gate_triggers=_clone_triggers(child.llm_gate_triggers),
             source_flags=["all_metadata_no_numeric"],
         ))
+
+    parent_footnotes = _compute_parent_footnotes(
+        rt.bbox, emitted_children, grid_reader,
+    )
 
     return FinalMapEntryParent(
         table_id=rt.table_id,
@@ -333,6 +481,8 @@ def _emit_parent_rule4(
         title=rt.title,
         parent_path=[sheet_name],
         children=emitted_children,
+        footnotes_notes_refs=parent_footnotes,
+        llm_gate_triggers=_clone_triggers(rt.llm_gate_triggers),
         source_flags=["all_metadata_no_numeric"],
     )
 
@@ -345,6 +495,7 @@ def _emit_parent_rule5(
     rt: V6ResolvedTable,
     sheet_name: str,
     config: XlSheetAgentV6Config,
+    grid_reader: GridReader,
 ) -> FinalMapEntryParent:
     """
     One level of flattening.  A preserved child that itself has preserved
@@ -372,6 +523,7 @@ def _emit_parent_rule5(
     # Delegate to Rule 3 emission with the flattened children pool.
     entry = _emit_parent_rule3(
         rt, sheet_name, flattened, extra_parent_flags=parent_flags,
+        grid_reader=grid_reader,
     )
 
     # If all flattened entries happen to be metadata (unusual), keep Rule 3 output;
@@ -520,7 +672,10 @@ def _emit_standalone_from_resolved(
     rt: V6ResolvedTable,
     sheet_name: str,
     flags: List[str],
+    grid_reader: GridReader,
 ) -> FinalMapEntryStandalone:
+    core_region = _first_core_bbox(rt.core_regions)
+    footnotes = compute_footnotes(rt.bbox, core_region, grid_reader)
     return FinalMapEntryStandalone(
         table_id=rt.table_id,
         coordinates=bbox_to_coords(sheet_name, rt.bbox),
@@ -529,12 +684,40 @@ def _emit_standalone_from_resolved(
         title=rt.title,
         headers=_clone_headers(rt.headers),
         row_names=_clone_row_names(rt.row_names),
-        core_region=_first_core_bbox(rt.core_regions),
+        core_region=core_region,
         node_type=rt.table_role,
         parent_path=[sheet_name],
-        notes=list(rt.notes),
+        footnotes_notes_refs=footnotes,
+        llm_gate_triggers=_clone_triggers(rt.llm_gate_triggers),
         source_flags=list(flags),
     )
+
+
+def _clone_triggers(triggers: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    return [dict(t) for t in triggers or []]
+
+
+def _merge_triggers(
+    existing: List[Dict[str, str]],
+    new: List[Dict[str, str]],
+) -> List[Dict[str, str]]:
+    """Union two trigger lists — dedup by name, earlier source wins."""
+    by_name: Dict[str, Dict[str, str]] = {}
+    for t in existing or []:
+        name = t.get("name") if isinstance(t, dict) else None
+        if name and name not in by_name:
+            by_name[name] = {
+                "name": name,
+                "source": t.get("source", "raw_v6") if isinstance(t, dict) else "raw_v6",
+            }
+    for t in new or []:
+        name = t.get("name") if isinstance(t, dict) else None
+        if name and name not in by_name:
+            by_name[name] = {
+                "name": name,
+                "source": t.get("source", "raw_v6") if isinstance(t, dict) else "raw_v6",
+            }
+    return list(by_name.values())
 
 
 def _child_parent_path(sheet_name: str, rt: V6ResolvedTable) -> List[str]:
@@ -558,6 +741,12 @@ def _is_numeric_child(c: V6ResolvedTable) -> bool:
 def _first_core_bbox(core_regions: List[CoreRegion]) -> Optional[Dict[str, int]]:
     if not core_regions:
         return None
+    if len(core_regions) > 1:
+        logger.warning(
+            "finalize: picking first of %d core regions — caller should "
+            "route multi-core resolved tables through the split dispatch",
+            len(core_regions),
+        )
     cr = core_regions[0]
     return bbox_dict_copy(cr.bbox)
 
@@ -586,3 +775,114 @@ def _headers_differ(a: List[List[str]], b: List[List[str]]) -> bool:
             if sx != sy:
                 return True
     return False
+
+
+# ---------------------------------------------------------------------------
+# Footnote coverage-complement computation
+# ---------------------------------------------------------------------------
+
+def _claimed_cells(
+    bbox: Dict[str, int],
+    core_region: Optional[Dict[str, int]],
+) -> Set[Tuple[int, int]]:
+    """Cells inside ``bbox`` that are claimed by core / title / headers / row_names.
+
+    Geometric approximation: when a ``core_region`` exists, every cell in
+    rows at-or-above the core AND in the core column span is treated as
+    title+header space; every cell in the core row span AND left of the
+    core column span is treated as row_names space.  The core itself is
+    also claimed.  Right-of-core and below-last-core zones remain
+    unclaimed, so non-empty cells there surface as footnotes.
+    """
+    claimed: Set[Tuple[int, int]] = set()
+    if not core_region:
+        return claimed
+    r1 = int(bbox["r1"]); c1 = int(bbox["c1"])
+    r2 = int(bbox["r2"]); c2 = int(bbox["c2"])
+    cr1 = int(core_region["r1"]); cc1 = int(core_region["c1"])
+    cr2 = int(core_region["r2"]); cc2 = int(core_region["c2"])
+
+    # Core bbox
+    for r in range(max(r1, cr1), min(r2, cr2) + 1):
+        for c in range(max(c1, cc1), min(c2, cc2) + 1):
+            claimed.add((r, c))
+    # Above-core (title + headers): rows [r1 .. cr1-1] × cols [c1 .. cc2]
+    if cr1 > r1:
+        for r in range(r1, cr1):
+            for c in range(c1, min(c2, cc2) + 1):
+                claimed.add((r, c))
+    # Left-of-core (row_names): rows [cr1 .. cr2] × cols [c1 .. cc1-1]
+    if cc1 > c1:
+        for r in range(max(r1, cr1), min(r2, cr2) + 1):
+            for c in range(c1, cc1):
+                claimed.add((r, c))
+    return claimed
+
+
+def compute_footnotes(
+    bbox: Dict[str, int],
+    core_region: Optional[Dict[str, int]],
+    grid_reader: GridReader,
+) -> List[Dict[str, Any]]:
+    """Coverage-complement: non-empty cells inside ``bbox`` not in claimed zones.
+
+    Coordinates emitted (``row``, ``col``) are absolute 0-indexed to match
+    the ``bbox`` convention.
+    """
+    if grid_reader is None:
+        return []
+    r1 = int(bbox["r1"]); c1 = int(bbox["c1"])
+    r2 = int(bbox["r2"]); c2 = int(bbox["c2"])
+    claimed = _claimed_cells(bbox, core_region)
+
+    out: List[Dict[str, Any]] = []
+    for r in range(r1, r2 + 1):
+        for c in range(c1, c2 + 1):
+            if (r, c) in claimed:
+                continue
+            val = grid_reader(r, c)
+            if val is None:
+                continue
+            s = str(val).strip()
+            if not s:
+                continue
+            out.append({"row": r, "col": c, "text": s})
+    return out
+
+
+def _compute_parent_footnotes(
+    parent_bbox: Dict[str, int],
+    children: List[FinalMapChildEntry],
+    grid_reader: GridReader,
+) -> List[Dict[str, Any]]:
+    """Parent-level footnotes = cells in parent bbox not covered by any child
+    (bbox + claimed zone) and not already surfaced as a child footnote."""
+    if grid_reader is None:
+        return []
+    covered: Set[Tuple[int, int]] = set()
+    for c in children:
+        cb = c.bbox
+        cr1 = int(cb["r1"]); cc1 = int(cb["c1"])
+        cr2 = int(cb["r2"]); cc2 = int(cb["c2"])
+        # Claim the whole child bbox (child's own footnotes already captured
+        # within that bbox — don't re-emit at parent level).
+        for r in range(cr1, cr2 + 1):
+            for col in range(cc1, cc2 + 1):
+                covered.add((r, col))
+
+    r1 = int(parent_bbox["r1"]); c1 = int(parent_bbox["c1"])
+    r2 = int(parent_bbox["r2"]); c2 = int(parent_bbox["c2"])
+
+    out: List[Dict[str, Any]] = []
+    for r in range(r1, r2 + 1):
+        for c in range(c1, c2 + 1):
+            if (r, c) in covered:
+                continue
+            val = grid_reader(r, c)
+            if val is None:
+                continue
+            s = str(val).strip()
+            if not s:
+                continue
+            out.append({"row": r, "col": c, "text": s})
+    return out

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import logging
 from collections import deque
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .config import XlSheetAgentV6Config
 from .schemas import ConsumedMap, CoreRegion
@@ -25,6 +25,7 @@ def detect_core_regions(
     config: XlSheetAgentV6Config,
     r_top_abs: int = 0,
     c_left_abs: int = 0,
+    formula_refs: Optional[Dict[Tuple[int, int], List[Tuple[int, int]]]] = None,
 ) -> List[CoreRegion]:
     """
     Detect core formula/number regions via connected-component labeling.
@@ -75,6 +76,17 @@ def detect_core_regions(
         components = _expand_with_structural_blanks(
             components, types, n_rows, n_cols,
             config.blank_inclusion_density_threshold,
+        )
+
+    # Step 3.6: Expand components with cells referenced by in-bbox formulas
+    if (
+        getattr(config, "core_formula_expansion_enabled", False)
+        and formula_refs
+    ):
+        components = _expand_with_formula_refs(
+            components, formula_refs, n_rows, n_cols,
+            r_top_abs, c_left_abs,
+            int(getattr(config, "core_formula_expansion_ring", 1)),
         )
 
     # Step 4: Optional merge of near-touching components
@@ -192,6 +204,66 @@ def _expand_with_structural_blanks(
                     t = types[r][c] if r < len(types) and c < len(types[r]) else ""
                     if t == "BLANK":
                         new_comp.add((r, c))
+        expanded.append(new_comp)
+
+    return expanded
+
+
+def _expand_with_formula_refs(
+    components: List[Set[Tuple[int, int]]],
+    formula_refs: Dict[Tuple[int, int], List[Tuple[int, int]]],
+    n_rows: int,
+    n_cols: int,
+    r_top_abs: int,
+    c_left_abs: int,
+    ring: int,
+) -> List[Set[Tuple[int, int]]]:
+    """For each component, pull in empty cells referenced by formula cells
+    that sit inside or within ``ring`` cells of the component's bbox.
+
+    ``formula_refs`` keys + values are absolute 0-indexed; we translate to
+    the local frame and only add refs that land inside the current bbox
+    (with grid dimensions) and within ``ring`` of the component bbox.
+    """
+    if not formula_refs or not components:
+        return components
+
+    expanded: List[Set[Tuple[int, int]]] = []
+    for comp in components:
+        r_min, c_min, r_max, c_max = _cells_to_bbox(comp)
+        r1 = max(0, r_min - ring)
+        c1 = max(0, c_min - ring)
+        r2 = min(n_rows - 1, r_max + ring)
+        c2 = min(n_cols - 1, c_max + ring)
+
+        new_comp = set(comp)
+        changed = True
+        while changed:
+            changed = False
+            for (fr_abs, fc_abs), refs in formula_refs.items():
+                fr = fr_abs - r_top_abs
+                fc = fc_abs - c_left_abs
+                if not (0 <= fr < n_rows and 0 <= fc < n_cols):
+                    continue
+                if not (r1 <= fr <= r2 and c1 <= fc <= c2):
+                    continue
+                for (rr_abs, cc_abs) in refs:
+                    rr = rr_abs - r_top_abs
+                    cc = cc_abs - c_left_abs
+                    if not (0 <= rr < n_rows and 0 <= cc < n_cols):
+                        continue
+                    if not (r1 <= rr <= r2 and c1 <= cc <= c2):
+                        continue
+                    if (rr, cc) in new_comp:
+                        continue
+                    new_comp.add((rr, cc))
+                    changed = True
+            if changed:
+                nr_min, nc_min, nr_max, nc_max = _cells_to_bbox(new_comp)
+                r1 = max(0, nr_min - ring)
+                c1 = max(0, nc_min - ring)
+                r2 = min(n_rows - 1, nr_max + ring)
+                c2 = min(n_cols - 1, nc_max + ring)
         expanded.append(new_comp)
 
     return expanded

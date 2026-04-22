@@ -1,8 +1,8 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-21T16:41:28.407805+00:00",
+  "run_ts": "2026-04-21T21:34:59.654239+00:00",
   "version": "3a.1.0",
-  "elapsed_seconds": 3.83,
+  "elapsed_seconds": 4.76,
   "n_tables_processed": 37,
   "n_llm_calls": 0,
   "n_sheets": 4,
@@ -41,7 +41,7 @@
           "hierarchy_role": "parent",
           "split_depth": 0,
           "parent_table_id": null,
-          "n_children": 2,
+          "n_children": 8,
           "metadata_complete": false,
           "missing_metadata": [
             "row_names",
@@ -92,11 +92,239 @@
               "original_bbox": {
                 "r_top": 4,
                 "c_left": 1,
-                "r_bot": 104,
+                "r_bot": 19,
                 "c_right": 7
               },
               "trimmed_bbox": {
                 "r_top": 5,
+                "c_left": 1,
+                "r_bot": 19,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 7,
+                "c_left": 1,
+                "r_bot": 19,
+                "c_right": 7,
+                "numeric_ratio": 0.9884
+              },
+              "n_title_candidates": 2,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child3",
+              "original_bbox": {
+                "r_top": 20,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 20,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 21,
+                "c_left": 1,
+                "r_bot": 33,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child4",
+              "original_bbox": {
+                "r_top": 34,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 34,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 35,
+                "c_left": 1,
+                "r_bot": 47,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child5",
+              "original_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 61,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 48,
+                "c_left": 1,
+                "r_bot": 61,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 49,
+                "c_left": 1,
+                "r_bot": 61,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child6",
+              "original_bbox": {
+                "r_top": 62,
+                "c_left": 1,
+                "r_bot": 75,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 62,
+                "c_left": 1,
+                "r_bot": 75,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 63,
+                "c_left": 1,
+                "r_bot": 75,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child7",
+              "original_bbox": {
+                "r_top": 76,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 76,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 77,
+                "c_left": 1,
+                "r_bot": 89,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_t103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_t103_child8",
+              "original_bbox": {
+                "r_top": 90,
+                "c_left": 1,
+                "r_bot": 104,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 90,
                 "c_left": 1,
                 "r_bot": 104,
                 "c_right": 7
@@ -701,14 +929,282 @@
           "n_footnote_candidates": 0,
           "n_sent_to_coordinator": 0,
           "n_llm_decisions": 0,
-          "hierarchy_role": "standalone",
+          "hierarchy_role": "parent",
           "split_depth": 0,
           "parent_table_id": null,
-          "n_children": 0,
+          "n_children": 7,
           "metadata_complete": false,
           "missing_metadata": [
             "row_names",
             "footnote"
+          ],
+          "children": [
+            {
+              "table_id": "94c8c58d611b9e70_b103_child1",
+              "original_bbox": {
+                "r_top": 106,
+                "c_left": 1,
+                "r_bot": 120,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 106,
+                "c_left": 1,
+                "r_bot": 120,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 108,
+                "c_left": 1,
+                "r_bot": 120,
+                "c_right": 7,
+                "numeric_ratio": 0.9884
+              },
+              "n_title_candidates": 2,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child2",
+              "original_bbox": {
+                "r_top": 121,
+                "c_left": 1,
+                "r_bot": 134,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 121,
+                "c_left": 1,
+                "r_bot": 134,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 122,
+                "c_left": 1,
+                "r_bot": 134,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child3",
+              "original_bbox": {
+                "r_top": 135,
+                "c_left": 1,
+                "r_bot": 148,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 135,
+                "c_left": 1,
+                "r_bot": 148,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 136,
+                "c_left": 1,
+                "r_bot": 148,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child4",
+              "original_bbox": {
+                "r_top": 149,
+                "c_left": 1,
+                "r_bot": 162,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 149,
+                "c_left": 1,
+                "r_bot": 162,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 150,
+                "c_left": 1,
+                "r_bot": 162,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child5",
+              "original_bbox": {
+                "r_top": 163,
+                "c_left": 1,
+                "r_bot": 176,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 163,
+                "c_left": 1,
+                "r_bot": 176,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 164,
+                "c_left": 1,
+                "r_bot": 176,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child6",
+              "original_bbox": {
+                "r_top": 177,
+                "c_left": 1,
+                "r_bot": 190,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 177,
+                "c_left": 1,
+                "r_bot": 190,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 178,
+                "c_left": 1,
+                "r_bot": 190,
+                "c_right": 7,
+                "numeric_ratio": 0.9889
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            },
+            {
+              "table_id": "94c8c58d611b9e70_b103_child7",
+              "original_bbox": {
+                "r_top": 191,
+                "c_left": 1,
+                "r_bot": 205,
+                "c_right": 7
+              },
+              "trimmed_bbox": {
+                "r_top": 191,
+                "c_left": 1,
+                "r_bot": 205,
+                "c_right": 7
+              },
+              "core_region": {
+                "r_top": 192,
+                "c_left": 1,
+                "r_bot": 205,
+                "c_right": 7,
+                "numeric_ratio": 0.988
+              },
+              "n_title_candidates": 1,
+              "n_header_candidates": 0,
+              "n_row_name_candidates": 0,
+              "n_footnote_candidates": 0,
+              "n_sent_to_coordinator": 0,
+              "n_llm_decisions": 0,
+              "hierarchy_role": "child_numeric",
+              "split_depth": 1,
+              "parent_table_id": "94c8c58d611b9e70_b103",
+              "n_children": 0,
+              "metadata_complete": false,
+              "missing_metadata": [
+                "header",
+                "row_names",
+                "footnote"
+              ]
+            }
           ]
         },
         {
@@ -1309,7 +1805,7 @@
       "n_tables": 5,
       "tables": [
         {
-          "table_id": "9814fc53f594ba29_t45",
+          "table_id": "9814fc53f594ba29_t118_t70_t45",
           "original_bbox": {
             "r_top": 2,
             "c_left": 1,
@@ -1345,7 +1841,7 @@
           ],
           "children": [
             {
-              "table_id": "9814fc53f594ba29_t45_child1",
+              "table_id": "9814fc53f594ba29_t118_t70_t45_child1",
               "original_bbox": {
                 "r_top": 2,
                 "c_left": 1,
@@ -1373,7 +1869,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_metadata",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_t45",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1384,7 +1880,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_t45_child2",
+              "table_id": "9814fc53f594ba29_t118_t70_t45_child2",
               "original_bbox": {
                 "r_top": 3,
                 "c_left": 1,
@@ -1412,7 +1908,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_t45",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1422,7 +1918,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_t45_child3",
+              "table_id": "9814fc53f594ba29_t118_t70_t45_child3",
               "original_bbox": {
                 "r_top": 6,
                 "c_left": 1,
@@ -1450,7 +1946,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_t45",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1460,7 +1956,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_t45_child4",
+              "table_id": "9814fc53f594ba29_t118_t70_t45_child4",
               "original_bbox": {
                 "r_top": 20,
                 "c_left": 1,
@@ -1488,7 +1984,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_t45",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1498,7 +1994,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_t45_child5",
+              "table_id": "9814fc53f594ba29_t118_t70_t45_child5",
               "original_bbox": {
                 "r_top": 34,
                 "c_left": 1,
@@ -1526,7 +2022,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_t45",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1538,7 +2034,7 @@
           ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_t24",
+          "table_id": "9814fc53f594ba29_t118_t70_b45",
           "original_bbox": {
             "r_top": 48,
             "c_left": 1,
@@ -1576,7 +2072,7 @@
           ],
           "children": [
             {
-              "table_id": "9814fc53f594ba29_b45_t24_child1",
+              "table_id": "9814fc53f594ba29_t118_t70_b45_child1",
               "original_bbox": {
                 "r_top": 48,
                 "c_left": 1,
@@ -1604,7 +2100,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_t24",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_b45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1615,7 +2111,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_t24_child2",
+              "table_id": "9814fc53f594ba29_t118_t70_b45_child2",
               "original_bbox": {
                 "r_top": 60,
                 "c_left": 1,
@@ -1643,7 +2139,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_t24",
+              "parent_table_id": "9814fc53f594ba29_t118_t70_b45",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1655,7 +2151,7 @@
           ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_b24_t46",
+          "table_id": "9814fc53f594ba29_t118_b70_t46",
           "original_bbox": {
             "r_top": 72,
             "c_left": 1,
@@ -1691,7 +2187,7 @@
           ],
           "children": [
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child1",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child1",
               "original_bbox": {
                 "r_top": 73,
                 "c_left": 1,
@@ -1719,7 +2215,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_metadata",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1730,7 +2226,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child2",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
               "original_bbox": {
                 "r_top": 74,
                 "c_left": 1,
@@ -1758,7 +2254,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1769,7 +2265,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child3",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child3",
               "original_bbox": {
                 "r_top": 79,
                 "c_left": 1,
@@ -1797,7 +2293,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_metadata",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1808,7 +2304,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child4",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
               "original_bbox": {
                 "r_top": 80,
                 "c_left": 1,
@@ -1836,7 +2332,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1847,7 +2343,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child5",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child5",
               "original_bbox": {
                 "r_top": 85,
                 "c_left": 1,
@@ -1875,7 +2371,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1885,7 +2381,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child6",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child6",
               "original_bbox": {
                 "r_top": 90,
                 "c_left": 1,
@@ -1913,7 +2409,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_metadata",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1924,7 +2420,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child7",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child7",
               "original_bbox": {
                 "r_top": 91,
                 "c_left": 1,
@@ -1952,7 +2448,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -1962,7 +2458,7 @@
               ]
             },
             {
-              "table_id": "9814fc53f594ba29_b45_b24_t46_child8",
+              "table_id": "9814fc53f594ba29_t118_b70_t46_child8",
               "original_bbox": {
                 "r_top": 105,
                 "c_left": 1,
@@ -1990,7 +2486,7 @@
               "n_llm_decisions": 0,
               "hierarchy_role": "child_numeric",
               "split_depth": 1,
-              "parent_table_id": "9814fc53f594ba29_b45_b24_t46",
+              "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
               "n_children": 0,
               "metadata_complete": false,
               "missing_metadata": [
@@ -2002,7 +2498,7 @@
           ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_b24_b46_t2",
+          "table_id": "9814fc53f594ba29_t118_b70_b46",
           "original_bbox": {
             "r_top": 118,
             "c_left": 1,
@@ -2041,7 +2537,7 @@
           ]
         },
         {
-          "table_id": "9814fc53f594ba29_b45_b24_b46_b2",
+          "table_id": "9814fc53f594ba29_b118",
           "original_bbox": {
             "r_top": 120,
             "c_left": 1,

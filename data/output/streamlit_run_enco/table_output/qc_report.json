@@ -1,36 +1,47 @@
 [
   {
-    "table_id": "88163c1a17b2494d_t10",
+    "table_id": "721d31377f9c163d",
     "sheet_name": "Adverse events",
-    "bbox_excel": "C7:I16",
+    "bbox_excel": "C7:I15",
+    "finalize_reason": "no_structural_split",
+    "split_depth": 0,
+    "signal_sources_used": [
+      "structural"
+    ],
+    "last_split_qc": null
+  },
+  {
+    "table_id": "39c56a739c48ef9f_t1",
+    "sheet_name": "Adverse events",
+    "bbox_excel": "C16:I17",
     "finalize_reason": "no_structural_split",
     "split_depth": 1,
     "signal_sources_used": [
       "structural"
     ],
     "last_split_qc": {
-      "H_presence_norm_delta": 0.0007508024422067106,
-      "H_type_delta": 1.1102230246251565e-16,
-      "S_boundary_JSD": 0.0863315727945941,
-      "soft_criteria_passed": 3,
-      "bonus_score": 0.24295437069897605
+      "H_presence_norm_delta": -0.033117678290914276,
+      "H_type_delta": -1.6653345369377348e-16,
+      "S_boundary_JSD": 0.4237195503755235,
+      "soft_criteria_passed": 1,
+      "bonus_score": 0.25354570479912414
     }
   },
   {
-    "table_id": "88163c1a17b2494d_b10",
+    "table_id": "39c56a739c48ef9f_b1",
     "sheet_name": "Adverse events",
-    "bbox_excel": "C17:I28",
+    "bbox_excel": "C18:I28",
     "finalize_reason": "no_structural_split",
     "split_depth": 1,
     "signal_sources_used": [
       "structural"
     ],
     "last_split_qc": {
-      "H_presence_norm_delta": 0.0007508024422067106,
-      "H_type_delta": 1.1102230246251565e-16,
-      "S_boundary_JSD": 0.0863315727945941,
-      "soft_criteria_passed": 3,
-      "bonus_score": 0.24295437069897605
+      "H_presence_norm_delta": -0.033117678290914276,
+      "H_type_delta": -1.6653345369377348e-16,
+      "S_boundary_JSD": 0.4237195503755235,
+      "soft_criteria_passed": 1,
+      "bonus_score": 0.25354570479912414
     }
   },
   {
@@ -6690,38 +6701,26 @@
     "last_split_qc": null
   },
   {
-    "table_id": "885e91d1fbad8dc3_t14",
+    "table_id": "7dce4f24e9b69cff",
     "sheet_name": "Cost calculations",
-    "bbox_excel": "D72:P86",
+    "bbox_excel": "D72:P84",
     "finalize_reason": "no_structural_split",
-    "split_depth": 1,
+    "split_depth": 0,
     "signal_sources_used": [
       "structural"
     ],
-    "last_split_qc": {
-      "H_presence_norm_delta": -0.06574114566360933,
-      "H_type_delta": 0.0,
-      "S_boundary_JSD": 0.3018542626166734,
-      "soft_criteria_passed": 1,
-      "bonus_score": 0.28758938426272274
-    }
+    "last_split_qc": null
   },
   {
-    "table_id": "885e91d1fbad8dc3_b14",
+    "table_id": "db3970e19145e71e",
     "sheet_name": "Cost calculations",
-    "bbox_excel": "D87:P99",
+    "bbox_excel": "D85:P99",
     "finalize_reason": "no_structural_split",
-    "split_depth": 1,
+    "split_depth": 0,
     "signal_sources_used": [
       "structural"
     ],
-    "last_split_qc": {
-      "H_presence_norm_delta": -0.06574114566360933,
-      "H_type_delta": 0.0,
-      "S_boundary_JSD": 0.3018542626166734,
-      "soft_criteria_passed": 1,
-      "bonus_score": 0.28758938426272274
-    }
+    "last_split_qc": null
   },
   {
     "table_id": "a345e30a9e72f004",

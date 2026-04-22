@@ -483,6 +483,56 @@ def _compute_header_confidence(
 # Header inheritance — delegated to xl_sheetagent_v5 (single source of truth)
 # ---------------------------------------------------------------------------
 
+
+def _nonblank_slice_count(
+    row: List[str],
+    anchor_c1: int,
+    abs_c1: int,
+    abs_c2: int,
+) -> int:
+    """Count non-blank cells when mapping absolute cols [abs_c1..abs_c2] via row[ac - anchor_c1]."""
+    n = 0
+    for ac in range(abs_c1, abs_c2 + 1):
+        i = ac - anchor_c1
+        if 0 <= i < len(row) and str(row[i]).strip():
+            n += 1
+    return n
+
+
+def _best_header_anchor_c1(
+    row0: List[str],
+    donor_bbox: Dict[str, int],
+    abs_core_c1: int,
+    abs_core_c2: int,
+    default_c1: int,
+) -> int:
+    """
+    Infer donor column index where a short header row (len < donor bbox width)
+    sits inside the donor's horizontal span.  Brute-force every valid anchor
+    and pick the one that fills the recipient core columns best (fixes
+    Year 2/3 when Year 0–3 align to core at E:H while bbox starts at C).
+    """
+    if not row0:
+        return default_c1
+    d_c1 = int(donor_bbox.get("c1", 0))
+    d_c2 = int(donor_bbox.get("c2", d_c1))
+    full_w = d_c2 - d_c1 + 1
+    if len(row0) >= full_w:
+        return default_c1
+    lo = d_c1
+    hi = d_c2 - len(row0) + 1
+    if hi < lo:
+        return default_c1
+    best_n, best_c1 = -1, default_c1
+    for c in range(lo, hi + 1):
+        n = _nonblank_slice_count(row0, c, abs_core_c1, abs_core_c2)
+        if n > best_n or (n == best_n and n > 0 and c < best_c1):
+            best_n, best_c1 = n, c
+    if best_n <= 0:
+        return default_c1
+    return best_c1
+
+
 def _try_inheritance(
     all_tables: Optional[List],
     current_bbox: Dict[str, int],
@@ -545,14 +595,39 @@ def _try_inheritance(
         abs_core_c1 = current_bbox["c1"] + core_lc1
         abs_core_c2 = current_bbox["c1"] + core_lc2
 
-        # Find donor c1 to convert absolute cols → donor header indices
+        # Find donor c1 to convert absolute cols → donor header indices.
+        # Headers are built core-sliced in walk_up (len == core width) while
+        # donor.bbox.c1 may include label columns left of the core; using bbox.c1
+        # shifts indices and yields wrong labels (e.g. Year 2/3 for Year 0/1).
         donor_id = result["source_table_id"]
         donor_c1 = current_bbox["c1"]  # fallback: assume aligned with child
+        donor_obj = None
         if all_tables:
             for t in all_tables:
                 if getattr(t, "table_id", None) == donor_id:
-                    donor_c1 = t.bbox.get("c1", donor_c1)
+                    donor_obj = t
+                    db = getattr(t, "bbox", None) or {}
+                    donor_c1 = db.get("c1", donor_c1) if isinstance(db, dict) else donor_c1
                     break
+        if donor_obj is not None and raw_headers:
+            row0 = raw_headers[0]
+            db = donor_obj.bbox
+            if isinstance(db, dict):
+                d_c1, d_c2 = db.get("c1", 0), db.get("c2", 0)
+                donor_bbox_dict = db
+            else:
+                d_c1 = getattr(db, "c1", 0)
+                d_c2 = getattr(db, "c2", d_c1)
+                donor_bbox_dict = {"c1": d_c1, "c2": d_c2}
+            full_w = d_c2 - d_c1 + 1
+            if row0 and len(row0) < full_w:
+                donor_c1 = _best_header_anchor_c1(
+                    row0,
+                    donor_bbox_dict,
+                    abs_core_c1,
+                    abs_core_c2,
+                    donor_c1,
+                )
 
         sliced: List[List[str]] = []
         for row in raw_headers:

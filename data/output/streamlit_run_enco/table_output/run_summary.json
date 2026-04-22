@@ -1,20 +1,20 @@
 {
   "workbook_id": "8018279055de31f7a44fc52bc3f9101c2328a7a5b75f9cb5ab1dbc1537579e87",
   "workbook_path": "data\\output\\streamlit_run_enco\\init_output\\cleaned_workbook.xlsx",
-  "total_input_bboxes": 263,
+  "total_input_bboxes": 265,
   "skipped_bboxes_too_small": 0,
-  "total_structural_splits_accepted": 588,
-  "total_structural_splits_rejected": 1135,
+  "total_structural_splits_accepted": 585,
+  "total_structural_splits_rejected": 1230,
   "total_visual_fallback_calls": 0,
   "total_visual_splits_accepted": 0,
-  "total_final_tables": 517,
+  "total_final_tables": 518,
   "xl_image_available": false,
   "cut_scores_available": true,
-  "elapsed_seconds": 5.918990612030029,
+  "elapsed_seconds": 5.9568376541137695,
   "per_sheet": {
     "Adverse events": {
-      "n_original_bboxes": 1,
-      "n_final_tables": 2,
+      "n_original_bboxes": 2,
+      "n_final_tables": 3,
       "n_structural_splits_accepted": 0,
       "n_structural_splits_rejected": 0,
       "n_visual_fallback_calls": 0,
@@ -117,7 +117,7 @@
       "n_visual_splits_accepted": 0
     },
     "Cost calculations": {
-      "n_original_bboxes": 3,
+      "n_original_bboxes": 4,
       "n_final_tables": 5,
       "n_structural_splits_accepted": 0,
       "n_structural_splits_rejected": 0,

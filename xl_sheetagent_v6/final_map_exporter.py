@@ -17,7 +17,6 @@ from .schemas import (
     FinalMapEntryParent,
     FinalMapEntryStandalone,
     FinalTableMap,
-    NoteEntry,
     V6RunResult,
 )
 
@@ -80,7 +79,8 @@ def _serialize_standalone(e: FinalMapEntryStandalone) -> Dict[str, Any]:
         "core_region": dict(e.core_region) if e.core_region else None,
         "node_type": e.node_type,
         "parent_path": list(e.parent_path),
-        "notes": [_serialize_note(n) for n in e.notes],
+        "footnotes_notes_refs": [_serialize_footnote(n) for n in e.footnotes_notes_refs],
+        "llm_gate_triggers": [_serialize_trigger(t) for t in e.llm_gate_triggers],
         "source_flags": list(e.source_flags),
     }
 
@@ -95,6 +95,8 @@ def _serialize_parent(e: FinalMapEntryParent) -> Dict[str, Any]:
         "title": e.title,
         "parent_path": list(e.parent_path),
         "children": [_serialize_child(c) for c in e.children],
+        "footnotes_notes_refs": [_serialize_footnote(n) for n in e.footnotes_notes_refs],
+        "llm_gate_triggers": [_serialize_trigger(t) for t in e.llm_gate_triggers],
         "source_flags": list(e.source_flags),
     }
 
@@ -111,14 +113,22 @@ def _serialize_child(c: FinalMapChildEntry) -> Dict[str, Any]:
         "core_region": dict(c.core_region) if c.core_region else None,
         "node_type": c.node_type,
         "parent_path": list(c.parent_path),
+        "footnotes_notes_refs": [_serialize_footnote(n) for n in c.footnotes_notes_refs],
+        "llm_gate_triggers": [_serialize_trigger(t) for t in c.llm_gate_triggers],
         "source_flags": list(c.source_flags),
     }
 
 
-def _serialize_note(n: NoteEntry) -> Dict[str, Any]:
+def _serialize_footnote(n: Dict[str, Any]) -> Dict[str, Any]:
     return {
-        "row_index": n.row_index,
-        "text": n.text,
-        "note_type": n.note_type,
-        "source": n.source,
+        "row": int(n["row"]),
+        "col": int(n["col"]),
+        "text": str(n["text"]),
+    }
+
+
+def _serialize_trigger(t: Dict[str, str]) -> Dict[str, str]:
+    return {
+        "name": str(t["name"]),
+        "source": str(t["source"]),
     }

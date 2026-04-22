@@ -1,16 +1,16 @@
 {
   "workbook_id": "e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
-  "workbook_path": "data/output/streamlit_run_simple/init_output/cleaned_workbook.xlsx",
+  "workbook_path": "data\\output\\streamlit_run_simple\\init_output\\cleaned_workbook.xlsx",
   "total_input_bboxes": 7,
   "skipped_bboxes_too_small": 0,
-  "total_structural_splits_accepted": 102,
-  "total_structural_splits_rejected": 42,
+  "total_structural_splits_accepted": 101,
+  "total_structural_splits_rejected": 55,
   "total_visual_fallback_calls": 0,
   "total_visual_splits_accepted": 0,
   "total_final_tables": 37,
   "xl_image_available": false,
   "cut_scores_available": true,
-  "elapsed_seconds": 0.20824193954467773,
+  "elapsed_seconds": 0.927788257598877,
   "per_sheet": {
     "Calculations": {
       "n_original_bboxes": 3,

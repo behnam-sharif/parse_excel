@@ -1,9 +1,10 @@
 workbook: data\output\streamlit_run_enco\init_output\cleaned_workbook.xlsx
-run_ts: 2026-04-08T17:38:36.271036+00:00
+run_ts: 2026-04-21T21:42:34.259825+00:00
 
 Sheet: Adverse events
-  C7:I16
-  C17:I28
+  C7:I15
+  C16:I17
+  C18:I28
 
 Sheet: BI calculation_Alberta
   C3:I4
@@ -454,8 +455,8 @@ Sheet: Cost calculations
   D5:S37
   D38:S52
   D56:P68
-  D72:P86
-  D87:P99
+  D72:P84
+  D85:P99
 
 Sheet: Cover
   B2:C7

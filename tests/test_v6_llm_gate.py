@@ -68,6 +68,10 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         leftward_walk_max_cols=5, note_scan_right_max_cols=3,
         note_scan_below_max_rows=10,
         detect_beside_header_title=True, beside_header_title_max_nonempty=3,
+        core_formula_expansion_enabled=False, core_formula_expansion_ring=1,
+        enable_finalize=False, finalize_title_max_chars=200,
+        finalize_note_keywords=["source", "note", "*", "ref"],
+        finalize_flatten_depth=1, finalize_emit_stats=True,
     )
     defaults.update(overrides)
     return XlSheetAgentV6Config(**defaults)

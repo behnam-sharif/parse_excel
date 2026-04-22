@@ -163,6 +163,7 @@ class V6ResolvedTable:
     child_summaries: List[Dict[str, Any]] = field(default_factory=list)
     metadata_source: str = "heuristic"      # "heuristic" | "llm_per_bbox" | "llm_reconciliation"
     llm_metadata: Optional[Dict[str, Any]] = None
+    llm_gate_triggers: List[Dict[str, str]] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -187,6 +188,8 @@ class FinalMapChildEntry:
     node_type: str
     parent_path: List[str]
     source_flags: List[str] = field(default_factory=list)
+    footnotes_notes_refs: List[Dict[str, Any]] = field(default_factory=list)
+    llm_gate_triggers: List[Dict[str, str]] = field(default_factory=list)
 
 
 @dataclass
@@ -202,8 +205,9 @@ class FinalMapEntryStandalone:
     core_region: Optional[Dict[str, int]]
     node_type: str
     parent_path: List[str]
-    notes: List[NoteEntry] = field(default_factory=list)
     source_flags: List[str] = field(default_factory=list)
+    footnotes_notes_refs: List[Dict[str, Any]] = field(default_factory=list)
+    llm_gate_triggers: List[Dict[str, str]] = field(default_factory=list)
     kind: str = "standalone"
 
 
@@ -218,6 +222,8 @@ class FinalMapEntryParent:
     parent_path: List[str]
     children: List[FinalMapChildEntry] = field(default_factory=list)
     source_flags: List[str] = field(default_factory=list)
+    footnotes_notes_refs: List[Dict[str, Any]] = field(default_factory=list)
+    llm_gate_triggers: List[Dict[str, str]] = field(default_factory=list)
     kind: str = "parent"
 
 

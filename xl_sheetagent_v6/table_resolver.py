@@ -146,7 +146,37 @@ def _resolve_standalone(table: V6TableResult) -> V6ResolvedTable:
         children=[],
         child_summaries=[],
         metadata_source="heuristic",
+        llm_gate_triggers=_wrap_triggers(table.llm_gate_triggers, "raw_v6"),
     )
+
+
+def _wrap_triggers(names: List[str], source: str) -> List[Dict[str, str]]:
+    """Wrap raw trigger names as ``{"name": n, "source": source}`` dicts, deduped."""
+    seen: set = set()
+    out: List[Dict[str, str]] = []
+    for n in names or []:
+        if not n or n in seen:
+            continue
+        seen.add(n)
+        out.append({"name": str(n), "source": source})
+    return out
+
+
+def _merge_trigger_lists(
+    existing: List[Dict[str, str]],
+    new: List[Dict[str, str]],
+) -> List[Dict[str, str]]:
+    """Union of trigger dicts — dedup by name, earlier source wins."""
+    by_name: Dict[str, Dict[str, str]] = {}
+    for t in existing or []:
+        name = t.get("name")
+        if name and name not in by_name:
+            by_name[name] = {"name": name, "source": t.get("source", "raw_v6")}
+    for t in new or []:
+        name = t.get("name")
+        if name and name not in by_name:
+            by_name[name] = {"name": name, "source": t.get("source", "raw_v6")}
+    return list(by_name.values())
 
 
 def _build_child_resolved(
@@ -191,6 +221,7 @@ def _build_child_resolved(
         children=[],
         child_summaries=[],
         metadata_source="heuristic",
+        llm_gate_triggers=_wrap_triggers(child.llm_gate_triggers, "raw_v6"),
     )
 
 
@@ -410,6 +441,19 @@ def _resolve_parent_table(
 
     resolved_child_titles = [c.title for c in resolved_children]
 
+    # Step 17: union llm_gate_triggers from parent + every preserved child
+    combined_triggers = _wrap_triggers(parent.llm_gate_triggers, "raw_v6")
+    for sc in substantive_children:
+        combined_triggers = _merge_trigger_lists(
+            combined_triggers,
+            _wrap_triggers(sc.llm_gate_triggers, "raw_v6"),
+        )
+    for mc in absorbed_children:
+        combined_triggers = _merge_trigger_lists(
+            combined_triggers,
+            _wrap_triggers(mc.llm_gate_triggers, "raw_v6"),
+        )
+
     return V6ResolvedTable(
         table_id=parent.table_id,
         source_table_ids=source_ids,
@@ -429,6 +473,7 @@ def _resolve_parent_table(
         child_summaries=child_summaries,
         metadata_source=metadata_source,
         llm_metadata=llm_metadata,
+        llm_gate_triggers=combined_triggers,
     )
 
 

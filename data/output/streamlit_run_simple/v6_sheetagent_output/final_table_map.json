@@ -1,4 +1,789 @@
 {
+  "Inputs": {
+    "sheet_name": "Inputs",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_t70_t45",
+        "coordinates": "Inputs!B3:F47",
+        "bbox": {
+          "r1": 2,
+          "c1": 1,
+          "r2": 46,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": "Patient population",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child2",
+            "coordinates": "Inputs!B4:F6",
+            "bbox": {
+              "r1": 3,
+              "c1": 1,
+              "r2": 5,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Patient population",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Number of patients in the 1st year",
+              "Annual percentage change"
+            ],
+            "core_region": {
+              "r1": 4,
+              "c1": 2,
+              "r2": 5,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "source_flags": [
+              "metadata_propagated_positional"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child3",
+            "coordinates": "Inputs!B7:F20",
+            "bbox": {
+              "r1": 6,
+              "c1": 1,
+              "r2": 19,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Market shares in world without InO",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "CHECK"
+            ],
+            "core_region": {
+              "r1": 7,
+              "c1": 2,
+              "r2": 19,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child4",
+            "coordinates": "Inputs!B21:F34",
+            "bbox": {
+              "r1": 20,
+              "c1": 1,
+              "r2": 33,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Market shares in world with InO",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "CHECK"
+            ],
+            "core_region": {
+              "r1": 21,
+              "c1": 2,
+              "r2": 33,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child5",
+            "coordinates": "Inputs!B35:F47",
+            "bbox": {
+              "r1": 34,
+              "c1": 1,
+              "r2": 46,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Annual drug costs",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
+            ],
+            "core_region": {
+              "r1": 35,
+              "c1": 2,
+              "r2": 46,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "source_flags": []
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_t70_b45",
+        "coordinates": "Inputs!B49:N72",
+        "bbox": {
+          "r1": 48,
+          "c1": 1,
+          "r2": 71,
+          "c2": 13
+        },
+        "sheet_name": "Inputs",
+        "title": "Adverse events, frequencies (same as global models)",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_b45_child1",
+            "coordinates": "Inputs!B49:N60",
+            "bbox": {
+              "r1": 48,
+              "c1": 1,
+              "r2": 59,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": "Adverse events, frequencies (same as global models)",
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Neutropenia",
+              "Thrombocytopenia",
+              "Leukopenia",
+              "Febrile neutropenia",
+              "Anaemia",
+              "Lymphopenia",
+              "White blood cells decreased",
+              "Veno-occlusive liver disease on treatment",
+              "Cytokine release syndrome",
+              "Veno-occlusive liver disease after SCT",
+              "Graft-versus-host disease after SCT"
+            ],
+            "core_region": {
+              "r1": 49,
+              "c1": 2,
+              "r2": 59,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Adverse events, frequencies (same as global models)"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_b45_child2",
+            "coordinates": "Inputs!B61:F72",
+            "bbox": {
+              "r1": 60,
+              "c1": 1,
+              "r2": 71,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Adverse events, costs",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default"
+              ]
+            ],
+            "row_names": [
+              "Neutropenia",
+              "Thrombocytopenia",
+              "Leukopenia",
+              "Febrile neutropenia",
+              "Anaemia",
+              "Lymphopenia",
+              "White blood cells decreased",
+              "Veno-occlusive liver disease on treatment",
+              "Cytokine release syndrome",
+              "Veno-occlusive liver disease after SCT",
+              "Graft-versus-host disease after SCT"
+            ],
+            "core_region": {
+              "r1": 61,
+              "c1": 2,
+              "r2": 71,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Adverse events, frequencies (same as global models)"
+            ],
+            "source_flags": []
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_b70_t46",
+        "coordinates": "Inputs!B74:N118",
+        "bbox": {
+          "r1": 73,
+          "c1": 1,
+          "r2": 117,
+          "c2": 13
+        },
+        "sheet_name": "Inputs",
+        "title": "Hospitalization",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
+            "coordinates": "Inputs!B75:N79",
+            "bbox": {
+              "r1": 74,
+              "c1": 1,
+              "r2": 78,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": null,
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab",
+              "Blinatumomab (set to 0%)",
+              "Chemotherapy",
+              "TKI"
+            ],
+            "core_region": {
+              "r1": 75,
+              "c1": 2,
+              "r2": 78,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "source_flags": [
+              "metadata_propagated_positional",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
+            "coordinates": "Inputs!B81:N85",
+            "bbox": {
+              "r1": 80,
+              "c1": 1,
+              "r2": 84,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": null,
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab",
+              "Blinatumomab (set to 0%)",
+              "Chemotherapy",
+              "TKI"
+            ],
+            "core_region": {
+              "r1": 81,
+              "c1": 2,
+              "r2": 84,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "source_flags": [
+              "metadata_propagated_positional",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child5",
+            "coordinates": "Inputs!B86:F90",
+            "bbox": {
+              "r1": 85,
+              "c1": 1,
+              "r2": 89,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Subsequent treatment costs",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "Blinatumomab",
+              "Chemotherapy",
+              "TKI (Ponatinib)"
+            ],
+            "core_region": {
+              "r1": 86,
+              "c1": 2,
+              "r2": 89,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child7",
+            "coordinates": "Inputs!B92:F105",
+            "bbox": {
+              "r1": 91,
+              "c1": 1,
+              "r2": 104,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Number of bed days",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Cost of bed days"
+            ],
+            "core_region": {
+              "r1": 92,
+              "c1": 2,
+              "r2": 104,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "source_flags": [
+              "metadata_propagated_positional"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child8",
+            "coordinates": "Inputs!B106:F118",
+            "bbox": {
+              "r1": 105,
+              "c1": 1,
+              "r2": 117,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "SCT rates after induction therapy",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
+            ],
+            "core_region": {
+              "r1": 106,
+              "c1": 2,
+              "r2": 117,
+              "c2": 3
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "source_flags": []
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "standalone",
+        "table_id": "9814fc53f594ba29_t118_b70_b46",
+        "coordinates": "Inputs!B120:F120",
+        "bbox": {
+          "r1": 119,
+          "c1": 1,
+          "r2": 119,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": null,
+        "headers": [
+          [
+            "Value used in the model",
+            "Default"
+          ]
+        ],
+        "row_names": [
+          "SCT costs"
+        ],
+        "core_region": {
+          "r1": 119,
+          "c1": 2,
+          "r2": 119,
+          "c2": 3
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Inputs"
+        ],
+        "notes": [
+          {
+            "row_index": 0,
+            "text": "Assumption",
+            "note_type": "assumption",
+            "source": "heuristic"
+          }
+        ],
+        "source_flags": [
+          "title_missing"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "9814fc53f594ba29_b118",
+        "coordinates": "Inputs!B122:F122",
+        "bbox": {
+          "r1": 121,
+          "c1": 1,
+          "r2": 121,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": null,
+        "headers": [
+          [
+            "Value used in the model",
+            "Default"
+          ]
+        ],
+        "row_names": [
+          "End-of-life costs"
+        ],
+        "core_region": {
+          "r1": 121,
+          "c1": 2,
+          "r2": 121,
+          "c2": 3
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Inputs"
+        ],
+        "notes": [
+          {
+            "row_index": 0,
+            "text": "Assumption",
+            "note_type": "assumption",
+            "source": "heuristic"
+          }
+        ],
+        "source_flags": [
+          "title_missing"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 2,
+      "parent_count": 3,
+      "total_children": 11,
+      "flag_frequency": {
+        "metadata_propagated_positional": 4,
+        "title_missing": 4
+      }
+    }
+  },
+  "Introduction": {
+    "sheet_name": "Introduction",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "parent",
+        "table_id": "f57ac8d2e4e4931a_t3",
+        "coordinates": "Introduction!C11:E13",
+        "bbox": {
+          "r1": 10,
+          "c1": 2,
+          "r2": 12,
+          "c2": 4
+        },
+        "sheet_name": "Introduction",
+        "title": null,
+        "parent_path": [
+          "Introduction"
+        ],
+        "children": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "coordinates": "Introduction!C11:E11",
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4
+            },
+            "sheet_name": "Introduction",
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
+            "row_names": null,
+            "core_region": null,
+            "node_type": "metadata",
+            "parent_path": [
+              "Introduction"
+            ],
+            "source_flags": [
+              "all_metadata_no_numeric",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "coordinates": "Introduction!C13:E13",
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4
+            },
+            "sheet_name": "Introduction",
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
+            "row_names": null,
+            "core_region": null,
+            "node_type": "metadata",
+            "parent_path": [
+              "Introduction"
+            ],
+            "source_flags": [
+              "all_metadata_no_numeric",
+              "title_missing"
+            ]
+          }
+        ],
+        "source_flags": [
+          "all_metadata_no_numeric"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "f57ac8d2e4e4931a_b3",
+        "coordinates": "Introduction!C15:E15",
+        "bbox": {
+          "r1": 14,
+          "c1": 2,
+          "r2": 14,
+          "c2": 4
+        },
+        "sheet_name": "Introduction",
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
+        "row_names": null,
+        "core_region": null,
+        "node_type": "metadata",
+        "parent_path": [
+          "Introduction"
+        ],
+        "notes": [],
+        "source_flags": [
+          "title_missing"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 1,
+      "parent_count": 1,
+      "total_children": 2,
+      "flag_frequency": {
+        "all_metadata_no_numeric": 3,
+        "title_missing": 3
+      }
+    }
+  },
   "Calculations": {
     "sheet_name": "Calculations",
     "finalize_version": "v6-finalize-mvp",
@@ -58,11 +843,11 @@
           },
           {
             "table_id": "94c8c58d611b9e70_t103_child2",
-            "coordinates": "Calculations!B6:H105",
+            "coordinates": "Calculations!B6:H20",
             "bbox": {
               "r1": 5,
               "c1": 1,
-              "r2": 104,
+              "r2": 19,
               "c2": 7
             },
             "sheet_name": "Calculations",
@@ -89,7 +874,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Market shares (Total)",
+              "Market shares (Total)"
+            ],
+            "core_region": {
+              "r1": 7,
+              "c1": 2,
+              "r2": 19,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child3",
+            "coordinates": "Calculations!B21:H34",
+            "bbox": {
+              "r1": 20,
+              "c1": 1,
+              "r2": 33,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Drug costs",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -102,7 +922,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Total costs of treatment",
+              "Total costs of treatment"
+            ],
+            "core_region": {
+              "r1": 21,
+              "c1": 2,
+              "r2": 33,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child4",
+            "coordinates": "Calculations!B35:H48",
+            "bbox": {
+              "r1": 34,
+              "c1": 1,
+              "r2": 47,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Costs of adverse events",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -115,7 +970,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Total costs of adverse events on treatment",
+              "Total costs of adverse events on treatment"
+            ],
+            "core_region": {
+              "r1": 35,
+              "c1": 2,
+              "r2": 47,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child5",
+            "coordinates": "Calculations!B49:H62",
+            "bbox": {
+              "r1": 48,
+              "c1": 1,
+              "r2": 61,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Subsequent treatment costs",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -128,7 +1018,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Total costs of Subsequent treatment costs",
+              "Total costs of Subsequent treatment costs"
+            ],
+            "core_region": {
+              "r1": 49,
+              "c1": 2,
+              "r2": 61,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child6",
+            "coordinates": "Calculations!B63:H76",
+            "bbox": {
+              "r1": 62,
+              "c1": 1,
+              "r2": 75,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Costs of hospitalization",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -141,7 +1066,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Total costs of hospitalization",
+              "Total costs of hospitalization"
+            ],
+            "core_region": {
+              "r1": 63,
+              "c1": 2,
+              "r2": 75,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child7",
+            "coordinates": "Calculations!B77:H90",
+            "bbox": {
+              "r1": 76,
+              "c1": 1,
+              "r2": 89,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Stem cell transplant after induction therapy",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -154,7 +1114,42 @@
               "TKI (Ponatinib)",
               "TKI + vincristine",
               "Clofarabine",
-              "Costs of an allogeneic stem cell transplant",
+              "Costs of an allogeneic stem cell transplant"
+            ],
+            "core_region": {
+              "r1": 77,
+              "c1": 2,
+              "r2": 89,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "BIM calculation"
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "94c8c58d611b9e70_t103_child8",
+            "coordinates": "Calculations!B91:H105",
+            "bbox": {
+              "r1": 90,
+              "c1": 1,
+              "r2": 104,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "End-of-life costs",
+            "headers": [
+              [
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ]
+            ],
+            "row_names": [
               "Inotuzumab Ozogamicin",
               "FLAG-Ida",
               "FLAG",
@@ -171,9 +1166,9 @@
               "Total costs in world without InO"
             ],
             "core_region": {
-              "r1": 7,
-              "c1": 2,
-              "r2": 19,
+              "r1": 91,
+              "c1": 3,
+              "r2": 104,
               "c2": 7
             },
             "node_type": "input",
@@ -591,7 +1586,7 @@
         ]
       },
       {
-        "kind": "standalone",
+        "kind": "parent",
         "table_id": "94c8c58d611b9e70_b103",
         "coordinates": "Calculations!B107:H206",
         "bbox": {
@@ -602,114 +1597,306 @@
         },
         "sheet_name": "Calculations",
         "title": "Current treatments used",
-        "headers": [],
-        "row_names": [
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Market shares (Total)",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs of treatment",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs of adverse events on treatment",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs of Subsequent treatment costs",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs of hospitalization",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Costs of an allogeneic stem cell transplant",
-          "Inotuzumab Ozogamicin",
-          "FLAG-Ida",
-          "FLAG",
-          "Mitoxantrone and cytarabine",
-          "HIDAC",
-          "DVP-Asp",
-          "DVP-Asp+Cyclo",
-          "hCVAD+MTX",
-          "Blinatumomab",
-          "TKI (Ponatinib)",
-          "TKI + vincristine",
-          "Clofarabine",
-          "Total costs in world with InO"
-        ],
-        "core_region": {
-          "r1": 108,
-          "c1": 2,
-          "r2": 120,
-          "c2": 7
-        },
-        "node_type": "input",
         "parent_path": [
           "Calculations"
         ],
-        "notes": [],
-        "source_flags": [
-          "header_missing"
-        ]
+        "children": [
+          {
+            "table_id": "94c8c58d611b9e70_b103_child1",
+            "coordinates": "Calculations!B107:H121",
+            "bbox": {
+              "r1": 106,
+              "c1": 1,
+              "r2": 120,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Current treatments used",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Market shares (Total)"
+            ],
+            "core_region": {
+              "r1": 108,
+              "c1": 2,
+              "r2": 120,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child2",
+            "coordinates": "Calculations!B122:H135",
+            "bbox": {
+              "r1": 121,
+              "c1": 1,
+              "r2": 134,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Drug costs",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of treatment"
+            ],
+            "core_region": {
+              "r1": 122,
+              "c1": 2,
+              "r2": 134,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child3",
+            "coordinates": "Calculations!B136:H149",
+            "bbox": {
+              "r1": 135,
+              "c1": 1,
+              "r2": 148,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Costs of adverse events",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of adverse events on treatment"
+            ],
+            "core_region": {
+              "r1": 136,
+              "c1": 2,
+              "r2": 148,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child4",
+            "coordinates": "Calculations!B150:H163",
+            "bbox": {
+              "r1": 149,
+              "c1": 1,
+              "r2": 162,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Subsequent treatment costs",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of Subsequent treatment costs"
+            ],
+            "core_region": {
+              "r1": 150,
+              "c1": 2,
+              "r2": 162,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child5",
+            "coordinates": "Calculations!B164:H177",
+            "bbox": {
+              "r1": 163,
+              "c1": 1,
+              "r2": 176,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Costs of hospitalization",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of hospitalization"
+            ],
+            "core_region": {
+              "r1": 164,
+              "c1": 2,
+              "r2": 176,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child6",
+            "coordinates": "Calculations!B178:H191",
+            "bbox": {
+              "r1": 177,
+              "c1": 1,
+              "r2": 190,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "Stem cell transplant after induction therapy",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Costs of an allogeneic stem cell transplant"
+            ],
+            "core_region": {
+              "r1": 178,
+              "c1": 2,
+              "r2": 190,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          },
+          {
+            "table_id": "94c8c58d611b9e70_b103_child7",
+            "coordinates": "Calculations!B192:H206",
+            "bbox": {
+              "r1": 191,
+              "c1": 1,
+              "r2": 205,
+              "c2": 7
+            },
+            "sheet_name": "Calculations",
+            "title": "End-of-life costs",
+            "headers": [],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs in world with InO"
+            ],
+            "core_region": {
+              "r1": 192,
+              "c1": 3,
+              "r2": 205,
+              "c2": 7
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Calculations",
+              "Current treatments used"
+            ],
+            "source_flags": [
+              "header_missing"
+            ]
+          }
+        ],
+        "source_flags": []
       },
       {
         "kind": "standalone",
@@ -1176,801 +2363,16 @@
       }
     ],
     "stats": {
-      "standalone_count": 25,
-      "parent_count": 2,
-      "total_children": 4,
+      "standalone_count": 24,
+      "parent_count": 3,
+      "total_children": 17,
       "flag_frequency": {
         "merged_from_metadata_and_numeric_child": 1,
         "header_conflict": 1,
         "title_missing": 25,
-        "header_missing": 26,
+        "header_missing": 32,
         "rowname_missing": 13,
         "low_context_node": 13
-      }
-    }
-  },
-  "Introduction": {
-    "sheet_name": "Introduction",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "parent",
-        "table_id": "f57ac8d2e4e4931a_t3",
-        "coordinates": "Introduction!C11:E13",
-        "bbox": {
-          "r1": 10,
-          "c1": 2,
-          "r2": 12,
-          "c2": 4
-        },
-        "sheet_name": "Introduction",
-        "title": null,
-        "parent_path": [
-          "Introduction"
-        ],
-        "children": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "coordinates": "Introduction!C11:E11",
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4
-            },
-            "sheet_name": "Introduction",
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-              ]
-            ],
-            "row_names": null,
-            "core_region": null,
-            "node_type": "metadata",
-            "parent_path": [
-              "Introduction"
-            ],
-            "source_flags": [
-              "all_metadata_no_numeric",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "coordinates": "Introduction!C13:E13",
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4
-            },
-            "sheet_name": "Introduction",
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells can be changed to accommodate user inputs"
-              ]
-            ],
-            "row_names": null,
-            "core_region": null,
-            "node_type": "metadata",
-            "parent_path": [
-              "Introduction"
-            ],
-            "source_flags": [
-              "all_metadata_no_numeric",
-              "title_missing"
-            ]
-          }
-        ],
-        "source_flags": [
-          "all_metadata_no_numeric"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "f57ac8d2e4e4931a_b3",
-        "coordinates": "Introduction!C15:E15",
-        "bbox": {
-          "r1": 14,
-          "c1": 2,
-          "r2": 14,
-          "c2": 4
-        },
-        "sheet_name": "Introduction",
-        "title": null,
-        "headers": [
-          [
-            "Value",
-            "",
-            "The content of these cells is used in the model and can not be changed"
-          ]
-        ],
-        "row_names": null,
-        "core_region": null,
-        "node_type": "metadata",
-        "parent_path": [
-          "Introduction"
-        ],
-        "notes": [],
-        "source_flags": [
-          "title_missing"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 1,
-      "parent_count": 1,
-      "total_children": 2,
-      "flag_frequency": {
-        "all_metadata_no_numeric": 3,
-        "title_missing": 3
-      }
-    }
-  },
-  "Inputs": {
-    "sheet_name": "Inputs",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_t45",
-        "coordinates": "Inputs!B3:F47",
-        "bbox": {
-          "r1": 2,
-          "c1": 1,
-          "r2": 46,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": "Patient population",
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_t45_child2",
-            "coordinates": "Inputs!B4:F6",
-            "bbox": {
-              "r1": 3,
-              "c1": 1,
-              "r2": 5,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Patient population",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Number of patients in the 1st year",
-              "Annual percentage change"
-            ],
-            "core_region": {
-              "r1": 4,
-              "c1": 2,
-              "r2": 5,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "source_flags": [
-              "metadata_propagated_positional"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t45_child3",
-            "coordinates": "Inputs!B7:F20",
-            "bbox": {
-              "r1": 6,
-              "c1": 1,
-              "r2": 19,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Market shares in world without InO",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "CHECK"
-            ],
-            "core_region": {
-              "r1": 7,
-              "c1": 2,
-              "r2": 19,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_t45_child4",
-            "coordinates": "Inputs!B21:F34",
-            "bbox": {
-              "r1": 20,
-              "c1": 1,
-              "r2": 33,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Market shares in world with InO",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "CHECK"
-            ],
-            "core_region": {
-              "r1": 21,
-              "c1": 2,
-              "r2": 33,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_t45_child5",
-            "coordinates": "Inputs!B35:F47",
-            "bbox": {
-              "r1": 34,
-              "c1": 1,
-              "r2": 46,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Annual drug costs",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine"
-            ],
-            "core_region": {
-              "r1": 35,
-              "c1": 2,
-              "r2": 46,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "source_flags": []
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_b45_t24",
-        "coordinates": "Inputs!B49:N72",
-        "bbox": {
-          "r1": 48,
-          "c1": 1,
-          "r2": 71,
-          "c2": 13
-        },
-        "sheet_name": "Inputs",
-        "title": "Adverse events, frequencies (same as global models)",
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_b45_t24_child1",
-            "coordinates": "Inputs!B49:N60",
-            "bbox": {
-              "r1": 48,
-              "c1": 1,
-              "r2": 59,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": "Adverse events, frequencies (same as global models)",
-            "headers": [
-              [
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
-              ]
-            ],
-            "row_names": [
-              "Neutropenia",
-              "Thrombocytopenia",
-              "Leukopenia",
-              "Febrile neutropenia",
-              "Anaemia",
-              "Lymphopenia",
-              "White blood cells decreased",
-              "Veno-occlusive liver disease on treatment",
-              "Cytokine release syndrome",
-              "Veno-occlusive liver disease after SCT",
-              "Graft-versus-host disease after SCT"
-            ],
-            "core_region": {
-              "r1": 49,
-              "c1": 2,
-              "r2": 59,
-              "c2": 13
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Adverse events, frequencies (same as global models)"
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_b45_t24_child2",
-            "coordinates": "Inputs!B61:F72",
-            "bbox": {
-              "r1": 60,
-              "c1": 1,
-              "r2": 71,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Adverse events, costs",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default"
-              ]
-            ],
-            "row_names": [
-              "Neutropenia",
-              "Thrombocytopenia",
-              "Leukopenia",
-              "Febrile neutropenia",
-              "Anaemia",
-              "Lymphopenia",
-              "White blood cells decreased",
-              "Veno-occlusive liver disease on treatment",
-              "Cytokine release syndrome",
-              "Veno-occlusive liver disease after SCT",
-              "Graft-versus-host disease after SCT"
-            ],
-            "core_region": {
-              "r1": 61,
-              "c1": 2,
-              "r2": 71,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Adverse events, frequencies (same as global models)"
-            ],
-            "source_flags": []
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_b45_b24_t46",
-        "coordinates": "Inputs!B74:N118",
-        "bbox": {
-          "r1": 73,
-          "c1": 1,
-          "r2": 117,
-          "c2": 13
-        },
-        "sheet_name": "Inputs",
-        "title": "Hospitalization",
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_b45_b24_t46_child2",
-            "coordinates": "Inputs!B75:N79",
-            "bbox": {
-              "r1": 74,
-              "c1": 1,
-              "r2": 78,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": null,
-            "headers": [
-              [
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab",
-              "Blinatumomab (set to 0%)",
-              "Chemotherapy",
-              "TKI"
-            ],
-            "core_region": {
-              "r1": 75,
-              "c1": 2,
-              "r2": 78,
-              "c2": 13
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "source_flags": [
-              "metadata_propagated_positional",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_b45_b24_t46_child4",
-            "coordinates": "Inputs!B81:N85",
-            "bbox": {
-              "r1": 80,
-              "c1": 1,
-              "r2": 84,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": null,
-            "headers": [
-              [
-                "Inotuzumab Ozogamicin ",
-                "FLAG-Ida ",
-                "FLAG ",
-                "Mitoxantrone and cytarabine",
-                "HIDAC ",
-                "DVP-Asp ",
-                "DVP-Asp+Cyclo",
-                "hCVAD+MTX ",
-                "Blinatumomab ",
-                "TKI (Ponatinib)",
-                "TKI + vincristine",
-                "Clofarabine "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab",
-              "Blinatumomab (set to 0%)",
-              "Chemotherapy",
-              "TKI"
-            ],
-            "core_region": {
-              "r1": 81,
-              "c1": 2,
-              "r2": 84,
-              "c2": 13
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "source_flags": [
-              "metadata_propagated_positional",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_b45_b24_t46_child5",
-            "coordinates": "Inputs!B86:F90",
-            "bbox": {
-              "r1": 85,
-              "c1": 1,
-              "r2": 89,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Subsequent treatment costs",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "Blinatumomab",
-              "Chemotherapy",
-              "TKI (Ponatinib)"
-            ],
-            "core_region": {
-              "r1": 86,
-              "c1": 2,
-              "r2": 89,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_b45_b24_t46_child7",
-            "coordinates": "Inputs!B92:F105",
-            "bbox": {
-              "r1": 91,
-              "c1": 1,
-              "r2": 104,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Number of bed days",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "Cost of bed days"
-            ],
-            "core_region": {
-              "r1": 92,
-              "c1": 2,
-              "r2": 104,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "source_flags": [
-              "metadata_propagated_positional"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_b45_b24_t46_child8",
-            "coordinates": "Inputs!B106:F118",
-            "bbox": {
-              "r1": 105,
-              "c1": 1,
-              "r2": 117,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "SCT rates after induction therapy",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine"
-            ],
-            "core_region": {
-              "r1": 106,
-              "c1": 2,
-              "r2": 117,
-              "c2": 3
-            },
-            "node_type": "input",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "source_flags": []
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "standalone",
-        "table_id": "9814fc53f594ba29_b45_b24_b46_t2",
-        "coordinates": "Inputs!B120:F120",
-        "bbox": {
-          "r1": 119,
-          "c1": 1,
-          "r2": 119,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": null,
-        "headers": [
-          [
-            "Value used in the model",
-            "Default"
-          ]
-        ],
-        "row_names": [
-          "SCT costs"
-        ],
-        "core_region": {
-          "r1": 119,
-          "c1": 2,
-          "r2": 119,
-          "c2": 3
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Inputs"
-        ],
-        "notes": [
-          {
-            "row_index": 0,
-            "text": "Assumption",
-            "note_type": "assumption",
-            "source": "heuristic"
-          }
-        ],
-        "source_flags": [
-          "title_missing"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "9814fc53f594ba29_b45_b24_b46_b2",
-        "coordinates": "Inputs!B122:F122",
-        "bbox": {
-          "r1": 121,
-          "c1": 1,
-          "r2": 121,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": null,
-        "headers": [
-          [
-            "Value used in the model",
-            "Default"
-          ]
-        ],
-        "row_names": [
-          "End-of-life costs"
-        ],
-        "core_region": {
-          "r1": 121,
-          "c1": 2,
-          "r2": 121,
-          "c2": 3
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Inputs"
-        ],
-        "notes": [
-          {
-            "row_index": 0,
-            "text": "Assumption",
-            "note_type": "assumption",
-            "source": "heuristic"
-          }
-        ],
-        "source_flags": [
-          "title_missing"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 2,
-      "parent_count": 3,
-      "total_children": 11,
-      "flag_frequency": {
-        "metadata_propagated_positional": 4,
-        "title_missing": 4
       }
     }
   },

@@ -2,16 +2,20 @@
   "workbook_path": "data\\output\\streamlit_run_enco\\init_output\\cleaned_workbook.xlsx",
   "workbook_id": "8018279055de31f7a44fc52bc3f9101c2328a7a5b75f9cb5ab1dbc1537579e87",
   "xl_table_version": "3.1.0",
-  "run_ts": "2026-04-08T17:38:36.271036+00:00",
+  "run_ts": "2026-04-21T21:42:34.259825+00:00",
   "sheets": {
     "Adverse events": [
       {
-        "table_id": "88163c1a17b2494d_t10",
-        "range": "C7:I16"
+        "table_id": "721d31377f9c163d",
+        "range": "C7:I15"
       },
       {
-        "table_id": "88163c1a17b2494d_b10",
-        "range": "C17:I28"
+        "table_id": "39c56a739c48ef9f_t1",
+        "range": "C16:I17"
+      },
+      {
+        "table_id": "39c56a739c48ef9f_b1",
+        "range": "C18:I28"
       }
     ],
     "BI calculation_Alberta": [
@@ -1736,12 +1740,12 @@
         "range": "D56:P68"
       },
       {
-        "table_id": "885e91d1fbad8dc3_t14",
-        "range": "D72:P86"
+        "table_id": "7dce4f24e9b69cff",
+        "range": "D72:P84"
       },
       {
-        "table_id": "885e91d1fbad8dc3_b14",
-        "range": "D87:P99"
+        "table_id": "db3970e19145e71e",
+        "range": "D85:P99"
       }
     ],
     "Cover": [

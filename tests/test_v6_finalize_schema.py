@@ -32,7 +32,10 @@ def _make_standalone() -> FinalMapEntryStandalone:
         core_region={"r1": 1, "c1": 1, "r2": 4, "c2": 2},
         node_type="calc",
         parent_path=["Sheet1"],
-        notes=[],
+        footnotes_notes_refs=[
+            {"row": 5, "col": 0, "text": "*Note about Canada"},
+        ],
+        llm_gate_triggers=[{"name": "missing_header", "source": "raw_v6"}],
         source_flags=["low_context_node"],
     )
 
@@ -49,6 +52,10 @@ def _make_parent() -> FinalMapEntryParent:
         core_region={"r1": 10, "c1": 1, "r2": 14, "c2": 2},
         node_type="calc",
         parent_path=["Sheet1", "Costs container"],
+        footnotes_notes_refs=[
+            {"row": 14, "col": 2, "text": "child-level footnote"},
+        ],
+        llm_gate_triggers=[{"name": "coverage_gap", "source": "finalize"}],
         source_flags=["metadata_propagated_positional"],
     )
     return FinalMapEntryParent(
@@ -59,6 +66,8 @@ def _make_parent() -> FinalMapEntryParent:
         title="Costs container",
         parent_path=["Sheet1"],
         children=[child],
+        footnotes_notes_refs=[],
+        llm_gate_triggers=[{"name": "multi_core_ambiguity", "source": "raw_v6"}],
         source_flags=["nested_parent_flattened"],
     )
 
@@ -82,6 +91,14 @@ class TestFinalMapSerialization(unittest.TestCase):
         self.assertEqual(entry["core_region"], {"r1": 1, "c1": 1, "r2": 4, "c2": 2})
         self.assertEqual(entry["parent_path"], ["Sheet1"])
         self.assertIn("low_context_node", entry["source_flags"])
+        self.assertEqual(len(entry["footnotes_notes_refs"]), 1)
+        self.assertEqual(entry["footnotes_notes_refs"][0]["row"], 5)
+        self.assertEqual(entry["footnotes_notes_refs"][0]["col"], 0)
+        self.assertEqual(
+            entry["llm_gate_triggers"][0],
+            {"name": "missing_header", "source": "raw_v6"},
+        )
+        self.assertNotIn("notes", entry)
 
     def test_parent_round_trip(self) -> None:
         fm = FinalTableMap(
@@ -98,6 +115,19 @@ class TestFinalMapSerialization(unittest.TestCase):
         # parent entries must NOT carry core_region / node_type at the top level
         self.assertNotIn("core_region", entry)
         self.assertNotIn("node_type", entry)
+        # parent carries triggers + footnotes fields (may be empty)
+        self.assertIn("footnotes_notes_refs", entry)
+        self.assertIn("llm_gate_triggers", entry)
+        self.assertEqual(
+            entry["llm_gate_triggers"][0],
+            {"name": "multi_core_ambiguity", "source": "raw_v6"},
+        )
+        child = entry["children"][0]
+        self.assertEqual(child["footnotes_notes_refs"][0]["text"], "child-level footnote")
+        self.assertEqual(
+            child["llm_gate_triggers"][0],
+            {"name": "coverage_gap", "source": "finalize"},
+        )
 
     def test_json_serializable(self) -> None:
         fm = FinalTableMap(

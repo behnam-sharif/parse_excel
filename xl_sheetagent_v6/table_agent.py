@@ -73,6 +73,7 @@ def analyze_table(
     audit_records: Optional[Dict[str, List]] = None,
     cut_scores: Optional[List[Dict[str, Any]]] = None,
     formula_peek: Any = None,
+    formula_refs: Optional[Dict[Any, Any]] = None,
 ) -> V6TableResult:
     """
     Full per-table analysis pipeline (core-first algorithm).
@@ -129,7 +130,7 @@ def analyze_table(
             merge_info, bold_rows, all_tables_in_sheet,
             structural_summary, config, llm_client,
             llm_call_counter, audit_records, signals,
-            cut_scores, formula_peek,
+            cut_scores, formula_peek, formula_refs,
         )
     except Exception as exc:
         # Fallback: return minimal result with confidence 0
@@ -157,6 +158,7 @@ def _analyze_table_inner(
     llm_call_counter, audit_records, signals,
     cut_scores=None,
     formula_peek=None,
+    formula_refs=None,
 ) -> V6TableResult:
     n_rows = len(grid)
 
@@ -173,6 +175,7 @@ def _analyze_table_inner(
     core_regions = detect_core_regions(
         grid, types, empty_consumed, config,
         r_top_abs=bbox["r1"], c_left_abs=bbox["c1"],
+        formula_refs=formula_refs,
     )
 
     # Step 1b: Zero cores — V5-style header detect + restricted inheritance
