@@ -77,3 +77,6 @@ neo4j_data/
 # Environment variables
 # ----------------------------
 .env
+
+#data folders
+/cheri_v1_docs

@@ -34,6 +34,7 @@ def main():
     parser.add_argument("--output-base", default="data/output", help="Base output directory")
     parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
     parser.add_argument("--with-sheetagent", action="store_true", help="Run optional xl_sheetagent stage")
+    parser.add_argument("--with-dag", action="store_true", help="Run optional xl_dag stage (after v6 finalize)")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
 
     args = parser.parse_args()
@@ -200,6 +201,36 @@ def main():
         except Exception as exc:
             summary["stages"]["xl_sheetagent"] = {"error": str(exc)}
             summary["warnings"].append(f"xl_sheetagent failed: {exc}")
+            print(f"  FAILED: {exc}")
+
+    # -- Stage 6: xl_dag (optional) --
+    if args.with_dag:
+        print("\n" + "=" * 60)
+        print("Stage 6: xl_dag (optional)")
+        print("=" * 60)
+        t0 = time.time()
+        try:
+            from core.stage_config import dag_config_from_pipeline
+            from xl_dag import run_dag_analysis
+
+            dag_cfg = dag_config_from_pipeline(load_config())
+            dag_result = run_dag_analysis(
+                run_id=run_id,
+                output_base=base,
+                config=dag_cfg,
+            )
+            summary["stages"]["xl_dag"] = {
+                "duration_s": round(time.time() - t0, 2),
+                "artifacts": dag_result.artifacts,
+                "errors": dag_result.errors,
+            }
+            print(f"  Done in {summary['stages']['xl_dag']['duration_s']}s")
+            print(f"  Artifacts: {len(dag_result.artifacts)}")
+            if dag_result.errors:
+                print(f"  Errors:    {len(dag_result.errors)}")
+        except Exception as exc:
+            summary["stages"]["xl_dag"] = {"error": str(exc)}
+            summary["warnings"].append(f"xl_dag failed: {exc}")
             print(f"  FAILED: {exc}")
 
     # -- Write summary --

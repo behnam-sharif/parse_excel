@@ -268,6 +268,6 @@ def _bbox_coords(bbox: Any) -> Tuple[int, int, int, int]:
 
 
 def _extract_refs_from_formula(formula_text: str) -> List[Tuple[int, int]]:
-    """Thin re-export of the pure helper in xl_sheetagent_v6.formula_refs."""
-    from xl_sheetagent_v6.formula_refs import _extract_refs
+    """Thin re-export of the pure helper in xl_sheetagent.formula_refs."""
+    from xl_sheetagent.formula_refs import _extract_refs
     return _extract_refs(formula_text)

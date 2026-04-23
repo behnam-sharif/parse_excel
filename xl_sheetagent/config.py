@@ -1,8 +1,8 @@
 """
-xl_sheetagent/config.py — Configuration dataclass for the xl_sheetagent stage.
+xl_sheetagent/config.py — V6 semantic layer configuration.
 
-All thresholds from config/stages.yaml xl_sheetagent section.
-No silent Python defaults — YAML is the single source of truth.
+V6 owns only its semantic config; V3a config stays separate.
+All thresholds must come from config/stages.yaml — no silent defaults.
 """
 
 from __future__ import annotations
@@ -11,89 +11,116 @@ from dataclasses import dataclass
 
 
 @dataclass
-class XlSheetAgentConfig:
-    """Centralised settings for the xl_sheetagent pipeline."""
+class XlSheetAgentV6Config:
+    # Row tagging thresholds
+    text_ratio_header: float
+    number_ratio_data: float
+    note_fill_max: float
+    title_max_nonempty: int
 
-    # Tier thresholds
-    tier_a_sufficient: float
-    tier_b_accept: float
-    header_unresolved_floor: float
-    split_reconsideration_min: float
-    split_confirmation_threshold: float
-    section_assignment_accept: float
-    section_ambiguity_delta: float
-    table_finalization: float
+    # Multi-row header detection
+    header_zone_pct: float
+    header_col_tolerance: int
 
-    # Grammar promotion (V1C)
-    grammar_promotion_count: int
-    grammar_promotion_sheets: int
+    # Header inheritance (recipient width vs donor header span, inclusive ±)
+    inherit_header_col_tolerance: int
 
-    # Context / spatial
-    title_shape_proximity_max: int
-    context_block_max_rows: int
-    context_block_formula_ceil: float
-    context_block_adjacency_max: int
+    # Core region rules
+    min_component_area: int
+    component_merge_gap: int
+    blank_inclusion_density_threshold: float
 
-    # Sheet-level
-    text_dominant_sheet_threshold: float
+    # Formula-dependency core expansion (Batch 3a)
+    core_formula_expansion_enabled: bool
+    core_formula_expansion_ring: int
 
-    # Ambiguity class thresholds
-    structural_threshold: float
-    semantic_threshold: float
-    presentation_threshold: float
+    # When false, never opens data_only=False for cell typing: formulas count as
+    # NUMBER (cached values). role_hint / table_role / node_type use that grid.
+    # By default, core_formula_expansion_enabled requires this to be true; set
+    # core_formula_expansion_allow_without_formula_typing=true to enable
+    # formula-ref expansion while keeping values-only typing.
+    use_formula_view_for_types: bool
 
-    # Debug
-    debug_level: str
+    # Allow core formula-reference expansion even when use_formula_view_for_types is false.
+    # This opens the formula workbook only to build formula refs, but does NOT
+    # mark any cells as type=FORMULA in the main grid typing.
+    core_formula_expansion_allow_without_formula_typing: bool
 
-    # LLM (parity with xl_init)
+    # Child rules / hierarchy / resolution (KEPT from v5)
+    min_child_rows: int
+    iou_merge_threshold: float
+    enable_resolution: bool
+    absorb_metadata_only_children: bool
+    enforce_multi_core_children: bool
+
+    # Confidence weights (redistributed for w_llm)
+    w_tags: float
+    w_header: float
+    w_core: float
+    w_llm: float
+    w_role: float
+
+    # Formatting, parallelism, audit, export
+    extract_formatting: bool
+    max_workers: int
+    emit_audit: bool
+    export_mode: str
+    row_name_text_ratio_threshold: float
+
+    # LLM transport
     llm_model: str
     llm_max_tokens: int
-    skip_llm_enrichment: bool
+    llm_temperature: float
+    max_retries: int
+    base_delay: float
 
-    # V2 agent-based pipeline
-    v2_enabled: bool
-    grammar_sample_max_rows: int
-    grammar_sample_count: int
-    grammar_sample_attempts: int
-    grammar_match_threshold: float
-    split_consideration_min_rows: int
-    split_min_score_floor: float
-    split_top_k: int
-    split_proximity_dedup: int
-    max_parallel_sheets: int
-    coordinator_batch_llm_threshold: int
-    ontology_hint_enabled: bool
+    # LLM: reconciliation (resolution stage, same as v5)
+    use_llm_metadata_resolution: bool
+    llm_metadata_max_tokens: int
+    llm_metadata_max_cells: int
 
-    # V3A clean redesign
-    v3a_enabled: bool
-    v3a_margin_trim: bool
-    v3a_core_numeric_ratio: float
-    v3a_title_scan_rows: int
-    v3a_footnote_scan_rows: int
-    v3a_skip_llm: bool
-    v3a_llm_model: str
-    v3a_llm_max_tokens: int
-    v3a_max_parallel_sheets: int
-    v3a_split_threshold: float
+    # Performance guardrails
+    max_cells_per_prompt: int
+    max_tables_per_sheet_warn: int
+    max_llm_calls_per_sheet: int
+    max_llm_children_per_sheet: int
 
-    # V3A Phase 1-3: Enhanced validation and heuristics
-    v3a_header_column_validation: bool
-    v3a_numeric_header_fallback: bool
-    v3a_title_single_cell_strict: bool
-    v3a_footnote_all_text_strict: bool
+    # Per-bbox LLM gate (Phase 2)
+    enable_llm: bool
+    llm_gate_core_validation: bool
+    llm_gate_multi_core: bool
+    llm_gate_missing_header: bool
+    llm_gate_ambiguous_rows: bool
+    llm_gate_coverage_gap: bool
+    llm_gate_overlap: bool
+    llm_payload_max_cells: int
+    llm_context_max_rows: int
 
-    # V3A Phase 2: Formatting analysis
-    v3a_formatting_analysis_enabled: bool
-    v3a_formatting_long_text_threshold: int
+    # Core region validation (Phase 1)
+    validate_core_top_rows: bool
+    core_validator_check_bottom_rows: bool
+    core_validator_max_strip_rows: int
+    core_validator_detect_years: bool
+    core_validator_detect_months: bool
+    core_validator_detect_cycles: bool
+    core_validator_detect_quarters: bool
+    core_validator_formula_divergence_threshold: float
+    core_validator_ambiguity_threshold: float
 
-    # V3A Phase 4: Two-pass split architecture
-    v3a_two_pass_enabled: bool
-    v3a_split_core_bbox_ratio: float
-    v3a_split_min_numeric_outside: int
-    v3a_split_max_depth: int
+    # Walks (Phase 1)
+    upward_walk_max_rows: int
+    upward_walk_blank_row_stop: bool
+    leftward_walk_max_cols: int
+    note_scan_right_max_cols: int
+    note_scan_below_max_rows: int
 
-    # V3A Phase 4+: Hierarchical splitting (v3a.1.0)
-    v3a_hierarchical_splits: bool
-    v3a_multi_split_enabled: bool
-    v3a_row_names_allow_formulas: bool
-    v3a_column_split_classification: bool
+    # Beside-header title detection
+    detect_beside_header_title: bool
+    beside_header_title_max_nonempty: int
+
+    # Finalize stage (deterministic, no LLM)
+    enable_finalize: bool
+    finalize_title_max_chars: int
+    finalize_note_keywords: list
+    finalize_flatten_depth: int
+    finalize_emit_stats: bool

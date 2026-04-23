@@ -10,8 +10,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.config import XlSheetAgentV6Config
-from xl_sheetagent_v6.runner import _v6_formula_snapshot_flags
+from xl_sheetagent.config import XlSheetAgentV6Config
+from xl_sheetagent.runner import _v6_formula_snapshot_flags
 
 
 def _base(**overrides) -> XlSheetAgentV6Config:
@@ -29,6 +29,7 @@ def _base(**overrides) -> XlSheetAgentV6Config:
         core_formula_expansion_enabled=False,
         core_formula_expansion_ring=1,
         use_formula_view_for_types=True,
+        core_formula_expansion_allow_without_formula_typing=False,
         min_child_rows=6,
         iou_merge_threshold=0.30,
         enable_resolution=True,
@@ -121,6 +122,17 @@ class TestFormulaTypingFlag(unittest.TestCase):
         self.assertFalse(typing)
         self.assertFalse(exp)
         self.assertFalse(wb)
+
+    def test_expansion_can_run_without_typing_when_allowed(self) -> None:
+        cfg = _base(
+            use_formula_view_for_types=False,
+            core_formula_expansion_enabled=True,
+            core_formula_expansion_allow_without_formula_typing=True,
+        )
+        typing, exp, wb = _v6_formula_snapshot_flags(cfg)
+        self.assertFalse(typing)
+        self.assertTrue(exp)
+        self.assertTrue(wb)
 
 
 if __name__ == "__main__":

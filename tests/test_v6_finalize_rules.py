@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6.finalize Rules 1–5."""
+"""Tests for xl_sheetagent.finalize Rules 1–5."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.finalize import finalize_sheet
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.finalize import finalize_sheet
+from xl_sheetagent.v6_models import (
     CoreRegion,
     FinalMapEntryParent,
     FinalMapEntryStandalone,

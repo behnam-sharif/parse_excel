@@ -11,17 +11,17 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.finalize import (
+from xl_sheetagent.finalize import (
     _merge_triggers,
     finalize_sheet,
 )
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.v6_models import (
     CoreRegion,
     FinalMapEntryParent,
     FinalMapEntryStandalone,
     V6ResolvedTable,
 )
-from xl_sheetagent_v6.table_resolver import (
+from xl_sheetagent.table_resolver import (
     _merge_trigger_lists,
     _wrap_triggers,
 )

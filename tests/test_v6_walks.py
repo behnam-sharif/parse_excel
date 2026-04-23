@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6 directional walks (upward_walk, leftward_walk)."""
+"""Tests for xl_sheetagent directional walks (upward_walk, leftward_walk)."""
 
 from __future__ import annotations
 
@@ -10,10 +10,10 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.upward_walk import walk_up_for_metadata
-from xl_sheetagent_v6.leftward_walk import walk_left_for_row_names
-from xl_sheetagent_v6.schemas import CoreRegion, RowTag, V6TableResult
-from xl_sheetagent_v6.config import XlSheetAgentV6Config
+from xl_sheetagent.upward_walk import walk_up_for_metadata
+from xl_sheetagent.leftward_walk import walk_left_for_row_names
+from xl_sheetagent.v6_models import CoreRegion, RowTag, V6TableResult
+from xl_sheetagent.config import XlSheetAgentV6Config
 
 
 def _make_config(**overrides) -> XlSheetAgentV6Config:
@@ -48,6 +48,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         detect_beside_header_title=True, beside_header_title_max_nonempty=3,
         core_formula_expansion_enabled=False, core_formula_expansion_ring=1,
         use_formula_view_for_types=True,
+        core_formula_expansion_allow_without_formula_typing=False,
         enable_finalize=False, finalize_title_max_chars=200,
         finalize_note_keywords=["source", "note", "*", "ref"],
         finalize_flatten_depth=1, finalize_emit_stats=True,

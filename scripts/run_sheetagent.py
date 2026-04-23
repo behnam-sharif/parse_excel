@@ -28,14 +28,6 @@ def main():
         ),
     )
     parser.add_argument(
-        "--v5",
-        action="store_true",
-        help=(
-            "Run the V5 pipeline (writes v5_sheetagent_output/). "
-            "V5 wraps V3a hierarchy + deterministic row tagging + selective LLM."
-        ),
-    )
-    parser.add_argument(
         "--v6",
         action="store_true",
         help=(
@@ -52,7 +44,7 @@ def main():
         pc = load_config()
         v6_cfg = sheetagent_v6_config_from_pipeline(pc)
 
-        from xl_sheetagent_v6 import run_v6_analysis
+        from xl_sheetagent import run_v6_analysis
 
         results = run_v6_analysis(
             run_id=args.run_id,
@@ -61,22 +53,6 @@ def main():
         )
         total = sum(len(r.tables) for r in results)
         print(f"xl_sheetagent (V6): {total} tables — see v6_sheetagent_output/")
-    elif args.v5:
-        from core.config import load_config
-        from core.stage_config import sheetagent_v5_config_from_pipeline
-
-        pc = load_config()
-        v5_cfg = sheetagent_v5_config_from_pipeline(pc)
-
-        from xl_sheetagent_v5 import run_v5_analysis
-
-        results = run_v5_analysis(
-            run_id=args.run_id,
-            output_base=args.output_base,
-            config=v5_cfg,
-        )
-        total = sum(len(r.tables) for r in results)
-        print(f"xl_sheetagent (V5): {total} tables — see v5_sheetagent_output/")
     else:
         from core.config import load_config
         from core.stage_config import sheetagent_config_from_pipeline

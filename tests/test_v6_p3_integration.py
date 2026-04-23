@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6 Phase 3: integration, resolution, exporter, orchestrator."""
+"""Tests for xl_sheetagent Phase 3: integration, resolution, exporter, orchestrator."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.config import XlSheetAgentV6Config
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.config import XlSheetAgentV6Config
+from xl_sheetagent.v6_models import (
     ConsumedMap,
     CoreRegion,
     V6ResolvedTable,
@@ -53,6 +53,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         detect_beside_header_title=True, beside_header_title_max_nonempty=3,
         core_formula_expansion_enabled=False, core_formula_expansion_ring=1,
         use_formula_view_for_types=True,
+        core_formula_expansion_allow_without_formula_typing=False,
         enable_finalize=False, finalize_title_max_chars=200,
         finalize_note_keywords=["source", "note", "*", "ref"],
         finalize_flatten_depth=1, finalize_emit_stats=True,
@@ -123,7 +124,7 @@ class TestResolverPromptBuilderImport(unittest.TestCase):
 
     def test_prompt_builder_import_resolves(self):
         """The try/except import in table_resolver should succeed now that prompt_builder exists."""
-        from xl_sheetagent_v6.prompt_builder import (
+        from xl_sheetagent.prompt_builder import (
             build_v6_metadata_prompt,
             parse_v6_metadata_response,
         )
@@ -132,7 +133,7 @@ class TestResolverPromptBuilderImport(unittest.TestCase):
 
     def test_table_resolver_imports_cleanly(self):
         """table_resolver module itself should import without error."""
-        import xl_sheetagent_v6.table_resolver as tr
+        import xl_sheetagent.table_resolver as tr
         self.assertTrue(hasattr(tr, "resolve_sheet_tables"))
 
 
@@ -144,14 +145,14 @@ class TestExporterLlmFields(unittest.TestCase):
     """Exporter must include llm_result and llm_gate_triggers in serialized output."""
 
     def test_serialize_table_with_no_llm(self):
-        from xl_sheetagent_v6.exporter import _serialize_table
+        from xl_sheetagent.exporter import _serialize_table
         table = _make_table_result()
         d = _serialize_table(table)
         self.assertIsNone(d["llm_result"])
         self.assertEqual(d["llm_gate_triggers"], [])
 
     def test_serialize_table_with_llm_result(self):
-        from xl_sheetagent_v6.exporter import _serialize_table
+        from xl_sheetagent.exporter import _serialize_table
         llm = {"table_role": "calc", "title": "Updated Title", "headers": None, "row_names": None}
         triggers = ["coverage_gap", "missing_header"]
         table = _make_table_result(llm_result=llm, llm_gate_triggers=triggers)
@@ -161,13 +162,13 @@ class TestExporterLlmFields(unittest.TestCase):
         self.assertEqual(d["llm_gate_triggers"], ["coverage_gap", "missing_header"])
 
     def test_serialize_resolved_table_metadata_source(self):
-        from xl_sheetagent_v6.exporter import _serialize_resolved_table
+        from xl_sheetagent.exporter import _serialize_resolved_table
         rt = _make_resolved_table(metadata_source="llm_per_bbox")
         d = _serialize_resolved_table(rt, export_mode="hierarchical")
         self.assertEqual(d["metadata_source"], "llm_per_bbox")
 
     def test_serialize_resolved_table_llm_metadata(self):
-        from xl_sheetagent_v6.exporter import _serialize_resolved_table
+        from xl_sheetagent.exporter import _serialize_resolved_table
         llm_meta = {"title": "LLM Title", "headers": [["X", "Y"]]}
         rt = _make_resolved_table(
             metadata_source="llm_reconciliation",
@@ -215,8 +216,8 @@ class TestConfigPipelineV6(unittest.TestCase):
     def test_pipeline_config_has_v6_section(self):
         from core.config import load_config
         pc = load_config()
-        self.assertTrue(hasattr(pc, "xl_sheetagent_v6"))
-        self.assertIsInstance(pc.xl_sheetagent_v6, dict)
+        self.assertTrue(hasattr(pc, "xl_sheetagent"))
+        self.assertIsInstance(pc.xl_sheetagent, dict)
 
     def test_stage_config_builder_exists(self):
         from core.stage_config import sheetagent_v6_config_from_pipeline
@@ -288,7 +289,7 @@ class TestExporterRoundTrip(unittest.TestCase):
     """Serialize V6RunResult to JSON and verify the structure."""
 
     def test_full_run_result_serialization(self):
-        from xl_sheetagent_v6.exporter import export_results
+        from xl_sheetagent.exporter import export_results
         import tempfile
 
         cfg = _make_config()
@@ -342,10 +343,10 @@ class TestExporterRoundTrip(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 class TestNoLegacySubstring(unittest.TestCase):
-    """No .py file in xl_sheetagent_v6/ should contain the string 'xl_kg'."""
+    """No .py file in xl_sheetagent/ should contain the string 'xl_kg'."""
 
     def test_no_xl_kg_in_v6(self):
-        v6_dir = _ROOT / "xl_sheetagent_v6"
+        v6_dir = _ROOT / "xl_sheetagent"
         violations = []
         for py_file in v6_dir.rglob("*.py"):
             text = py_file.read_text(encoding="utf-8", errors="replace")

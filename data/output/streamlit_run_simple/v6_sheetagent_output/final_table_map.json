@@ -1,4 +1,1206 @@
 {
+  "Inputs": {
+    "sheet_name": "Inputs",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_t70_t45",
+        "coordinates": "Inputs!B3:F47",
+        "bbox": {
+          "r1": 2,
+          "c1": 1,
+          "r2": 46,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": "Patient population",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child2",
+            "coordinates": "Inputs!B4:F6",
+            "bbox": {
+              "r1": 3,
+              "c1": 1,
+              "r2": 5,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Patient population",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Number of patients in the 1st year",
+              "Annual percentage change"
+            ],
+            "core_region": {
+              "r1": 4,
+              "c1": 2,
+              "r2": 5,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 4,
+                "col": 5,
+                "text": "Number of patients treated in the first year - This can be adjusted for different payers"
+              },
+              {
+                "row": 5,
+                "col": 5,
+                "text": "Assumption - This can be adjusted for different payers"
+              }
+            ],
+            "llm_gate_triggers": [
+              {
+                "name": "overlap",
+                "source": "raw_v6"
+              }
+            ],
+            "source_flags": [
+              "metadata_propagated_positional"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child3",
+            "coordinates": "Inputs!B7:F20",
+            "bbox": {
+              "r1": 6,
+              "c1": 1,
+              "r2": 19,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Market shares in world without InO",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "CHECK"
+            ],
+            "core_region": {
+              "r1": 7,
+              "c1": 2,
+              "r2": 19,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 7,
+                "col": 5,
+                "text": "Assumption validated with KOLs"
+              },
+              {
+                "row": 8,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 9,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 10,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 11,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 12,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 13,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 14,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 15,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 16,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 17,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 18,
+                "col": 5,
+                "text": "\"\""
+              }
+            ],
+            "llm_gate_triggers": [
+              {
+                "name": "overlap",
+                "source": "raw_v6"
+              }
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child4",
+            "coordinates": "Inputs!B21:F34",
+            "bbox": {
+              "r1": 20,
+              "c1": 1,
+              "r2": 33,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Market shares in world with InO",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "CHECK"
+            ],
+            "core_region": {
+              "r1": 21,
+              "c1": 2,
+              "r2": 33,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 21,
+                "col": 5,
+                "text": "Assumption validated with KOLs"
+              },
+              {
+                "row": 22,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 23,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 24,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 25,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 26,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 27,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 28,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 29,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 30,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 31,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 32,
+                "col": 5,
+                "text": "\"\""
+              }
+            ],
+            "llm_gate_triggers": [
+              {
+                "name": "overlap",
+                "source": "raw_v6"
+              }
+            ],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_t45_child5",
+            "coordinates": "Inputs!B35:F47",
+            "bbox": {
+              "r1": 34,
+              "c1": 1,
+              "r2": 46,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Annual drug costs",
+            "headers": [
+              [
+                "",
+                "Value used in the model",
+                "Default",
+                "User input",
+                "Description "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
+            ],
+            "core_region": {
+              "r1": 35,
+              "c1": 2,
+              "r2": 46,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Patient population"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 35,
+                "col": 5,
+                "text": "Detailed calculation in the cost-effectiveness model, based on Lebanon drug price list"
+              },
+              {
+                "row": 36,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 37,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 38,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 39,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 40,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 41,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 42,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 43,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 44,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 45,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 46,
+                "col": 5,
+                "text": "\"\""
+              }
+            ],
+            "llm_gate_triggers": [],
+            "source_flags": []
+          }
+        ],
+        "footnotes_notes_refs": [
+          {
+            "row": 2,
+            "col": 2,
+            "text": "Value used in the model"
+          },
+          {
+            "row": 2,
+            "col": 3,
+            "text": "Default"
+          },
+          {
+            "row": 2,
+            "col": 4,
+            "text": "User input"
+          },
+          {
+            "row": 2,
+            "col": 5,
+            "text": "Description"
+          }
+        ],
+        "llm_gate_triggers": [
+          {
+            "name": "ambiguous_inter_core_rows",
+            "source": "raw_v6"
+          },
+          {
+            "name": "overlap",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_t70_b45",
+        "coordinates": "Inputs!B49:N72",
+        "bbox": {
+          "r1": 48,
+          "c1": 1,
+          "r2": 71,
+          "c2": 13
+        },
+        "sheet_name": "Inputs",
+        "title": "Adverse events, frequencies (same as global models)",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_b45_child1",
+            "coordinates": "Inputs!B49:N60",
+            "bbox": {
+              "r1": 48,
+              "c1": 1,
+              "r2": 59,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": "Adverse events, frequencies (same as global models)",
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Neutropenia",
+              "Thrombocytopenia",
+              "Leukopenia",
+              "Febrile neutropenia",
+              "Anaemia",
+              "Lymphopenia",
+              "White blood cells decreased",
+              "Veno-occlusive liver disease on treatment",
+              "Cytokine release syndrome",
+              "Veno-occlusive liver disease after SCT",
+              "Graft-versus-host disease after SCT"
+            ],
+            "core_region": {
+              "r1": 49,
+              "c1": 2,
+              "r2": 59,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Adverse events, frequencies (same as global models)"
+            ],
+            "footnotes_notes_refs": [],
+            "llm_gate_triggers": [],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_t70_b45_child2",
+            "coordinates": "Inputs!B61:F72",
+            "bbox": {
+              "r1": 60,
+              "c1": 1,
+              "r2": 71,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Adverse events, costs",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default",
+                "User input"
+              ]
+            ],
+            "row_names": [
+              "Neutropenia",
+              "Thrombocytopenia",
+              "Leukopenia",
+              "Febrile neutropenia",
+              "Anaemia",
+              "Lymphopenia",
+              "White blood cells decreased",
+              "Veno-occlusive liver disease on treatment",
+              "Cytokine release syndrome",
+              "Veno-occlusive liver disease after SCT",
+              "Graft-versus-host disease after SCT"
+            ],
+            "core_region": {
+              "r1": 61,
+              "c1": 2,
+              "r2": 71,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Adverse events, frequencies (same as global models)"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 61,
+                "col": 5,
+                "text": "Assumption"
+              },
+              {
+                "row": 62,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 63,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 64,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 65,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 66,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 67,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 68,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 69,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 70,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 71,
+                "col": 5,
+                "text": "\"\""
+              }
+            ],
+            "llm_gate_triggers": [
+              {
+                "name": "overlap",
+                "source": "raw_v6"
+              }
+            ],
+            "source_flags": []
+          }
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "ambiguous_inter_core_rows",
+            "source": "raw_v6"
+          },
+          {
+            "name": "overlap",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "parent",
+        "table_id": "9814fc53f594ba29_t118_b70_t46",
+        "coordinates": "Inputs!B74:N118",
+        "bbox": {
+          "r1": 73,
+          "c1": 1,
+          "r2": 117,
+          "c2": 13
+        },
+        "sheet_name": "Inputs",
+        "title": "Hospitalization",
+        "parent_path": [
+          "Inputs"
+        ],
+        "children": [
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
+            "coordinates": "Inputs!B75:N79",
+            "bbox": {
+              "r1": 74,
+              "c1": 1,
+              "r2": 78,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": null,
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab",
+              "Blinatumomab (set to 0%)",
+              "Chemotherapy",
+              "TKI"
+            ],
+            "core_region": {
+              "r1": 75,
+              "c1": 2,
+              "r2": 78,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "footnotes_notes_refs": [],
+            "llm_gate_triggers": [],
+            "source_flags": [
+              "metadata_propagated_positional",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
+            "coordinates": "Inputs!B81:N85",
+            "bbox": {
+              "r1": 80,
+              "c1": 1,
+              "r2": 84,
+              "c2": 13
+            },
+            "sheet_name": "Inputs",
+            "title": null,
+            "headers": [
+              [
+                "Inotuzumab Ozogamicin ",
+                "FLAG-Ida ",
+                "FLAG ",
+                "Mitoxantrone and cytarabine",
+                "HIDAC ",
+                "DVP-Asp ",
+                "DVP-Asp+Cyclo",
+                "hCVAD+MTX ",
+                "Blinatumomab ",
+                "TKI (Ponatinib)",
+                "TKI + vincristine",
+                "Clofarabine "
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab",
+              "Blinatumomab (set to 0%)",
+              "Chemotherapy",
+              "TKI"
+            ],
+            "core_region": {
+              "r1": 81,
+              "c1": 2,
+              "r2": 84,
+              "c2": 13
+            },
+            "node_type": "input",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "footnotes_notes_refs": [],
+            "llm_gate_triggers": [],
+            "source_flags": [
+              "metadata_propagated_positional",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child5",
+            "coordinates": "Inputs!B86:F90",
+            "bbox": {
+              "r1": 85,
+              "c1": 1,
+              "r2": 89,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Subsequent treatment costs",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default",
+                "User input"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "Blinatumomab",
+              "Chemotherapy",
+              "TKI (Ponatinib)"
+            ],
+            "core_region": {
+              "r1": 86,
+              "c1": 2,
+              "r2": 89,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 86,
+                "col": 5,
+                "text": "Calculations are based on an average body surface area of 1.88m2 (INO Phase III trial) and weight of 76.9 kg (INO Phase III trial). For INO, on average 8.9 vials are provided"
+              },
+              {
+                "row": 87,
+                "col": 5,
+                "text": "Detailed calculation in the adapted cost-effectiveness model"
+              },
+              {
+                "row": 88,
+                "col": 5,
+                "text": "Costs are assumed to be equal to average weighted costs of Investigator's choice treatments (FLAG, Mitoxantrone + Cytarabine, HIDAC), detailed calculation in the cost-effectiveness model"
+              },
+              {
+                "row": 89,
+                "col": 5,
+                "text": "Detailed calculation in the cost-effectiveness model"
+              }
+            ],
+            "llm_gate_triggers": [],
+            "source_flags": []
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child7",
+            "coordinates": "Inputs!B92:F105",
+            "bbox": {
+              "r1": 91,
+              "c1": 1,
+              "r2": 104,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "Number of bed days",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default",
+                "User input"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Cost of bed days"
+            ],
+            "core_region": {
+              "r1": 92,
+              "c1": 2,
+              "r2": 104,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 92,
+                "col": 5,
+                "text": "Same as global models"
+              },
+              {
+                "row": 93,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 94,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 95,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 96,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 97,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 98,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 99,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 100,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 101,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 102,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 103,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 104,
+                "col": 5,
+                "text": "Assumption"
+              }
+            ],
+            "llm_gate_triggers": [
+              {
+                "name": "overlap",
+                "source": "raw_v6"
+              }
+            ],
+            "source_flags": [
+              "metadata_propagated_positional"
+            ]
+          },
+          {
+            "table_id": "9814fc53f594ba29_t118_b70_t46_child8",
+            "coordinates": "Inputs!B106:F118",
+            "bbox": {
+              "r1": 105,
+              "c1": 1,
+              "r2": 117,
+              "c2": 5
+            },
+            "sheet_name": "Inputs",
+            "title": "SCT rates after induction therapy",
+            "headers": [
+              [
+                "Value used in the model",
+                "Default",
+                "User input"
+              ]
+            ],
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine"
+            ],
+            "core_region": {
+              "r1": 106,
+              "c1": 2,
+              "r2": 117,
+              "c2": 4
+            },
+            "node_type": "mixed",
+            "parent_path": [
+              "Inputs",
+              "Hospitalization"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 106,
+                "col": 5,
+                "text": "Same as global models"
+              },
+              {
+                "row": 107,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 108,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 109,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 110,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 111,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 112,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 113,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 114,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 115,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 116,
+                "col": 5,
+                "text": "\"\""
+              },
+              {
+                "row": 117,
+                "col": 5,
+                "text": "\"\""
+              }
+            ],
+            "llm_gate_triggers": [],
+            "source_flags": []
+          }
+        ],
+        "footnotes_notes_refs": [
+          {
+            "row": 73,
+            "col": 1,
+            "text": "Subsequent treatments in world without InO"
+          },
+          {
+            "row": 73,
+            "col": 5,
+            "text": "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments"
+          },
+          {
+            "row": 79,
+            "col": 1,
+            "text": "Subsequent treatments in world with InO"
+          },
+          {
+            "row": 79,
+            "col": 5,
+            "text": "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments"
+          },
+          {
+            "row": 90,
+            "col": 1,
+            "text": "Hospitalization"
+          }
+        ],
+        "llm_gate_triggers": [
+          {
+            "name": "ambiguous_inter_core_rows",
+            "source": "raw_v6"
+          },
+          {
+            "name": "overlap",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": []
+      },
+      {
+        "kind": "standalone",
+        "table_id": "9814fc53f594ba29_t118_b70_b46",
+        "coordinates": "Inputs!B120:F120",
+        "bbox": {
+          "r1": 119,
+          "c1": 1,
+          "r2": 119,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": null,
+        "headers": [
+          [
+            "Value used in the model",
+            "Default",
+            "User input"
+          ]
+        ],
+        "row_names": [
+          "SCT costs"
+        ],
+        "core_region": {
+          "r1": 119,
+          "c1": 2,
+          "r2": 119,
+          "c2": 4
+        },
+        "node_type": "mixed",
+        "parent_path": [
+          "Inputs"
+        ],
+        "footnotes_notes_refs": [
+          {
+            "row": 119,
+            "col": 5,
+            "text": "Assumption"
+          }
+        ],
+        "llm_gate_triggers": [
+          {
+            "name": "overlap",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "title_missing"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "9814fc53f594ba29_b118",
+        "coordinates": "Inputs!B122:F122",
+        "bbox": {
+          "r1": 121,
+          "c1": 1,
+          "r2": 121,
+          "c2": 5
+        },
+        "sheet_name": "Inputs",
+        "title": null,
+        "headers": [
+          [
+            "Value used in the model",
+            "Default",
+            "User input"
+          ]
+        ],
+        "row_names": [
+          "End-of-life costs"
+        ],
+        "core_region": {
+          "r1": 121,
+          "c1": 2,
+          "r2": 121,
+          "c2": 4
+        },
+        "node_type": "mixed",
+        "parent_path": [
+          "Inputs"
+        ],
+        "footnotes_notes_refs": [
+          {
+            "row": 121,
+            "col": 5,
+            "text": "Assumption"
+          }
+        ],
+        "llm_gate_triggers": [
+          {
+            "name": "overlap",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "title_missing"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 2,
+      "parent_count": 3,
+      "total_children": 11,
+      "flag_frequency": {
+        "metadata_propagated_positional": 4,
+        "title_missing": 4
+      }
+    }
+  },
   "Introduction": {
     "sheet_name": "Introduction",
     "finalize_version": "v6-finalize-mvp",
@@ -163,1236 +1365,6 @@
       }
     }
   },
-  "Inputs": {
-    "sheet_name": "Inputs",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_t118_t70_t45",
-        "coordinates": "Inputs!B3:F47",
-        "bbox": {
-          "r1": 2,
-          "c1": 1,
-          "r2": 46,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": "Patient population",
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_t45_child2",
-            "coordinates": "Inputs!B4:F6",
-            "bbox": {
-              "r1": 3,
-              "c1": 1,
-              "r2": 5,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Patient population",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Number of patients in the 1st year",
-              "Annual percentage change"
-            ],
-            "core_region": {
-              "r1": 4,
-              "c1": 2,
-              "r2": 5,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 4,
-                "col": 5,
-                "text": "Number of patients treated in the first year - This can be adjusted for different payers"
-              },
-              {
-                "row": 5,
-                "col": 5,
-                "text": "Assumption - This can be adjusted for different payers"
-              }
-            ],
-            "llm_gate_triggers": [
-              {
-                "name": "overlap",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": [
-              "metadata_propagated_positional"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_t45_child3",
-            "coordinates": "Inputs!B7:F20",
-            "bbox": {
-              "r1": 6,
-              "c1": 1,
-              "r2": 19,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Market shares in world without InO",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "CHECK"
-            ],
-            "core_region": {
-              "r1": 7,
-              "c1": 2,
-              "r2": 19,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 7,
-                "col": 5,
-                "text": "Assumption validated with KOLs"
-              },
-              {
-                "row": 8,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 9,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 10,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 11,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 12,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 13,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 14,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 15,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 16,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 17,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 18,
-                "col": 5,
-                "text": "\"\""
-              }
-            ],
-            "llm_gate_triggers": [
-              {
-                "name": "overlap",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_t45_child4",
-            "coordinates": "Inputs!B21:F34",
-            "bbox": {
-              "r1": 20,
-              "c1": 1,
-              "r2": 33,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Market shares in world with InO",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "CHECK"
-            ],
-            "core_region": {
-              "r1": 21,
-              "c1": 2,
-              "r2": 33,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 21,
-                "col": 5,
-                "text": "Assumption validated with KOLs"
-              },
-              {
-                "row": 22,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 23,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 24,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 25,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 26,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 27,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 28,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 29,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 30,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 31,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 32,
-                "col": 5,
-                "text": "\"\""
-              }
-            ],
-            "llm_gate_triggers": [
-              {
-                "name": "overlap",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_t45_child5",
-            "coordinates": "Inputs!B35:F47",
-            "bbox": {
-              "r1": 34,
-              "c1": 1,
-              "r2": 46,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Annual drug costs",
-            "headers": [
-              [
-                "",
-                "Value used in the model",
-                "Default",
-                "User input",
-                "Description "
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine"
-            ],
-            "core_region": {
-              "r1": 35,
-              "c1": 2,
-              "r2": 46,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Patient population"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 35,
-                "col": 5,
-                "text": "Detailed calculation in the cost-effectiveness model, based on Lebanon drug price list"
-              },
-              {
-                "row": 36,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 37,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 38,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 39,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 40,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 41,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 42,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 43,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 44,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 45,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 46,
-                "col": 5,
-                "text": "\"\""
-              }
-            ],
-            "llm_gate_triggers": [],
-            "source_flags": []
-          }
-        ],
-        "footnotes_notes_refs": [
-          {
-            "row": 2,
-            "col": 2,
-            "text": "Value used in the model"
-          },
-          {
-            "row": 2,
-            "col": 3,
-            "text": "Default"
-          },
-          {
-            "row": 2,
-            "col": 4,
-            "text": "User input"
-          },
-          {
-            "row": 2,
-            "col": 5,
-            "text": "Description"
-          }
-        ],
-        "llm_gate_triggers": [
-          {
-            "name": "multi_core_ambiguity",
-            "source": "raw_v6"
-          },
-          {
-            "name": "ambiguous_inter_core_rows",
-            "source": "raw_v6"
-          },
-          {
-            "name": "overlap",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_t118_t70_b45",
-        "coordinates": "Inputs!B49:N72",
-        "bbox": {
-          "r1": 48,
-          "c1": 1,
-          "r2": 71,
-          "c2": 13
-        },
-        "sheet_name": "Inputs",
-        "title": null,
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_b45_child1",
-            "coordinates": "Inputs!B49:N60",
-            "bbox": {
-              "r1": 48,
-              "c1": 1,
-              "r2": 59,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": null,
-            "headers": [
-              [
-                "Value used in the model",
-                "Default",
-                "User input"
-              ]
-            ],
-            "row_names": [
-              "Adverse events, frequencies (same as global models)",
-              "Neutropenia",
-              "Thrombocytopenia",
-              "Leukopenia",
-              "Febrile neutropenia",
-              "Anaemia",
-              "Lymphopenia",
-              "White blood cells decreased",
-              "Veno-occlusive liver disease on treatment",
-              "Cytokine release syndrome",
-              "Veno-occlusive liver disease after SCT",
-              "Graft-versus-host disease after SCT"
-            ],
-            "core_region": {
-              "r1": 49,
-              "c1": 2,
-              "r2": 59,
-              "c2": 13
-            },
-            "node_type": "mixed",
-            "parent_path": [
-              "Inputs"
-            ],
-            "footnotes_notes_refs": [],
-            "llm_gate_triggers": [
-              {
-                "name": "missing_header",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": [
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_t70_b45_child2",
-            "coordinates": "Inputs!B61:F72",
-            "bbox": {
-              "r1": 60,
-              "c1": 1,
-              "r2": 71,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Adverse events, costs",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default",
-                "User input"
-              ]
-            ],
-            "row_names": [
-              "Neutropenia",
-              "Thrombocytopenia",
-              "Leukopenia",
-              "Febrile neutropenia",
-              "Anaemia",
-              "Lymphopenia",
-              "White blood cells decreased",
-              "Veno-occlusive liver disease on treatment",
-              "Cytokine release syndrome",
-              "Veno-occlusive liver disease after SCT",
-              "Graft-versus-host disease after SCT"
-            ],
-            "core_region": {
-              "r1": 61,
-              "c1": 2,
-              "r2": 71,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 61,
-                "col": 5,
-                "text": "Assumption"
-              },
-              {
-                "row": 62,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 63,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 64,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 65,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 66,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 67,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 68,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 69,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 70,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 71,
-                "col": 5,
-                "text": "\"\""
-              }
-            ],
-            "llm_gate_triggers": [
-              {
-                "name": "overlap",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": []
-          }
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          },
-          {
-            "name": "ambiguous_inter_core_rows",
-            "source": "raw_v6"
-          },
-          {
-            "name": "overlap",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "parent",
-        "table_id": "9814fc53f594ba29_t118_b70_t46",
-        "coordinates": "Inputs!B74:N118",
-        "bbox": {
-          "r1": 73,
-          "c1": 1,
-          "r2": 117,
-          "c2": 13
-        },
-        "sheet_name": "Inputs",
-        "title": "Hospitalization",
-        "parent_path": [
-          "Inputs"
-        ],
-        "children": [
-          {
-            "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
-            "coordinates": "Inputs!B75:N79",
-            "bbox": {
-              "r1": 74,
-              "c1": 1,
-              "r2": 78,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": null,
-            "headers": [
-              [
-                "Subsequent treatments in world without InO ",
-                "",
-                "",
-                "",
-                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab",
-              "Blinatumomab (set to 0%)",
-              "Chemotherapy",
-              "TKI"
-            ],
-            "core_region": {
-              "r1": 74,
-              "c1": 2,
-              "r2": 78,
-              "c2": 13
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "footnotes_notes_refs": [],
-            "llm_gate_triggers": [
-              {
-                "name": "missing_header",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": [
-              "metadata_propagated_positional",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
-            "coordinates": "Inputs!B81:N85",
-            "bbox": {
-              "r1": 80,
-              "c1": 1,
-              "r2": 84,
-              "c2": 13
-            },
-            "sheet_name": "Inputs",
-            "title": null,
-            "headers": [
-              [
-                "Subsequent treatments in world without InO ",
-                "",
-                "",
-                "",
-                "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments ",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab",
-              "Blinatumomab (set to 0%)",
-              "Chemotherapy",
-              "TKI"
-            ],
-            "core_region": {
-              "r1": 80,
-              "c1": 2,
-              "r2": 84,
-              "c2": 13
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "footnotes_notes_refs": [],
-            "llm_gate_triggers": [
-              {
-                "name": "missing_header",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": [
-              "metadata_propagated_positional",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_b70_t46_child5",
-            "coordinates": "Inputs!B86:F90",
-            "bbox": {
-              "r1": 85,
-              "c1": 1,
-              "r2": 89,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Subsequent treatment costs",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default",
-                "User input"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "Blinatumomab",
-              "Chemotherapy",
-              "TKI (Ponatinib)"
-            ],
-            "core_region": {
-              "r1": 86,
-              "c1": 2,
-              "r2": 89,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 86,
-                "col": 5,
-                "text": "Calculations are based on an average body surface area of 1.88m2 (INO Phase III trial) and weight of 76.9 kg (INO Phase III trial). For INO, on average 8.9 vials are provided"
-              },
-              {
-                "row": 87,
-                "col": 5,
-                "text": "Detailed calculation in the adapted cost-effectiveness model"
-              },
-              {
-                "row": 88,
-                "col": 5,
-                "text": "Costs are assumed to be equal to average weighted costs of Investigator's choice treatments (FLAG, Mitoxantrone + Cytarabine, HIDAC), detailed calculation in the cost-effectiveness model"
-              },
-              {
-                "row": 89,
-                "col": 5,
-                "text": "Detailed calculation in the cost-effectiveness model"
-              }
-            ],
-            "llm_gate_triggers": [],
-            "source_flags": []
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_b70_t46_child7",
-            "coordinates": "Inputs!B92:F105",
-            "bbox": {
-              "r1": 91,
-              "c1": 1,
-              "r2": 104,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "Number of bed days",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default",
-                "User input"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine",
-              "Cost of bed days"
-            ],
-            "core_region": {
-              "r1": 92,
-              "c1": 2,
-              "r2": 104,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 92,
-                "col": 5,
-                "text": "Same as global models"
-              },
-              {
-                "row": 93,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 94,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 95,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 96,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 97,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 98,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 99,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 100,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 101,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 102,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 103,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 104,
-                "col": 5,
-                "text": "Assumption"
-              }
-            ],
-            "llm_gate_triggers": [
-              {
-                "name": "overlap",
-                "source": "raw_v6"
-              }
-            ],
-            "source_flags": [
-              "metadata_propagated_positional"
-            ]
-          },
-          {
-            "table_id": "9814fc53f594ba29_t118_b70_t46_child8",
-            "coordinates": "Inputs!B106:F118",
-            "bbox": {
-              "r1": 105,
-              "c1": 1,
-              "r2": 117,
-              "c2": 5
-            },
-            "sheet_name": "Inputs",
-            "title": "SCT rates after induction therapy",
-            "headers": [
-              [
-                "Value used in the model",
-                "Default",
-                "User input"
-              ]
-            ],
-            "row_names": [
-              "Inotuzumab Ozogamicin",
-              "FLAG-Ida",
-              "FLAG",
-              "Mitoxantrone and cytarabine",
-              "HIDAC",
-              "DVP-Asp",
-              "DVP-Asp+Cyclo",
-              "hCVAD+MTX",
-              "Blinatumomab",
-              "TKI (Ponatinib)",
-              "TKI + vincristine",
-              "Clofarabine"
-            ],
-            "core_region": {
-              "r1": 106,
-              "c1": 2,
-              "r2": 117,
-              "c2": 4
-            },
-            "node_type": "calc",
-            "parent_path": [
-              "Inputs",
-              "Hospitalization"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 106,
-                "col": 5,
-                "text": "Same as global models"
-              },
-              {
-                "row": 107,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 108,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 109,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 110,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 111,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 112,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 113,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 114,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 115,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 116,
-                "col": 5,
-                "text": "\"\""
-              },
-              {
-                "row": 117,
-                "col": 5,
-                "text": "\"\""
-              }
-            ],
-            "llm_gate_triggers": [],
-            "source_flags": []
-          }
-        ],
-        "footnotes_notes_refs": [
-          {
-            "row": 73,
-            "col": 1,
-            "text": "Subsequent treatments in world without InO"
-          },
-          {
-            "row": 73,
-            "col": 5,
-            "text": "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments"
-          },
-          {
-            "row": 79,
-            "col": 1,
-            "text": "Subsequent treatments in world with InO"
-          },
-          {
-            "row": 79,
-            "col": 5,
-            "text": "Same as the global models except for BLINA. Since BLINA is not available in Lebanon we assumed that BLINA shares will be distributed to other treatments"
-          },
-          {
-            "row": 90,
-            "col": 1,
-            "text": "Hospitalization"
-          }
-        ],
-        "llm_gate_triggers": [
-          {
-            "name": "multi_core_ambiguity",
-            "source": "raw_v6"
-          },
-          {
-            "name": "ambiguous_inter_core_rows",
-            "source": "raw_v6"
-          },
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          },
-          {
-            "name": "overlap",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": []
-      },
-      {
-        "kind": "standalone",
-        "table_id": "9814fc53f594ba29_t118_b70_b46",
-        "coordinates": "Inputs!B120:F120",
-        "bbox": {
-          "r1": 119,
-          "c1": 1,
-          "r2": 119,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": null,
-        "headers": [
-          [
-            "",
-            "",
-            ""
-          ]
-        ],
-        "row_names": [
-          "SCT costs"
-        ],
-        "core_region": {
-          "r1": 119,
-          "c1": 2,
-          "r2": 119,
-          "c2": 4
-        },
-        "node_type": "calc",
-        "parent_path": [
-          "Inputs"
-        ],
-        "footnotes_notes_refs": [
-          {
-            "row": 119,
-            "col": 5,
-            "text": "Assumption"
-          }
-        ],
-        "llm_gate_triggers": [
-          {
-            "name": "overlap",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "title_missing",
-          "header_missing"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "9814fc53f594ba29_b118",
-        "coordinates": "Inputs!B122:F122",
-        "bbox": {
-          "r1": 121,
-          "c1": 1,
-          "r2": 121,
-          "c2": 5
-        },
-        "sheet_name": "Inputs",
-        "title": null,
-        "headers": [
-          [
-            "",
-            "",
-            ""
-          ]
-        ],
-        "row_names": [
-          "End-of-life costs"
-        ],
-        "core_region": {
-          "r1": 121,
-          "c1": 2,
-          "r2": 121,
-          "c2": 4
-        },
-        "node_type": "calc",
-        "parent_path": [
-          "Inputs"
-        ],
-        "footnotes_notes_refs": [
-          {
-            "row": 121,
-            "col": 5,
-            "text": "Assumption"
-          }
-        ],
-        "llm_gate_triggers": [
-          {
-            "name": "overlap",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "title_missing",
-          "header_missing"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 2,
-      "parent_count": 3,
-      "total_children": 11,
-      "flag_frequency": {
-        "metadata_propagated_positional": 4,
-        "title_missing": 5,
-        "header_missing": 2
-      }
-    }
-  },
   "Results": {
     "sheet_name": "Results",
     "finalize_version": "v6-finalize-mvp",
@@ -1417,14 +1389,21 @@
             "Budget impact"
           ]
         ],
-        "row_names": null,
+        "row_names": [
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "Total"
+        ],
         "core_region": {
           "r1": 4,
-          "c1": 1,
+          "c1": 2,
           "r2": 9,
           "c2": 4
         },
-        "node_type": "output",
+        "node_type": "input",
         "parent_path": [
           "Results"
         ],
@@ -1438,7 +1417,7 @@
         "source_flags": [
           "merged_from_metadata_and_numeric_child",
           "title_missing",
-          "rowname_missing"
+          "rowname_sequence"
         ]
       },
       {
@@ -1455,7 +1434,6 @@
         "title": null,
         "headers": [
           [
-            "",
             "Without InO",
             "Without InO",
             "Without InO",
@@ -1468,7 +1446,6 @@
             "With InO"
           ],
           [
-            "",
             "2020",
             "2021",
             "2022",
@@ -1481,14 +1458,23 @@
             "2024"
           ]
         ],
-        "row_names": null,
+        "row_names": [
+          "Drug costs",
+          "Adverse events costs",
+          "Subsequent treatment costs",
+          "Hospitalization costs",
+          "SCT costs",
+          "End-of-life costs",
+          "Total",
+          "Annual budget impact"
+        ],
         "core_region": {
           "r1": 49,
-          "c1": 1,
+          "c1": 2,
           "r2": 56,
           "c2": 11
         },
-        "node_type": "output",
+        "node_type": "input",
         "parent_path": [
           "Results"
         ],
@@ -1503,7 +1489,7 @@
           "merged_from_metadata_and_numeric_child",
           "header_conflict",
           "title_missing",
-          "rowname_missing"
+          "header_sequence"
         ]
       },
       {
@@ -1533,7 +1519,7 @@
           "r2": 63,
           "c2": 11
         },
-        "node_type": "calc",
+        "node_type": "input",
         "parent_path": [
           "Results"
         ],
@@ -1557,8 +1543,9 @@
       "flag_frequency": {
         "merged_from_metadata_and_numeric_child": 2,
         "title_missing": 3,
-        "rowname_missing": 2,
+        "rowname_sequence": 1,
         "header_conflict": 1,
+        "header_sequence": 1,
         "header_missing": 1
       }
     }
@@ -1613,7 +1600,7 @@
               "r2": 3,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1625,7 +1612,9 @@
                 "source": "raw_v6"
               }
             ],
-            "source_flags": []
+            "source_flags": [
+              "header_sequence"
+            ]
           },
           {
             "table_id": "94c8c58d611b9e70_t103_child2",
@@ -1647,14 +1636,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Market shares (Total)"
+            ],
             "core_region": {
               "r1": 7,
-              "c1": 1,
+              "c1": 2,
               "r2": 19,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1662,7 +1665,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1685,14 +1688,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of treatment"
+            ],
             "core_region": {
               "r1": 21,
-              "c1": 1,
+              "c1": 2,
               "r2": 33,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1700,7 +1717,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1723,14 +1740,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of adverse events on treatment"
+            ],
             "core_region": {
               "r1": 35,
-              "c1": 1,
+              "c1": 2,
               "r2": 47,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1738,7 +1769,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1761,14 +1792,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of Subsequent treatment costs"
+            ],
             "core_region": {
               "r1": 49,
-              "c1": 1,
+              "c1": 2,
               "r2": 61,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1776,7 +1821,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1799,14 +1844,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of hospitalization"
+            ],
             "core_region": {
               "r1": 63,
-              "c1": 1,
+              "c1": 2,
               "r2": 75,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1814,7 +1873,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1837,14 +1896,28 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Costs of an allogeneic stem cell transplant"
+            ],
             "core_region": {
               "r1": 77,
-              "c1": 1,
+              "c1": 2,
               "r2": 89,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
@@ -1852,7 +1925,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           },
           {
@@ -1875,383 +1948,37 @@
                 "2024"
               ]
             ],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total end-of-life costs",
+              "Total costs in world without InO"
+            ],
             "core_region": {
               "r1": 91,
-              "c1": 1,
-              "r2": 102,
-              "c2": 1
+              "c1": 3,
+              "r2": 104,
+              "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "BIM calculation"
             ],
-            "footnotes_notes_refs": [
-              {
-                "row": 91,
-                "col": 3,
-                "text": "0"
-              },
-              {
-                "row": 91,
-                "col": 4,
-                "text": "0"
-              },
-              {
-                "row": 91,
-                "col": 5,
-                "text": "0"
-              },
-              {
-                "row": 91,
-                "col": 6,
-                "text": "0"
-              },
-              {
-                "row": 91,
-                "col": 7,
-                "text": "0"
-              },
-              {
-                "row": 92,
-                "col": 3,
-                "text": "2181.968748454776"
-              },
-              {
-                "row": 92,
-                "col": 4,
-                "text": "2648.7843231470574"
-              },
-              {
-                "row": 92,
-                "col": 5,
-                "text": "2810.8926724269645"
-              },
-              {
-                "row": 92,
-                "col": 6,
-                "text": "2882.1635971671853"
-              },
-              {
-                "row": 92,
-                "col": 7,
-                "text": "2894.9274285723714"
-              },
-              {
-                "row": 93,
-                "col": 3,
-                "text": "2181.968748454776"
-              },
-              {
-                "row": 93,
-                "col": 4,
-                "text": "2648.7843231470574"
-              },
-              {
-                "row": 93,
-                "col": 5,
-                "text": "2810.8926724269645"
-              },
-              {
-                "row": 93,
-                "col": 6,
-                "text": "2882.1635971671853"
-              },
-              {
-                "row": 93,
-                "col": 7,
-                "text": "2894.9274285723714"
-              },
-              {
-                "row": 94,
-                "col": 3,
-                "text": "2181.968748454776"
-              },
-              {
-                "row": 94,
-                "col": 4,
-                "text": "2648.7843231470574"
-              },
-              {
-                "row": 94,
-                "col": 5,
-                "text": "2810.8926724269645"
-              },
-              {
-                "row": 94,
-                "col": 6,
-                "text": "2882.1635971671853"
-              },
-              {
-                "row": 94,
-                "col": 7,
-                "text": "2894.9274285723714"
-              },
-              {
-                "row": 95,
-                "col": 3,
-                "text": "872.7874993819104"
-              },
-              {
-                "row": 95,
-                "col": 4,
-                "text": "1059.5137292588233"
-              },
-              {
-                "row": 95,
-                "col": 5,
-                "text": "1124.357068970786"
-              },
-              {
-                "row": 95,
-                "col": 6,
-                "text": "1152.8654388668745"
-              },
-              {
-                "row": 95,
-                "col": 7,
-                "text": "1157.9709714289488"
-              },
-              {
-                "row": 96,
-                "col": 3,
-                "text": "4363.937496909552"
-              },
-              {
-                "row": 96,
-                "col": 4,
-                "text": "5297.568646294115"
-              },
-              {
-                "row": 96,
-                "col": 5,
-                "text": "5621.785344853929"
-              },
-              {
-                "row": 96,
-                "col": 6,
-                "text": "5764.327194334371"
-              },
-              {
-                "row": 96,
-                "col": 7,
-                "text": "5789.854857144743"
-              },
-              {
-                "row": 97,
-                "col": 3,
-                "text": "9600.662493201013"
-              },
-              {
-                "row": 97,
-                "col": 4,
-                "text": "11654.651021847054"
-              },
-              {
-                "row": 97,
-                "col": 5,
-                "text": "12367.927758678645"
-              },
-              {
-                "row": 97,
-                "col": 6,
-                "text": "12681.519827535616"
-              },
-              {
-                "row": 97,
-                "col": 7,
-                "text": "12737.680685718435"
-              },
-              {
-                "row": 98,
-                "col": 3,
-                "text": "17455.749987638206"
-              },
-              {
-                "row": 98,
-                "col": 4,
-                "text": "21190.27458517646"
-              },
-              {
-                "row": 98,
-                "col": 5,
-                "text": "22487.141379415716"
-              },
-              {
-                "row": 98,
-                "col": 6,
-                "text": "23057.308777337483"
-              },
-              {
-                "row": 98,
-                "col": 7,
-                "text": "23159.41942857897"
-              },
-              {
-                "row": 99,
-                "col": 3,
-                "text": "9765"
-              },
-              {
-                "row": 99,
-                "col": 4,
-                "text": "13243.92161573529"
-              },
-              {
-                "row": 99,
-                "col": 5,
-                "text": "14054.463362134826"
-              },
-              {
-                "row": 99,
-                "col": 6,
-                "text": "14410.81798583593"
-              },
-              {
-                "row": 99,
-                "col": 7,
-                "text": "14474.637142861862"
-              },
-              {
-                "row": 100,
-                "col": 3,
-                "text": "0"
-              },
-              {
-                "row": 100,
-                "col": 4,
-                "text": "0"
-              },
-              {
-                "row": 100,
-                "col": 5,
-                "text": "0"
-              },
-              {
-                "row": 100,
-                "col": 6,
-                "text": "0"
-              },
-              {
-                "row": 100,
-                "col": 7,
-                "text": "0"
-              },
-              {
-                "row": 101,
-                "col": 3,
-                "text": "0"
-              },
-              {
-                "row": 101,
-                "col": 4,
-                "text": "0"
-              },
-              {
-                "row": 101,
-                "col": 5,
-                "text": "0"
-              },
-              {
-                "row": 101,
-                "col": 6,
-                "text": "0"
-              },
-              {
-                "row": 101,
-                "col": 7,
-                "text": "0"
-              },
-              {
-                "row": 102,
-                "col": 3,
-                "text": "4800.331246600506"
-              },
-              {
-                "row": 102,
-                "col": 4,
-                "text": "5827.325510923527"
-              },
-              {
-                "row": 102,
-                "col": 5,
-                "text": "6183.963879339322"
-              },
-              {
-                "row": 102,
-                "col": 6,
-                "text": "6340.759913767808"
-              },
-              {
-                "row": 102,
-                "col": 7,
-                "text": "6368.840342859217"
-              },
-              {
-                "row": 103,
-                "col": 1,
-                "text": "Total end-of-life costs"
-              },
-              {
-                "row": 103,
-                "col": 3,
-                "text": "53404.374969095516"
-              },
-              {
-                "row": 103,
-                "col": 4,
-                "text": "66219.60807867645"
-              },
-              {
-                "row": 103,
-                "col": 5,
-                "text": "70272.31681067412"
-              },
-              {
-                "row": 103,
-                "col": 6,
-                "text": "72054.08992917964"
-              },
-              {
-                "row": 103,
-                "col": 7,
-                "text": "72373.1857143093"
-              },
-              {
-                "row": 104,
-                "col": 1,
-                "text": "Total costs in world without InO"
-              },
-              {
-                "row": 104,
-                "col": 3,
-                "text": "1909813.415472605"
-              },
-              {
-                "row": 104,
-                "col": 4,
-                "text": "1922628.648582186"
-              },
-              {
-                "row": 104,
-                "col": 5,
-                "text": "1926681.3573141836"
-              },
-              {
-                "row": 104,
-                "col": 6,
-                "text": "1928463.1304326893"
-              },
-              {
-                "row": 104,
-                "col": 7,
-                "text": "1928782.226217819"
-              }
-            ],
+            "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "rowname_missing"
+              "header_sequence"
             ]
           }
         ],
@@ -2259,10 +1986,6 @@
         "llm_gate_triggers": [
           {
             "name": "core_validation_ambiguous",
-            "source": "raw_v6"
-          },
-          {
-            "name": "multi_core_ambiguity",
             "source": "raw_v6"
           },
           {
@@ -2327,7 +2050,8 @@
         ],
         "source_flags": [
           "merged_from_metadata_and_numeric_child",
-          "header_conflict"
+          "header_conflict",
+          "rowname_sequence"
         ]
       },
       {
@@ -2365,7 +2089,7 @@
               "r2": 21,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2407,7 +2131,7 @@
               "r2": 27,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2449,7 +2173,7 @@
               "r2": 27,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -2491,7 +2215,7 @@
               "r2": 27,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -2611,7 +2335,7 @@
               "r2": 29,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2653,7 +2377,7 @@
               "r2": 35,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2695,7 +2419,7 @@
               "r2": 35,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -2737,7 +2461,7 @@
               "r2": 35,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -2852,7 +2576,7 @@
               "r2": 37,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2894,7 +2618,7 @@
               "r2": 43,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -2936,7 +2660,7 @@
               "r2": 43,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -2978,7 +2702,7 @@
               "r2": 43,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3098,7 +2822,7 @@
               "r2": 45,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3140,7 +2864,7 @@
               "r2": 51,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3182,7 +2906,7 @@
               "r2": 51,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3224,7 +2948,7 @@
               "r2": 51,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3339,7 +3063,7 @@
               "r2": 53,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3381,7 +3105,7 @@
               "r2": 59,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3423,7 +3147,7 @@
               "r2": 59,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3465,7 +3189,7 @@
               "r2": 59,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3585,7 +3309,7 @@
               "r2": 61,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3627,7 +3351,7 @@
               "r2": 67,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3669,7 +3393,7 @@
               "r2": 67,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3711,7 +3435,7 @@
               "r2": 67,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3826,7 +3550,7 @@
               "r2": 69,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3868,7 +3592,7 @@
               "r2": 75,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -3910,7 +3634,7 @@
               "r2": 75,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -3952,7 +3676,7 @@
               "r2": 75,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4072,7 +3796,7 @@
               "r2": 77,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4114,7 +3838,7 @@
               "r2": 83,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4156,7 +3880,7 @@
               "r2": 83,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4198,7 +3922,7 @@
               "r2": 83,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4313,7 +4037,7 @@
               "r2": 85,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4355,7 +4079,7 @@
               "r2": 91,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4397,7 +4121,7 @@
               "r2": 91,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4439,7 +4163,7 @@
               "r2": 91,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4559,7 +4283,7 @@
               "r2": 93,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4601,7 +4325,7 @@
               "r2": 99,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4643,7 +4367,7 @@
               "r2": 99,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4685,7 +4409,7 @@
               "r2": 99,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4800,7 +4524,7 @@
               "r2": 101,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4842,7 +4566,7 @@
               "r2": 107,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -4884,7 +4608,7 @@
               "r2": 107,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -4926,7 +4650,7 @@
               "r2": 107,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -5039,14 +4763,28 @@
             "sheet_name": "Calculations",
             "title": "World with InO | Current treatments used",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Market shares (Total)"
+            ],
             "core_region": {
               "r1": 108,
-              "c1": 1,
+              "c1": 2,
               "r2": 120,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5054,8 +4792,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5070,14 +4807,28 @@
             "sheet_name": "Calculations",
             "title": "Drug costs",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of treatment"
+            ],
             "core_region": {
               "r1": 122,
-              "c1": 1,
+              "c1": 2,
               "r2": 134,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5085,8 +4836,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5101,14 +4851,28 @@
             "sheet_name": "Calculations",
             "title": "Costs of adverse events",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of adverse events on treatment"
+            ],
             "core_region": {
               "r1": 136,
-              "c1": 1,
+              "c1": 2,
               "r2": 148,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5116,8 +4880,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5132,14 +4895,28 @@
             "sheet_name": "Calculations",
             "title": "Subsequent treatment costs",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of Subsequent treatment costs"
+            ],
             "core_region": {
               "r1": 150,
-              "c1": 1,
+              "c1": 2,
               "r2": 162,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5147,8 +4924,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5163,14 +4939,28 @@
             "sheet_name": "Calculations",
             "title": "Costs of hospitalization",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs of hospitalization"
+            ],
             "core_region": {
               "r1": 164,
-              "c1": 1,
+              "c1": 2,
               "r2": 176,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5178,8 +4968,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5194,14 +4983,28 @@
             "sheet_name": "Calculations",
             "title": "Stem cell transplant after induction therapy",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Costs of an allogeneic stem cell transplant"
+            ],
             "core_region": {
               "r1": 178,
-              "c1": 1,
+              "c1": 2,
               "r2": 190,
               "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
@@ -5209,8 +5012,7 @@
             "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           },
           {
@@ -5225,388 +5027,41 @@
             "sheet_name": "Calculations",
             "title": "End-of-life costs",
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "Inotuzumab Ozogamicin",
+              "FLAG-Ida",
+              "FLAG",
+              "Mitoxantrone and cytarabine",
+              "HIDAC",
+              "DVP-Asp",
+              "DVP-Asp+Cyclo",
+              "hCVAD+MTX",
+              "Blinatumomab",
+              "TKI (Ponatinib)",
+              "TKI + vincristine",
+              "Clofarabine",
+              "Total costs in world with InO"
+            ],
             "core_region": {
               "r1": 192,
-              "c1": 1,
-              "r2": 203,
-              "c2": 1
+              "c1": 3,
+              "r2": 205,
+              "c2": 7
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations",
               "World with InO | Current treatments used"
             ],
-            "footnotes_notes_refs": [
-              {
-                "row": 192,
-                "col": 3,
-                "text": "23878.36553001101"
-              },
-              {
-                "row": 192,
-                "col": 4,
-                "text": "29249.3415793557"
-              },
-              {
-                "row": 192,
-                "col": 5,
-                "text": "31081.01252329046"
-              },
-              {
-                "row": 192,
-                "col": 6,
-                "text": "32023.87721892232"
-              },
-              {
-                "row": 192,
-                "col": 7,
-                "text": "32227.113066952534"
-              },
-              {
-                "row": 193,
-                "col": 3,
-                "text": "872.7874993819104"
-              },
-              {
-                "row": 193,
-                "col": 4,
-                "text": "1059.5137292588233"
-              },
-              {
-                "row": 193,
-                "col": 5,
-                "text": "1124.357068970786"
-              },
-              {
-                "row": 193,
-                "col": 6,
-                "text": "1152.8654388668745"
-              },
-              {
-                "row": 193,
-                "col": 7,
-                "text": "1157.9709714289488"
-              },
-              {
-                "row": 194,
-                "col": 3,
-                "text": "872.7874993819104"
-              },
-              {
-                "row": 194,
-                "col": 4,
-                "text": "1059.5137292588233"
-              },
-              {
-                "row": 194,
-                "col": 5,
-                "text": "1124.357068970786"
-              },
-              {
-                "row": 194,
-                "col": 6,
-                "text": "1152.8654388668745"
-              },
-              {
-                "row": 194,
-                "col": 7,
-                "text": "1157.9709714289488"
-              },
-              {
-                "row": 195,
-                "col": 3,
-                "text": "872.7874993819104"
-              },
-              {
-                "row": 195,
-                "col": 4,
-                "text": "1059.5137292588233"
-              },
-              {
-                "row": 195,
-                "col": 5,
-                "text": "1124.357068970786"
-              },
-              {
-                "row": 195,
-                "col": 6,
-                "text": "1152.8654388668745"
-              },
-              {
-                "row": 195,
-                "col": 7,
-                "text": "1157.9709714289488"
-              },
-              {
-                "row": 196,
-                "col": 3,
-                "text": "436.3937496909552"
-              },
-              {
-                "row": 196,
-                "col": 4,
-                "text": "529.7568646294117"
-              },
-              {
-                "row": 196,
-                "col": 5,
-                "text": "562.178534485393"
-              },
-              {
-                "row": 196,
-                "col": 6,
-                "text": "576.4327194334372"
-              },
-              {
-                "row": 196,
-                "col": 7,
-                "text": "578.9854857144744"
-              },
-              {
-                "row": 197,
-                "col": 3,
-                "text": "2181.968748454776"
-              },
-              {
-                "row": 197,
-                "col": 4,
-                "text": "2648.7843231470574"
-              },
-              {
-                "row": 197,
-                "col": 5,
-                "text": "2810.8926724269645"
-              },
-              {
-                "row": 197,
-                "col": 6,
-                "text": "2882.1635971671853"
-              },
-              {
-                "row": 197,
-                "col": 7,
-                "text": "2894.9274285723714"
-              },
-              {
-                "row": 198,
-                "col": 3,
-                "text": "3927.543747218596"
-              },
-              {
-                "row": 198,
-                "col": 4,
-                "text": "4767.811781664704"
-              },
-              {
-                "row": 198,
-                "col": 5,
-                "text": "5059.606810368537"
-              },
-              {
-                "row": 198,
-                "col": 6,
-                "text": "5187.894474900933"
-              },
-              {
-                "row": 198,
-                "col": 7,
-                "text": "5210.869371430269"
-              },
-              {
-                "row": 199,
-                "col": 3,
-                "text": "10473.449992582924"
-              },
-              {
-                "row": 199,
-                "col": 4,
-                "text": "12714.164751105876"
-              },
-              {
-                "row": 199,
-                "col": 5,
-                "text": "13492.284827649431"
-              },
-              {
-                "row": 199,
-                "col": 6,
-                "text": "13834.38526640249"
-              },
-              {
-                "row": 199,
-                "col": 7,
-                "text": "13895.651657147386"
-              },
-              {
-                "row": 200,
-                "col": 3,
-                "text": "4882.5"
-              },
-              {
-                "row": 200,
-                "col": 4,
-                "text": "6621.960807867645"
-              },
-              {
-                "row": 200,
-                "col": 5,
-                "text": "7027.231681067413"
-              },
-              {
-                "row": 200,
-                "col": 6,
-                "text": "7205.408992917965"
-              },
-              {
-                "row": 200,
-                "col": 7,
-                "text": "7237.318571430931"
-              },
-              {
-                "row": 201,
-                "col": 3,
-                "text": "0"
-              },
-              {
-                "row": 201,
-                "col": 4,
-                "text": "0"
-              },
-              {
-                "row": 201,
-                "col": 5,
-                "text": "0"
-              },
-              {
-                "row": 201,
-                "col": 6,
-                "text": "0"
-              },
-              {
-                "row": 201,
-                "col": 7,
-                "text": "0"
-              },
-              {
-                "row": 202,
-                "col": 3,
-                "text": "0"
-              },
-              {
-                "row": 202,
-                "col": 4,
-                "text": "0"
-              },
-              {
-                "row": 202,
-                "col": 5,
-                "text": "0"
-              },
-              {
-                "row": 202,
-                "col": 6,
-                "text": "0"
-              },
-              {
-                "row": 202,
-                "col": 7,
-                "text": "0"
-              },
-              {
-                "row": 203,
-                "col": 3,
-                "text": "2181.968748454776"
-              },
-              {
-                "row": 203,
-                "col": 4,
-                "text": "2648.7843231470574"
-              },
-              {
-                "row": 203,
-                "col": 5,
-                "text": "2810.8926724269645"
-              },
-              {
-                "row": 203,
-                "col": 6,
-                "text": "2882.1635971671853"
-              },
-              {
-                "row": 203,
-                "col": 7,
-                "text": "2894.9274285723714"
-              },
-              {
-                "row": 204,
-                "col": 3,
-                "text": "50580.55301455877"
-              },
-              {
-                "row": 204,
-                "col": 4,
-                "text": "62359.14561869392"
-              },
-              {
-                "row": 204,
-                "col": 5,
-                "text": "66217.17092862753"
-              },
-              {
-                "row": 204,
-                "col": 6,
-                "text": "68050.92218351214"
-              },
-              {
-                "row": 204,
-                "col": 7,
-                "text": "68413.70592410718"
-              },
-              {
-                "row": 205,
-                "col": 1,
-                "text": "Total costs in world with InO"
-              },
-              {
-                "row": 205,
-                "col": 3,
-                "text": "2356312.4040997457"
-              },
-              {
-                "row": 205,
-                "col": 4,
-                "text": "2368090.996703881"
-              },
-              {
-                "row": 205,
-                "col": 5,
-                "text": "2371949.0220138147"
-              },
-              {
-                "row": 205,
-                "col": 6,
-                "text": "2373782.773268699"
-              },
-              {
-                "row": 205,
-                "col": 7,
-                "text": "2374145.557009294"
-              }
-            ],
+            "footnotes_notes_refs": [],
             "llm_gate_triggers": [],
             "source_flags": [
-              "header_missing",
-              "rowname_missing"
+              "header_missing"
             ]
           }
         ],
         "footnotes_notes_refs": [],
         "llm_gate_triggers": [
-          {
-            "name": "multi_core_ambiguity",
-            "source": "raw_v6"
-          },
           {
             "name": "ambiguous_inter_core_rows",
             "source": "raw_v6"
@@ -5649,7 +5104,7 @@
               "r2": 109,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -5691,7 +5146,7 @@
               "r2": 115,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -5733,7 +5188,7 @@
               "r2": 115,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -5775,7 +5230,7 @@
               "r2": 115,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -5890,7 +5345,7 @@
               "r2": 117,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -5932,7 +5387,7 @@
               "r2": 123,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -5974,7 +5429,7 @@
               "r2": 123,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6016,7 +5471,7 @@
               "r2": 123,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6136,7 +5591,7 @@
               "r2": 125,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6178,7 +5633,7 @@
               "r2": 131,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6220,7 +5675,7 @@
               "r2": 131,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6262,7 +5717,7 @@
               "r2": 131,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6377,7 +5832,7 @@
               "r2": 133,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6419,7 +5874,7 @@
               "r2": 139,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6461,7 +5916,7 @@
               "r2": 139,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6503,7 +5958,7 @@
               "r2": 139,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6623,7 +6078,7 @@
               "r2": 141,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6665,7 +6120,7 @@
               "r2": 147,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6707,7 +6162,7 @@
               "r2": 147,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6749,7 +6204,7 @@
               "r2": 147,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6864,7 +6319,7 @@
               "r2": 149,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6906,7 +6361,7 @@
               "r2": 155,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -6948,7 +6403,7 @@
               "r2": 155,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -6990,7 +6445,7 @@
               "r2": 155,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7110,7 +6565,7 @@
               "r2": 157,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7152,7 +6607,7 @@
               "r2": 162,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7194,7 +6649,7 @@
               "r2": 162,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7236,7 +6691,7 @@
               "r2": 162,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7351,7 +6806,7 @@
               "r2": 177,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7446,7 +6901,7 @@
               "r2": 185,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7651,7 +7106,7 @@
               "r2": 187,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7693,7 +7148,7 @@
               "r2": 193,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7735,7 +7190,7 @@
               "r2": 193,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7777,7 +7232,7 @@
               "r2": 193,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -7892,7 +7347,7 @@
               "r2": 195,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7934,7 +7389,7 @@
               "r2": 201,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -7976,7 +7431,7 @@
               "r2": 201,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8018,7 +7473,7 @@
               "r2": 201,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8138,7 +7593,7 @@
               "r2": 203,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8180,7 +7635,7 @@
               "r2": 209,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8222,7 +7677,7 @@
               "r2": 209,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8264,7 +7719,7 @@
               "r2": 209,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8379,7 +7834,7 @@
               "r2": 211,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8421,7 +7876,7 @@
               "r2": 217,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8463,7 +7918,7 @@
               "r2": 217,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8505,7 +7960,7 @@
               "r2": 217,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8625,7 +8080,7 @@
               "r2": 219,
               "c2": 26
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8667,7 +8122,7 @@
               "r2": 225,
               "c2": 14
             },
-            "node_type": "calc",
+            "node_type": "input",
             "parent_path": [
               "Calculations"
             ],
@@ -8709,7 +8164,7 @@
               "r2": 225,
               "c2": 20
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8751,7 +8206,7 @@
               "r2": 225,
               "c2": 27
             },
-            "node_type": "calc",
+            "node_type": "mixed",
             "parent_path": [
               "Calculations"
             ],
@@ -8837,13 +8292,15 @@
       "parent_count": 26,
       "total_children": 109,
       "flag_frequency": {
-        "rowname_missing": 107,
+        "header_sequence": 8,
         "merged_from_metadata_and_numeric_child": 1,
         "header_conflict": 1,
+        "rowname_sequence": 1,
         "multi_core_split": 23,
         "derived_from_parent_core_split": 92,
         "title_missing": 94,
         "header_missing": 101,
+        "rowname_missing": 93,
         "low_context_node": 93
       }
     }

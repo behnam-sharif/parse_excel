@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6.finalize Rule 6 — flag violations."""
+"""Tests for xl_sheetagent.finalize Rule 6 — flag violations."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.finalize import finalize_sheet
-from xl_sheetagent_v6.schemas import CoreRegion, V6ResolvedTable
+from xl_sheetagent.finalize import finalize_sheet
+from xl_sheetagent.v6_models import CoreRegion, V6ResolvedTable
 
 
 def _load_config():
@@ -130,6 +130,30 @@ class TestMissingFlags(unittest.TestCase):
         )
         fm = finalize_sheet("Sheet1", [rt], config)
         self.assertIn("no_core_region", fm.entries[0].source_flags)
+
+    def test_header_sequence_flag(self) -> None:
+        config = _load_config()
+        rt = _rt(
+            "t", 0, 0, 5, 5,
+            title="Title",
+            headers=[["2020", "2021", "2022", "2023", "2024"]],
+            row_names=["r1"],
+            core_regions=[_core(1, 1, 5, 5)],
+        )
+        fm = finalize_sheet("Sheet1", [rt], config)
+        self.assertIn("header_sequence", fm.entries[0].source_flags)
+
+    def test_rowname_sequence_flag(self) -> None:
+        config = _load_config()
+        rt = _rt(
+            "t", 0, 0, 5, 5,
+            title="Title",
+            headers=[["A", "B"]],
+            row_names=["2020", "2021", "2022", "2023"],
+            core_regions=[_core(1, 1, 5, 5)],
+        )
+        fm = finalize_sheet("Sheet1", [rt], config)
+        self.assertIn("rowname_sequence", fm.entries[0].source_flags)
 
 
 class TestTitleFootnoteFlag(unittest.TestCase):

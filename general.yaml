@@ -1,0 +1,15 @@
+# config/general.yaml — Cross-cutting / orchestrator settings.
+# Loaded by core/config.py alongside config/stages.yaml.
+
+logging:
+  level: "INFO"
+  log_filename: "pipeline.log"
+
+run:
+  # Default base directory for outputs (relative to project root)
+  output_base: "data/output"
+
+orchestrator:
+  # Default paths shown in Streamlit UI
+  default_input_dir: "data/input"
+  default_output_base: "data/output"

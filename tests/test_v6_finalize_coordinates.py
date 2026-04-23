@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6.coordinates.bbox_to_coords."""
+"""Tests for xl_sheetagent.coordinates.bbox_to_coords."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.coordinates import bbox_dict_copy, bbox_to_coords, col_letter
+from xl_sheetagent.coordinates import bbox_dict_copy, bbox_to_coords, col_letter
 
 
 class TestColLetter(unittest.TestCase):

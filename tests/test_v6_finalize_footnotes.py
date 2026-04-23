@@ -11,11 +11,11 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.finalize import (
+from xl_sheetagent.finalize import (
     compute_footnotes,
     finalize_sheet,
 )
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.v6_models import (
     CoreRegion,
     FinalMapEntryParent,
     FinalMapEntryStandalone,

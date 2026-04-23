@@ -116,7 +116,7 @@ def xl_image_config_from_pipeline(
 
 
 def sheetagent_config_from_mapping(d: Mapping[str, Any]):
-    from xl_sheetagent.config import XlSheetAgentConfig
+    from xl_sheetagent.xl_sheetagent.config import XlSheetAgentConfig
 
     data = _require_exact_keys(XlSheetAgentConfig, d, "stages.yaml xl_sheetagent")
     return XlSheetAgentConfig(**data)
@@ -129,22 +129,8 @@ def sheetagent_config_from_pipeline(
     return sheetagent_config_from_mapping(merge_stage_dict(pc.xl_sheetagent, overrides))
 
 
-def sheetagent_v5_config_from_mapping(d: Mapping[str, Any]):
-    from xl_sheetagent_v5.config import XlSheetAgentV5Config
-
-    data = _require_exact_keys(XlSheetAgentV5Config, d, "stages.yaml xl_sheetagent_v5")
-    return XlSheetAgentV5Config(**data)
-
-
-def sheetagent_v5_config_from_pipeline(
-    pc: PipelineConfig,
-    overrides: Optional[Dict[str, Any]] = None,
-):
-    return sheetagent_v5_config_from_mapping(merge_stage_dict(pc.xl_sheetagent_v5, overrides))
-
-
 def sheetagent_v6_config_from_mapping(d: Mapping[str, Any]):
-    from xl_sheetagent_v6.config import XlSheetAgentV6Config
+    from xl_sheetagent.config import XlSheetAgentV6Config
 
     data = _require_exact_keys(XlSheetAgentV6Config, d, "stages.yaml xl_sheetagent_v6")
     return XlSheetAgentV6Config(**data)
@@ -155,3 +141,17 @@ def sheetagent_v6_config_from_pipeline(
     overrides: Optional[Dict[str, Any]] = None,
 ):
     return sheetagent_v6_config_from_mapping(merge_stage_dict(pc.xl_sheetagent_v6, overrides))
+
+
+def dag_config_from_mapping(d: Mapping[str, Any]):
+    from xl_dag.config import XlDagConfig
+
+    data = _require_exact_keys(XlDagConfig, d, "stages.yaml xl_dag")
+    return XlDagConfig(**data)
+
+
+def dag_config_from_pipeline(
+    pc: PipelineConfig,
+    overrides: Optional[Dict[str, Any]] = None,
+):
+    return dag_config_from_mapping(merge_stage_dict(pc.xl_dag, overrides))

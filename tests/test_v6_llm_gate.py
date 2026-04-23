@@ -1,4 +1,4 @@
-"""Tests for xl_sheetagent_v6 Phase 2: LLM gate, prompt builder, response parsing."""
+"""Tests for xl_sheetagent Phase 2: LLM gate, prompt builder, response parsing."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.llm_gate import (
+from xl_sheetagent.llm_gate import (
     evaluate_gate_triggers,
     should_call_llm,
     _check_core_validation_ambiguous,
@@ -21,7 +21,7 @@ from xl_sheetagent_v6.llm_gate import (
     _check_coverage_gap,
     _check_overlap,
 )
-from xl_sheetagent_v6.prompt_builder import (
+from xl_sheetagent.prompt_builder import (
     parse_json_response,
     build_v6_per_bbox_prompt,
     parse_v6_per_bbox_response,
@@ -29,13 +29,13 @@ from xl_sheetagent_v6.prompt_builder import (
     build_v6_metadata_prompt,
     parse_v6_metadata_response,
 )
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.v6_models import (
     ConsumedMap,
     CoreRegion,
     RowTag,
     V6TableResult,
 )
-from xl_sheetagent_v6.config import XlSheetAgentV6Config
+from xl_sheetagent.config import XlSheetAgentV6Config
 
 
 def _make_config(**overrides) -> XlSheetAgentV6Config:
@@ -70,6 +70,7 @@ def _make_config(**overrides) -> XlSheetAgentV6Config:
         detect_beside_header_title=True, beside_header_title_max_nonempty=3,
         core_formula_expansion_enabled=False, core_formula_expansion_ring=1,
         use_formula_view_for_types=True,
+        core_formula_expansion_allow_without_formula_typing=False,
         enable_finalize=False, finalize_title_max_chars=200,
         finalize_note_keywords=["source", "note", "*", "ref"],
         finalize_flatten_depth=1, finalize_emit_stats=True,
@@ -592,7 +593,7 @@ class TestConfidenceWithLlm(unittest.TestCase):
     """Verify _compute_confidence uses llm_score parameter."""
 
     def test_llm_score_increases_confidence(self):
-        from xl_sheetagent_v6.table_agent import _compute_confidence
+        from xl_sheetagent.table_agent import _compute_confidence
 
         tags = [_make_tag(r, "data_candidate", conf=0.7) for r in range(4)]
         cr = _make_region(5, 0, 8, 3, density=0.9, role_hint="input")

@@ -11,8 +11,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.final_map_exporter import serialize_final_map
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.final_map_exporter import serialize_final_map
+from xl_sheetagent.v6_models import (
     FinalMapChildEntry,
     FinalMapEntryParent,
     FinalMapEntryStandalone,

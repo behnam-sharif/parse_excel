@@ -40,24 +40,34 @@ def get_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
     return get_run_root(run_id, base) / "sheetagent_output"
 
 
-def get_v4_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
-    """Return the xl_sheetagent_v4 output directory for a given run."""
-    return get_run_root(run_id, base) / "v4_sheetagent_output"
-
-
-def get_v5_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
-    """Return the xl_sheetagent_v5 output directory for a given run."""
-    return get_run_root(run_id, base) / "v5_sheetagent_output"
-
-
 def get_v6_sheetagent_output_path(run_id: str, base: str = "data/output") -> Path:
-    """Return the xl_sheetagent_v6 output directory for a given run."""
+    """Return the V6 enricher output directory for a given run."""
     return get_run_root(run_id, base) / "v6_sheetagent_output"
 
 
 def get_v6_final_table_map_path(run_id: str, base: str = "data/output") -> Path:
     """Return the v6 finalize output file for a given run."""
     return get_v6_sheetagent_output_path(run_id, base) / "final_table_map.json"
+
+
+def get_dag_output_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the xl_dag (v7 DAG) output directory for a given run."""
+    return get_run_root(run_id, base) / "dag_output"
+
+
+def get_dag_graph_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the full DAG graph file (nodes + edges)."""
+    return get_dag_output_path(run_id, base) / "dag.json"
+
+
+def get_dag_summary_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the aggregate DAG summary file."""
+    return get_dag_output_path(run_id, base) / "dag_summary.json"
+
+
+def get_table_map_overview_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the table_map_overview.json file (Cheri overview contract)."""
+    return get_dag_output_path(run_id, base) / "table_map_overview.json"
 
 
 def get_log_path(run_id: str, base: str = "data/output") -> Path:

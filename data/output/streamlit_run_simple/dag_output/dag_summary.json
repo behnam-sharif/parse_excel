@@ -1,0 +1,82 @@
+{
+  "workbook_name": "cleaned_workbook",
+  "build_version": "v7-mvp",
+  "total_nodes": 129,
+  "total_edges": 192,
+  "total_unresolved_edges": 46,
+  "nodes_by_type": {
+    "mixed": 57,
+    "input": 69,
+    "metadata": 3
+  },
+  "named_ranges_count": 0,
+  "top_sheets_by_nodes": [
+    "Calculations",
+    "Inputs",
+    "Introduction",
+    "Results"
+  ],
+  "sheets": [
+    {
+      "sheet_name": "Inputs",
+      "node_count": 13,
+      "node_types": {
+        "mixed": 10,
+        "input": 3
+      },
+      "outgoing_edges": 17,
+      "incoming_edges": 1,
+      "cross_sheet_edges": 16
+    },
+    {
+      "sheet_name": "Introduction",
+      "node_count": 3,
+      "node_types": {
+        "metadata": 3
+      },
+      "outgoing_edges": 0,
+      "incoming_edges": 0,
+      "cross_sheet_edges": 0
+    },
+    {
+      "sheet_name": "Results",
+      "node_count": 3,
+      "node_types": {
+        "input": 3
+      },
+      "outgoing_edges": 1,
+      "incoming_edges": 5,
+      "cross_sheet_edges": 0
+    },
+    {
+      "sheet_name": "Calculations",
+      "node_count": 110,
+      "node_types": {
+        "input": 63,
+        "mixed": 47
+      },
+      "outgoing_edges": 128,
+      "incoming_edges": 186,
+      "cross_sheet_edges": 4
+    }
+  ],
+  "warnings": {
+    "low_context_nodes": 95,
+    "dynamic_references": 0,
+    "cross_workbook_references": 0,
+    "heterogeneous_formulas": 0,
+    "circular_references": 0
+  },
+  "sheet_edge_bundles": [
+    {
+      "source_sheet": "Calculations",
+      "target_sheet": "Results",
+      "edge_count": 4
+    },
+    {
+      "source_sheet": "Inputs",
+      "target_sheet": "Calculations",
+      "edge_count": 16
+    }
+  ]
+}

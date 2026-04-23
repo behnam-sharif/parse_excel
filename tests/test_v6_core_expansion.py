@@ -12,13 +12,13 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from xl_sheetagent_v6.core_region_detector import (
+from xl_sheetagent.core_region_detector import (
     _expand_with_formula_refs,
     detect_core_regions,
 )
-from xl_sheetagent_v6.core_region_validator import validate_core_regions
-from xl_sheetagent_v6.finalize import finalize_sheet
-from xl_sheetagent_v6.schemas import (
+from xl_sheetagent.core_region_validator import validate_core_regions
+from xl_sheetagent.finalize import finalize_sheet
+from xl_sheetagent.v6_models import (
     ConsumedMap,
     CoreRegion,
     FinalMapEntryParent,
@@ -192,7 +192,7 @@ class TestMultiCoreSynthesis(unittest.TestCase):
 
 class TestFormulaRefsModule(unittest.TestCase):
     def test_build_formula_refs_extracts_single_and_range(self) -> None:
-        from xl_sheetagent_v6.formula_refs import _extract_refs
+        from xl_sheetagent.formula_refs import _extract_refs
 
         refs = _extract_refs("=A1+B2")
         self.assertIn((0, 0), refs)
@@ -205,7 +205,7 @@ class TestFormulaRefsModule(unittest.TestCase):
         self.assertIn((2, 2), refs)
 
     def test_cross_sheet_refs_dropped(self) -> None:
-        from xl_sheetagent_v6.formula_refs import _extract_refs
+        from xl_sheetagent.formula_refs import _extract_refs
 
         refs = _extract_refs("=Sheet2!A1+B2")
         # Sheet2!A1 dropped; B2 kept

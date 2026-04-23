@@ -32,9 +32,8 @@ from core.paths import (
     get_parse_output_path,
     get_table_output_path,
     get_sheetagent_output_path,
-    get_v4_sheetagent_output_path,
-    get_v5_sheetagent_output_path,
     get_v6_sheetagent_output_path,
+    get_dag_output_path,
 )
 from core.stage_config import (
     xl_table_config_from_mapping,
@@ -42,6 +41,7 @@ from core.stage_config import (
     parse_config_from_mapping,
     xl_init_config_from_mapping,
     sheetagent_config_from_mapping,
+    dag_config_from_pipeline,
 )
 
 _executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -62,32 +62,6 @@ def _load_v3a_viewer():
     return mod
 
 
-def _load_v4_viewer():
-    """Load sibling ``v4_viewer.py`` by path.
-
-    ``streamlit run apps/orchestrator/app.py`` executes this file as ``__main__``,
-    so ``from .v4_viewer`` relative imports fail.
-    """
-    path = Path(__file__).resolve().parent / "v4_viewer.py"
-    spec = importlib.util.spec_from_file_location("orchestrator_v4_viewer", path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Cannot load v4_viewer from {path}")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-def _load_v5_viewer():
-    """Load sibling ``v5_viewer.py`` by path."""
-    path = Path(__file__).resolve().parent / "v5_viewer.py"
-    spec = importlib.util.spec_from_file_location("orchestrator_v5_viewer", path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Cannot load v5_viewer from {path}")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
 def _load_v6_viewer():
     """Load sibling ``v6_viewer.py`` by path."""
     path = Path(__file__).resolve().parent / "v6_viewer.py"
@@ -99,10 +73,20 @@ def _load_v6_viewer():
     return mod
 
 
+def _load_dag_viewer():
+    """Load sibling ``dag_viewer.py`` by path."""
+    path = Path(__file__).resolve().parent / "dag_viewer.py"
+    spec = importlib.util.spec_from_file_location("orchestrator_dag_viewer", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load dag_viewer from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 _v3a_viewer = _load_v3a_viewer()
-_v4_viewer = _load_v4_viewer()
-_v5_viewer = _load_v5_viewer()
 _v6_viewer = _load_v6_viewer()
+_dag_viewer = _load_dag_viewer()
 
 
 def _default_session() -> None:
@@ -118,6 +102,7 @@ def _default_session() -> None:
             "xl_parse": {},
             "xl_table": {},
             "xl_sheetagent": {},
+            "xl_dag": {},
         }
     if "pipeline_future" not in st.session_state:
         st.session_state["pipeline_future"] = None
@@ -131,14 +116,16 @@ def _default_session() -> None:
         st.session_state["pipeline_started_at"] = None
     if "orchestrator_view_saved_v3a" not in st.session_state:
         st.session_state["orchestrator_view_saved_v3a"] = False
-    if "orchestrator_view_saved_v5" not in st.session_state:
-        st.session_state["orchestrator_view_saved_v5"] = False
     if "orchestrator_view_saved_v6" not in st.session_state:
         st.session_state["orchestrator_view_saved_v6"] = False
+    if "orchestrator_view_saved_dag" not in st.session_state:
+        st.session_state["orchestrator_view_saved_dag"] = False
     # Older sessions may lack xl_sheetagent overrides
     _co = st.session_state.get("cfg_ov")
     if isinstance(_co, dict) and "xl_sheetagent" not in _co:
         _co["xl_sheetagent"] = {}
+    if isinstance(_co, dict) and "xl_dag" not in _co:
+        _co["xl_dag"] = {}
 
 
 def _effective_init_config():
@@ -240,14 +227,14 @@ def app() -> None:
     parse_out = get_parse_output_path(run_id, base)
     table_out = get_table_output_path(run_id, base)
     sa_out = get_sheetagent_output_path(run_id, base)
-    v4_out = get_v4_sheetagent_output_path(run_id, base)
-    v5_out = get_v5_sheetagent_output_path(run_id, base)
     v6_out = get_v6_sheetagent_output_path(run_id, base)
+    dag_out = get_dag_output_path(run_id, base)
 
     cli = f"""```text
 py -3 scripts/run_init.py --input <workbook.xlsx> --run-id {run_id} --output-base {base} --no-interactive
 py -3 scripts/run_parse.py --run-id {run_id} --output-base {base}
 py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
+py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
 ```"""
     with st.sidebar.expander("CLI (equivalent commands)", expanded=False):
         st.markdown(cli)
@@ -296,9 +283,9 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
             value=bool(pc.xl_table.get("use_other_tools", False)),
             key="ov_table_other_tools",
         )
-        st.markdown("**xl_sheetagent (V3A)**")
+        st.markdown("**xl_sheetagent (V3a stage)**")
         st.caption(
-            "Merged when you click **Run V3A sheetagent**. `OPENAI_API_KEY` in repo-root "
+            "Merged when you click **Run xl_sheetagent**. `OPENAI_API_KEY` in repo-root "
             "`.env` is loaded automatically (see core/env_bootstrap.py) when LLM is on."
         )
         _sa_ov = st.session_state["cfg_ov"].setdefault("xl_sheetagent", {})
@@ -329,21 +316,25 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["stage_error"] = None
         st.session_state["stage_op"] = op
         st.session_state["orchestrator_view_saved_v3a"] = False
-        st.session_state["orchestrator_view_saved_v5"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
+        st.session_state["orchestrator_view_saved_dag"] = False
 
     init_btn = st.sidebar.button("▶ Run xl_init", disabled=busy or not input_path)
     parse_btn = st.sidebar.button("▶ Run xl_parse", disabled=busy)
     table_btn = st.sidebar.button("▶ Run xl_table", disabled=busy)
-    v3a_btn = st.sidebar.button("▶ Run V3A sheetagent", disabled=busy)
-    v4_btn = st.sidebar.button("▶ Run xl_sheetagent_v4", disabled=busy)
-    v5_btn = st.sidebar.button("▶ Run V5 sheetagent", disabled=busy)
-    v6_btn = st.sidebar.button("▶ Run V6 sheetagent", disabled=busy)
+    sheetagent_btn = st.sidebar.button("▶ Run xl_sheetagent", disabled=busy)
+    dag_btn = st.sidebar.button(
+        "▶ Run xl_dag",
+        disabled=busy,
+        help=(
+            "Builds dag_output/* from v6 finalize output (final_table_map.json + summary.json) "
+            "and cleaned_workbook.xlsx."
+        ),
+    )
     st.sidebar.caption(
-        "V4/V5/V6: set OPENAI_API_KEY in repo-root .env. "
-        "**V5/V6** run V3A first (writes `v3a_results.json`), then enrichment. "
-        "**V6** uses core-first metadata algorithm. "
-        "Requires prior **xl_table** (and init/parse) for the same Run ID."
+        "xl_sheetagent runs **V3a** first (`sheetagent_output/v3a_results.json`), "
+        "then **V6** enrichment (`v6_sheetagent_output/`). "
+        "Set OPENAI_API_KEY when using the LLM gate. Requires prior **xl_table** for the same Run ID."
     )
 
     if init_btn and not busy:
@@ -395,142 +386,28 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
-    if v3a_btn and not busy:
-        _clear_for_run("v3a_sheetagent")
-        pc = load_config()
-        _sa_user = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
-        _sa_merged = merge_stage_dict(pc.xl_sheetagent, _sa_user)
-        _sa_merged = merge_stage_dict(_sa_merged, {"v3a_enabled": True})
-        _sa_cfg = sheetagent_config_from_mapping(_sa_merged)
-
-        _run_id_capture = run_id
-        _sa_out_capture = sa_out
-
-        def _work():
-            from xl_sheetagent import run_sheetagent
-
-            _sa_out_capture.mkdir(parents=True, exist_ok=True)
-            return run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg)
-
-        st.session_state["pipeline_future"] = _executor.submit(_work)
-        st.session_state["pipeline_started_at"] = time.time()
-        st.rerun()
-
-    if v4_btn and not busy:
-        _clear_for_run("xl_sheetagent_v4")
-
-        _run_id_capture = run_id
-        _v4_out_capture = v4_out
-        _table_out_capture = table_out
-
-        def _work():
-            from core.env_bootstrap import load_project_dotenv
-
-            load_project_dotenv()
-
-            import openai
-            from xl_sheetagent_v4.runner import run_v4_analysis
-
-            _v4_out_capture.mkdir(parents=True, exist_ok=True)
-
-            if not os.environ.get("OPENAI_API_KEY", "").strip():
-                raise RuntimeError(
-                    "OPENAI_API_KEY is missing. Add it to the repo-root .env file "
-                    "(or set it in the environment) before running xl_sheetagent_v4."
-                )
-            llm_client = openai.OpenAI()
-            return run_v4_analysis(
-                run_id=_run_id_capture,
-                output_base=Path(_v4_out_capture).parent.parent,
-                llm_client=llm_client,
-                model="gpt-4o",
-                max_recursion_depth=3,
-            )
-
-        st.session_state["pipeline_future"] = _executor.submit(_work)
-        st.session_state["pipeline_started_at"] = time.time()
-        st.rerun()
-
-    if v5_btn and not busy:
-        _clear_for_run("xl_sheetagent_v5")
-
-        _run_id_capture = run_id
-        _v5_out_capture = v5_out
-        _base_capture = base
-        _sa_out_capture = sa_out
-        pc_chain = load_config()
-        _sa_user_v5 = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
-        _sa_merged_v5 = merge_stage_dict(pc_chain.xl_sheetagent, _sa_user_v5)
-        _sa_merged_v5 = merge_stage_dict(_sa_merged_v5, {"v3a_enabled": True})
-        _sa_cfg_v5 = sheetagent_config_from_mapping(_sa_merged_v5)
-
-        def _work():
-            from core.env_bootstrap import load_project_dotenv
-
-            load_project_dotenv()
-
-            # V5 expects sheetagent_output/v3a_results.json — run V3A first (same as "Run V3A").
-            from xl_sheetagent import run_sheetagent
-
-            _sa_out_capture.mkdir(parents=True, exist_ok=True)
-            run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg_v5)
-
-            from core.stage_config import sheetagent_v5_config_from_pipeline
-
-            pc = load_config()
-            v5_cfg = sheetagent_v5_config_from_pipeline(pc)
-
-            llm_client = None
-            if v5_cfg.enable_llm_rules:
-                api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-                if api_key:
-                    import openai
-
-                    llm_client = openai.OpenAI()
-                else:
-                    import logging
-
-                    logging.getLogger(__name__).warning(
-                        "OPENAI_API_KEY not set — V5 LLM rules will be skipped"
-                    )
-
-            from xl_sheetagent_v5 import run_v5_analysis
-
-            _v5_out_capture.mkdir(parents=True, exist_ok=True)
-            return run_v5_analysis(
-                run_id=_run_id_capture,
-                output_base=_base_capture,
-                config=v5_cfg,
-                llm_client=llm_client,
-            )
-
-        st.session_state["pipeline_future"] = _executor.submit(_work)
-        st.session_state["pipeline_started_at"] = time.time()
-        st.rerun()
-
-    if v6_btn and not busy:
-        _clear_for_run("xl_sheetagent_v6")
+    if sheetagent_btn and not busy:
+        _clear_for_run("xl_sheetagent")
 
         _run_id_capture = run_id
         _v6_out_capture = v6_out
         _base_capture = base
         _sa_out_capture = sa_out
         pc_chain = load_config()
-        _sa_user_v6 = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
-        _sa_merged_v6 = merge_stage_dict(pc_chain.xl_sheetagent, _sa_user_v6)
-        _sa_merged_v6 = merge_stage_dict(_sa_merged_v6, {"v3a_enabled": True})
-        _sa_cfg_v6 = sheetagent_config_from_mapping(_sa_merged_v6)
+        _sa_user = st.session_state["cfg_ov"].get("xl_sheetagent") or {}
+        _sa_merged = merge_stage_dict(pc_chain.xl_sheetagent, _sa_user)
+        _sa_merged = merge_stage_dict(_sa_merged, {"v3a_enabled": True})
+        _sa_cfg = sheetagent_config_from_mapping(_sa_merged)
 
         def _work():
             from core.env_bootstrap import load_project_dotenv
 
             load_project_dotenv()
 
-            # V6 expects sheetagent_output/v3a_results.json — run V3A first.
-            from xl_sheetagent import run_sheetagent
+            from xl_sheetagent import run_sheetagent, run_v6_analysis
 
             _sa_out_capture.mkdir(parents=True, exist_ok=True)
-            run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg_v6)
+            run_sheetagent(_run_id_capture, str(_sa_out_capture), config=_sa_cfg)
 
             from core.stage_config import sheetagent_v6_config_from_pipeline
 
@@ -548,10 +425,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                     import logging
 
                     logging.getLogger(__name__).warning(
-                        "OPENAI_API_KEY not set — V6 LLM gate calls will be skipped"
+                        "OPENAI_API_KEY not set — LLM gate calls will be skipped"
                     )
-
-            from xl_sheetagent_v6 import run_v6_analysis
 
             _v6_out_capture.mkdir(parents=True, exist_ok=True)
             return run_v6_analysis(
@@ -565,29 +440,37 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
+    if dag_btn and not busy:
+        _clear_for_run("xl_dag")
+        pc_chain = load_config()
+        _dag_user = st.session_state["cfg_ov"].get("xl_dag") or {}
+        _dag_cfg = dag_config_from_pipeline(pc_chain, overrides=_dag_user)
+
+        _run_id_capture = run_id
+        _base_capture = base
+
+        def _work():
+            from xl_dag import run_dag_analysis
+
+            return run_dag_analysis(
+                run_id=_run_id_capture,
+                output_base=_base_capture,
+                config=_dag_cfg,
+            )
+
+        st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
+        st.rerun()
+
     view_v3a_saved_btn = st.sidebar.button(
         "📂 View saved V3A results (no re-run)",
         disabled=busy,
-        help="Loads sheetagent_output/v3a_results.json for the current Run ID — same UI as after Run V3A.",
+        help="Loads sheetagent_output/v3a_results.json for the current Run ID.",
     )
     if view_v3a_saved_btn and not busy:
         st.session_state["orchestrator_view_saved_v3a"] = True
-        st.session_state["orchestrator_view_saved_v5"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
-        st.rerun()
-
-    view_v5_saved_btn = st.sidebar.button(
-        "View saved V5 results (no re-run)",
-        disabled=busy,
-        help=(
-            "Select sheets first, then display: uses summary.json for the sheet list when present; "
-            "loads tables.json only for the sheets you choose."
-        ),
-    )
-    if view_v5_saved_btn and not busy:
-        st.session_state["orchestrator_view_saved_v5"] = True
-        st.session_state["orchestrator_view_saved_v3a"] = False
-        st.session_state["orchestrator_view_saved_v6"] = False
+        st.session_state["orchestrator_view_saved_dag"] = False
         st.rerun()
 
     view_v6_saved_btn = st.sidebar.button(
@@ -601,7 +484,18 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
     if view_v6_saved_btn and not busy:
         st.session_state["orchestrator_view_saved_v6"] = True
         st.session_state["orchestrator_view_saved_v3a"] = False
-        st.session_state["orchestrator_view_saved_v5"] = False
+        st.session_state["orchestrator_view_saved_dag"] = False
+        st.rerun()
+
+    view_dag_saved_btn = st.sidebar.button(
+        "View saved DAG (no re-run)",
+        disabled=busy,
+        help="Loads dag_output/dag_summary.json + dag.json for the current Run ID.",
+    )
+    if view_dag_saved_btn and not busy:
+        st.session_state["orchestrator_view_saved_dag"] = True
+        st.session_state["orchestrator_view_saved_v3a"] = False
+        st.session_state["orchestrator_view_saved_v6"] = False
         st.rerun()
 
     # --- Main area -----------------------------------------------------------
@@ -611,9 +505,8 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         f"parse_output:         {parse_out}\n"
         f"table_output:         {table_out}\n"
         f"sheetagent_output:    {sa_out}\n"
-        f"v4_sheetagent_output: {v4_out}\n"
-        f"v5_sheetagent_output: {v5_out}\n"
-        f"v6_sheetagent_output: {v6_out}",
+        f"v6_sheetagent_output: {v6_out}\n"
+        f"dag_output:           {dag_out}",
         language="text",
     )
 
@@ -625,10 +518,10 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
 
     if st.session_state.get("orchestrator_view_saved_v3a"):
         _v3a_viewer.render_v3a_from_json(str(sa_out))
-    elif st.session_state.get("orchestrator_view_saved_v5"):
-        _v5_viewer.render_v5_selective_view(str(v5_out), run_id, in_memory=None)
     elif st.session_state.get("orchestrator_view_saved_v6"):
         _v6_viewer.render_v6_selective_view(str(v6_out), run_id, in_memory=None)
+    elif st.session_state.get("orchestrator_view_saved_dag"):
+        _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
     elif res is not None and op == "xl_table":
         rs = res.run_summary
         st.success(
@@ -660,32 +553,23 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
                 "`accepted_tables.txt` under table_output. Full payload: `structural_tables.json`. "
                 "Optional debug log: `decisions.jsonl`."
             )
-    elif res is not None and op == "v3a_sheetagent":
-        # V3ARunResult has a .sheets attribute; enriched table list does not
-        if hasattr(res, "sheets"):
-            _v3a_viewer.render_v3a_results(res)
-        else:
-            # Fallback: load from saved JSON
-            _v3a_viewer.render_v3a_from_json(str(sa_out))
-    elif res is not None and op == "xl_sheetagent_v4":
-        # V4 results - show Phase 1 & 2 output (tables, metadata, children)
-        _v4_viewer.render_v4_from_json(str(v4_out))
-    elif op == "xl_sheetagent_v5":
+    elif op == "xl_sheetagent":
         payload = res if isinstance(res, list) else []
         if payload:
             st.success(
-                f"V5 sheetagent complete — {len(payload)} sheet(s) in memory. "
-                "Choose sheets below, then **Display selected sheets** (avoids loading the full run at once)."
-            )
-        _v5_viewer.render_v5_selective_view(str(v5_out), run_id, in_memory=payload or None)
-    elif op == "xl_sheetagent_v6":
-        payload = res if isinstance(res, list) else []
-        if payload:
-            st.success(
-                f"V6 sheetagent complete — {len(payload)} sheet(s) in memory. "
+                f"xl_sheetagent complete — {len(payload)} sheet(s) in memory (V6 output). "
                 "Choose sheets below, then **Display selected sheets** (avoids loading the full run at once)."
             )
         _v6_viewer.render_v6_selective_view(str(v6_out), run_id, in_memory=payload or None)
+    elif res is not None and op == "xl_dag":
+        st.success(
+            f"xl_dag complete — {len(getattr(res, 'artifacts', []) or [])} artifact(s), "
+            f"{len(getattr(res, 'errors', []) or [])} error(s)"
+        )
+        errors = getattr(res, "errors", []) or []
+        for err in errors:
+            st.error(err)
+        _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
     elif res is not None and op == "xl_init":
         st.success(
             f"xl_init complete — {len(res.table_sheets)} approved sheet(s). "
@@ -698,13 +582,13 @@ py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
         res is None
         and not st.session_state["stage_error"]
         and not st.session_state.get("orchestrator_view_saved_v3a")
-        and not st.session_state.get("orchestrator_view_saved_v5")
         and not st.session_state.get("orchestrator_view_saved_v6")
+        and not st.session_state.get("orchestrator_view_saved_dag")
     ):
         st.info(
             "Upload a workbook, then run **xl_init** → **xl_parse** → **xl_table** "
-            "in order. Then optionally run **V3A sheetagent**, **xl_sheetagent_v4**, "
-            "**V5 sheetagent**, or **V6 sheetagent** to extract semantic pieces and metadata."
+            "in order. Then optionally run **xl_sheetagent** (V3a + V6) "
+            "to extract semantic pieces and metadata. Finally run **xl_dag** to build a dependency graph from formulas."
         )
 
 

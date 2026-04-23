@@ -1,0 +1,99 @@
+"""
+xl_sheetagent/config.py — Configuration dataclass for the xl_sheetagent stage.
+
+All thresholds from config/stages.yaml xl_sheetagent section.
+No silent Python defaults — YAML is the single source of truth.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+
+@dataclass
+class XlSheetAgentConfig:
+    """Centralised settings for the xl_sheetagent pipeline."""
+
+    # Tier thresholds
+    tier_a_sufficient: float
+    tier_b_accept: float
+    header_unresolved_floor: float
+    split_reconsideration_min: float
+    split_confirmation_threshold: float
+    section_assignment_accept: float
+    section_ambiguity_delta: float
+    table_finalization: float
+
+    # Grammar promotion (V1C)
+    grammar_promotion_count: int
+    grammar_promotion_sheets: int
+
+    # Context / spatial
+    title_shape_proximity_max: int
+    context_block_max_rows: int
+    context_block_formula_ceil: float
+    context_block_adjacency_max: int
+
+    # Sheet-level
+    text_dominant_sheet_threshold: float
+
+    # Ambiguity class thresholds
+    structural_threshold: float
+    semantic_threshold: float
+    presentation_threshold: float
+
+    # Debug
+    debug_level: str
+
+    # LLM (parity with xl_init)
+    llm_model: str
+    llm_max_tokens: int
+    skip_llm_enrichment: bool
+
+    # V2 agent-based pipeline
+    v2_enabled: bool
+    grammar_sample_max_rows: int
+    grammar_sample_count: int
+    grammar_sample_attempts: int
+    grammar_match_threshold: float
+    split_consideration_min_rows: int
+    split_min_score_floor: float
+    split_top_k: int
+    split_proximity_dedup: int
+    max_parallel_sheets: int
+    coordinator_batch_llm_threshold: int
+    ontology_hint_enabled: bool
+
+    # V3A clean redesign
+    v3a_enabled: bool
+    v3a_margin_trim: bool
+    v3a_core_numeric_ratio: float
+    v3a_title_scan_rows: int
+    v3a_footnote_scan_rows: int
+    v3a_skip_llm: bool
+    v3a_llm_model: str
+    v3a_llm_max_tokens: int
+    v3a_max_parallel_sheets: int
+    v3a_split_threshold: float
+
+    # V3A Phase 1-3: Enhanced validation and heuristics
+    v3a_header_column_validation: bool
+    v3a_numeric_header_fallback: bool
+    v3a_title_single_cell_strict: bool
+    v3a_footnote_all_text_strict: bool
+
+    # V3A Phase 2: Formatting analysis
+    v3a_formatting_analysis_enabled: bool
+    v3a_formatting_long_text_threshold: int
+
+    # V3A Phase 4: Two-pass split architecture
+    v3a_two_pass_enabled: bool
+    v3a_split_core_bbox_ratio: float
+    v3a_split_min_numeric_outside: int
+    v3a_split_max_depth: int
+
+    # V3A Phase 4+: Hierarchical splitting (v3a.1.0)
+    v3a_hierarchical_splits: bool
+    v3a_multi_split_enabled: bool
+    v3a_row_names_allow_formulas: bool
+    v3a_column_split_classification: bool

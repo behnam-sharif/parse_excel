@@ -17,8 +17,7 @@ class TestImports(unittest.TestCase):
         from xl_image import run_image
         from xl_parse import run_parse
         from xl_table import run_table
-        from xl_sheetagent import run_sheetagent
-        from xl_sheetagent_v6 import run_v6_analysis
+        from xl_sheetagent import run_sheetagent, run_v6_analysis
 
         self.assertTrue(callable(run_init))
         self.assertTrue(callable(run_parse))
@@ -52,14 +51,14 @@ class TestImports(unittest.TestCase):
         self.assertTrue(ToolCallRecorder is not None)
 
     def test_v6_finalize_imports(self) -> None:
-        from xl_sheetagent_v6.coordinates import bbox_to_coords
-        from xl_sheetagent_v6.finalize import finalize_sheet
-        from xl_sheetagent_v6.final_map_exporter import (
+        from xl_sheetagent.coordinates import bbox_to_coords
+        from xl_sheetagent.finalize import finalize_sheet
+        from xl_sheetagent.final_map_exporter import (
             export_final_map,
             serialize_final_map,
         )
-        from xl_sheetagent_v6.formula_refs import _extract_refs
-        from xl_sheetagent_v6.schemas import (
+        from xl_sheetagent.formula_refs import _extract_refs
+        from xl_sheetagent.v6_models import (
             FinalMapChildEntry,
             FinalMapEntryParent,
             FinalMapEntryStandalone,
@@ -88,7 +87,6 @@ class TestConfig(unittest.TestCase):
             xl_image_config_from_pipeline,
             xl_init_config_from_pipeline,
             sheetagent_config_from_pipeline,
-            sheetagent_v5_config_from_pipeline,
             sheetagent_v6_config_from_pipeline,
         )
 
@@ -98,7 +96,6 @@ class TestConfig(unittest.TestCase):
         xl_table_config_from_pipeline(pc)
         xl_image_config_from_pipeline(pc)
         sheetagent_config_from_pipeline(pc)
-        sheetagent_v5_config_from_pipeline(pc)
         sheetagent_v6_config_from_pipeline(pc)
 
 
@@ -110,7 +107,6 @@ class TestNoLegacyKgSubstring(unittest.TestCase):
             _ROOT / "xl_table",
             _ROOT / "xl_image",
             _ROOT / "xl_sheetagent",
-            _ROOT / "xl_sheetagent_v6",
             _ROOT / "core",
             _ROOT / "apps",
             _ROOT / "scripts",

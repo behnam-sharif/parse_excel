@@ -5,6 +5,22 @@
   "total_tokens": 0,
   "sheets": [
     {
+      "sheet_name": "Inputs",
+      "n_tables": 35,
+      "n_resolved_tables": 5,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "input": 9,
+        "metadata": 8,
+        "mixed": 18
+      },
+      "resolved_table_roles": {
+        "input": 3,
+        "mixed": 2
+      }
+    },
+    {
       "sheet_name": "Introduction",
       "n_tables": 6,
       "n_resolved_tables": 2,
@@ -18,34 +34,17 @@
       }
     },
     {
-      "sheet_name": "Inputs",
-      "n_tables": 35,
-      "n_resolved_tables": 5,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "calc": 25,
-        "metadata": 8,
-        "mixed": 2
-      },
-      "resolved_table_roles": {
-        "calc": 5
-      }
-    },
-    {
       "sheet_name": "Results",
       "n_tables": 11,
       "n_resolved_tables": 3,
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "output": 6,
-        "metadata": 4,
-        "calc": 1
+        "input": 7,
+        "metadata": 4
       },
       "resolved_table_roles": {
-        "output": 2,
-        "calc": 1
+        "input": 3
       }
     },
     {
@@ -55,13 +54,13 @@
       "token_count": 0,
       "n_errors": 0,
       "table_roles": {
-        "calc": 60,
-        "input": 3,
-        "metadata": 2
+        "input": 37,
+        "metadata": 2,
+        "mixed": 26
       },
       "resolved_table_roles": {
-        "calc": 26,
-        "input": 1
+        "input": 3,
+        "mixed": 24
       }
     }
   ]
