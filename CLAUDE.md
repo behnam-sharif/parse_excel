@@ -207,6 +207,8 @@ Load candidates -> Adaptive params per bbox -> Render (COM or fallback)
 
 LLM-driven semantic enrichment on top of xl_table's structural hierarchy. Uses agentic LLM calls for table interpretation, split refinement, and enrichment.
 
+For an end-to-end narrative of the package (what V3a and V6 each do, why, and what they emit), see `xl_sheetagent/approach_sheetagent.md`.
+
 **Config**: `XlSheetAgentConfig` (in `xl_sheetagent/xl_sheetagent/config.py`) -- V3a routing flag, LLM model, agent parameters.
 
 **Module structure** (under `xl_sheetagent/xl_sheetagent/`): `steps/` (step0_prefilter, step1_boundary, step2_splits, step3_headers, step4_interpretation), `modules/` (grammar_builder, section_detector, visual_skeleton, table_enricher, sheet_coordinator, text_dominant_handler), `agents/` (table_agent, split_agent, sheet_coordinator_agent, grammar_workbook_agent), `assembly/` (sheet_assembler, relationship_builder, tree_renderer, exporter), `schemas/` (agent_types, enriched_table, grammar_profile, grammar_snapshot, run_manifest, sheet_object_tree, signals), `tools/` (llm_client, payload_builder, ontology_map, provenance_tools, debug_trace, v1c_review), `v3a/` (runner, table_agent, split_agent, sheet_coordinator, cell_analysis, formatting_utils, schemas, exporter, llm_ownership, detection_agent_poc).
@@ -267,7 +269,7 @@ Load V3a hierarchy (from xl_table or xl_sheetagent V3a)
 
 **Outputs**: `v6_sheetagent_output/tables.json`, `resolved_tables.json`, `final_table_map.json` (when `enable_finalize=true`), `summary.json`, `audit/llm_calls.jsonl`.
 
-**Downstream contract**: `xl_sheetagent/spec_finalize_v6.md` is the finalize implementation spec; `xl_sheetagent/spec_dag_v7.md` is the v7 DAG spec (implemented by the `xl_dag/` stage described below). V6 finalize must satisfy the node contract that `xl_dag` consumes.
+**Downstream contract**: `xl_sheetagent/spec_finalize_v6.md` is the finalize implementation spec; `xl_sheetagent/spec_dag_v7.md` is the v7 DAG spec (implemented by the `xl_dag/` stage described below). V6 finalize must satisfy the node contract that `xl_dag` consumes. For the package-level approach + outcome overview (V3a + V6, with pointers into the code), see `xl_sheetagent/approach_sheetagent.md`.
 
 **Orchestrator**: `apps/orchestrator/v6_viewer.py` — selective viewer with sheet picker, Raw V6 Nodes view (gate trigger badges), Resolved Tables view (metadata_source badges), core validation display.
 
