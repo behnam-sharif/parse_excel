@@ -77,6 +77,98 @@ class TestImports(unittest.TestCase):
         self.assertTrue(FinalMapEntryStandalone is not None)
         self.assertTrue(FinalTableMap is not None)
 
+    def test_xl_ontology_phase_a_imports(self) -> None:
+        from xl_ontology import (
+            OntologyRunError,
+            OntologyRunResult,
+            XlOntologyConfig,
+            run_ontology,
+        )
+        from xl_ontology.agents import (
+            CalculationsAgent,
+            InputsAgent,
+            OntologyAgent,
+            OverallModelAgent,
+            ResultsAgent,
+        )
+        from xl_ontology.defects import (
+            DefectOutcome,
+            recover_header_stub,
+            recover_rownames_stub,
+            recover_title_stub,
+            resolve_multi_core_stub,
+        )
+        from xl_ontology.pack_loader import load_pack
+        from xl_ontology.budget import BudgetExhausted, LlmBudget
+        from xl_ontology.trace import (
+            BuildErrorWriter,
+            NodeTypeOverrideWriter,
+            TraceWriter,
+        )
+        from xl_ontology.output_writers import (
+            next_summary_model_version,
+            write_summary_model,
+        )
+        from xl_ontology.agents import (
+            HEURISTIC_HANDLERS,
+            TRIGGER_REGISTRY,
+        )
+        from xl_ontology.schemas import (
+            DefectProcedureSkipped,
+            NodeTypeOverrideRecord,
+            OntologyPack,
+            OverrideEvidence,
+            PackWarning,
+            SummaryModel,
+            WarningEvent,
+        )
+        from core.paths import (
+            get_node_type_override_log_path,
+            get_ontology_output_path,
+            get_summary_model_path,
+            get_ontology_trace_path,
+        )
+
+        self.assertTrue(XlOntologyConfig is not None)
+        self.assertTrue(callable(load_pack))
+        self.assertTrue(callable(LlmBudget))
+        self.assertTrue(callable(BudgetExhausted))
+        self.assertTrue(callable(TraceWriter))
+        self.assertTrue(callable(BuildErrorWriter))
+        self.assertTrue(callable(NodeTypeOverrideWriter))
+        self.assertTrue(callable(write_summary_model))
+        self.assertTrue(callable(next_summary_model_version))
+        self.assertGreater(len(TRIGGER_REGISTRY), 0)
+        # cross_check_complete was dropped after H-CA-1/H-CA-3 became
+        # per-concept (REVISION 1 follow-up). Confirm the registry no
+        # longer carries it.
+        self.assertNotIn("cross_check_complete", TRIGGER_REGISTRY)
+        self.assertEqual(HEURISTIC_HANDLERS, {})
+        self.assertTrue(OntologyPack is not None)
+        self.assertTrue(PackWarning is not None)
+        self.assertTrue(SummaryModel is not None)
+        self.assertTrue(WarningEvent is not None)
+        self.assertTrue(DefectProcedureSkipped is not None)
+        self.assertTrue(NodeTypeOverrideRecord is not None)
+        self.assertTrue(OverrideEvidence is not None)
+        self.assertTrue(callable(get_ontology_output_path))
+        self.assertTrue(callable(get_summary_model_path))
+        self.assertTrue(callable(get_ontology_trace_path))
+        self.assertTrue(callable(get_node_type_override_log_path))
+        self.assertTrue(callable(run_ontology))
+        self.assertTrue(callable(OntologyRunError))
+        self.assertTrue(OntologyRunResult is not None)
+        self.assertTrue(OntologyAgent is not None)
+        self.assertTrue(OverallModelAgent is not None)
+        self.assertTrue(InputsAgent is not None)
+        self.assertTrue(CalculationsAgent is not None)
+        self.assertTrue(ResultsAgent is not None)
+        self.assertTrue(DefectOutcome is not None)
+        self.assertTrue(callable(recover_title_stub))
+        self.assertTrue(callable(recover_header_stub))
+        self.assertTrue(callable(recover_rownames_stub))
+        self.assertTrue(callable(resolve_multi_core_stub))
+
 
 class TestConfig(unittest.TestCase):
     def test_load_yaml_maps_to_dataclasses(self) -> None:
@@ -88,6 +180,7 @@ class TestConfig(unittest.TestCase):
             xl_init_config_from_pipeline,
             sheetagent_config_from_pipeline,
             sheetagent_v6_config_from_pipeline,
+            ontology_config_from_pipeline,
         )
 
         pc = load_config()
@@ -97,6 +190,7 @@ class TestConfig(unittest.TestCase):
         xl_image_config_from_pipeline(pc)
         sheetagent_config_from_pipeline(pc)
         sheetagent_v6_config_from_pipeline(pc)
+        ontology_config_from_pipeline(pc)
 
 
 class TestNoLegacyKgSubstring(unittest.TestCase):
@@ -107,6 +201,7 @@ class TestNoLegacyKgSubstring(unittest.TestCase):
             _ROOT / "xl_table",
             _ROOT / "xl_image",
             _ROOT / "xl_sheetagent",
+            _ROOT / "xl_ontology",
             _ROOT / "core",
             _ROOT / "apps",
             _ROOT / "scripts",

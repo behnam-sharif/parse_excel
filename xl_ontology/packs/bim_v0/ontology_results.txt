@@ -1,0 +1,249 @@
+ontology_results.txt
+====================
+
+1. IDENTITY
+-----------
+ontology_pack: bim_v0
+ontology_node: results
+version: 0.2
+model_family: BIM
+expected_scale: 1-3 main result tables per workbook
+llm_budget_share: 1 planner call + up to 3 defect calls = 4 calls max
+                  per workbook (seed phase)
+
+
+2. PURPOSE
+----------
+Identify the result / output tables. Result tables answer "what is the
+budget impact?" — usually by year and cumulatively, comparing
+intervention vs comparator scenarios.
+
+These are terminal in the DAG: nothing important downstream depends on
+them. They are read, copied to slides, and reported.
+
+For framing, see ontology_results.context.md and
+pack_overview.context.md.
+
+
+3. EXPECTED CONCEPTS
+--------------------
+- incremental_budget_impact   the headline: cost difference between
+                              intervention and comparator, by year and
+                              cumulative
+- total_cost_summary          side-by-side total costs (intervention vs
+                              comparator), by year
+- per_patient_impact          cost per treated or eligible patient
+- annual_impact               year-by-year breakdown
+- multi_year_impact           3-year, 5-year, or full-horizon totals
+- scenario_results            sensitivity / scenario analysis output
+
+
+4. STRUCTURAL FINGERPRINTS
+--------------------------
+- Upstream `node_type` is `output`
+- Terminal in the DAG (zero or near-zero fan-out)
+- High DAG fan-in (multiple calc tables feed it)
+- Sheet names: "Results", "Output", "Summary", "Budget Impact", "BIM
+  Output", "Headline", "Dashboard", "Report"
+- Title contains "incremental", "difference", "budget impact", "summary"
+- Time-indexed columns (Year 1 through Year N) plus a "Total" or
+  "Cumulative" column
+- Visually emphasised: bold headers, larger font, fill colours, borders,
+  embedded chart nearby
+
+Specific fingerprints:
+
+- incremental_budget_impact:  row labelled "Difference", "Incremental",
+                              or "Net impact"; formula subtracts
+                              comparator from intervention
+- per_patient_impact:         row label or column header mentions "per
+                              patient"; formulas divide totals by
+                              patient count
+- multi_year:                 contains "Total", "Cumulative", or
+                              "5-year" column with SUM across years
+
+
+5. LEXICON
+----------
+Match case-insensitively.
+
+results:           result, results, output, summary, headline,
+                   dashboard, report, BIM result, budget impact
+incremental:       incremental, difference, net, delta, change, impact,
+                   vs comparator, vs current practice
+total:             total, grand total, overall, all-in, sum
+per_patient:       per patient, per person, per treated, per eligible
+annual:            annual, yearly, per year, by year
+cumulative:        cumulative, running total, multi-year, 3-year,
+                   5-year, full horizon, total horizon
+scenario:          scenario, sensitivity, what if, alternative, best
+                   case, worst case
+
+
+6. DECISION RULES
+-----------------
+A. STARTING SET
+   Pull all tables with upstream `node_type=output`.
+
+B. TERMINAL CHECK
+   Verify each candidate is terminal in the DAG (fan-out = 0 or near
+   0). Tables with significant fan-out are likely intermediate calc
+   tables — defer to calculations agent.
+
+C. INCREMENTAL DETECTION
+   The headline result almost always contains a row or column with
+   incremental lexicon. Search candidates for this. First match is
+   usually correct.
+
+D. CROSS-CHECK BY EXPECTED CONCEPT
+   Confirm at least one candidate covers `incremental_budget_impact`.
+   If none do, search ALL terminal tables in the workbook with
+   scope=whole_table (regardless of upstream node_type). The
+   whole_table scope covers title + headers + row_names + body cell
+   values + formula text. Some BIMs put the headline result on a
+   sheet finalize tagged unusually. When a hit is found in a
+   non-output-tagged table, set `node_type_override_proposed: true`
+   and call record_node_type_override.
+
+E. STRUCTURAL SANITY CHECK (deterministic, no LLM)
+   For every table in the workbook, evaluate:
+     fanout == 0 AND fanin > 1 AND
+       (table is on a sheet whose name matches results lexicon
+        OR table title matches results lexicon)
+   Tables matching this pattern are terminal, fed by multiple
+   upstream nodes, and named like results. When the predicate fires
+   AND upstream label is not "output", treat the table as a result
+   candidate, set `node_type_override_proposed: true`, and call
+   record_node_type_override. This check runs once per candidate
+   after rule D, before rule F.
+
+F. RANKING
+   Rank by lexicon match score (incremental keywords weighted highest),
+   terminal in DAG, fan-in count, sheet name match, visual emphasis.
+
+G. STOP CONDITION
+   Stop after 3 result candidates OR LLM budget exhausted.
+
+H. HEURISTICS
+   Executor checks ontology_results.heuristics.md for applicable
+   heuristics before marking concepts absent.
+
+I. DEFECT FLAGS (v0)
+   If a candidate table carries upstream defect flags (title_missing,
+   header_missing, rowname_missing, multi_core_detected), the executor
+   calls the corresponding stub procedure (spec Section 10) and emits
+   a defect_procedure_skipped trace event. The agent proceeds with
+   whatever metadata exists; if classification is impossible, the
+   table goes to unclassified with reason
+   "defect_procedure_disabled_in_v0". Real defect recovery is deferred
+   to a future xl_table_repair pre-stage.
+
+
+7. EXTRACTION SCHEMA
+--------------------
+For each accepted result table:
+
+  {
+    "table_id": "...",
+    "ontology_role": "result",
+    "ontology_subtype": "incremental_budget_impact | total_cost_summary |
+                        per_patient_impact | annual_impact |
+                        multi_year_impact | scenario_results",
+    "confidence": 0.0 to 1.0,
+    "evidence_quality": "high | partial | inferred | absent",
+    "why_selected": "free text",
+    "evidence_signals": [
+      {"type": "...", "value": "...", "matched_term": "..."}
+    ],
+    "upstream_node_type": "output | mixed | ...",
+    "node_type_override_proposed": false,
+    "parent_table_id": "... or null",
+    "parent_path": [...],
+    "sibling_count": integer,
+    "parent_split_appears_artificial": false,
+    "applied_heuristics": [...],
+    "extracted_payload": {
+      "time_indexed": true | false,
+      "time_columns": ["Year 1", ...] or null,
+      "has_cumulative_column": true | false,
+      "result_metrics": [
+        {
+          "name": "row or column label, e.g. 'Incremental cost (£)'",
+          "values_by_period": {"Year 1": 1234567, "Total": ...},
+          "unit": "GBP | USD | EUR | %",
+          "source_cells": ["Sheet!A1", ...],
+          "is_formula": true | false,
+          "format_role": "headline | subtotal | label"
+        }
+      ],
+      "fed_by": ["upstream node_ids"]
+    },
+    "flags": [...]
+  }
+
+
+8. FORMAT CONVENTIONS
+---------------------
+Result tables are usually the most visually emphasised tables.
+
+- Headline value cells:    currency format, often bold, larger font,
+                           sometimes coloured (red for negative, green
+                           for positive), contains formula
+- Year header cells:       text, bold, often centred, may be merged
+- Row label cells:         text, left-aligned, often bold for "Total"
+                           or "Incremental" rows
+- Subtotal rows:           formula cells, bold, top border
+- Total / cumulative col:  formula cells, bold, often distinct fill,
+                           double border on left
+- Negative values:         often red, sometimes parentheses format
+                           (e.g., "(1,234)" instead of "-1234")
+
+Every extracted cell tagged with `format_role` (headline | subtotal |
+label).
+
+
+9. CONFIDENCE CALIBRATION
+-------------------------
+- high:     upstream `node_type=output`, terminal in DAG, lexicon match
+            includes incremental keyword, no defect flags
+- partial:  terminal but weak lexicon match, OR strong lexicon match
+            but not terminal
+- inferred: LLM-classified after defect procedure
+- absent:   no result table found anywhere
+
+
+10. UNKNOWN POLICY
+------------------
+- If no result table found, model is incomplete or non-standard. Mark
+  `present: false` and flag for human review.
+- If multiple terminal tables are equally plausible, include all in
+  candidates (up to 3) — let `xl_ask` disambiguate at query time.
+- If a result table is complete but lacks an incremental row/column,
+  flag `incremental_missing`. Model may report only absolute totals.
+- Embedded charts near a result table are NOT extracted in v0. Flag
+  their presence so future versions can pick them up.
+
+
+11. SUMMARY CONSTRAINTS
+-----------------------
+generation: template (Option B — no LLM call)
+summary_source: "template"
+template:
+  "{N} result table{s_or_blank} identified
+   ({main_subtypes_list}{cumulative_clause}). {incremental_clause}.
+   {scenario_clause}."
+
+Examples:
+  "1 result table identified (incremental_budget_impact, with
+   cumulative column). Incremental row present. No sensitivity or
+   scenario results."
+
+  "2 result tables identified (incremental_budget_impact,
+   per_patient_impact). Incremental row present. Scenario results
+   table found separately."
+
+on_low_evidence:
+  if N == 0:
+    summary = "No result tables identified. Model may be incomplete."
+  if no incremental row found:
+    summary appends ": no incremental row located"

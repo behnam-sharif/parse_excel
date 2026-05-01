@@ -1,0 +1,173 @@
+ontology_overall_model.txt
+================================
+
+1. IDENTITY
+-----------
+ontology_pack: bim_v0
+ontology_node: overall_model
+version: 0.2
+model_family: BIM
+expected_scale: one summary per workbook
+llm_budget_share: 1 planner call + 1 summary call + up to 2 inferred-concept
+                  calls = 4 calls max per workbook (seed phase)
+
+
+2. PURPOSE
+----------
+Identify what this budget impact model is about. Produce a short, factual
+summary of the intervention, comparator, country, population, disease, time
+horizon, and objective. This is the "front page" of the model.
+
+This agent does not classify tables into ontology roles. It only extracts
+high-level concepts that orient the rest of the ontology pack.
+
+For framing on what BIM is and why these concepts always appear, see
+ontology_overall_model.context.md and pack_overview.context.md.
+
+
+3. EXPECTED CONCEPTS
+--------------------
+Each concept must be populated, set to inferred, or marked absent. No
+hallucination.
+
+- intervention         the new drug, device, or program being evaluated
+- comparator(s)        what the intervention is compared against
+- country / setting    geography or healthcare system
+- population           target patient group (e.g., adults with X)
+- disease / indication clinical condition
+- time_horizon         years or cycles modelled
+- perspective          payer / societal / hospital
+- objective            free-text 1-2 sentence model purpose
+
+
+4. STRUCTURAL FINGERPRINTS
+--------------------------
+Where to look (priority order):
+
+- Sheets named: "Title", "Cover", "Front", "Description", "About",
+  "Introduction", "Model Info", "Assumptions", "Notes", "Read Me",
+  "Summary", "Settings", "Inputs Overview"
+- The first sheet of the workbook regardless of name
+- Tables tagged `data_table` or `orphan_metadata` on those sheets
+- Cells in rows 1-10 of any input-tagged sheet (often dropdown switches:
+  country, currency, indication)
+- Named ranges with names matching the lexicon
+
+
+5. LEXICON
+----------
+Match case-insensitively.
+
+intervention:    intervention, new drug, novel therapy, study drug,
+                 treatment, therapy, product, brand name, INN
+comparator:      comparator, standard of care, SoC, current practice,
+                 reference, control, baseline arm, comparator arm
+country:         country, region, geography, market, setting, jurisdiction,
+                 territory; ISO country names; payer names (NHS, CMS, etc.)
+population:      population, patient population, target population, eligible
+                 patients, indication population, cohort
+disease:         disease, indication, condition, diagnosis, ICD,
+                 therapeutic area
+time_horizon:    time horizon, model horizon, years modelled, projection
+                 period, analysis period, X-year horizon
+perspective:     perspective, viewpoint, payer perspective, societal
+                 perspective
+objective:       objective, purpose, aim, goal, scope
+
+
+6. DECISION RULES
+-----------------
+- If a sheet matching the structural fingerprints exists AND contains
+  free-text describing the model: send the relevant cells to LLM with
+  this ontology file plus context files. Ask LLM to populate concepts.
+- If only dropdown switches exist: extract values deterministically. No
+  LLM call.
+- If neither exists: search across all sheets for the lexicon terms. Send
+  top 5 matching cell contexts to LLM in a SINGLE call.
+- If still nothing: mark `evidence_quality: absent` and `present: false`.
+- For any concept not directly found, the executor checks
+  ontology_overall_model.heuristics.md for an applicable heuristic before
+  marking absent. See heuristic IDs H-OM-1, H-OM-2, etc.
+- DEFECT FLAGS (v0): if a candidate sheet's tables carry upstream defect
+  flags (title_missing, header_missing, rowname_missing,
+  multi_core_detected), the executor calls the corresponding stub
+  procedure (spec Section 10) and emits a defect_procedure_skipped
+  trace event. The agent proceeds with whatever metadata exists; if
+  classification is impossible, the table goes to unclassified with
+  reason "defect_procedure_disabled_in_v0". Real defect recovery is
+  deferred to a future xl_table_repair pre-stage.
+
+
+7. EXTRACTION SCHEMA
+--------------------
+Per concept:
+
+  {
+    "value": "<string or null>",
+    "evidence": [
+      {
+        "sheet": "...",
+        "cell": "...",
+        "table_id": "... or null",
+        "snippet": "actual cell text",
+        "match_type": "lexicon_match | format_match | dropdown_value |
+                       llm_inferred | cross_reference |
+                       structural_fingerprint",
+        "matched_term": "string or null"
+      }
+    ],
+    "search_log": [...],   // populated only if value is null
+    "confidence": 0.0 to 1.0 or null,
+    "evidence_quality": "high | partial | inferred | absent"
+  }
+
+Plus a top-level summary (see Section 11).
+
+
+8. FORMAT CONVENTIONS
+---------------------
+Cell formats expected on overall-model sheets:
+
+- Title cells:        bold, large font, often merged, may be coloured,
+                      no formula
+- Section headers:    bold, may have border below
+- Free-text body:     regular text, may be wrapped, no formula
+- Switch cells:       bordered, often highlighted (yellow/blue), data
+                      validation dropdown, value is a label string
+- Date cells:         number-formatted as date, no formula
+
+Anything formula-bearing on these sheets is unusual and worth flagging.
+
+
+9. CONFIDENCE CALIBRATION
+-------------------------
+- high:     concept extracted from clearly-titled cell with lexicon match,
+            no ambiguity
+- partial:  extracted but had to be inferred from context (e.g., country
+            from currency symbol)
+- inferred: LLM proposed value with no direct cell evidence
+- absent:   no evidence found anywhere
+
+
+10. UNKNOWN POLICY
+------------------
+Unknown is a valid answer. Set value to null and evidence_quality to
+absent. Do NOT guess based on prior probability ("most BIMs are oncology"
+→ do not write "oncology"). Always populate `search_log` for absent
+concepts so reviewers can see what was searched.
+
+
+11. SUMMARY CONSTRAINTS
+-----------------------
+generation: LLM (Option A — 1 call)
+summary_source: "llm_synthesised"
+max_length: 3 sentences (~60 words)
+must_contain: only facts grounded in extracted evidence
+must_not_contain:
+  - claims about quality, sophistication, or correctness
+  - methodological standards not explicitly stated in the workbook
+  - duplication of fields in `concepts` or `expected_concepts_status`
+voice: descriptive third person, present tense
+on_low_evidence:
+  if evidence_quality == "absent": summary = null
+  if evidence_quality == "partial": summary must say what is missing

@@ -1,0 +1,643 @@
+"""xl_ontology/schemas.py — Pydantic v2 data model.
+
+Mirrors the JSON shapes in spec §12 and the structures named in plan §4.
+Phase A defines the surface; behaviour (validators, builders) lands in
+later phases. Field names match the spec verbatim.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional, Union
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+# ---------------------------------------------------------------------------
+# Strict base — extra keys forbidden in v0 to catch contract drift early.
+# ---------------------------------------------------------------------------
+
+class _Strict(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=False)
+
+
+# ---------------------------------------------------------------------------
+# Pack-loaded types (plan §4 — pack-loaded)
+# ---------------------------------------------------------------------------
+
+NodeName = Literal["overall_model", "inputs", "calculations", "results"]
+HeuristicStatus = Literal["active", "experimental", "deprecated", "subsumed_by_ml"]
+
+
+class HeuristicFrontMatter(_Strict):
+    """Front-matter parsed from a heuristic chunk in <node>.heuristics.md."""
+
+    id: str
+    applies_to: NodeName
+    concept: str
+    trigger: str
+    priority: int
+    last_updated: str  # date string as written (YYYY-MM-DD); not parsed in v0
+    status: HeuristicStatus
+
+
+class Heuristic(_Strict):
+    """A single heuristic chunk: front-matter + prose body."""
+
+    id: str
+    applies_to: NodeName
+    concept: str
+    trigger: str
+    priority: int
+    last_updated: str
+    status: HeuristicStatus
+    body_text: str
+
+
+class NodeIdentity(_Strict):
+    """Parsed §1 IDENTITY block from <node>.txt."""
+
+    ontology_pack: str
+    ontology_node: NodeName
+    version: str
+    model_family: str
+    expected_scale: str
+    llm_budget_share: str
+
+
+class OntologyNode(_Strict):
+    """One of the four node bundles in a pack."""
+
+    node_name: NodeName
+    txt_path: Path
+    context_md_path: Path
+    heuristics_md_path: Path
+    txt_text: str
+    context_text: str
+    identity: NodeIdentity
+    heuristics: List[Heuristic]
+
+
+class PackBudgets(_Strict):
+    """Optional pack-overview front-matter overriding spec defaults.
+
+    Defaults match REVISION 1 (spec §11): 8 LLM calls per workbook
+    in seed phase, 5 per xl_ask query in enrichment. The class
+    default must agree with config/stages.yaml — agreement enforced
+    by tests in xl_ontology/tests/test_pack_loader.py and
+    xl_ontology/tests/test_config_loading.py.
+    """
+
+    seed_llm_budget_max: int = 8
+    enrichment_llm_budget_max: int = 5
+
+
+class PackWarning(_Strict):
+    """A non-fatal issue surfaced by the pack loader. Examples:
+    unknown extra files in the pack directory, deprecated heuristics
+    encountered, etc. The runner converts each into a
+    ``WarningEvent`` trace entry (plan §5.7 / §12.10)."""
+
+    category: str  # e.g. "unknown_pack_file"
+    message: str
+    file_path: Optional[str] = None  # absolute or relative path string
+
+
+class OntologyPack(_Strict):
+    """Top-level loaded pack."""
+
+    id: str
+    version: str
+    pack_dir: Path
+    pack_overview_text: str
+    budgets: PackBudgets
+    nodes: Dict[NodeName, OntologyNode]
+    warnings: List[PackWarning] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Per-table classification types (plan §4 — per-table)
+# ---------------------------------------------------------------------------
+
+EvidenceMatchType = Literal[
+    "lexicon_match",
+    "format_match",
+    "dropdown_value",
+    "llm_inferred",
+    "cross_reference",
+    "structural_fingerprint",
+]
+
+
+class Evidence(_Strict):
+    sheet: str
+    cell: str
+    table_id: Optional[str] = None
+    snippet: str
+    match_type: EvidenceMatchType
+    matched_term: Optional[str] = None
+
+
+class SearchLogEntry(_Strict):
+    tool: str
+    args_summary: Union[str, Dict[str, Any]]
+    result_summary: Union[str, Dict[str, Any]]
+    hits: Optional[int] = None
+
+
+EvidenceSignalType = Literal[
+    "title_match",
+    "formula_density",
+    "dag_fanout",
+    "format_match",
+    "structural_fingerprint",
+]
+
+
+class EvidenceSignal(_Strict):
+    type: EvidenceSignalType
+    value: Any
+    matched_term: Optional[str] = None
+
+
+# Extracted-payload sub-shapes (one per ontology node).
+ParameterFormatRole = Literal["input_value", "derived_value", "label", "header"]
+
+
+class ParameterRecord(_Strict):
+    name: str
+    value: Any
+    unit: Optional[str] = None
+    source_cell: str
+    is_formula: bool
+    format_role: ParameterFormatRole
+
+
+class InputPayload(_Strict):
+    parameters: List[ParameterRecord] = Field(default_factory=list)
+
+
+class KeyFormulaRecord(_Strict):
+    cell: str
+    formula: str
+    depends_on_tables: List[str] = Field(default_factory=list)
+
+
+class CalcPayload(_Strict):
+    time_indexed: bool
+    time_columns: Optional[List[str]] = None
+    treatment_dimension: Literal["intervention", "comparator", "both", "n/a"]
+    key_formulas: List[KeyFormulaRecord] = Field(default_factory=list)
+    feeds_into: List[str] = Field(default_factory=list)
+    fed_by: List[str] = Field(default_factory=list)
+
+
+ResultFormatRole = Literal["headline", "subtotal", "label"]
+
+
+class ResultMetric(_Strict):
+    name: str
+    values_by_period: Dict[str, float] = Field(default_factory=dict)
+    unit: Optional[str] = None
+    source_cells: List[str] = Field(default_factory=list)
+    is_formula: bool
+    format_role: ResultFormatRole
+
+
+class ResultPayload(_Strict):
+    time_indexed: bool
+    time_columns: Optional[List[str]] = None
+    has_cumulative_column: bool
+    result_metrics: List[ResultMetric] = Field(default_factory=list)
+    fed_by: List[str] = Field(default_factory=list)
+
+
+EvidenceQuality = Literal["high", "partial", "inferred", "absent"]
+EvidenceQualityOrPending = Literal["high", "partial", "inferred", "absent", "pending"]
+OntologyRoleClassified = Literal["input", "calculation", "result"]
+OntologyRoleAny = Literal[
+    "input", "calculation", "result", "overall_evidence", "unclassified"
+]
+UpstreamNodeType = Literal["input", "calc", "output", "mixed", "data_table", "metadata"]
+
+
+class CandidateTable(_Strict):
+    table_id: str
+    ontology_role: OntologyRoleClassified
+    ontology_subtype: Optional[str] = None
+    confidence: Optional[float] = None
+    evidence_quality: EvidenceQuality
+    why_selected: str
+    evidence_signals: List[EvidenceSignal] = Field(default_factory=list)
+    upstream_node_type: UpstreamNodeType
+    node_type_override_proposed: bool = False
+    parent_table_id: Optional[str] = None
+    parent_path: List[str] = Field(default_factory=list)
+    sibling_count: int = 0
+    parent_split_appears_artificial: bool = False
+    applied_heuristics: List[str] = Field(default_factory=list)
+    extracted_payload: Union[InputPayload, CalcPayload, ResultPayload]
+    flags: List[str] = Field(default_factory=list)
+
+
+class ParentGroup(_Strict):
+    parent_table_id: str
+    parent_title: Optional[str] = None
+    members: List[str] = Field(default_factory=list)
+    all_in_this_node: bool
+    cross_node_members: List[Dict[str, str]] = Field(default_factory=list)
+
+
+class ConceptRecord(_Strict):
+    """One entry in overall_model.concepts."""
+
+    value: Any = None
+    evidence: List[Evidence] = Field(default_factory=list)
+    search_log: List[SearchLogEntry] = Field(default_factory=list)
+    confidence: Optional[float] = None
+    evidence_quality: EvidenceQuality
+
+
+SummarySource = Literal["template", "llm_synthesised"]
+
+
+class OverallModelNode(_Strict):
+    present: bool
+    evidence_quality: EvidenceQuality
+    summary: Optional[str] = None
+    summary_source: SummarySource
+    concepts: Dict[str, ConceptRecord] = Field(default_factory=dict)
+    applied_heuristics: List[str] = Field(default_factory=list)
+    confidence: Optional[float] = None
+
+
+ConceptStatus = Literal["found", "partial", "inferred", "absent"]
+
+
+class OntologyClassificationNode(_Strict):
+    """Generic shape for inputs / calculations / results agents."""
+
+    present: bool
+    evidence_quality: EvidenceQuality
+    summary: Optional[str] = None
+    summary_source: SummarySource
+    candidate_tables: List[CandidateTable] = Field(default_factory=list)
+    parent_groups: List[ParentGroup] = Field(default_factory=list)
+    expected_concepts_status: Dict[str, ConceptStatus] = Field(default_factory=dict)
+    confidence: Optional[float] = None
+
+
+class UnclassifiedTable(_Strict):
+    table_id: str
+    priority_score: float
+    reason: str
+
+
+class ProposedCorrection(_Strict):
+    table_id: str
+    issue: str
+    proposed_correction: str
+    confidence: Optional[float] = None
+    evidence: str
+    consumer: Literal["advisory_only"] = "advisory_only"
+
+
+class LlmBudgetSnapshot(_Strict):
+    seed_calls_used: int
+    seed_calls_max: int
+    enrichment_calls_used: int
+
+
+class SummaryModel(_Strict):
+    """Top-level summary_model_v{N}.json."""
+
+    model_id: str
+    ontology_id: str
+    ontology_version: str
+    schema_version: Literal["v0"] = "v0"
+    seed_timestamp: str
+    last_enriched_timestamp: Optional[str] = None
+    workbook_file_hash: str
+    overall_model: OverallModelNode
+    inputs: OntologyClassificationNode
+    calculations: OntologyClassificationNode
+    results: OntologyClassificationNode
+    unclassified_tables: List[UnclassifiedTable] = Field(default_factory=list)
+    proposed_table_corrections: List[ProposedCorrection] = Field(default_factory=list)
+    llm_budget: LlmBudgetSnapshot
+    run_notes: List[str] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Per-agent record types (plan §4 — per-agent)
+# ---------------------------------------------------------------------------
+
+AgentStatus = Literal["complete", "partial", "failed"]
+
+
+class AgentOutputRecord(_Strict):
+    status: AgentStatus
+    evidence_quality: EvidenceQuality
+    summary: Optional[str] = None
+    summary_source: SummarySource
+    concepts_resolved: Optional[int] = None
+    concepts_absent: Optional[int] = None
+    tables_classified: Optional[int] = None
+    node_type_overrides_proposed: int = 0
+    expected_concepts_found: List[str] = Field(default_factory=list)
+    expected_concepts_absent: List[str] = Field(default_factory=list)
+    applied_heuristics: List[str] = Field(default_factory=list)
+    tools_called: List[str] = Field(default_factory=list)
+    llm_calls_used: int = 0
+    elapsed_seconds: float = 0.0
+    key_decisions: List[str] = Field(default_factory=list)
+    human_readable_output: str = ""
+
+
+class AgentOutputsFile(_Strict):
+    model_id: str
+    ontology_id: str
+    run_timestamp: str
+    agents: Dict[NodeName, AgentOutputRecord] = Field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Per-table tag types (plan §4 — per-table tag)
+# ---------------------------------------------------------------------------
+
+class TableTagRecord(_Strict):
+    table_id: str
+    sheet: str
+    title: Optional[str] = None
+    upstream_node_type: UpstreamNodeType
+    ontology_role: OntologyRoleAny
+    ontology_subtype: Optional[str] = None
+    node_type_override_proposed: bool = False
+    in_top_candidates: bool
+    confidence: Optional[float] = None
+    evidence_quality: Optional[EvidenceQuality] = None
+    agent_owner: Optional[NodeName] = None
+    applied_heuristics: List[str] = Field(default_factory=list)
+    flags: List[str] = Field(default_factory=list)
+
+
+class TagSummary(_Strict):
+    total_tables: int
+    classified_input: int
+    classified_calculation: int
+    classified_result: int
+    classified_overall_evidence: int
+    unclassified: int
+    node_type_overrides_proposed: int
+
+
+class TableTagsFile(_Strict):
+    model_id: str
+    ontology_id: str
+    run_timestamp: str
+    tables: List[TableTagRecord] = Field(default_factory=list)
+    tag_summary: TagSummary
+
+
+# ---------------------------------------------------------------------------
+# Trace event types (plan §4 — trace events; spec §12.10)
+#
+# Discriminated by the `event` field. v0 keeps these as separate models so
+# the writer can serialise a heterogeneous list and a future loader can
+# discriminate. Each model carries `ts: str` (ISO-8601) and `event: str`.
+# ---------------------------------------------------------------------------
+
+class _TraceBase(_Strict):
+    ts: str
+    event: str
+
+    @staticmethod
+    def now_ts() -> str:
+        return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace(
+            "+00:00", "Z"
+        )
+
+
+class AgentStart(_TraceBase):
+    event: Literal["agent_start"] = "agent_start"
+    agent: NodeName
+    files_loaded: List[str]
+
+
+class PlannerContextBuilt(_TraceBase):
+    event: Literal["planner_context_built"] = "planner_context_built"
+    agent: NodeName
+    context_size_chars: int
+    node_index_summary_size_chars: int
+
+
+class LlmCall(_TraceBase):
+    event: Literal["llm_call"] = "llm_call"
+    agent: NodeName
+    phase: Literal["planner", "concept_synthesis", "defect_procedure", "summary_synthesis"]
+    prompt: str
+    prompt_size_chars: int
+    response: str
+    response_size_chars: int
+    tokens_used: int
+    elapsed_ms: int
+
+
+class PlanProduced(_TraceBase):
+    event: Literal["plan_produced"] = "plan_produced"
+    agent: NodeName
+    plan_steps: int
+    plan: List[Dict[str, Any]]
+
+
+class ToolCall(_TraceBase):
+    event: Literal["tool_call"] = "tool_call"
+    agent: NodeName
+    tool: str
+    args: Dict[str, Any]
+    result_summary: Union[str, Dict[str, Any]]
+    elapsed_ms: int
+    concept_in_focus: Optional[str] = None
+
+
+class HeuristicTriggered(_TraceBase):
+    event: Literal["heuristic_triggered"] = "heuristic_triggered"
+    agent: NodeName
+    heuristic_id: str
+    concept: str
+    trigger_state: str
+
+
+class HeuristicApplied(_TraceBase):
+    event: Literal["heuristic_applied"] = "heuristic_applied"
+    agent: NodeName
+    heuristic_id: str
+    outcome: str
+    value: Optional[Any] = None
+
+
+class ConceptRecorded(_TraceBase):
+    event: Literal["concept_recorded"] = "concept_recorded"
+    agent: NodeName
+    concept: str
+    value: Optional[Any] = None
+    evidence_quality: EvidenceQuality
+    confidence: Optional[float] = None
+
+
+class ConceptAbsent(_TraceBase):
+    event: Literal["concept_absent"] = "concept_absent"
+    agent: NodeName
+    concept: str
+    search_log_size: int
+
+
+class TableClassified(_TraceBase):
+    event: Literal["table_classified"] = "table_classified"
+    agent: NodeName
+    table_id: str
+    ontology_role: OntologyRoleClassified
+    ontology_subtype: Optional[str] = None
+    confidence: Optional[float] = None
+
+
+class NodeTypeOverride(_TraceBase):
+    event: Literal["node_type_override"] = "node_type_override"
+    agent: NodeName
+    table_id: str
+    from_type: str = Field(alias="from")
+    to_type: str = Field(alias="to")
+    reason: str
+
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+
+class DefectProcedureInvoked(_TraceBase):
+    event: Literal["defect_procedure_invoked"] = "defect_procedure_invoked"
+    agent: NodeName
+    table_id: str
+    defect_type: Literal["title_missing", "header_missing", "rowname_missing", "multi_core_detected"]
+    procedure: Literal["10.1", "10.2", "10.3", "10.4"]
+
+
+class BudgetCheck(_TraceBase):
+    event: Literal["budget_check"] = "budget_check"
+    phase: Literal["seed", "enrichment"]
+    calls_used: int
+    calls_max: int
+
+
+class BudgetExhausted(_TraceBase):
+    event: Literal["budget_exhausted"] = "budget_exhausted"
+    phase: Literal["seed", "enrichment"]
+    agent: Optional[NodeName] = None
+    skipped_concept: Optional[str] = None
+    skipped_table_id: Optional[str] = None
+
+
+class AgentComplete(_TraceBase):
+    event: Literal["agent_complete"] = "agent_complete"
+    agent: NodeName
+    status: AgentStatus
+    elapsed_seconds: float
+
+
+class RunStart(_TraceBase):
+    event: Literal["run_start"] = "run_start"
+    run_id: str
+    ontology_id: str
+    phase: Literal["seed", "enrichment"]
+
+
+class RunComplete(_TraceBase):
+    event: Literal["run_complete"] = "run_complete"
+    status: AgentStatus
+    agents_run: int
+    total_elapsed_seconds: float
+    total_llm_calls: int
+
+
+class TraceError(_TraceBase):
+    event: Literal["error"] = "error"
+    agent: Optional[NodeName] = None
+    table_id: Optional[str] = None
+    error_type: str
+    message: str
+
+
+class DefectProcedureSkipped(_TraceBase):
+    """REVISION 1 first-class event. Emitted by every defect stub
+    (spec §10) so the §13.6 dashboard can quantify defect frequency
+    in real workbooks for sizing the future xl_table_repair."""
+
+    event: Literal["defect_procedure_skipped"] = "defect_procedure_skipped"
+    agent: NodeName
+    table_id: str
+    flag_type: Literal[
+        "title_missing", "header_missing", "rowname_missing", "multi_core_detected"
+    ]
+    would_have_been_procedure_id: Literal["10.1", "10.2", "10.3", "10.4"]
+    agent_owner: NodeName
+
+
+class WarningEvent(_TraceBase):
+    """Non-fatal warning surfaced during the run. The pack loader
+    populates ``OntologyPack.warnings`` for things like unknown extra
+    files; the runner converts each into a WarningEvent so the UI's
+    Inspect-run view (and a future Warnings filter) can display them
+    next to errors. Plan §5.7 / §13.2."""
+
+    event: Literal["warning"] = "warning"
+    category: str  # e.g. "unknown_pack_file"
+    message: str
+    file_path: Optional[str] = None
+    agent: Optional[NodeName] = None
+
+
+# ---------------------------------------------------------------------------
+# Build-error log type (plan §4 — error log)
+# ---------------------------------------------------------------------------
+
+class BuildErrorRecord(_Strict):
+    """One line in ontology_build_errors.jsonl."""
+
+    ts: str
+    agent: Optional[NodeName] = None
+    table_id: Optional[str] = None
+    error_type: str
+    message: str
+    partial_state: Optional[Dict[str, Any]] = None
+
+
+# ---------------------------------------------------------------------------
+# Override-log type (REVISION 3 — plan §4)
+# ---------------------------------------------------------------------------
+
+class OverrideEvidence(_Strict):
+    """One evidence row inside a NodeTypeOverrideRecord."""
+
+    signal: str  # e.g. "lexicon_match_whole_table", "structural_sanity_low_formula_high_fanout"
+    value: Any
+    matched_term: Optional[str] = None
+
+
+class NodeTypeOverrideRecord(_Strict):
+    """One line in node_type_override_log.jsonl (spec §12.11).
+
+    Captures finalize/ontology disagreements about node_type. Each
+    line is a labelled training example for a future finalize ML
+    classifier and a row in the UI's "Upstream label disagreements"
+    view (spec §13.2).
+    """
+
+    ts: str
+    table_id: str
+    sheet: str
+    title: Optional[str] = None
+    upstream_label: UpstreamNodeType
+    ontology_label: Literal["input", "calculation", "result", "overall_evidence"]
+    ontology_subtype: str
+    evidence: List[OverrideEvidence] = Field(default_factory=list)
+    confidence: Optional[float] = None
+    applied_heuristic: Optional[str] = None

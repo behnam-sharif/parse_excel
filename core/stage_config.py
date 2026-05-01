@@ -155,3 +155,17 @@ def dag_config_from_pipeline(
     overrides: Optional[Dict[str, Any]] = None,
 ):
     return dag_config_from_mapping(merge_stage_dict(pc.xl_dag, overrides))
+
+
+def ontology_config_from_mapping(d: Mapping[str, Any]):
+    from xl_ontology.config import XlOntologyConfig
+
+    data = _require_exact_keys(XlOntologyConfig, d, "stages.yaml xl_ontology")
+    return XlOntologyConfig(**data)
+
+
+def ontology_config_from_pipeline(
+    pc: PipelineConfig,
+    overrides: Optional[Dict[str, Any]] = None,
+):
+    return ontology_config_from_mapping(merge_stage_dict(pc.xl_ontology, overrides))

@@ -73,3 +73,40 @@ def get_table_map_overview_path(run_id: str, base: str = "data/output") -> Path:
 def get_log_path(run_id: str, base: str = "data/output") -> Path:
     """Return the logs directory for a given run."""
     return get_run_root(run_id, base) / "logs"
+
+
+def get_ontology_output_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the xl_ontology output directory for a given run."""
+    return get_run_root(run_id, base) / "ontology_output"
+
+
+def get_summary_model_path(
+    run_id: str, version: int, base: str = "data/output"
+) -> Path:
+    """Return the versioned summary_model file (summary_model_v{N}.json)."""
+    return get_ontology_output_path(run_id, base) / f"summary_model_v{version}.json"
+
+
+def get_agent_outputs_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the per-agent ontology output file."""
+    return get_ontology_output_path(run_id, base) / "ontology_agent_outputs.json"
+
+
+def get_table_tags_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the per-table ontology tags file."""
+    return get_ontology_output_path(run_id, base) / "ontology_table_tags.json"
+
+
+def get_ontology_trace_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the append-only ontology trace JSONL file."""
+    return get_ontology_output_path(run_id, base) / "ontology_trace.jsonl"
+
+
+def get_ontology_build_errors_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the ontology build-errors JSONL file."""
+    return get_ontology_output_path(run_id, base) / "ontology_build_errors.jsonl"
+
+
+def get_node_type_override_log_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the node_type override log file (REVISION 3)."""
+    return get_ontology_output_path(run_id, base) / "node_type_override_log.jsonl"

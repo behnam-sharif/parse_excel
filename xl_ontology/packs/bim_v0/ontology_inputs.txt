@@ -1,0 +1,265 @@
+ontology_inputs.txt
+===================
+
+1. IDENTITY
+-----------
+ontology_pack: bim_v0
+ontology_node: inputs
+version: 0.2
+model_family: BIM
+expected_scale: 10-20 important input tables per workbook
+llm_budget_share: 1 planner call + up to 6 defect calls = 7 calls max
+                  per workbook (seed phase)
+
+
+2. PURPOSE
+----------
+Identify the input parameter tables of the budget impact model. An input
+table is one whose role is to declare values that downstream calculations
+depend on. Inputs are user-editable in spirit, even if some cells contain
+light formulas (currency conversion, lookup, aggregation).
+
+This agent does NOT trust upstream `node_type=input` blindly. It uses
+upstream as the starting point but cross-checks against the expected
+concept list. Some input tables get tagged `calc` or `mixed` upstream
+because they contain formulas — this agent catches those.
+
+For framing on what inputs always look like in a BIM, see
+ontology_inputs.context.md and pack_overview.context.md.
+
+
+3. EXPECTED CONCEPTS
+--------------------
+A complete BIM has, at minimum:
+
+- population              eligible patient count, by year if time-varying
+- epidemiology            incidence, prevalence, mortality, progression
+- market_share / uptake   penetration of intervention vs comparator;
+                          rows usually sum to ~1 across treatments per year
+- drug_cost               unit cost of intervention and comparators
+- administration_cost     IV infusion, injection, day-case fees
+- monitoring_cost         labs, imaging, follow-up visits
+- adverse_event_cost      AE management cost per event, by AE type
+- hospitalisation_cost    inpatient cost per admission or per day
+- indirect_cost           productivity loss, caregiver burden (rare in BIM)
+- scenario_assumption     switches changing behaviour (perspective, time
+                          horizon, discount rate)
+- dosing_schedule         dose, frequency, duration, weight-adjusted
+
+Not every BIM has every concept. The agent records
+`expected_concepts_status` showing which were found, partial, or absent.
+
+
+4. STRUCTURAL FINGERPRINTS
+--------------------------
+- Upstream `node_type` is `input` (highest priority — start here)
+- Low formula density (≤ 20% of body cells contain formulas)
+- High value density
+- Bordered or highlighted "input cells" (blue text or yellow fill)
+- Has data validation dropdowns
+- Sits upstream in the DAG (high fan-out, low fan-in)
+- Title or sheet name matches lexicon
+- Sheet names: "Inputs", "Parameters", "Assumptions", "Settings",
+  "Costs", "Population", "Epidemiology", "Market Share"
+
+Specific fingerprints per concept:
+
+- market_share:    rows sum to ~1.0 across treatment columns; percentage
+                   format
+- drug_cost:       currency format; column headers contain currency or
+                   unit label
+- population:      single column of integers, may grow/shrink across
+                   years; referenced by many downstream tables
+- discount_rate:   single cell, percentage format, value 0.00-0.10
+
+
+5. LEXICON
+----------
+Match case-insensitively.
+
+population:           population, patient pop, eligible pop, target pop,
+                      cohort, covered lives, treated pop, indication pop
+epidemiology:         incidence, prevalence, mortality, progression rate,
+                      hazard, risk, transition
+market_share:         market share, uptake, penetration, share, treatment
+                      mix, treatment distribution, switching rate
+drug_cost:            drug cost, unit cost, list price, WAC, net price,
+                      cost per dose, cost per pack, AAC, ASP, ex-factory
+administration_cost:  admin cost, infusion fee, injection fee, day case,
+                      administration
+monitoring_cost:      monitoring, labs, imaging, follow-up, surveillance
+ae_cost:              AE cost, adverse event, toxicity cost, side effect
+                      management
+hospitalisation:      hospitalisation, inpatient, admission, bed day, ward
+indirect_cost:        productivity loss, indirect cost, caregiver burden,
+                      absenteeism
+scenario:             scenario, switch, toggle, assumption, sensitivity
+                      driver, perspective, time horizon, discount rate
+dosing:               dose, frequency, regimen, schedule, mg/kg, mg/m2,
+                      cycles, duration
+
+
+6. DECISION RULES
+-----------------
+A. STARTING SET
+   Pull all tables with upstream `node_type=input`.
+
+B. CROSS-CHECK BY EXPECTED CONCEPT
+   For each expected concept (population, market_share, drug_cost, ...):
+     1. Search starting set for tables matching the concept's lexicon
+        using a cheap scope (titles_and_headers_only, then
+        row_labels_only).
+     2. If found in starting set: classify and extract.
+     3. If NOT found in starting set: search ALL tables in the workbook
+        with scope=whole_table (regardless of node_type). The
+        whole_table scope covers title + headers + row_names + body cell
+        values + formula text in one call. Use match_location to weight
+        evidence: title > header > row_label > body_cell_value >
+        formula_text.
+     4. If found outside starting set: classify as input, set
+        `node_type_override_proposed: true`, and call
+        record_node_type_override (writes one line to
+        node_type_override_log.jsonl). Override does NOT propagate
+        upstream.
+
+C. STRUCTURAL SANITY CHECK (deterministic, no LLM)
+   For every table in the workbook, evaluate:
+     formula_density < 0.20 AND dag_fanout > 5
+   Tables matching this pattern are almost certainly inputs (low
+   formula activity, many downstream consumers). When the predicate
+   fires AND upstream label is not "input", treat the table as an
+   input candidate, set `node_type_override_proposed: true`, and call
+   record_node_type_override. This check runs once per candidate after
+   rule B, before rule D.
+
+D. DEDUPLICATION
+   If two tables match the same concept (e.g., drug cost per arm), keep
+   both as separate candidates.
+
+E. RANKING
+   Rank by lexicon match score, structural fingerprint match, DAG
+   fan-out, absence of low_context_node flag.
+
+F. STOP CONDITION
+   Stop after 20 input candidates OR LLM budget exhausted.
+
+G. HEURISTICS
+   For concepts not directly found via lexicon, the executor checks
+   ontology_inputs.heuristics.md for an applicable heuristic before
+   marking absent.
+
+H. DEFECT FLAGS (v0)
+   If a candidate table carries upstream defect flags (title_missing,
+   header_missing, rowname_missing, multi_core_detected), the executor
+   calls the corresponding stub procedure (spec Section 10) and emits
+   a defect_procedure_skipped trace event. The agent proceeds with
+   whatever metadata exists; if classification is impossible, the
+   table goes to unclassified with reason
+   "defect_procedure_disabled_in_v0". Real defect recovery is deferred
+   to a future xl_table_repair pre-stage.
+
+
+7. EXTRACTION SCHEMA
+--------------------
+For each accepted input table:
+
+  {
+    "table_id": "...",
+    "ontology_role": "input",
+    "ontology_subtype": "drug_cost | market_share | population | ...",
+    "confidence": 0.0 to 1.0,
+    "evidence_quality": "high | partial | inferred | absent",
+    "why_selected": "free text reason",
+    "evidence_signals": [
+      {
+        "type": "title_match | formula_density | dag_fanout |
+                 format_match | structural_fingerprint",
+        "value": "...",
+        "matched_term": "string or null"
+      }
+    ],
+    "upstream_node_type": "input | calc | mixed | data_table",
+    "node_type_override_proposed": true | false,
+    "parent_table_id": "string or null",
+    "parent_path": [...],
+    "sibling_count": integer,
+    "parent_split_appears_artificial": true | false,
+    "applied_heuristics": ["H-IN-X"],
+    "extracted_payload": {
+      "parameters": [
+        {
+          "name": "row label or column header",
+          "value": "...",
+          "unit": "GBP | % | count | year | ...",
+          "source_cell": "Sheet!A1",
+          "is_formula": true | false,
+          "format_role": "input_value | derived_value | label | header"
+        }
+      ]
+    },
+    "flags": [...]
+  }
+
+
+8. FORMAT CONVENTIONS
+---------------------
+- Input value cells:    number/currency format, no formula, often
+                        coloured fill (yellow/blue), often bordered, often
+                        with data validation
+- Derived value cells:  number/currency format, contains formula —
+                        still semantically input
+- Label cells:          text format, no formula, often left-aligned, may
+                        be bold for sub-section headings
+- Header cells:         text format, bold, often merged, may have
+                        background fill
+- Unit cells:           text format, often row 2 below header, e.g.
+                        "GBP", "%", "patients/year"
+
+Every extracted cell is tagged with `format_role` so downstream consumers
+can distinguish hand-entered inputs from formula-derived inputs.
+
+
+9. CONFIDENCE CALIBRATION
+-------------------------
+- high:     upstream `node_type=input`, lexicon match in title or headers,
+            structural fingerprint matches, no defect flags
+- partial:  upstream input but lexicon match weak, OR strong lexicon
+            match but upstream is `calc`/`mixed`
+- inferred: LLM-classified after defect procedure
+- absent:   expected concept not found anywhere
+
+
+10. UNKNOWN POLICY
+------------------
+- If an expected concept cannot be found anywhere, record
+  `expected_concepts_status[concept] = "absent"` with search_log in
+  evidence. Do not invent a table.
+- If a table is found but content cannot be cleanly parsed, classify
+  with `evidence_quality: partial` and add a flag describing the problem.
+  Do not drop silently.
+- If a table is ambiguous between input and calculation, prefer input if
+  formula density < 30% AND DAG fan-in < 3. Otherwise leave for the
+  calculations agent.
+
+
+11. SUMMARY CONSTRAINTS
+-----------------------
+generation: template (Option B — no LLM call)
+summary_source: "template"
+template:
+  "{N_classified} input tables identified covering
+   {found_concepts_list}. {missing_concepts_list_or_none_missing}."
+
+Examples:
+  "6 input tables identified covering population, market share, drug
+   cost, and admin cost. AE costs and monitoring costs not located."
+
+  "12 input tables identified covering population, epidemiology, market
+   share, drug cost, admin cost, monitoring cost, AE cost,
+   hospitalisation cost, and dosing schedule. No expected concepts
+   missing."
+
+on_low_evidence:
+  if N_classified == 0: summary = "No input tables identified."
+  if all found_concepts have evidence_quality == "inferred":
+    prefix summary with "Inferred only: "

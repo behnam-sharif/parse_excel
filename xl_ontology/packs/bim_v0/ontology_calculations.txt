@@ -1,0 +1,244 @@
+ontology_calculations.txt
+=========================
+
+1. IDENTITY
+-----------
+ontology_pack: bim_v0
+ontology_node: calculations
+version: 0.2
+model_family: BIM
+expected_scale: 1-3 main calculation tables per workbook (MVP);
+                future versions will recognise per-component patterns
+llm_budget_share: 1 planner call + up to 3 defect calls = 4 calls max
+                  per workbook (seed phase)
+
+
+2. PURPOSE
+----------
+Identify the engine of the BIM — tables where inputs are combined into
+per-year, per-treatment, or per-component values that feed result tables.
+Calculation tables are the "middle" of the DAG: high fan-in from inputs,
+high fan-out to results.
+
+This agent does NOT enumerate every formula-bearing cell. It identifies
+the table-level engines where the model's main arithmetic happens.
+
+For framing, see ontology_calculations.context.md and
+pack_overview.context.md.
+
+
+3. EXPECTED CONCEPTS
+--------------------
+- total_cost_with_intervention      sum of all costs in intervention
+                                    scenario, by year
+- total_cost_without_intervention   same for comparator scenario
+- cost_component_calc               per-component breakdown (drug, admin,
+                                    AE, hospitalisation, monitoring) for
+                                    each scenario
+- patient_flow                      eligible × market share × duration =
+                                    treated patient count per year
+- scenario_calc                     calculations driven by scenario
+                                    switches
+- aggregator                        any table summing or weighting other
+                                    calc tables to produce totals
+
+
+4. STRUCTURAL FINGERPRINTS
+--------------------------
+- Upstream `node_type` is `calc` or `mixed`
+- High formula density (≥ 50% of body cells contain formulas)
+- High DAG fan-in (multiple input tables feed it)
+- Non-zero DAG fan-out (feeds something downstream)
+- Sits between input-tagged and output-tagged tables in the DAG
+- Title or sheet name matches lexicon
+- Sheet names: "Engine", "Calculation", "Calc", "Costs", "Cost per
+  Patient", "Total Costs", "Per Patient Cost", "Annual Cost", "Workings"
+- Time-indexed columns (Year 1 … Year 5) or cycle-indexed columns
+
+Specific fingerprints:
+
+- patient_flow:       formulas multiplying population × share × duration
+- cost_component:     formulas referencing one input from a drug-cost-
+                      style table, multiplied by patient count or dose
+- aggregator:         SUM or SUMPRODUCT across other calc tables; small
+                      bbox; near results
+
+
+5. LEXICON
+----------
+Match case-insensitively.
+
+total_cost:          total cost, total spend, total budget, total
+                     expenditure, overall cost, gross cost
+intervention_cost:   intervention cost, new drug cost, with intervention,
+                     scenario A cost, treatment arm
+comparator_cost:     comparator cost, current practice cost, without
+                     intervention, scenario B cost, baseline cost
+component:           drug cost, admin cost, monitoring cost, AE cost,
+                     hospitalisation cost (in calc context — formula-
+                     bearing, not input-only)
+patient_flow:        treated patients, patients on treatment, patient
+                     numbers, eligible × share, uptake-adjusted population
+aggregator:          subtotal, total, summary, grand total, all-cost,
+                     cumulative
+per_patient:         per patient, per person, unit cost calc, average cost
+annual:              annual, per year, year 1, year 2, yearly
+
+
+6. DECISION RULES
+-----------------
+A. STARTING SET
+   Pull all tables with upstream `node_type=calc` or `mixed`.
+
+B. ENGINE IDENTIFICATION
+   The "main" calc table usually has:
+     - Highest combined fan-in × fan-out score
+     - Time-indexed structure (columns = years)
+     - Both intervention and comparator columns or rows present
+   Identify top 3 by this score.
+
+C. AGGREGATOR DETECTION
+   Aggregators are short tables (1-5 rows) just upstream of result
+   tables, dominated by SUM-style formulas. Identify any table with:
+     - Formula density > 80%
+     - DAG fan-in > 3
+     - Bbox area < 50 cells
+     - Direct edge to an output-tagged node
+   Always include these.
+
+D. CROSS-CHECK BY EXPECTED CONCEPT
+   For each expected concept, confirm at least one candidate covers it.
+   If not, search input set and output set with scope=whole_table —
+   sometimes patient_flow lives inside an input-tagged or output-tagged
+   table. The whole_table scope covers title + headers + row_names +
+   body cell values + formula text. When a hit is found in a
+   non-calc-tagged table, set `node_type_override_proposed: true` and
+   call record_node_type_override.
+
+E. STRUCTURAL SANITY CHECK (deterministic, no LLM)
+   For every table in the workbook, evaluate:
+     formula_density > 0.50 AND dag_fanin > 0 AND dag_fanout > 0
+   Tables matching this pattern sit in the middle of the dependency
+   graph and are formula-heavy — the calculation engine signature.
+   When the predicate fires AND upstream label is "input" or
+   "data_table", treat the table as a calculation candidate, set
+   `node_type_override_proposed: true`, and call
+   record_node_type_override. This check runs once per candidate after
+   rule D, before rule F.
+
+F. STOP CONDITION
+   Stop after 3 calc candidates OR LLM budget exhausted. Excess
+   formula-heavy tables go to `unclassified` with high priority.
+
+G. HEURISTICS
+   Executor checks ontology_calculations.heuristics.md for applicable
+   heuristics before marking concepts absent.
+
+H. DEFECT FLAGS (v0)
+   If a candidate table carries upstream defect flags (title_missing,
+   header_missing, rowname_missing, multi_core_detected), the executor
+   calls the corresponding stub procedure (spec Section 10) and emits
+   a defect_procedure_skipped trace event. The agent proceeds with
+   whatever metadata exists; if classification is impossible, the
+   table goes to unclassified with reason
+   "defect_procedure_disabled_in_v0". Real defect recovery is deferred
+   to a future xl_table_repair pre-stage.
+
+
+7. EXTRACTION SCHEMA
+--------------------
+For each accepted calculation table:
+
+  {
+    "table_id": "...",
+    "ontology_role": "calculation",
+    "ontology_subtype": "total_cost_with | total_cost_without |
+                        cost_component | patient_flow | aggregator |
+                        scenario_calc",
+    "confidence": 0.0 to 1.0,
+    "evidence_quality": "high | partial | inferred | absent",
+    "why_selected": "free text",
+    "evidence_signals": [
+      {"type": "...", "value": "...", "matched_term": "..."}
+    ],
+    "upstream_node_type": "calc | mixed | ...",
+    "node_type_override_proposed": false,
+    "parent_table_id": "... or null",
+    "parent_path": [...],
+    "sibling_count": integer,
+    "parent_split_appears_artificial": false,
+    "applied_heuristics": [...],
+    "extracted_payload": {
+      "time_indexed": true | false,
+      "time_columns": ["Year 1", "Year 2", ...] or null,
+      "treatment_dimension": "intervention | comparator | both | n/a",
+      "key_formulas": [
+        {
+          "cell": "Sheet!A1",
+          "formula": "=Population * MarketShare * UnitCost",
+          "depends_on_tables": ["t3", "t7", "t12"]
+        }
+      ],
+      "feeds_into": ["downstream node_ids"],
+      "fed_by": ["upstream node_ids"]
+    },
+    "flags": [...]
+  }
+
+
+8. FORMAT CONVENTIONS
+---------------------
+- Formula cells:        number/currency format, contain formula, often
+                        locked, often plain (no fill) — distinct from
+                        input cells which are usually highlighted
+- Header cells:         text, bold, may be merged, often time-indexed
+- Row label cells:      text, left-aligned, sometimes indented for
+                        hierarchy
+- Subtotal rows:        formula cells, often bold, often top border
+- Grand total rows:     formula cells, bold, often double border or
+                        distinct fill
+
+Every extracted cell tagged with `format_role` (formula | header |
+label | subtotal | grand_total).
+
+
+9. CONFIDENCE CALIBRATION
+-------------------------
+- high:     upstream `node_type=calc`, lexicon match strong, fan-in and
+            fan-out > 0, no defect flags
+- partial:  upstream `mixed`, OR weak lexicon match, OR fan-out is 0
+- inferred: LLM-classified after defect procedure
+- absent:   expected concept not found anywhere
+
+
+10. UNKNOWN POLICY
+------------------
+- If no calc tables found at all, model may be unusual (lookup-only).
+  Mark `present: false`. Do not invent.
+- For multi-core tables, use Section 10.4 of the spec — send whole
+  table plus all formulas to LLM.
+- Orphan calc tables (high formula density, zero fan-out) are unusual.
+  Flag — may be deprecated or scratch. Do not include in main candidates.
+
+
+11. SUMMARY CONSTRAINTS
+-----------------------
+generation: template (Option B — no LLM call)
+summary_source: "template"
+template:
+  "{N_main} main calculation table{s_or_blank} identified
+   ({main_subtypes_list}). {N_aggregators} aggregator{s_or_blank}.
+   {missing_concepts_or_none}."
+
+Examples:
+  "1 main calculation table identified (total_cost_with intervention,
+   time-indexed). 1 aggregator. patient_flow is embedded in the engine
+   table, not standalone."
+
+  "2 main calculation tables identified (total_cost_with,
+   total_cost_without). 0 aggregators. No expected concepts missing."
+
+on_low_evidence:
+  if N_main == 0 and N_aggregators == 0:
+    summary = "No calculation tables identified. Model may be lookup-
+    only or non-standard."

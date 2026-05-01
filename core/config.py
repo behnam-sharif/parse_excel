@@ -43,6 +43,7 @@ class PipelineConfig:
     xl_sheetagent: Dict[str, Any]
     xl_sheetagent_v6: Dict[str, Any]
     xl_dag: Dict[str, Any]
+    xl_ontology: Dict[str, Any]
 
 
 # ---------------------------------------------------------------------------
@@ -102,7 +103,10 @@ def load_config(
 
     general = _general_config_from_raw(general_raw)
 
-    for key in ("xl_init", "xl_parse", "xl_table", "xl_image", "xl_sheetagent", "xl_sheetagent_v6", "xl_dag"):
+    for key in (
+        "xl_init", "xl_parse", "xl_table", "xl_image",
+        "xl_sheetagent", "xl_sheetagent_v6", "xl_dag", "xl_ontology",
+    ):
         if key not in stages or not isinstance(stages[key], dict):
             raise ValueError(f"stages.yaml: missing or invalid top-level section {key!r}")
 
@@ -115,4 +119,5 @@ def load_config(
         xl_sheetagent=stages["xl_sheetagent"],
         xl_sheetagent_v6=stages["xl_sheetagent_v6"],
         xl_dag=stages["xl_dag"],
+        xl_ontology=stages["xl_ontology"],
     )

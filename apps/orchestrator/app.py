@@ -84,9 +84,23 @@ def _load_dag_viewer():
     return mod
 
 
+def _load_ontology_viewer():
+    """Load sibling ``ontology_viewer.py`` by path."""
+    path = Path(__file__).resolve().parent / "ontology_viewer.py"
+    spec = importlib.util.spec_from_file_location(
+        "orchestrator_ontology_viewer", path
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load ontology_viewer from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 _v3a_viewer = _load_v3a_viewer()
 _v6_viewer = _load_v6_viewer()
 _dag_viewer = _load_dag_viewer()
+_ontology_viewer = _load_ontology_viewer()
 
 
 def _default_session() -> None:
@@ -103,6 +117,7 @@ def _default_session() -> None:
             "xl_table": {},
             "xl_sheetagent": {},
             "xl_dag": {},
+            "xl_ontology": {},
         }
     if "pipeline_future" not in st.session_state:
         st.session_state["pipeline_future"] = None
@@ -120,6 +135,8 @@ def _default_session() -> None:
         st.session_state["orchestrator_view_saved_v6"] = False
     if "orchestrator_view_saved_dag" not in st.session_state:
         st.session_state["orchestrator_view_saved_dag"] = False
+    if "orchestrator_view_saved_ontology" not in st.session_state:
+        st.session_state["orchestrator_view_saved_ontology"] = False
     # Older sessions may lack xl_sheetagent overrides
     _co = st.session_state.get("cfg_ov")
     if isinstance(_co, dict) and "xl_sheetagent" not in _co:
@@ -318,6 +335,7 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
+        st.session_state["orchestrator_view_saved_ontology"] = False
 
     init_btn = st.sidebar.button("▶ Run xl_init", disabled=busy or not input_path)
     parse_btn = st.sidebar.button("▶ Run xl_parse", disabled=busy)
@@ -496,6 +514,23 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_dag"] = True
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
+        st.session_state["orchestrator_view_saved_ontology"] = False
+        st.rerun()
+
+    view_ontology_btn = st.sidebar.button(
+        "View XL Ontology output (no re-run)",
+        disabled=busy,
+        help=(
+            "Loads ontology_output/* for the current Run ID. Renders the six "
+            "required UI views (spec §13.2) plus the §13.6 defect-frequency "
+            "dashboard."
+        ),
+    )
+    if view_ontology_btn and not busy:
+        st.session_state["orchestrator_view_saved_ontology"] = True
+        st.session_state["orchestrator_view_saved_v3a"] = False
+        st.session_state["orchestrator_view_saved_v6"] = False
+        st.session_state["orchestrator_view_saved_dag"] = False
         st.rerun()
 
     # --- Main area -----------------------------------------------------------
@@ -522,6 +557,8 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         _v6_viewer.render_v6_selective_view(str(v6_out), run_id, in_memory=None)
     elif st.session_state.get("orchestrator_view_saved_dag"):
         _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
+    elif st.session_state.get("orchestrator_view_saved_ontology"):
+        _ontology_viewer.render(run_id, output_base=base)
     elif res is not None and op == "xl_table":
         rs = res.run_summary
         st.success(

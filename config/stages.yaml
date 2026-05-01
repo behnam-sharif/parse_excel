@@ -453,6 +453,30 @@ xl_image:
   cc_separation_score_floor: 0.30
 
 # ============================================================================
+# xl_ontology — pluggable ontology mapping (consumes v6 finalize + v7 DAG;
+# writes ontology_output/*.json + ontology_trace.jsonl). See
+# xl_ontology/spec/spec_xl_ontology_v0.md and xl_ontology/IMPLEMENTATION_PLAN.md.
+# ============================================================================
+xl_ontology:
+  pack_name: "bim_v0"
+  # Built-in default packs root. Override to any directory containing
+  # `<pack_name>/` to load a pack from outside the repo. Loader resolves
+  # pack_dir = packs_root / pack_name.
+  packs_root: "xl_ontology/packs"
+  # Hard cap on LLM calls in seed phase (spec §11; REVISION 1 dropped 20→8
+  # because defect recovery is stubbed in v0). Pack-overview front-matter
+  # may override this; if absent the YAML value applies.
+  seed_llm_budget_max: 8
+  enrichment_llm_budget_max: 5
+  llm_model: "gpt-4o-mini"
+  llm_max_tokens: 4096
+  llm_temperature: 0.0
+  # Nodes with fan-out <= threshold count as "terminal" for the results agent.
+  dag_terminal_threshold: 0
+  # Sequential agent execution per spec §7.4 / plan §2.9. Keep at 1 in v0.
+  parallelism: 1
+
+# ============================================================================
 # xl_dag — v7 DAG build (consumes v6 finalize output, writes dag_output/*.json)
 # ============================================================================
 xl_dag:
