@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
     parser.add_argument("--with-sheetagent", action="store_true", help="Run optional xl_sheetagent stage")
     parser.add_argument("--with-dag", action="store_true", help="Run optional xl_dag stage (after v6 finalize)")
+    parser.add_argument("--with-ontology", action="store_true", help="Run optional xl_ontology seed phase (after xl_dag)")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
 
     args = parser.parse_args()
@@ -231,6 +232,39 @@ def main():
         except Exception as exc:
             summary["stages"]["xl_dag"] = {"error": str(exc)}
             summary["warnings"].append(f"xl_dag failed: {exc}")
+            print(f"  FAILED: {exc}")
+
+    # -- Stage 7: xl_ontology (optional) --
+    if args.with_ontology:
+        print("\n" + "=" * 60)
+        print("Stage 7: xl_ontology (optional)")
+        print("=" * 60)
+        t0 = time.time()
+        try:
+            from core.stage_config import ontology_config_from_pipeline
+            from xl_ontology import run_ontology
+
+            ont_cfg = ontology_config_from_pipeline(load_config())
+            ont_result = run_ontology(
+                run_id,
+                output_base=base,
+                config=ont_cfg,
+            )
+            summary["stages"]["xl_ontology"] = {
+                "duration_s": round(time.time() - t0, 2),
+                "version_written": ont_result.version_written,
+                "llm_calls_used": ont_result.llm_calls_used,
+                "artifacts": [str(p) for p in ont_result.artifacts],
+                "errors": ont_result.errors,
+            }
+            print(f"  Done in {summary['stages']['xl_ontology']['duration_s']}s")
+            print(f"  Version:   v{ont_result.version_written}")
+            print(f"  Artifacts: {len(ont_result.artifacts)}")
+            if ont_result.errors:
+                print(f"  Errors:    {len(ont_result.errors)}")
+        except Exception as exc:
+            summary["stages"]["xl_ontology"] = {"error": str(exc)}
+            summary["warnings"].append(f"xl_ontology failed: {exc}")
             print(f"  FAILED: {exc}")
 
     # -- Write summary --

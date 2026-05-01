@@ -34,6 +34,7 @@ from core.paths import (
     get_sheetagent_output_path,
     get_v6_sheetagent_output_path,
     get_dag_output_path,
+    get_ontology_output_path,
 )
 from core.stage_config import (
     xl_table_config_from_mapping,
@@ -42,6 +43,7 @@ from core.stage_config import (
     xl_init_config_from_mapping,
     sheetagent_config_from_mapping,
     dag_config_from_pipeline,
+    ontology_config_from_pipeline,
 )
 
 _executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -246,12 +248,14 @@ def app() -> None:
     sa_out = get_sheetagent_output_path(run_id, base)
     v6_out = get_v6_sheetagent_output_path(run_id, base)
     dag_out = get_dag_output_path(run_id, base)
+    ontology_out = get_ontology_output_path(run_id, base)
 
     cli = f"""```text
 py -3 scripts/run_init.py --input <workbook.xlsx> --run-id {run_id} --output-base {base} --no-interactive
 py -3 scripts/run_parse.py --run-id {run_id} --output-base {base}
 py -3 scripts/run_table.py --run-id {run_id} --output-base {base}
 py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
+py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
 ```"""
     with st.sidebar.expander("CLI (equivalent commands)", expanded=False):
         st.markdown(cli)
@@ -347,6 +351,15 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         help=(
             "Builds dag_output/* from v6 finalize output (final_table_map.json + summary.json) "
             "and cleaned_workbook.xlsx."
+        ),
+    )
+    ontology_btn = st.sidebar.button(
+        "▶ Run xl_ontology",
+        disabled=busy,
+        help=(
+            "Seed-phase ontology run. Reads v6 final_table_map.json + xl_dag dag.json + "
+            "cleaned_workbook.xlsx and writes ontology_output/* (summary_model_v{N}.json, "
+            "agent_outputs, table_tags, trace, override log, build errors)."
         ),
     )
     st.sidebar.caption(
@@ -480,6 +493,28 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
+    if ontology_btn and not busy:
+        _clear_for_run("xl_ontology")
+        pc_chain = load_config()
+        _ont_user = st.session_state["cfg_ov"].get("xl_ontology") or {}
+        _ont_cfg = ontology_config_from_pipeline(pc_chain, overrides=_ont_user)
+
+        _run_id_capture = run_id
+        _base_capture = base
+
+        def _work():
+            from xl_ontology import run_ontology
+
+            return run_ontology(
+                _run_id_capture,
+                output_base=_base_capture,
+                config=_ont_cfg,
+            )
+
+        st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
+        st.rerun()
+
     view_v3a_saved_btn = st.sidebar.button(
         "📂 View saved V3A results (no re-run)",
         disabled=busy,
@@ -489,6 +524,7 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v3a"] = True
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
+        st.session_state["orchestrator_view_saved_ontology"] = False
         st.rerun()
 
     view_v6_saved_btn = st.sidebar.button(
@@ -503,6 +539,7 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v6"] = True
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
+        st.session_state["orchestrator_view_saved_ontology"] = False
         st.rerun()
 
     view_dag_saved_btn = st.sidebar.button(
@@ -541,7 +578,8 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         f"table_output:         {table_out}\n"
         f"sheetagent_output:    {sa_out}\n"
         f"v6_sheetagent_output: {v6_out}\n"
-        f"dag_output:           {dag_out}",
+        f"dag_output:           {dag_out}\n"
+        f"ontology_output:      {ontology_out}",
         language="text",
     )
 
@@ -607,6 +645,16 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         for err in errors:
             st.error(err)
         _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
+    elif res is not None and op == "xl_ontology":
+        st.success(
+            f"xl_ontology complete — version=v{getattr(res, 'version_written', '?')}, "
+            f"llm_calls={getattr(res, 'llm_calls_used', 0)}, "
+            f"{len(getattr(res, 'artifacts', []) or [])} artifact(s), "
+            f"{getattr(res, 'elapsed_seconds', 0.0):.2f}s"
+        )
+        for err in getattr(res, "errors", []) or []:
+            st.error(err)
+        _ontology_viewer.render(run_id, output_base=base)
     elif res is not None and op == "xl_init":
         st.success(
             f"xl_init complete — {len(res.table_sheets)} approved sheet(s). "
@@ -621,11 +669,13 @@ py -3 scripts/run_dag.py --run-id {run_id} --output-base {base}
         and not st.session_state.get("orchestrator_view_saved_v3a")
         and not st.session_state.get("orchestrator_view_saved_v6")
         and not st.session_state.get("orchestrator_view_saved_dag")
+        and not st.session_state.get("orchestrator_view_saved_ontology")
     ):
         st.info(
             "Upload a workbook, then run **xl_init** → **xl_parse** → **xl_table** "
             "in order. Then optionally run **xl_sheetagent** (V3a + V6) "
-            "to extract semantic pieces and metadata. Finally run **xl_dag** to build a dependency graph from formulas."
+            "to extract semantic pieces and metadata, **xl_dag** to build a dependency "
+            "graph from formulas, and **xl_ontology** to seed the pluggable ontology layer."
         )
 
 
