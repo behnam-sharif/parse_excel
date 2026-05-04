@@ -128,6 +128,16 @@ class DagIndex:
     def nodes_for_table(self, table_id: str) -> List[DagNode]:
         return [self._by_id[nid] for nid in self._by_table_id.get(table_id, [])]
 
+    def is_in_dag(self, table_id: str) -> bool:
+        """True iff this table_id has at least one node in dag.json.
+
+        v1.A "DAG-only filter": labelling agents skip tables whose
+        table_id is not represented in the DAG (e.g. orphan overview
+        sheets, unreferenced data tables). Such tables have no
+        upstream/downstream signal and are out of scope for Pass 1.
+        """
+        return bool(self._by_table_id.get(table_id))
+
     def nodes_for_sheet(self, sheet_name: str) -> List[DagNode]:
         return [self._by_id[nid] for nid in self._by_sheet.get(sheet_name, [])]
 
@@ -226,3 +236,26 @@ def _parse_edge(d: dict) -> DagEdge:
         named_range_name=d.get("named_range_name"),
         unresolved_reason=d.get("unresolved_reason"),
     )
+
+
+# Node types that Pass 1 should never label, regardless of DAG residence.
+# `metadata` = description/narrative/cover content. `data_table` =
+# reference cards or static lookup tables. Neither is an input,
+# calculation, or result in any meaningful sense.
+PASS1_INELIGIBLE_NODE_TYPES = frozenset({"metadata", "data_table", "setting"})
+
+
+def is_pass1_eligible(dag: DagIndex, table_id: str, node_type: Optional[str]) -> bool:
+    """Single source of truth for the Pass-1 eligibility filter.
+
+    A finalize leaf is eligible for ontology labelling iff it has a
+    DAG node *and* its v6 finalize ``node_type`` is not in
+    ``PASS1_INELIGIBLE_NODE_TYPES``. Used by `_classify` /
+    `_classify_structural` in each agent and by the table-tags
+    assembler in ``runner.py``.
+    """
+    if not dag.is_in_dag(table_id):
+        return False
+    if node_type and node_type in PASS1_INELIGIBLE_NODE_TYPES:
+        return False
+    return True

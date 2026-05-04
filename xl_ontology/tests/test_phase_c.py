@@ -279,16 +279,20 @@ class TestOverallModelAgent(unittest.TestCase):
 
 class TestOverrideLogCoupling(unittest.TestCase):
     def test_classification_writes_log_line_when_override_proposed(self) -> None:
-        # Re-tag Engine as 'data_table' upstream so the calculations
-        # structural sanity will fire and propose an override.
+        # Re-tag Engine as 'input' upstream so the calculations
+        # structural-sanity check fires (formula_density > 0.50 AND
+        # fanin>0 AND fanout>0 AND node_type in {input, data_table})
+        # and proposes an override input → calculation.
+        # Pre-v1.A this used 'data_table'; that's now filtered out by
+        # `is_pass1_eligible`. `input` is the remaining trigger
+        # node_type that the structural rule overrides.
         pack = load_pack(_PACKS_ROOT, "bim_v0")
         with tempfile.TemporaryDirectory() as tmp:
             f = build_synthetic_run(Path(tmp))
-            # Mutate the synthetic final_table_map.json to retag Engine.
             raw = json.loads(f.final_map_path.read_text(encoding="utf-8"))
             for entry in raw["Engine"]["entries"]:
                 if entry["table_id"] == "Engine__t1__c0":
-                    entry["node_type"] = "data_table"
+                    entry["node_type"] = "input"
             f.final_map_path.write_text(json.dumps(raw), encoding="utf-8")
 
             ctx, bundle = _make_ctx(Path(tmp), f)

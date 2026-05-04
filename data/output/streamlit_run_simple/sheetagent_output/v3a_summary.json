@@ -1,8 +1,8 @@
 {
   "run_id": "streamlit_run_simple",
-  "run_ts": "2026-04-23T18:55:01.559837+00:00",
+  "run_ts": "2026-05-04T19:09:22.391315+00:00",
   "version": "3a.1.0",
-  "elapsed_seconds": 4.23,
+  "elapsed_seconds": 4.81,
   "n_tables_processed": 37,
   "n_llm_calls": 0,
   "n_sheets": 4,

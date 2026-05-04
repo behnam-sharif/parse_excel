@@ -459,6 +459,10 @@ xl_image:
 # ============================================================================
 xl_ontology:
   pack_name: "bim_v0"
+  # When true, seed-phase ontology runs planner (+ overall_model summary LLM)
+  # via xl_sheetagent.llm_dispatch when OPENAI_API_KEY is set; otherwise warns
+  # and falls back to deterministic mode.
+  use_llm: true
   # Built-in default packs root. Override to any directory containing
   # `<pack_name>/` to load a pack from outside the repo. Loader resolves
   # pack_dir = packs_root / pack_name.
@@ -475,6 +479,16 @@ xl_ontology:
   dag_terminal_threshold: 0
   # Sequential agent execution per spec §7.4 / plan §2.9. Keep at 1 in v0.
   parallelism: 1
+  # v1 Pass 2 (comprehension layer). When true and use_llm is also true,
+  # Pass 2 runs after Pass 1 and writes model_understanding.{md,json} +
+  # cross_agent_findings.jsonl. See spec_xl_ontology_v1.md.
+  pass2_enabled: true
+  # Hard caps for the bounded planner-executor loop (spec §6, §12).
+  pass2_max_iterations: 3
+  pass2_llm_budget_max: 20
+  # Per-sheet character cap for the overview-sheet read in Stage 2.1
+  # (keeps the synthesis-prompt size bounded even on dense covers).
+  pass2_overview_sheet_max_chars: 10000
 
 # ============================================================================
 # xl_dag — v7 DAG build (consumes v6 finalize output, writes dag_output/*.json)

@@ -30,24 +30,25 @@ ontology_inputs.context.md and pack_overview.context.md.
 
 3. EXPECTED CONCEPTS
 --------------------
-A complete BIM has, at minimum:
+v1 simplification: Section 3 lists only the four ANCHOR concepts the
+agent uses to identify "this is an input table" with high confidence.
+Everything else is handled by Phase B's secondary lexicon (defined in
+agents/prompts.py SECONDARY_INPUT_LEXICON, e.g. adverse_event, SCT,
+hospitalization, end_of_life, subsequent_treatment, monitoring,
+administration, dosing, scenario), which only fires on tables that
+share a sheet with one of these anchors.
 
-- population              eligible patient count, by year if time-varying
-- epidemiology            incidence, prevalence, mortality, progression
-- market_share / uptake   penetration of intervention vs comparator;
-                          rows usually sum to ~1 across treatments per year
-- drug_cost               unit cost of intervention and comparators
-- administration_cost     IV infusion, injection, day-case fees
-- monitoring_cost         labs, imaging, follow-up visits
-- adverse_event_cost      AE management cost per event, by AE type
-- hospitalisation_cost    inpatient cost per admission or per day
-- indirect_cost           productivity loss, caregiver burden (rare in BIM)
-- scenario_assumption     switches changing behaviour (perspective, time
-                          horizon, discount rate)
-- dosing_schedule         dose, frequency, duration, weight-adjusted
+- population                          eligible patient count, by year if time-varying
+- epidemiology                        incidence, prevalence, mortality, progression
+- market_share                        treatment uptake / mix (with-intervention,
+                                       without-intervention, or ambiguous)
+- drug_cost                           unit cost of intervention and comparators
 
-Not every BIM has every concept. The agent records
-`expected_concepts_status` showing which were found, partial, or absent.
+Not every BIM has every anchor; the agent records
+`expected_concepts_status` showing which were found, partial, or
+absent. Tables matching a secondary concept are reported as
+`structural_input_<concept>` in the candidate_tables list with
+`evidence_quality=partial`.
 
 
 4. STRUCTURAL FINGERPRINTS
@@ -77,26 +78,85 @@ Specific fingerprints per concept:
 ----------
 Match case-insensitively.
 
-population:           population, patient pop, eligible pop, target pop,
-                      cohort, covered lives, treated pop, indication pop
-epidemiology:         incidence, prevalence, mortality, progression rate,
-                      hazard, risk, transition
-market_share:         market share, uptake, penetration, share, treatment
-                      mix, treatment distribution, switching rate
-drug_cost:            drug cost, unit cost, list price, WAC, net price,
-                      cost per dose, cost per pack, AAC, ASP, ex-factory
-administration_cost:  admin cost, infusion fee, injection fee, day case,
-                      administration
-monitoring_cost:      monitoring, labs, imaging, follow-up, surveillance
-ae_cost:              AE cost, adverse event, toxicity cost, side effect
-                      management
-hospitalisation:      hospitalisation, inpatient, admission, bed day, ward
-indirect_cost:        productivity loss, indirect cost, caregiver burden,
-                      absenteeism
-scenario:             scenario, switch, toggle, assumption, sensitivity
-                      driver, perspective, time horizon, discount rate
-dosing:               dose, frequency, regimen, schedule, mg/kg, mg/m2,
-                      cycles, duration
+population:                          population, patient pop, eligible pop,
+                                     target pop, cohort, covered lives,
+                                     treated pop, indication pop
+epidemiology:                        incidence, prevalence, mortality,
+                                     progression rate, hazard, risk,
+                                     transition
+market_share_with_intervention:      market share with intervention,
+                                     intervention scenario share, novel-arm
+                                     share, with-drug uptake, intervention
+                                     uptake, post-launch share,
+                                     post-intervention market share
+market_share_without_intervention:   market share without intervention,
+                                     comparator scenario share, current
+                                     standard share, no-intervention
+                                     uptake, baseline market share,
+                                     pre-launch share, status quo share
+market_share:                        market share, uptake, penetration,
+                                     share, treatment mix, treatment
+                                     distribution, switching rate
+drug_cost:                           drug cost, unit cost, list price, WAC,
+                                     net price, cost per dose, cost per pack,
+                                     AAC, ASP, ex-factory
+administration_cost:                 admin cost, infusion fee, injection
+                                     fee, day case, administration
+hospitalization_rate:                hospitalization rate, hospitalisation
+                                     rate, admission rate, inpatient rate,
+                                     hospitalization probability,
+                                     admission probability, % admitted
+hospitalization_unit_cost:           hospitalization cost, hospitalisation
+                                     cost, cost per admission, inpatient
+                                     cost, bed day cost, ward cost, per-day
+                                     inpatient
+adverse_event_rate:                  AE rate, AE incidence, adverse event
+                                     rate, adverse event incidence,
+                                     toxicity rate, side effect rate,
+                                     event probability
+adverse_event_unit_cost:             AE cost, adverse event cost, toxicity
+                                     cost, side effect management cost,
+                                     cost per AE, AE management
+monitoring_rate:                     monitoring frequency, monitoring rate,
+                                     visits per patient, scans per year,
+                                     follow-up frequency
+monitoring_unit_cost:                monitoring cost, cost per scan, lab
+                                     cost, imaging cost, follow-up cost,
+                                     surveillance cost, cost per visit
+subsequent_treatment_rate:           subsequent treatment rate, subsequent
+                                     therapy rate, later-line treatment
+                                     rate, follow-up treatment probability,
+                                     post-progression treatment rate
+subsequent_treatment_unit_cost:      subsequent treatment cost, subsequent
+                                     therapy cost, later-line cost,
+                                     post-progression cost, salvage therapy
+                                     cost
+subsequent_treatment_total_cost:     total subsequent treatment cost,
+                                     aggregate subsequent therapy cost,
+                                     all-cause subsequent treatment cost
+SCT_rate:                            SCT rate, stem cell transplant rate,
+                                     SCT incidence, SCT probability
+SCT_cost:                            SCT cost, stem cell transplant cost,
+                                     SCT procedure cost
+end_of_life_rate:                    end of life rate, EOL rate, terminal
+                                     rate, dying rate
+end_of_life_cost:                    end of life cost, EOL cost, terminal
+                                     care cost, death-stage cost
+terminal_care_cost:                  terminal care cost, hospice cost,
+                                     last-month-of-life cost
+death_cost:                          death cost, mortality cost, funeral
+                                     cost, one-time death cost
+palliative_care_cost:                palliative cost, palliative care,
+                                     comfort care cost
+other_input:                         other input, miscellaneous input,
+                                     additional parameter
+indirect_cost:                       productivity loss, indirect cost,
+                                     caregiver burden, absenteeism
+scenario:                            scenario, switch, toggle, assumption,
+                                     sensitivity driver, perspective, time
+                                     horizon, discount rate
+dosing:                              dose, frequency, regimen, schedule,
+                                     mg/kg, mg/m2, cycles, duration
 
 
 6. DECISION RULES
@@ -166,7 +226,20 @@ For each accepted input table:
   {
     "table_id": "...",
     "ontology_role": "input",
-    "ontology_subtype": "drug_cost | market_share | population | ...",
+    "ontology_subtype": "drug_cost | population | epidemiology |
+                         market_share_with_intervention |
+                         market_share_without_intervention | market_share |
+                         hospitalization_rate | hospitalization_unit_cost |
+                         adverse_event_rate | adverse_event_unit_cost |
+                         monitoring_rate | monitoring_unit_cost |
+                         subsequent_treatment_rate |
+                         subsequent_treatment_unit_cost |
+                         subsequent_treatment_total_cost |
+                         SCT_rate | SCT_cost | end_of_life_rate |
+                         end_of_life_cost | terminal_care_cost |
+                         death_cost | palliative_care_cost | other_input |
+                         administration_cost | indirect_cost |
+                         scenario_assumption | dosing_schedule",
     "confidence": 0.0 to 1.0,
     "evidence_quality": "high | partial | inferred | absent",
     "why_selected": "free text reason",

@@ -31,6 +31,7 @@ from core.paths import (
     get_ontology_output_path,
     get_ontology_trace_path,
     get_table_tags_path,
+    get_v6_final_table_map_path,
 )
 
 
@@ -65,6 +66,44 @@ def _latest_summary_model(out_dir: Path) -> Optional[Path]:
     return candidates[-1] if candidates else None
 
 
+def _table_id_to_coordinates(final_table_map: Optional[Dict[str, Any]]) -> Dict[str, str]:
+    """Build table_id -> 'Sheet!A1:B5' from v6 final_table_map.json."""
+    if not final_table_map:
+        return {}
+    out: Dict[str, str] = {}
+    for sheet_block in final_table_map.values():
+        if not isinstance(sheet_block, dict):
+            continue
+        entries = sheet_block.get("entries") or []
+        if not isinstance(entries, list):
+            continue
+        for e in entries:
+            if not isinstance(e, dict):
+                continue
+            kind = e.get("kind")
+            if kind == "parent":
+                children = e.get("children") or []
+                if isinstance(children, list):
+                    for c in children:
+                        if isinstance(c, dict) and c.get("table_id") and c.get("coordinates"):
+                            out[str(c["table_id"])] = str(c["coordinates"])
+                continue
+            if e.get("table_id") and e.get("coordinates"):
+                out[str(e["table_id"])] = str(e["coordinates"])
+    return out
+
+
+def _format_table_location(coordinates: Optional[str]) -> Optional[str]:
+    """Format 'Sheet!A1:B5' -> 'Sheet_A1:B5'."""
+    if not coordinates:
+        return None
+    if "!" not in coordinates:
+        return coordinates
+    sheet, rng = coordinates.split("!", 1)
+    rng = rng.replace("$", "")
+    return f"{sheet}_{rng}"
+
+
 def render(run_id: str, output_base: str = "data/output") -> None:
     """Top-level entry called by the orchestrator app."""
     out_dir = get_ontology_output_path(run_id, output_base)
@@ -79,9 +118,11 @@ def render(run_id: str, output_base: str = "data/output") -> None:
     summary = _read_json(summary_path) if summary_path else None
     agent_outputs = _read_json(get_agent_outputs_path(run_id, output_base))
     table_tags = _read_json(get_table_tags_path(run_id, output_base))
+    final_table_map = _read_json(get_v6_final_table_map_path(run_id, output_base))
     trace_events = _read_jsonl(get_ontology_trace_path(run_id, output_base))
     overrides = _read_jsonl(get_node_type_override_log_path(run_id, output_base))
     errors = _read_jsonl(get_ontology_build_errors_path(run_id, output_base))
+    table_id_to_coords = _table_id_to_coordinates(final_table_map)
 
     tab_labels = [
         "Final output (prose)",
@@ -98,7 +139,7 @@ def render(run_id: str, output_base: str = "data/output") -> None:
     with tabs[1]:
         _render_per_agent(agent_outputs)
     with tabs[2]:
-        _render_table_tags(table_tags)
+        _render_table_tags(table_tags, table_id_to_coords=table_id_to_coords)
     with tabs[3]:
         _render_trace(trace_events)
     with tabs[4]:
@@ -166,7 +207,9 @@ def _render_per_agent(agent_outputs: Optional[Dict[str, Any]]) -> None:
                 st.text(rec["human_readable_output"])
 
 
-def _render_table_tags(table_tags: Optional[Dict[str, Any]]) -> None:
+def _render_table_tags(
+    table_tags: Optional[Dict[str, Any]], *, table_id_to_coords: Dict[str, str]
+) -> None:
     if not table_tags:
         st.info("ontology_table_tags.json not found.")
         return
@@ -191,7 +234,28 @@ def _render_table_tags(table_tags: Optional[Dict[str, Any]]) -> None:
         rows = [t for t in rows if t.get("ontology_role") in role_filter]
     if only_overrides:
         rows = [t for t in rows if t.get("node_type_override_proposed")]
-    st.dataframe(rows, use_container_width=True)
+    enriched_rows: List[Dict[str, Any]] = []
+    for t in rows:
+        if not isinstance(t, dict):
+            continue
+        table_id = t.get("table_id")
+        loc = _format_table_location(table_id_to_coords.get(str(table_id)) if table_id else None)
+        if not loc and t.get("sheet") and table_id_to_coords.get(str(table_id)):
+            # Fallback: if coordinates exist but parse failed, still show it.
+            loc = str(table_id_to_coords.get(str(table_id)))
+        if not loc and t.get("sheet"):
+            loc = str(t.get("sheet"))
+
+        # Keep column ordering stable, with table_location right after table_id.
+        out: Dict[str, Any] = {}
+        out["table_id"] = table_id
+        out["table_location"] = loc
+        for k, v in t.items():
+            if k in ("table_id", "table_location"):
+                continue
+            out[k] = v
+        enriched_rows.append(out)
+    st.dataframe(enriched_rows, use_container_width=True)
 
 
 def _render_trace(events: List[Dict[str, Any]]) -> None:
@@ -236,6 +300,26 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
         st.caption(f"Showing first 500 of {len(rows)} events.")
 
 
+def _flatten_for_dataframe(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Stringify nested list/dict cells so Arrow conversion stays uniform.
+
+    pyarrow rejects columns that mix struct and non-struct values (e.g.,
+    ``evidence`` being a list-of-dicts in some rows and ``[]``/``None`` in
+    others). JSON-serializing those cells avoids the schema clash without
+    losing information.
+    """
+    out: List[Dict[str, Any]] = []
+    for row in rows:
+        flat: Dict[str, Any] = {}
+        for k, v in row.items():
+            if isinstance(v, (list, dict)):
+                flat[k] = json.dumps(v, ensure_ascii=False, default=str)
+            else:
+                flat[k] = v
+        out.append(flat)
+    return out
+
+
 def _render_overrides(overrides: List[Dict[str, Any]]) -> None:
     if not overrides:
         st.info(
@@ -247,11 +331,11 @@ def _render_overrides(overrides: List[Dict[str, Any]]) -> None:
         "Each row is one finalize/ontology disagreement on `node_type`. "
         "Future use: export to CSV for the finalize ML labelling pipeline."
     )
-    st.dataframe(overrides, use_container_width=True)
+    st.dataframe(_flatten_for_dataframe(overrides), use_container_width=True)
 
 
 def _render_errors(errors: List[Dict[str, Any]]) -> None:
     if not errors:
         st.success("No build errors recorded.")
         return
-    st.dataframe(errors, use_container_width=True)
+    st.dataframe(_flatten_for_dataframe(errors), use_container_width=True)

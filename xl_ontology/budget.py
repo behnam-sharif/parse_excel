@@ -14,7 +14,7 @@ from typing import Literal
 
 from xl_ontology.schemas import LlmBudgetSnapshot
 
-Phase = Literal["seed", "enrichment"]
+Phase = Literal["seed", "enrichment", "pass2"]
 
 
 class BudgetExhausted(Exception):
@@ -42,6 +42,9 @@ class LlmBudget:
     enrichment_calls_max: int
     seed_calls_used: int = 0
     enrichment_calls_used: int = 0
+    # v1 Pass 2 budget — counted independently of seed.
+    pass2_calls_max: int = 0
+    pass2_calls_used: int = 0
 
     def can_call(self, phase: Phase) -> bool:
         """True iff at least one call remains in the given phase."""
@@ -49,6 +52,8 @@ class LlmBudget:
             return self.seed_calls_used < self.seed_calls_max
         if phase == "enrichment":
             return self.enrichment_calls_used < self.enrichment_calls_max
+        if phase == "pass2":
+            return self.pass2_calls_used < self.pass2_calls_max
         raise ValueError(f"Unknown phase: {phase!r}")
 
     def record_call(self, phase: Phase, tokens_used: int = 0) -> None:
@@ -60,6 +65,8 @@ class LlmBudget:
             self.seed_calls_used += 1
         elif phase == "enrichment":
             self.enrichment_calls_used += 1
+        elif phase == "pass2":
+            self.pass2_calls_used += 1
         else:
             raise ValueError(f"Unknown phase: {phase!r}")
 

@@ -59,6 +59,7 @@ class AgentState:
     """Per-agent mutable state passed by reference through the run."""
 
     agent_name: NodeName
+    planner_plan: List[Dict[str, Any]] = field(default_factory=list)
     expected_concepts: List[str] = field(default_factory=list)
     concept_results: Dict[str, ConceptResult] = field(default_factory=dict)
     tool_call_log: List[ToolCallRecord] = field(default_factory=list)

@@ -202,6 +202,7 @@ class SummaryModelBuilder:
             "classified_result": 0,
             "classified_overall_evidence": 0,
             "unclassified": 0,
+            "out_of_scope_for_pass_1": 0,
             "node_type_overrides_proposed": 0,
         }
         # Build a fast lookup from table_id -> CandidateTable (per agent)
@@ -223,6 +224,23 @@ class SummaryModelBuilder:
                 flags = list(cand.flags)
                 override = cand.node_type_override_proposed
                 in_top = True
+            elif fin_summary.get("pass1_eligible", True) is False or \
+                    fin_summary.get("in_dag", True) is False:
+                # v1.A: tables that are out of scope for Pass-1 labelling.
+                # Two reasons to land here:
+                #   - no DAG node at all (orphan / unreferenced)
+                #   - DAG node but node_type is metadata/data_table
+                #     (description / narrative / reference content)
+                # Distinguished from `unclassified` so future comprehension
+                # passes can decide whether to treat them.
+                role = "out_of_scope_for_pass_1"
+                subtype = None
+                confidence = None
+                quality = None
+                heuristics = []
+                flags = []
+                override = False
+                in_top = False
             else:
                 role = "unclassified"
                 subtype = None
@@ -256,6 +274,8 @@ class SummaryModelBuilder:
                 counts["classified_result"] += 1
             elif role == "overall_evidence":
                 counts["classified_overall_evidence"] += 1
+            elif role == "out_of_scope_for_pass_1":
+                counts["out_of_scope_for_pass_1"] += 1
             else:
                 counts["unclassified"] += 1
             if override:

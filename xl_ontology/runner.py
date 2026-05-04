@@ -27,12 +27,12 @@ from core.stage_config import ontology_config_from_pipeline
 from xl_ontology.agents import (
     CalculationsAgent,
     InputsAgent,
-    OverallModelAgent,
     ResultsAgent,
 )
 from xl_ontology.builder import SummaryModelBuilder
 from xl_ontology.budget import LlmBudget
 from xl_ontology.config import XlOntologyConfig
+from xl_ontology.llm_complete import resolve_llm_complete
 from xl_ontology.output_writers import (
     next_summary_model_version,
     write_agent_outputs,
@@ -93,14 +93,20 @@ def run_ontology(
 
     Resolves upstream artifacts under ``output_base/run_id/``,
     constructs the agent pipeline, and writes the five required
-    artifacts. ``llm_complete`` is the optional CompleteFn (Phase E
-    integration); when None, the pipeline runs deterministically with
-    template-only summaries.
+    artifacts. ``llm_complete`` overrides ``config.use_llm`` when
+    non-``None``. When both are absent/unspecified and
+    ``config.use_llm`` is true, builds a default OpenAI completion
+    fn from ``OPENAI_API_KEY`` (see ``resolve_llm_complete``). If no
+    key is set, runs deterministically with a warning.
     """
     t0 = time.perf_counter()
     if config is None:
         pc = load_config()
         config = ontology_config_from_pipeline(pc)
+
+    effective_llm = llm_complete
+    if effective_llm is None:
+        effective_llm = resolve_llm_complete(config)
 
     # --- resolve upstream paths ---
     final_map_path = get_v6_final_table_map_path(run_id, output_base)
@@ -157,6 +163,19 @@ def run_ontology(
                 file_path=w.file_path,
             )
         )
+    if config.use_llm and effective_llm is None:
+        trace.emit(
+            WarningEvent(
+                ts=_TraceBase.now_ts(),
+                category="llm_disabled",
+                message=(
+                    "use_llm=true but no completion fn resolved — "
+                    "OPENAI_API_KEY missing or .env not loaded. "
+                    "Run will proceed deterministically with no LLM calls."
+                ),
+                file_path=None,
+            )
+        )
 
     artifacts: List[Path] = []
     error_list: List[str] = []
@@ -194,13 +213,15 @@ def run_ontology(
                 trace=trace,
                 override_writer=overrides,
                 build_errors=errors,
-                llm_complete=llm_complete,
+                llm_complete=effective_llm,
             )
 
             # --- agents (sequential per plan §7.1) ---
+            # v1.A: OverallModelAgent removed from Pass 1 — overall is a
+            # Pass 2 stage (Stage 2.1) that operates as a comprehension
+            # layer, not a labeller.
             agents_run = 0
             for agent_cls in (
-                OverallModelAgent,
                 InputsAgent,
                 CalculationsAgent,
                 ResultsAgent,
@@ -214,11 +235,19 @@ def run_ontology(
             llm_calls_used = budget.seed_calls_used
 
             # --- table_tags assembly ---
+            # v1.A: include Pass-1 eligibility (DAG residence AND
+            # not metadata/data_table) so the builder marks ineligible
+            # tables as `out_of_scope_for_pass_1` rather than `unclassified`.
+            from xl_ontology.upstream import is_pass1_eligible
             lookup = {
                 e.table_id: {
                     "sheet": e.sheet_name,
                     "title": e.title,
                     "upstream_node_type": e.node_type,
+                    "in_dag": dag.is_in_dag(e.table_id),
+                    "pass1_eligible": is_pass1_eligible(
+                        dag, e.table_id, e.node_type
+                    ),
                 }
                 for e in final_map.all_entries()
             }

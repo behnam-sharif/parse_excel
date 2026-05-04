@@ -10,6 +10,10 @@ from __future__ import annotations
 
 from typing import ClassVar, Dict, List, Optional
 
+from xl_ontology.agents.planner_execute import (
+    DEFAULT_OVERVIEW_NAME_PATTERNS,
+    resolve_overall_model_plan_step,
+)
 from xl_ontology.agents.prompts import (
     OVERALL_MODEL_LEXICON,
     template_human_readable_overall_model,
@@ -27,6 +31,7 @@ from xl_ontology.schemas import (
 from xl_ontology.tools.composite import (
     extract_currency_symbols,
     find_overview_sheets,
+    list_data_validation_dropdowns,
 )
 from xl_ontology.tools.lexicon import search_workbook_lexicon
 from xl_ontology.tools.llm import ask_llm
@@ -49,27 +54,65 @@ class OverallModelAgent(OntologyAgent):
         self._overview_sheets: List[str] = []
         self._summary_text: Optional[str] = None
 
-    def _cross_check_phase(self) -> None:
+    def _execute_planner_tools_phase(self) -> None:
+        if not self.state.planner_plan:
+            return
+        for step in self.state.planner_plan:
+            resolved = resolve_overall_model_plan_step(step)
+            if resolved is None:
+                continue
+            tool, args = resolved
+            if tool == "find_overview_sheets":
+                patterns = args.get("name_patterns") or DEFAULT_OVERVIEW_NAME_PATTERNS
+                if not isinstance(patterns, list):
+                    patterns = DEFAULT_OVERVIEW_NAME_PATTERNS
+                self._discover_overview_sheets(patterns)
+            elif tool == "list_data_validation_dropdowns":
+                sheets = args.get("sheets") or self._overview_sheets
+                if not sheets:
+                    self._discover_overview_sheets(DEFAULT_OVERVIEW_NAME_PATTERNS)
+                    sheets = self._overview_sheets
+                self._track_tool("list_data_validation_dropdowns")
+                list_data_validation_dropdowns(self.ctx, sheets)
+            elif tool == "extract_currency_symbols":
+                self._currency_country_fallback()
+            elif tool == "search_workbook_lexicon":
+                raw = args.get("concepts")
+                concepts: Optional[List[str]]
+                if raw is None:
+                    concepts = None
+                elif isinstance(raw, str):
+                    concepts = [raw]
+                elif isinstance(raw, list):
+                    concepts = [str(c) for c in raw]
+                else:
+                    concepts = None
+                self._lexicon_pass_for_concepts(concepts)
+
+    def _discover_overview_sheets(self, name_patterns: List[str]) -> List[str]:
         self._track_tool("find_overview_sheets")
-        self._overview_sheets = find_overview_sheets(
-            self.ctx,
-            ["Description", "Cover", "Front", "About", "Read Me",
-             "Introduction", "Summary"],
-        )
-        # For each expected concept, try lexicon search (whole_table).
-        for concept in self.state.expected_concepts:
+        self._overview_sheets = find_overview_sheets(self.ctx, name_patterns)
+        return self._overview_sheets
+
+    def _lexicon_pass_for_concepts(
+        self, concepts: Optional[List[str]] = None
+    ) -> None:
+        todo = concepts if concepts is not None else list(self.state.expected_concepts)
+        for concept in todo:
+            if concept not in self.state.expected_concepts:
+                continue
             terms = OVERALL_MODEL_LEXICON.get(concept, [concept])
             self._track_tool("search_workbook_lexicon")
             hits = search_workbook_lexicon(self.ctx, terms, "whole_table")
             if hits:
-                # Take the row-label or body-cell-value hit if present —
-                # those tend to carry the actual value (e.g., "Drug X").
                 preferred = next(
-                    (h for h in hits if h.match_location in ("row_label", "body_cell_value")),
+                    (
+                        h
+                        for h in hits
+                        if h.match_location in ("row_label", "body_cell_value")
+                    ),
                     hits[0],
                 )
-                # The neighbouring cell (one column right) usually holds
-                # the concept's value in a description-style layout.
                 value = self._read_neighbour_value(
                     preferred.sheet, preferred.cell
                 )
@@ -105,36 +148,48 @@ class OverallModelAgent(OntologyAgent):
                         )
                     ],
                 )
-        # Country fallback via currency (heuristic H-OM-2 spirit, not the
-        # full handler — that's Phase E).
-        country_rec = self.ctx.builder.summary.overall_model.concepts.get("country")
-        if country_rec is None or country_rec.value is None:
-            self._track_tool("extract_currency_symbols")
-            sym_map = extract_currency_symbols(self.ctx, self.ctx.workbook.sheet_names())
-            for sym, country in _CURRENCY_TO_COUNTRY.items():
-                if sym in sym_map and sym_map[sym]:
-                    cell = sym_map[sym][0]
-                    record_concept(
-                        self.ctx,
-                        concept_name="country",
-                        value=country,
-                        evidence=[
-                            Evidence(
-                                sheet=cell.sheet,
-                                cell=cell.cell,
-                                table_id=None,
-                                snippet=str(cell.value or sym),
-                                match_type="format_match",
-                                matched_term=sym,
-                            )
-                        ],
-                        confidence=0.9 if sym in ("£", "C$", "A$", "₹", "R$") else 0.5,
-                        evidence_quality="partial",
-                    )
-                    self._key_decisions.append(
-                        f"inferred country={country} from currency symbol {sym}"
-                    )
-                    break
+
+    def _currency_country_fallback(self) -> None:
+        country_rec = self.ctx.builder.summary.overall_model.concepts.get(
+            "country"
+        )
+        if country_rec is not None and country_rec.value is not None:
+            return
+        self._track_tool("extract_currency_symbols")
+        sym_map = extract_currency_symbols(
+            self.ctx, self.ctx.workbook.sheet_names()
+        )
+        for sym, country in _CURRENCY_TO_COUNTRY.items():
+            if sym in sym_map and sym_map[sym]:
+                cell = sym_map[sym][0]
+                record_concept(
+                    self.ctx,
+                    concept_name="country",
+                    value=country,
+                    evidence=[
+                        Evidence(
+                            sheet=cell.sheet,
+                            cell=cell.cell,
+                            table_id=None,
+                            snippet=str(cell.value or sym),
+                            match_type="format_match",
+                            matched_term=sym,
+                        )
+                    ],
+                    confidence=0.9
+                    if sym in ("£", "C$", "A$", "₹", "R$")
+                    else 0.5,
+                    evidence_quality="partial",
+                )
+                self._key_decisions.append(
+                    f"inferred country={country} from currency symbol {sym}"
+                )
+                break
+
+    def _cross_check_phase(self) -> None:
+        self._discover_overview_sheets(DEFAULT_OVERVIEW_NAME_PATTERNS)
+        self._lexicon_pass_for_concepts(None)
+        self._currency_country_fallback()
 
     def _read_neighbour_value(self, sheet: str, cell_addr: str):
         # Very lightweight: parse "B7" → (7, 2), read column 2 + 1 = 3.

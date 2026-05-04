@@ -43,15 +43,18 @@ def ask_llm(
 ) -> LLMResponse:
     """One bounded LLM call. Raises BudgetExhausted on cap; the caller
     catches and decides whether to mark a concept absent or escalate."""
-    if budget_phase not in ("seed", "enrichment"):
+    if budget_phase not in ("seed", "enrichment", "pass2"):
         raise ValueError(f"Unknown budget_phase: {budget_phase!r}")
 
     # Pre-call budget check + trace event.
     snap = ctx.budget.snapshot()
     if budget_phase == "seed":
         used, cap = snap.seed_calls_used, snap.seed_calls_max
-    else:
+    elif budget_phase == "enrichment":
         used, cap = snap.enrichment_calls_used, ctx.budget.enrichment_calls_max
+    else:  # pass2
+        used = ctx.budget.pass2_calls_used
+        cap = ctx.budget.pass2_calls_max
     ctx.trace.emit(
         BudgetCheck(
             ts=_TraceBase.now_ts(),

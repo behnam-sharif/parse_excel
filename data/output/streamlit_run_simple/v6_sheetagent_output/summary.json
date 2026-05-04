@@ -5,22 +5,6 @@
   "total_tokens": 0,
   "sheets": [
     {
-      "sheet_name": "Inputs",
-      "n_tables": 35,
-      "n_resolved_tables": 5,
-      "token_count": 0,
-      "n_errors": 0,
-      "table_roles": {
-        "input": 9,
-        "metadata": 8,
-        "mixed": 18
-      },
-      "resolved_table_roles": {
-        "input": 3,
-        "mixed": 2
-      }
-    },
-    {
       "sheet_name": "Introduction",
       "n_tables": 6,
       "n_resolved_tables": 2,
@@ -45,6 +29,22 @@
       },
       "resolved_table_roles": {
         "input": 3
+      }
+    },
+    {
+      "sheet_name": "Inputs",
+      "n_tables": 35,
+      "n_resolved_tables": 5,
+      "token_count": 0,
+      "n_errors": 0,
+      "table_roles": {
+        "input": 9,
+        "metadata": 8,
+        "mixed": 18
+      },
+      "resolved_table_roles": {
+        "input": 3,
+        "mixed": 2
       }
     },
     {

@@ -17,6 +17,8 @@ from xl_ontology.upstream.dag import (
     DagIndex,
     DagNode,
     NamedRangeDef,
+    PASS1_INELIGIBLE_NODE_TYPES,
+    is_pass1_eligible,
 )
 from xl_ontology.upstream.formulas import FormulasIndex
 from xl_ontology.upstream.workbook import WorkbookView
@@ -32,6 +34,8 @@ __all__ = [
     "FootnoteRef",
     "FormulasIndex",
     "NamedRangeDef",
+    "PASS1_INELIGIBLE_NODE_TYPES",
     "StructuralSanity",
     "WorkbookView",
+    "is_pass1_eligible",
 ]

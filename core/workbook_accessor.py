@@ -74,6 +74,12 @@ class WorkbookAccessor:
         # Per-sheet parsed formula refs. Populated on first call to
         # formula_refs_in; reuses tokenizer work across overlapping bboxes.
         self._ref_caches: Dict[str, Dict[Tuple[int, int], Tuple[Tuple[int, int], ...]]] = {}
+        # Array-formula range cache (option A — load once, close
+        # workbook immediately so memory stays light). Map:
+        # ``{sheet_name: [(r1, c1, r2, c2)]}`` — 0-indexed inclusive.
+        # ``None`` until first access; ``{}`` after a successful load
+        # with no array formulas; per-sheet entries are lists.
+        self._array_formula_ranges: Optional[Dict[str, List[Tuple[int, int, int, int]]]] = None
 
     # -- Workbook lifecycle ------------------------------------------------
 
@@ -115,6 +121,76 @@ class WorkbookAccessor:
                 except Exception:
                     pass
             setattr(self, wb_attr, None)
+
+    # -- Array-formula ranges (Option A: one-shot load, low memory) -------
+
+    def _load_array_formula_ranges(self) -> Dict[str, List[Tuple[int, int, int, int]]]:
+        """Open the workbook with ``data_only=False, read_only=False``
+        once, extract every sheet's ``ws.array_formulae`` ranges as
+        0-indexed inclusive tuples, then close the workbook.
+
+        Memory cost after this returns: just the cache dict (a few
+        thousand 4-tuples for a large BIM, KB scale).
+
+        ``ws.array_formulae`` is only populated in non-read-only mode;
+        the existing ``_get_wb_formula`` opens with ``read_only=True``
+        for memory, so it can't surface this info.
+        """
+        out: Dict[str, List[Tuple[int, int, int, int]]] = {}
+        try:
+            from openpyxl.utils import range_boundaries
+        except Exception:
+            return out
+        wb = None
+        try:
+            wb = openpyxl.load_workbook(
+                self._workbook_path, data_only=False, read_only=False,
+            )
+        except Exception as exc:
+            logger.warning(
+                "Could not open workbook for array-formula scan %s: %s",
+                self._workbook_path, exc,
+            )
+            return out
+        try:
+            for ws in wb.worksheets:
+                af = getattr(ws, "array_formulae", None) or {}
+                if not af:
+                    continue
+                ranges: List[Tuple[int, int, int, int]] = []
+                for _master, rng in af.items():
+                    try:
+                        min_col, min_row, max_col, max_row = range_boundaries(str(rng))
+                    except Exception:
+                        continue
+                    if any(v is None for v in (min_col, min_row, max_col, max_row)):
+                        continue
+                    ranges.append((
+                        int(min_row) - 1, int(min_col) - 1,
+                        int(max_row) - 1, int(max_col) - 1,
+                    ))
+                if ranges:
+                    out[ws.title] = ranges
+        finally:
+            try:
+                wb.close()
+            except Exception:
+                pass
+        return out
+
+    def _array_formula_ranges_for(self, sheet_name: str) -> List[Tuple[int, int, int, int]]:
+        """Lazy accessor — triggers the one-shot load on first use."""
+        if self._array_formula_ranges is None:
+            with self._lock:
+                if self._array_formula_ranges is None:
+                    self._array_formula_ranges = self._load_array_formula_ranges()
+        return self._array_formula_ranges.get(sheet_name, [])
+
+    def array_formula_ranges(self, sheet_name: str) -> List[Tuple[int, int, int, int]]:
+        """Public — return 0-indexed inclusive ``(r1, c1, r2, c2)``
+        tuples for every array formula on this sheet. Empty list if
+        no array formulas (or load failed)."""
+        return list(self._array_formula_ranges_for(sheet_name))
 
     # -- Worksheet handle (values) ----------------------------------------
 
@@ -165,11 +241,23 @@ class WorkbookAccessor:
                     dt = getattr(cell, "data_type", None)
                     val = getattr(cell, "value", None)
                     if dt == "f":
-                        text = (
-                            val if isinstance(val, str)
-                            else str(val) if val is not None
-                            else ""
-                        )
+                        # openpyxl wraps array formulas in an
+                        # ArrayFormula object whose `.text` attribute
+                        # holds the actual formula string. Without
+                        # this unwrap, str(val) returns the repr
+                        # ("openpyxl.worksheet.formula.ArrayFormula")
+                        # and downstream parsers see a token-less
+                        # string → 0 references extracted.
+                        if isinstance(val, str):
+                            text = val
+                        else:
+                            text_attr = getattr(val, "text", None)
+                            if isinstance(text_attr, str) and text_attr:
+                                text = text_attr
+                            elif val is not None:
+                                text = str(val)
+                            else:
+                                text = ""
                         if text and not text.startswith("="):
                             text = "=" + text
                         formulas[(r0, c0)] = text
@@ -183,6 +271,29 @@ class WorkbookAccessor:
                 self._workbook_path, sheet_name, exc,
             )
             return _FormulaCache(sheet_name, {}, frozenset())
+
+        # Overlay array-formula spill cells. The read_only=True
+        # formula workbook can't expose ws.array_formulae, so we
+        # consult the side-loader (Option A — opens a third workbook
+        # handle once, closes immediately, caches per-sheet ranges).
+        # Each spill cell inherits the master's formula text so
+        # downstream parsers extract refs uniformly across the array.
+        try:
+            af_ranges = self._array_formula_ranges_for(sheet_name)
+        except Exception:
+            af_ranges = []
+        for (r1, c1, r2, c2) in af_ranges:
+            # The master cell is the top-left of the array range;
+            # its formula text is already in `formulas` (data_type='f').
+            master_text = formulas.get((r1, c1), "")
+            for r in range(r1, r2 + 1):
+                for c in range(c1, c2 + 1):
+                    coord = (r, c)
+                    if coord in is_formula:
+                        continue
+                    if master_text:
+                        formulas[coord] = master_text
+                    is_formula.add(coord)
         return _FormulaCache(sheet_name, formulas, frozenset(is_formula))
 
     # -- Public formula API -----------------------------------------------

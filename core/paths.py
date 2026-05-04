@@ -110,3 +110,28 @@ def get_ontology_build_errors_path(run_id: str, base: str = "data/output") -> Pa
 def get_node_type_override_log_path(run_id: str, base: str = "data/output") -> Path:
     """Return the node_type override log file (REVISION 3)."""
     return get_ontology_output_path(run_id, base) / "node_type_override_log.jsonl"
+
+
+# v1.B — Pass 2 (comprehension layer) artifacts.
+
+def get_model_understanding_md_path(
+    run_id: str, base: str = "data/output"
+) -> Path:
+    """Pass 2 prose narrative — coherent description of the model."""
+    return get_ontology_output_path(run_id, base) / "model_understanding.md"
+
+
+def get_model_understanding_json_path(
+    run_id: str, base: str = "data/output"
+) -> Path:
+    """Pass 2 structured findings — completion criteria, items satisfied/missing,
+    overrides, applied heuristics, per-stage."""
+    return get_ontology_output_path(run_id, base) / "model_understanding.json"
+
+
+def get_cross_agent_findings_path(
+    run_id: str, base: str = "data/output"
+) -> Path:
+    """Pass 2 append-only mismatches and gaps detected across stages
+    (e.g. result components without classified inputs)."""
+    return get_ontology_output_path(run_id, base) / "cross_agent_findings.jsonl"

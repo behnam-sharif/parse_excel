@@ -84,6 +84,255 @@ def build_run_layout(tmp_path: Path, run_id: str = "synthetic_run") -> FixtureLa
     )
 
 
+def build_v01_run_layout(tmp_path: Path, run_id: str = "v01_run") -> FixtureLayout:
+    """Synthetic run designed to exercise v0.1 Bucket A + C scenarios:
+
+    - Three market-share tables (with intervention, without intervention,
+      and an ambiguous one) — exercises §4.1
+    - Separate hospitalization_rate and hospitalization_unit_cost tables —
+      exercises §4.2
+    - One subsequent_treatment_unit_cost table — §4.3
+    - One end_of_life_cost table — §4.4
+
+    All tables have DAG nodes so they pass the (future v1.A) DAG-only filter.
+    """
+    base = tmp_path / "output"
+    base.mkdir(parents=True, exist_ok=True)
+    run_root = base / run_id
+    init_dir = run_root / "init_output"
+    v6_dir = run_root / "v6_sheetagent_output"
+    dag_dir = run_root / "dag_output"
+    for d in (init_dir, v6_dir, dag_dir):
+        d.mkdir(parents=True, exist_ok=True)
+
+    wb_path = init_dir / "cleaned_workbook.xlsx"
+    _build_v01_workbook(wb_path)
+
+    final_map_path = v6_dir / "final_table_map.json"
+    dag_path = dag_dir / "dag.json"
+    node_index_path = dag_dir / "node_index.json"
+    formulas_path = dag_dir / "formulas.json"
+
+    final_map_path.write_text(
+        json.dumps(_build_v01_final_table_map(), indent=2), encoding="utf-8"
+    )
+    dag, node_index, formulas = _build_v01_dag_and_indices()
+    dag_path.write_text(json.dumps(dag, indent=2), encoding="utf-8")
+    node_index_path.write_text(json.dumps(node_index, indent=2), encoding="utf-8")
+    formulas_path.write_text(json.dumps(formulas, indent=2), encoding="utf-8")
+
+    return FixtureLayout(
+        base=base,
+        run_id=run_id,
+        workbook_path=wb_path,
+        final_map_path=final_map_path,
+        dag_path=dag_path,
+        node_index_path=node_index_path,
+        formulas_path=formulas_path,
+    )
+
+
+def _build_v01_workbook(path: Path) -> None:
+    wb = Workbook()
+    inputs = wb.active
+    inputs.title = "Inputs"
+
+    # Three market-share tables on a single sheet
+    inputs["A1"] = "Market share with intervention"
+    inputs["A1"].font = _BOLD
+    inputs["A2"] = "Year"
+    inputs["B2"] = "Drug X"
+    inputs["C2"] = "Comparator"
+    for i in range(3):
+        inputs.cell(row=3 + i, column=1, value=2024 + i)
+        inputs.cell(row=3 + i, column=2, value=0.10 + 0.05 * i)
+        inputs.cell(row=3 + i, column=3, value=0.90 - 0.05 * i)
+
+    inputs["E1"] = "Market share without intervention"
+    inputs["E1"].font = _BOLD
+    inputs["E2"] = "Year"
+    inputs["F2"] = "Drug X"
+    inputs["G2"] = "Comparator"
+    for i in range(3):
+        inputs.cell(row=3 + i, column=5, value=2024 + i)
+        inputs.cell(row=3 + i, column=6, value=0.0)
+        inputs.cell(row=3 + i, column=7, value=1.0)
+
+    inputs["I1"] = "Treatment mix (overall)"  # ambiguous parent fallback
+    inputs["I1"].font = _BOLD
+    inputs["I2"] = "Year"
+    inputs["J2"] = "Mix"
+    for i in range(3):
+        inputs.cell(row=3 + i, column=9, value=2024 + i)
+        inputs.cell(row=3 + i, column=10, value=0.5)
+
+    # Hospitalization rate + unit cost — separate tables
+    hosp = wb.create_sheet("Hosp")
+    hosp["A1"] = "Hospitalization rate"
+    hosp["A1"].font = _BOLD
+    hosp["A2"] = "Year"
+    hosp["B2"] = "Admission rate"
+    for i in range(3):
+        hosp.cell(row=3 + i, column=1, value=2024 + i)
+        c = hosp.cell(row=3 + i, column=2, value=0.05 + 0.01 * i)
+        c.number_format = "0.00%"
+
+    hosp["D1"] = "Hospitalization unit cost"
+    hosp["D1"].font = _BOLD
+    hosp["D2"] = "Year"
+    hosp["E2"] = "Cost per admission (£)"
+    for i in range(3):
+        hosp.cell(row=3 + i, column=4, value=2024 + i)
+        c = hosp.cell(row=3 + i, column=5, value=2500.0)
+        c.number_format = "£#,##0"
+
+    # Subsequent-treatment cost
+    subs = wb.create_sheet("Subs")
+    subs["A1"] = "Subsequent therapy cost"
+    subs["A1"].font = _BOLD
+    subs["A2"] = "Line"
+    subs["B2"] = "Cost"
+    subs.cell(row=3, column=1, value="2L")
+    subs.cell(row=3, column=2, value=15000)
+    subs.cell(row=4, column=1, value="3L")
+    subs.cell(row=4, column=2, value=22000)
+
+    # End-of-life cost (other_input child)
+    eol = wb.create_sheet("EOL")
+    eol["A1"] = "End of life cost"
+    eol["A1"].font = _BOLD
+    eol["A2"] = "Phase"
+    eol["B2"] = "Cost"
+    eol.cell(row=3, column=1, value="Last 30 days")
+    eol.cell(row=3, column=2, value=8000)
+
+    wb.save(path)
+
+
+def _build_v01_final_table_map() -> Dict[str, Any]:
+    ms_with = _entry(
+        "Inputs__t1__c0", "Inputs", _bbox(0, 0, 5, 2),
+        title="Market share with intervention",
+        headers=[["Year", "Drug X", "Comparator"]],
+        row_names=["2024", "2025", "2026"],
+        node_type="input",
+        coordinates="Inputs!A1:C6",
+    )
+    ms_without = _entry(
+        "Inputs__t2__c0", "Inputs", _bbox(0, 4, 5, 6),
+        title="Market share without intervention",
+        headers=[["Year", "Drug X", "Comparator"]],
+        row_names=["2024", "2025", "2026"],
+        node_type="input",
+        coordinates="Inputs!E1:G6",
+    )
+    ms_amb = _entry(
+        "Inputs__t3__c0", "Inputs", _bbox(0, 8, 5, 9),
+        title="Treatment mix (overall)",
+        headers=[["Year", "Mix"]],
+        row_names=["2024", "2025", "2026"],
+        node_type="input",
+        coordinates="Inputs!I1:J6",
+    )
+    hosp_rate = _entry(
+        "Hosp__t1__c0", "Hosp", _bbox(0, 0, 5, 1),
+        title="Hospitalization rate",
+        headers=[["Year", "Admission rate"]],
+        row_names=["2024", "2025", "2026"],
+        node_type="input",
+        coordinates="Hosp!A1:B6",
+    )
+    hosp_cost = _entry(
+        "Hosp__t2__c0", "Hosp", _bbox(0, 3, 5, 4),
+        title="Hospitalization unit cost",
+        headers=[["Year", "Cost per admission (£)"]],
+        row_names=["2024", "2025", "2026"],
+        node_type="input",
+        coordinates="Hosp!D1:E6",
+    )
+    subs_cost = _entry(
+        "Subs__t1__c0", "Subs", _bbox(0, 0, 3, 1),
+        title="Subsequent therapy cost",
+        headers=[["Line", "Cost"]],
+        row_names=["2L", "3L"],
+        node_type="input",
+        coordinates="Subs!A1:B4",
+    )
+    eol_cost = _entry(
+        "EOL__t1__c0", "EOL", _bbox(0, 0, 2, 1),
+        title="End of life cost",
+        headers=[["Phase", "Cost"]],
+        row_names=["Last 30 days"],
+        node_type="input",
+        coordinates="EOL!A1:B3",
+    )
+    return {
+        "Inputs": {
+            "sheet_name": "Inputs",
+            "finalize_version": "v6-finalize-mvp",
+            "entries": [ms_with, ms_without, ms_amb],
+            "stats": {},
+        },
+        "Hosp": {
+            "sheet_name": "Hosp",
+            "finalize_version": "v6-finalize-mvp",
+            "entries": [hosp_rate, hosp_cost],
+            "stats": {},
+        },
+        "Subs": {
+            "sheet_name": "Subs",
+            "finalize_version": "v6-finalize-mvp",
+            "entries": [subs_cost],
+            "stats": {},
+        },
+        "EOL": {
+            "sheet_name": "EOL",
+            "finalize_version": "v6-finalize-mvp",
+            "entries": [eol_cost],
+            "stats": {},
+        },
+    }
+
+
+def _build_v01_dag_and_indices() -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    table_specs = [
+        ("ms_with__0", "Inputs__t1__c0", "Inputs", "Market share with intervention"),
+        ("ms_without__0", "Inputs__t2__c0", "Inputs", "Market share without intervention"),
+        ("ms_amb__0", "Inputs__t3__c0", "Inputs", "Treatment mix (overall)"),
+        ("hosp_rate__0", "Hosp__t1__c0", "Hosp", "Hospitalization rate"),
+        ("hosp_cost__0", "Hosp__t2__c0", "Hosp", "Hospitalization unit cost"),
+        ("subs_cost__0", "Subs__t1__c0", "Subs", "Subsequent therapy cost"),
+        ("eol_cost__0", "EOL__t1__c0", "EOL", "End of life cost"),
+    ]
+    nodes = [
+        _node(node_id, table_id, sheet, _bbox(0, 0, 5, 1), title, "input")
+        for (node_id, table_id, sheet, title) in table_specs
+    ]
+    dag = {
+        "workbook_name": "v01_synthetic.xlsx",
+        "build_stats": {"build_version": "v7-mvp", "total_nodes": len(nodes), "total_edges": 0},
+        "nodes": nodes,
+        "edges": [],
+        "named_ranges": {},
+    }
+    by_id = {n["node_id"]: n for n in nodes}
+    by_sheet: Dict[str, List[str]] = {}
+    by_node_type: Dict[str, List[str]] = {}
+    by_table_id: Dict[str, List[str]] = {}
+    for n in nodes:
+        by_sheet.setdefault(n["sheet_name"], []).append(n["node_id"])
+        by_node_type.setdefault(n["node_type"], []).append(n["node_id"])
+        by_table_id.setdefault(n["table_id"], []).append(n["node_id"])
+    node_index = {
+        "by_id": by_id,
+        "by_sheet": by_sheet,
+        "by_node_type": by_node_type,
+        "by_table_id": by_table_id,
+        "cell_to_node": {},
+    }
+    return dag, node_index, {}
+
+
 def build_synthetic_run(tmp_path: Path) -> FixtureRun:
     """Build a synthetic xl_ontology run rooted at ``tmp_path``.
 

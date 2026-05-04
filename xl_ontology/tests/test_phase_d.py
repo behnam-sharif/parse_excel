@@ -29,6 +29,7 @@ def _config_for(tmp_root: Path) -> XlOntologyConfig:
     return XlOntologyConfig(
         pack_name="bim_v0",
         packs_root=str(_PACKS_ROOT),
+        use_llm=False,
         seed_llm_budget_max=8,
         enrichment_llm_budget_max=5,
         llm_model="gpt-4o-mini",

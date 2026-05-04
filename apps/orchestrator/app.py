@@ -503,6 +503,10 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         _base_capture = base
 
         def _work():
+            from core.env_bootstrap import load_project_dotenv
+
+            load_project_dotenv()
+
             from xl_ontology import run_ontology
 
             return run_ontology(

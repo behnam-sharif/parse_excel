@@ -22,6 +22,7 @@ from .formatting_agent import extract_table_formatting
 from .exporter import export_results
 from .finalize import finalize_sheet
 from .final_map_exporter import export_final_map
+from .settings_harvest import harvest_named_settings
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +205,22 @@ def run_v6_analysis(
 
     # Finalize export (deterministic flat map for DAG consumption)
     if getattr(config, "enable_finalize", False):
+        # Post-pass: harvest unattached named-variable cells into
+        # synthetic ``node_type="setting"`` leaves so DAG can resolve
+        # named-range references to a real source node.
+        try:
+            n_settings, settings_audit = harvest_named_settings(workbook_path, results)
+            if n_settings:
+                logger.info("Settings harvest: created %d synthetic settings", n_settings)
+            # Persist audit log alongside the final_table_map.
+            import json as _json
+            audit_path = output_dir / "settings_harvest_audit.jsonl"
+            audit_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(audit_path, "w", encoding="utf-8") as f:
+                for row in settings_audit:
+                    f.write(_json.dumps(row, ensure_ascii=False) + "\n")
+        except Exception as exc:
+            logger.warning("Settings harvest failed; proceeding without: %s", exc, exc_info=True)
         export_final_map(results, output_dir / "final_table_map.json")
 
     total_tables = sum(len(r.tables) for r in results)

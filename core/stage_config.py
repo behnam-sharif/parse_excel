@@ -19,15 +19,31 @@ def _require_exact_keys(
     *,
     exclude: frozenset[str] = frozenset(),
 ) -> Dict[str, Any]:
-    names = {f.name for f in fields(model_cls)} - exclude
+    """Require every field on ``model_cls`` to either be present in
+    ``data`` or to have a default. Reject any unknown keys.
+
+    Returns ``{name: data[name]}`` for the fields actually present so
+    the dataclass constructor uses defaults for the rest.
+    """
+    from dataclasses import MISSING
+
+    all_fields = [f for f in fields(model_cls) if f.name not in exclude]
+    required = {
+        f.name
+        for f in all_fields
+        if f.default is MISSING and f.default_factory is MISSING  # type: ignore[misc]
+    }
+    optional = {f.name for f in all_fields} - required
+
     present = set(data.keys())
-    missing = names - present
+    missing = required - present
     if missing:
         raise ValueError(f"{label}: missing keys: {sorted(missing)}")
-    extra = present - names
+    allowed = required | optional
+    extra = present - allowed
     if extra:
         raise ValueError(f"{label}: unknown keys: {sorted(extra)}")
-    return {name: data[name] for name in names}
+    return {name: data[name] for name in present}
 
 
 def merge_stage_dict(base: Dict[str, Any], overrides: Optional[Dict[str, Any]]) -> Dict[str, Any]:

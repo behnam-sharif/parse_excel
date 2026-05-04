@@ -1,4 +1,353 @@
 {
+  "Introduction": {
+    "sheet_name": "Introduction",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "parent",
+        "table_id": "f57ac8d2e4e4931a_t3",
+        "coordinates": "Introduction!C11:E13",
+        "bbox": {
+          "r1": 10,
+          "c1": 2,
+          "r2": 12,
+          "c2": 4
+        },
+        "sheet_name": "Introduction",
+        "title": null,
+        "parent_path": [
+          "Introduction"
+        ],
+        "children": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "coordinates": "Introduction!C11:E11",
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4
+            },
+            "sheet_name": "Introduction",
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
+            "row_names": null,
+            "core_region": null,
+            "node_type": "metadata",
+            "parent_path": [
+              "Introduction"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 10,
+                "col": 2,
+                "text": "Value"
+              },
+              {
+                "row": 10,
+                "col": 4,
+                "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
+              }
+            ],
+            "llm_gate_triggers": [],
+            "source_flags": [
+              "all_metadata_no_numeric",
+              "title_missing"
+            ]
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "coordinates": "Introduction!C13:E13",
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4
+            },
+            "sheet_name": "Introduction",
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
+            "row_names": null,
+            "core_region": null,
+            "node_type": "metadata",
+            "parent_path": [
+              "Introduction"
+            ],
+            "footnotes_notes_refs": [
+              {
+                "row": 12,
+                "col": 2,
+                "text": "Value"
+              },
+              {
+                "row": 12,
+                "col": 4,
+                "text": "The content of these cells can be changed to accommodate user inputs"
+              }
+            ],
+            "llm_gate_triggers": [],
+            "source_flags": [
+              "all_metadata_no_numeric",
+              "title_missing"
+            ]
+          }
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [],
+        "source_flags": [
+          "all_metadata_no_numeric"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "f57ac8d2e4e4931a_b3",
+        "coordinates": "Introduction!C15:E15",
+        "bbox": {
+          "r1": 14,
+          "c1": 2,
+          "r2": 14,
+          "c2": 4
+        },
+        "sheet_name": "Introduction",
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
+        "row_names": null,
+        "core_region": null,
+        "node_type": "metadata",
+        "parent_path": [
+          "Introduction"
+        ],
+        "footnotes_notes_refs": [
+          {
+            "row": 14,
+            "col": 2,
+            "text": "Value"
+          },
+          {
+            "row": 14,
+            "col": 4,
+            "text": "The content of these cells is used in the model and can not be changed"
+          }
+        ],
+        "llm_gate_triggers": [],
+        "source_flags": [
+          "title_missing"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 1,
+      "parent_count": 1,
+      "total_children": 2,
+      "flag_frequency": {
+        "all_metadata_no_numeric": 3,
+        "title_missing": 3
+      }
+    }
+  },
+  "Results": {
+    "sheet_name": "Results",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "standalone",
+        "table_id": "262a4c0f1d47d09d",
+        "coordinates": "Results!B4:E10",
+        "bbox": {
+          "r1": 3,
+          "c1": 1,
+          "r2": 9,
+          "c2": 4
+        },
+        "sheet_name": "Results",
+        "title": null,
+        "headers": [
+          [
+            "Year",
+            "Without InO",
+            "With InO",
+            "Budget impact"
+          ]
+        ],
+        "row_names": [
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "Total"
+        ],
+        "core_region": {
+          "r1": 4,
+          "c1": 2,
+          "r2": 9,
+          "c2": 4
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "missing_header",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "merged_from_metadata_and_numeric_child",
+          "title_missing",
+          "rowname_sequence"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "47ecc07e130eef5f_t10",
+        "coordinates": "Results!B48:L57",
+        "bbox": {
+          "r1": 47,
+          "c1": 1,
+          "r2": 56,
+          "c2": 11
+        },
+        "sheet_name": "Results",
+        "title": null,
+        "headers": [
+          [
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO"
+          ],
+          [
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024"
+          ]
+        ],
+        "row_names": [
+          "Drug costs",
+          "Adverse events costs",
+          "Subsequent treatment costs",
+          "Hospitalization costs",
+          "SCT costs",
+          "End-of-life costs",
+          "Total",
+          "Annual budget impact"
+        ],
+        "core_region": {
+          "r1": 49,
+          "c1": 2,
+          "r2": 56,
+          "c2": 11
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "core_validation_ambiguous",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "merged_from_metadata_and_numeric_child",
+          "header_conflict",
+          "title_missing",
+          "header_sequence"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "47ecc07e130eef5f_b10",
+        "coordinates": "Results!G59:L64",
+        "bbox": {
+          "r1": 58,
+          "c1": 6,
+          "r2": 63,
+          "c2": 11
+        },
+        "sheet_name": "Results",
+        "title": null,
+        "headers": [],
+        "row_names": [
+          "Drug costs",
+          "Adverse events costs",
+          "Subsequent treatment costs",
+          "Hospitalization costs",
+          "SCT costs",
+          "End-of-life costs"
+        ],
+        "core_region": {
+          "r1": 58,
+          "c1": 7,
+          "r2": 63,
+          "c2": 11
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "missing_header",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "title_missing",
+          "header_missing"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 3,
+      "parent_count": 0,
+      "total_children": 0,
+      "flag_frequency": {
+        "merged_from_metadata_and_numeric_child": 2,
+        "title_missing": 3,
+        "rowname_sequence": 1,
+        "header_conflict": 1,
+        "header_sequence": 1,
+        "header_missing": 1
+      }
+    }
+  },
   "Inputs": {
     "sheet_name": "Inputs",
     "finalize_version": "v6-finalize-mvp",
@@ -1198,355 +1547,6 @@
       "flag_frequency": {
         "metadata_propagated_positional": 4,
         "title_missing": 4
-      }
-    }
-  },
-  "Introduction": {
-    "sheet_name": "Introduction",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "parent",
-        "table_id": "f57ac8d2e4e4931a_t3",
-        "coordinates": "Introduction!C11:E13",
-        "bbox": {
-          "r1": 10,
-          "c1": 2,
-          "r2": 12,
-          "c2": 4
-        },
-        "sheet_name": "Introduction",
-        "title": null,
-        "parent_path": [
-          "Introduction"
-        ],
-        "children": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "coordinates": "Introduction!C11:E11",
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4
-            },
-            "sheet_name": "Introduction",
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-              ]
-            ],
-            "row_names": null,
-            "core_region": null,
-            "node_type": "metadata",
-            "parent_path": [
-              "Introduction"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 10,
-                "col": 2,
-                "text": "Value"
-              },
-              {
-                "row": 10,
-                "col": 4,
-                "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
-              }
-            ],
-            "llm_gate_triggers": [],
-            "source_flags": [
-              "all_metadata_no_numeric",
-              "title_missing"
-            ]
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "coordinates": "Introduction!C13:E13",
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4
-            },
-            "sheet_name": "Introduction",
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells can be changed to accommodate user inputs"
-              ]
-            ],
-            "row_names": null,
-            "core_region": null,
-            "node_type": "metadata",
-            "parent_path": [
-              "Introduction"
-            ],
-            "footnotes_notes_refs": [
-              {
-                "row": 12,
-                "col": 2,
-                "text": "Value"
-              },
-              {
-                "row": 12,
-                "col": 4,
-                "text": "The content of these cells can be changed to accommodate user inputs"
-              }
-            ],
-            "llm_gate_triggers": [],
-            "source_flags": [
-              "all_metadata_no_numeric",
-              "title_missing"
-            ]
-          }
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [],
-        "source_flags": [
-          "all_metadata_no_numeric"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "f57ac8d2e4e4931a_b3",
-        "coordinates": "Introduction!C15:E15",
-        "bbox": {
-          "r1": 14,
-          "c1": 2,
-          "r2": 14,
-          "c2": 4
-        },
-        "sheet_name": "Introduction",
-        "title": null,
-        "headers": [
-          [
-            "Value",
-            "",
-            "The content of these cells is used in the model and can not be changed"
-          ]
-        ],
-        "row_names": null,
-        "core_region": null,
-        "node_type": "metadata",
-        "parent_path": [
-          "Introduction"
-        ],
-        "footnotes_notes_refs": [
-          {
-            "row": 14,
-            "col": 2,
-            "text": "Value"
-          },
-          {
-            "row": 14,
-            "col": 4,
-            "text": "The content of these cells is used in the model and can not be changed"
-          }
-        ],
-        "llm_gate_triggers": [],
-        "source_flags": [
-          "title_missing"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 1,
-      "parent_count": 1,
-      "total_children": 2,
-      "flag_frequency": {
-        "all_metadata_no_numeric": 3,
-        "title_missing": 3
-      }
-    }
-  },
-  "Results": {
-    "sheet_name": "Results",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "standalone",
-        "table_id": "262a4c0f1d47d09d",
-        "coordinates": "Results!B4:E10",
-        "bbox": {
-          "r1": 3,
-          "c1": 1,
-          "r2": 9,
-          "c2": 4
-        },
-        "sheet_name": "Results",
-        "title": null,
-        "headers": [
-          [
-            "Year",
-            "Without InO",
-            "With InO",
-            "Budget impact"
-          ]
-        ],
-        "row_names": [
-          "2020",
-          "2021",
-          "2022",
-          "2023",
-          "2024",
-          "Total"
-        ],
-        "core_region": {
-          "r1": 4,
-          "c1": 2,
-          "r2": 9,
-          "c2": 4
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "merged_from_metadata_and_numeric_child",
-          "title_missing",
-          "rowname_sequence"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "47ecc07e130eef5f_t10",
-        "coordinates": "Results!B48:L57",
-        "bbox": {
-          "r1": 47,
-          "c1": 1,
-          "r2": 56,
-          "c2": 11
-        },
-        "sheet_name": "Results",
-        "title": null,
-        "headers": [
-          [
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "With InO",
-            "With InO",
-            "With InO",
-            "With InO",
-            "With InO"
-          ],
-          [
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
-          ]
-        ],
-        "row_names": [
-          "Drug costs",
-          "Adverse events costs",
-          "Subsequent treatment costs",
-          "Hospitalization costs",
-          "SCT costs",
-          "End-of-life costs",
-          "Total",
-          "Annual budget impact"
-        ],
-        "core_region": {
-          "r1": 49,
-          "c1": 2,
-          "r2": 56,
-          "c2": 11
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "core_validation_ambiguous",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "merged_from_metadata_and_numeric_child",
-          "header_conflict",
-          "title_missing",
-          "header_sequence"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "47ecc07e130eef5f_b10",
-        "coordinates": "Results!G59:L64",
-        "bbox": {
-          "r1": 58,
-          "c1": 6,
-          "r2": 63,
-          "c2": 11
-        },
-        "sheet_name": "Results",
-        "title": null,
-        "headers": [],
-        "row_names": [
-          "Drug costs",
-          "Adverse events costs",
-          "Subsequent treatment costs",
-          "Hospitalization costs",
-          "SCT costs",
-          "End-of-life costs"
-        ],
-        "core_region": {
-          "r1": 58,
-          "c1": 7,
-          "r2": 63,
-          "c2": 11
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "title_missing",
-          "header_missing"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 3,
-      "parent_count": 0,
-      "total_children": 0,
-      "flag_frequency": {
-        "merged_from_metadata_and_numeric_child": 2,
-        "title_missing": 3,
-        "rowname_sequence": 1,
-        "header_conflict": 1,
-        "header_sequence": 1,
-        "header_missing": 1
       }
     }
   },

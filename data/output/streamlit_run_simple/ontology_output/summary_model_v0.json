@@ -1,0 +1,1227 @@
+{
+  "model_id": "streamlit_run_simple",
+  "ontology_id": "bim_v0",
+  "ontology_version": "0.2",
+  "schema_version": "v0",
+  "seed_timestamp": "2026-05-04T19:12:43.272Z",
+  "last_enriched_timestamp": null,
+  "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
+  "overall_model": {
+    "present": false,
+    "evidence_quality": "absent",
+    "summary": null,
+    "summary_source": "template",
+    "concepts": {},
+    "applied_heuristics": [],
+    "confidence": null
+  },
+  "inputs": {
+    "present": true,
+    "evidence_quality": "partial",
+    "summary": "13 input tables identified covering population, market_share, drug_cost. epidemiology not located.",
+    "summary_source": "template",
+    "candidate_tables": [
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_t45_child2",
+        "ontology_role": "input",
+        "ontology_subtype": "population",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in title for concept 'population'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Patient population",
+            "matched_term": "population"
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "parent_path": [
+          "Inputs",
+          "Patient population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_t45_child3",
+        "ontology_role": "input",
+        "ontology_subtype": "market_share",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in title for concept 'market_share'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Market shares in world without InO",
+            "matched_term": "market share"
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "parent_path": [
+          "Inputs",
+          "Patient population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_t45_child5",
+        "ontology_role": "input",
+        "ontology_subtype": "drug_cost",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in title for concept 'drug_cost'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Annual drug costs",
+            "matched_term": "drug cost"
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "parent_path": [
+          "Inputs",
+          "Patient population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_t45_child4",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_market_share",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'market_share'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Market shares in world with InO",
+            "matched_term": "market share"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_t45",
+        "parent_path": [
+          "Inputs",
+          "Patient population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_b45_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_adverse_event",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'adverse_event'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Adverse events, frequencies (same as global models)",
+            "matched_term": "adverse event"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_b45",
+        "parent_path": [
+          "Inputs",
+          "Adverse events, frequencies (same as global models)"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_t70_b45_child2",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_adverse_event",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'adverse_event'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Adverse events, costs",
+            "matched_term": "adverse event"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_t70_b45",
+        "parent_path": [
+          "Inputs",
+          "Adverse events, frequencies (same as global models)"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "parent_path": [
+          "Inputs",
+          "Hospitalization"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "parent_path": [
+          "Inputs",
+          "Hospitalization"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_b70_t46_child7",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_hospitalization",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'hospitalization'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Number of bed days",
+            "matched_term": "bed day"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "parent_path": [
+          "Inputs",
+          "Hospitalization"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_b70_t46_child8",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_SCT",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'SCT'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "SCT rates after induction therapy",
+            "matched_term": "sct"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": "9814fc53f594ba29_t118_b70_t46",
+        "parent_path": [
+          "Inputs",
+          "Hospitalization"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_t118_b70_b46",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input_SCT",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in row_label for concept 'SCT'",
+        "evidence_signals": [
+          {
+            "type": "format_match",
+            "value": "SCT costs",
+            "matched_term": "sct"
+          },
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Inputs"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "9814fc53f594ba29_b118",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Inputs"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 24,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": null,
+        "parent_path": [
+          "Calculations"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": [
+          "fanout_outlier_high"
+        ]
+      }
+    ],
+    "parent_groups": [],
+    "expected_concepts_status": {
+      "population": "found",
+      "epidemiology": "absent",
+      "market_share": "found",
+      "drug_cost": "found"
+    },
+    "confidence": null
+  },
+  "calculations": {
+    "present": true,
+    "evidence_quality": "high",
+    "summary": "17 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+    "summary_source": "template",
+    "candidate_tables": [
+      {
+        "table_id": "94c8c58d611b9e70_t103_child3",
+        "ontology_role": "calculation",
+        "ontology_subtype": "total_cost_with",
+        "confidence": 0.385,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in row_label for concept 'total_cost_with_intervention'",
+        "evidence_signals": [
+          {
+            "type": "format_match",
+            "value": "Total costs of treatment",
+            "matched_term": "total cost"
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "47ecc07e130eef5f_t10",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.7727272727272727,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Results"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child1",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6428571428571429,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 26,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8095238095238095,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 17,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child4",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child5",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child6",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child7",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child8",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.780952380952381,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child1",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8095238095238095,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 17,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child3",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child4",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child5",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child6",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_b103_child7",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.780952380952381,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_b103",
+        "parent_path": [
+          "Calculations",
+          "World with InO | Current treatments used"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23__core2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 1.0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "1f634d7d13c5e37c_b57_b48_b16_b23",
+        "parent_path": [
+          "Calculations"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      }
+    ],
+    "parent_groups": [],
+    "expected_concepts_status": {
+      "total_cost_with_intervention": "found",
+      "total_cost_without_intervention": "found",
+      "cost_component_calc": "absent",
+      "patient_flow": "absent",
+      "scenario_calc": "absent",
+      "aggregator": "absent"
+    },
+    "confidence": null
+  },
+  "results": {
+    "present": true,
+    "evidence_quality": "partial",
+    "summary": "1 result table identified (structural_result). No incremental row located.",
+    "summary_source": "template",
+    "candidate_tables": [
+      {
+        "table_id": "262a4c0f1d47d09d",
+        "ontology_role": "result",
+        "ontology_subtype": "structural_result",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: terminal in DAG, multiple inputs, name matches results lexicon",
+        "evidence_signals": [
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "structural_fingerprint",
+            "value": "sheet_name",
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Results"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "has_cumulative_column": false,
+          "result_metrics": [],
+          "fed_by": []
+        },
+        "flags": []
+      }
+    ],
+    "parent_groups": [],
+    "expected_concepts_status": {
+      "incremental_budget_impact": "absent",
+      "total_cost_summary": "absent",
+      "per_patient_impact": "absent",
+      "annual_impact": "absent",
+      "multi_year_impact": "absent",
+      "scenario_results": "absent"
+    },
+    "confidence": null
+  },
+  "unclassified_tables": [],
+  "proposed_table_corrections": [],
+  "llm_budget": {
+    "seed_calls_used": 0,
+    "seed_calls_max": 8,
+    "enrichment_calls_used": 0
+  },
+  "run_notes": []
+}

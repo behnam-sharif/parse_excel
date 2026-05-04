@@ -17,6 +17,7 @@ from dataclasses import dataclass
 class XlOntologyConfig:
     pack_name: str
     packs_root: str
+    use_llm: bool
     seed_llm_budget_max: int
     enrichment_llm_budget_max: int
     llm_model: str
@@ -24,3 +25,10 @@ class XlOntologyConfig:
     llm_temperature: float
     dag_terminal_threshold: int
     parallelism: int
+    # v1 Pass 2 (comprehension layer). All defaultable so v0 YAML still
+    # loads without modification — the pipeline-config builder doesn't
+    # require these keys when use_llm=false or pass2_enabled=false.
+    pass2_enabled: bool = True
+    pass2_max_iterations: int = 3
+    pass2_llm_budget_max: int = 20
+    pass2_overview_sheet_max_chars: int = 10_000

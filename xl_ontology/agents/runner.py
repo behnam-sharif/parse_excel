@@ -19,6 +19,7 @@ from xl_ontology.agents.base import (
     ConceptResult,
     parse_expected_concepts,
 )
+from xl_ontology.agents.planner_parse import parse_tool_plan_from_planner_response
 from xl_ontology.budget import BudgetExhausted
 from xl_ontology.defects import (
     recover_header_stub,
@@ -145,6 +146,7 @@ class OntologyAgent:
         )
         try:
             self._planner_phase(pack_overview_text)
+            self._execute_planner_tools_phase()
             self._cross_check_phase()
             elapsed = time.perf_counter() - t0
             record = self._validator_phase(elapsed=elapsed)
@@ -194,46 +196,32 @@ class OntologyAgent:
 
     # ----- phases — overridden by subclasses where needed -----
 
+    def _execute_planner_tools_phase(self) -> None:
+        """Run tools implied by ``state.planner_plan`` before cross-check.
+        Default: no-op. ``OverallModelAgent`` resolves narrative or
+        explicit ``tool``/``args`` steps and dispatches."""
+        return
+
     def _planner_phase(self, pack_overview_text: str) -> None:
-        """v0: skipped when ctx.llm_complete is None. When set, fires a
-        single planner LLM call for budget accounting; the plan output
-        is logged but not consumed (the cross-check phase is
-        deterministic)."""
-        if self.ctx.llm_complete is None:
-            return
-        try:
-            payload = self._build_planner_payload()
-            ask_llm(
-                self.ctx,
-                agent=self.node_name,
-                phase="planner",
-                prompt_payload=payload,
-                ontology_context=[
-                    pack_overview_text,
-                    self.pack_node.context_text,
-                    self.pack_node.txt_text,
-                ],
-                max_tokens=2000,
-                temperature=0.0,
-            )
-            self.ctx.trace.emit(
-                PlanProduced(
-                    ts=_TraceBase.now_ts(),
-                    agent=self.node_name,
-                    plan_steps=0,
-                    plan=[],
-                )
-            )
-        except BudgetExhausted:
-            # Planner is the first call — should not exhaust on a clean
-            # run. If it does, we fall through to the cross-check phase.
-            return
+        """v1.A: removed. Pass 1 is fully deterministic. The planner LLM
+        call previously fired here was logged but never consumed by the
+        Inputs/Calculations/Results agents (only OverallModelAgent
+        executed the plan, and OverallModelAgent has been moved to
+        Pass 2 / Stage 2.1). Pass 2 owns its own bounded planner loop.
+        """
+        return
 
     def _build_planner_payload(self) -> str:
         return (
             f"Agent: {self.node_name}\n"
             f"Expected concepts: {', '.join(self.state.expected_concepts)}\n"
-            "Produce a tool plan in JSON form."
+            "Return a single JSON object (no prose outside JSON) with this shape:\n"
+            '{"tool_plan":{"steps":[{"step":"short label","action":"what to do"},'
+            "...]}}\n"
+            "Optional per step: "
+            '"tool" (one of find_overview_sheets, list_data_validation_dropdowns, '
+            "extract_currency_symbols, search_workbook_lexicon) and "
+            '"args" (e.g. {"name_patterns": [...]}, {"concepts": ["intervention"]}).'
         )
 
     def _cross_check_phase(self) -> None:  # pragma: no cover - abstract

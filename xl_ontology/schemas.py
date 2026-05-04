@@ -149,6 +149,7 @@ class SearchLogEntry(_Strict):
 EvidenceSignalType = Literal[
     "title_match",
     "formula_density",
+    "dag_fanin",
     "dag_fanout",
     "format_match",
     "structural_fingerprint",
@@ -217,9 +218,21 @@ EvidenceQuality = Literal["high", "partial", "inferred", "absent"]
 EvidenceQualityOrPending = Literal["high", "partial", "inferred", "absent", "pending"]
 OntologyRoleClassified = Literal["input", "calculation", "result"]
 OntologyRoleAny = Literal[
-    "input", "calculation", "result", "overall_evidence", "unclassified"
+    "input",
+    "calculation",
+    "result",
+    "overall_evidence",
+    "unclassified",
+    # v1.A: tables whose table_id has no node in dag.json. Pass 1 skips
+    # them (no upstream/downstream signal); they are not unclassified.
+    "out_of_scope_for_pass_1",
 ]
-UpstreamNodeType = Literal["input", "calc", "output", "mixed", "data_table", "metadata"]
+UpstreamNodeType = Literal[
+    "input", "calc", "output", "mixed", "data_table", "metadata",
+    # v6 finalize settings-harvest synthetic leaves (named-range targets
+    # not covered by any other leaf's core_region).
+    "setting",
+]
 
 
 class CandidateTable(_Strict):
@@ -389,6 +402,7 @@ class TagSummary(_Strict):
     classified_result: int
     classified_overall_evidence: int
     unclassified: int
+    out_of_scope_for_pass_1: int = 0  # v1.A — DAG-only filter result
     node_type_overrides_proposed: int
 
 
@@ -435,7 +449,17 @@ class PlannerContextBuilt(_TraceBase):
 class LlmCall(_TraceBase):
     event: Literal["llm_call"] = "llm_call"
     agent: NodeName
-    phase: Literal["planner", "concept_synthesis", "defect_procedure", "summary_synthesis"]
+    phase: Literal[
+        "planner",
+        "concept_synthesis",
+        "defect_procedure",
+        "summary_synthesis",
+        # v1 Pass 2 phases:
+        "extraction",
+        "synthesis",
+        "completion_criteria",
+        "narration",
+    ]
     prompt: str
     prompt_size_chars: int
     response: str
@@ -523,14 +547,14 @@ class DefectProcedureInvoked(_TraceBase):
 
 class BudgetCheck(_TraceBase):
     event: Literal["budget_check"] = "budget_check"
-    phase: Literal["seed", "enrichment"]
+    phase: Literal["seed", "enrichment", "pass2"]
     calls_used: int
     calls_max: int
 
 
 class BudgetExhausted(_TraceBase):
     event: Literal["budget_exhausted"] = "budget_exhausted"
-    phase: Literal["seed", "enrichment"]
+    phase: Literal["seed", "enrichment", "pass2"]
     agent: Optional[NodeName] = None
     skipped_concept: Optional[str] = None
     skipped_table_id: Optional[str] = None
@@ -641,3 +665,200 @@ class NodeTypeOverrideRecord(_Strict):
     evidence: List[OverrideEvidence] = Field(default_factory=list)
     confidence: Optional[float] = None
     applied_heuristic: Optional[str] = None
+
+
+# ---------------------------------------------------------------------------
+# v1 (Pass 2) — comprehension layer artifacts (spec_xl_ontology_v1.md §11)
+# ---------------------------------------------------------------------------
+
+Pass2StageName = Literal["overall", "inputs", "results", "calculations"]
+CompletionStatus = Literal[
+    "complete", "partial", "iteration_cap_reached", "budget_exhausted", "absent"
+]
+
+
+class Pass2EvidenceItem(_Strict):
+    """A single evidence pointer inside a Pass-2 finding."""
+
+    sheet: Optional[str] = None
+    cell: Optional[str] = None
+    table_id: Optional[str] = None
+    snippet: Optional[str] = None
+    matched_term: Optional[str] = None
+
+
+class CompletionCriterion(_Strict):
+    """One required-items entry from the LLM-derived criteria step (spec §5.1).
+
+    Each criterion has a free-form ``rationale`` and a ``source_signal``
+    pointing back to the upstream context that motivated it (e.g.
+    "overall_context.intervention + overall_context.comparators").
+    """
+
+    required_items: List[str] = Field(default_factory=list)
+    rationale: str = ""
+    source_signal: str = ""
+
+
+class StageFinding(_Strict):
+    """Per-concept rollup of what the loop discovered (spec §8.1)."""
+
+    tables_found: List[str] = Field(default_factory=list)
+    items_satisfied: List[str] = Field(default_factory=list)
+    items_missing: List[str] = Field(default_factory=list)
+    notes: str = ""
+
+
+class Pass2OverrideProposed(_Strict):
+    """Pass-2 LLM-driven override (spec §7) — wraps the existing
+    NodeTypeOverrideRecord with v1-specific signal labelling."""
+
+    table_id: str
+    new_role: Literal["input", "calculation", "result"]
+    new_subtype: Optional[str] = None
+    rationale: str = ""
+
+
+class StageOutputBase(_Strict):
+    """Shared shape across Pass-2 stages (spec §11.3)."""
+
+    stage: Pass2StageName
+    completion_status: CompletionStatus
+    iterations_run: int = 0
+    llm_calls_used: int = 0
+    elapsed_seconds: float = 0.0
+    prose: str = ""
+    overrides_proposed: List[Pass2OverrideProposed] = Field(default_factory=list)
+    applied_heuristics: List[str] = Field(default_factory=list)
+
+
+class Stage21Output(StageOutputBase):
+    """Stage 2.1 (overall) — fixed criteria, prose narrative + concept map.
+
+    The goal-concepts list (intervention, comparator, population, time
+    horizon, perspective, indication, country, model structure, key
+    assumptions) is populated as a flat dict keyed by concept name.
+    """
+
+    stage: Literal["overall"] = "overall"
+    concepts: Dict[str, Any] = Field(default_factory=dict)
+    overview_sheets_read: List[str] = Field(default_factory=list)
+
+
+class Stage22Output(StageOutputBase):
+    """Stage 2.2 (inputs) — derived criteria + per-concept findings."""
+
+    stage: Literal["inputs"] = "inputs"
+    completion_criteria: Dict[str, CompletionCriterion] = Field(default_factory=dict)
+    findings: Dict[str, StageFinding] = Field(default_factory=dict)
+
+
+class Stage23Output(StageOutputBase):
+    """Stage 2.3 (results) — derived criteria + cost-component findings."""
+
+    stage: Literal["results"] = "results"
+    completion_criteria: Dict[str, CompletionCriterion] = Field(default_factory=dict)
+    findings: Dict[str, StageFinding] = Field(default_factory=dict)
+
+
+class Stage24Output(StageOutputBase):
+    """Stage 2.4 (calculations) — engine-table identification."""
+
+    stage: Literal["calculations"] = "calculations"
+    completion_criteria: Dict[str, CompletionCriterion] = Field(default_factory=dict)
+    findings: Dict[str, StageFinding] = Field(default_factory=dict)
+    important_calc_tables: List[str] = Field(default_factory=list)
+
+
+class ModelUnderstandingFile(_Strict):
+    """``model_understanding.json`` (spec §11.3 shape)."""
+
+    schema_version: Literal["v1"] = "v1"
+    model_id: str
+    ontology_id: str
+    v1_run_timestamp: str
+    v1_pack_overview_text_hash: str
+    summary_prose: str = ""
+    stages: Dict[Pass2StageName, Any] = Field(default_factory=dict)
+
+
+CrossAgentFindingType = Literal[
+    "result_component_without_input",
+    "input_without_downstream_use",
+    "criterion_unmet",
+    "stage_failed",
+]
+
+
+class CrossAgentFinding(_Strict):
+    """One line in ``cross_agent_findings.jsonl`` (spec §11.4)."""
+
+    ts: str
+    type: CrossAgentFindingType
+    stage_origin: Pass2StageName
+    details: Dict[str, Any] = Field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# v1 (Pass 2) — trace event types (appended to ontology_trace.jsonl)
+# ---------------------------------------------------------------------------
+
+class Pass2StageStart(_TraceBase):
+    """Stage 2.x began."""
+
+    event: Literal["pass2_stage_start"] = "pass2_stage_start"
+    stage: Pass2StageName
+
+
+class Pass2StageComplete(_TraceBase):
+    """Stage 2.x finished (cleanly or with a recorded gap)."""
+
+    event: Literal["pass2_stage_complete"] = "pass2_stage_complete"
+    stage: Pass2StageName
+    completion_status: CompletionStatus
+    iterations_run: int
+    llm_calls_used: int
+    elapsed_seconds: float
+
+
+class CompletionCriteriaDerived(_TraceBase):
+    """LLM-derived completion criteria written for traceability (spec §5.2)."""
+
+    event: Literal["completion_criteria_derived"] = "completion_criteria_derived"
+    stage: Pass2StageName
+    criteria: Dict[str, CompletionCriterion] = Field(default_factory=dict)
+
+
+class Pass2ToolCall(_TraceBase):
+    """One tool invocation by Pass-2's executor.
+
+    Distinct from any v0 ``tool_call`` event so the UI can filter Pass-2
+    activity separately if/when v0 introduces its own.
+    """
+
+    event: Literal["pass2_tool_call"] = "pass2_tool_call"
+    stage: Pass2StageName
+    iteration: int
+    tool: str
+    args_summary: Dict[str, Any] = Field(default_factory=dict)
+    result_summary: Optional[str] = None
+
+
+class Pass2ToolCallFailed(_TraceBase):
+    """Tool name unknown or args invalid — emitted instead of crashing."""
+
+    event: Literal["pass2_tool_call_failed"] = "pass2_tool_call_failed"
+    stage: Pass2StageName
+    iteration: int
+    tool: str
+    error_type: str
+    message: str
+
+
+class IterationCapReached(_TraceBase):
+    """Stage exhausted its iteration budget without meeting all criteria."""
+
+    event: Literal["iteration_cap_reached"] = "iteration_cap_reached"
+    stage: Pass2StageName
+    iterations: int
+    items_missing_count: int

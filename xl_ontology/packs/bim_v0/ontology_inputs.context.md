@@ -121,6 +121,41 @@ Some concepts the agent should specifically look for outside the
 
 ---
 
+## Rate vs unit-cost split (v0.1)
+
+Several cost concepts have both a rate dimension (probability or
+proportion) and a unit-cost dimension (currency per event/day). The
+ontology now distinguishes them as separate subtypes:
+`hospitalization_rate` vs `hospitalization_unit_cost`,
+`adverse_event_rate` vs `adverse_event_unit_cost`,
+`monitoring_rate` vs `monitoring_unit_cost`. Same split applies to
+subsequent_treatment.
+
+The structural fingerprint disambiguates the two: rate tables are
+percentage-formatted (cells in 0.00–1.00 range, % format), unit-cost
+tables are currency-formatted (cells with currency symbol, larger
+magnitude). When both fingerprints could fit, prefer the rate subtype
+if rows sum to a sensible probability; prefer the unit-cost subtype if
+the cell format includes a currency symbol.
+
+If neither subtype is determinable from format, leave the table for
+the calculations agent or classify under the broader category — do not
+guess.
+
+## Other-input catch-all (v0.1)
+
+`other_input` is a parent concept for items that matter to BIM but
+don't fit the main categories: `SCT_rate`, `SCT_cost`,
+`end_of_life_rate`, `end_of_life_cost`, `terminal_care_cost`,
+`death_cost`, `palliative_care_cost`. Use these specific subtypes when
+the table is clearly about one of these items. Reserve the bare
+`other_input` parent for tables that the model needs but that don't
+match any specific child — do not dump every unclassifiable table here.
+Tables that don't fit the ontology at all stay in
+`unclassified_tables`, not in `other_input`.
+
+---
+
 ## What this agent should *not* do
 
 - Re-derive `node_type` from scratch. Trust upstream as the starting

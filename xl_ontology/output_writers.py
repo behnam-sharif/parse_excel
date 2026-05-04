@@ -19,12 +19,17 @@ from pydantic import BaseModel
 
 from core.paths import (
     get_agent_outputs_path,
+    get_cross_agent_findings_path,
+    get_model_understanding_json_path,
+    get_model_understanding_md_path,
     get_ontology_output_path,
     get_summary_model_path,
     get_table_tags_path,
 )
 from xl_ontology.schemas import (
     AgentOutputsFile,
+    CrossAgentFinding,
+    ModelUnderstandingFile,
     SummaryModel,
     TableTagsFile,
 )
@@ -133,10 +138,66 @@ def write_table_tags(
     )
 
 
+# ---------------------------------------------------------------------------
+# v1.B — Pass 2 (comprehension layer) writers
+# ---------------------------------------------------------------------------
+
+def write_model_understanding_md(
+    prose: str, run_id: str, base: str = "data/output"
+) -> Path:
+    """Atomically write model_understanding.md (Pass 2 prose narrative)."""
+    path = get_model_understanding_md_path(run_id, base)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    with open(tmp, "w", encoding="utf-8", newline="") as f:
+        f.write(prose)
+        f.flush()
+        try:
+            os.fsync(f.fileno())
+        except OSError:  # pragma: no cover
+            pass
+    os.replace(tmp, path)
+    return path
+
+
+def write_model_understanding_json(
+    file: ModelUnderstandingFile, run_id: str, base: str = "data/output"
+) -> Path:
+    """Atomically write model_understanding.json (Pass 2 structured findings)."""
+    return _atomic_write_json(
+        get_model_understanding_json_path(run_id, base), file
+    )
+
+
+def append_cross_agent_finding(
+    finding: CrossAgentFinding, run_id: str, base: str = "data/output"
+) -> Path:
+    """Append one CrossAgentFinding row to cross_agent_findings.jsonl.
+
+    Append-only by design — Pass 2 may emit multiple findings across
+    stages and we want them ordered by emission time.
+    """
+    path = get_cross_agent_findings_path(run_id, base)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = finding.model_dump(mode="json", by_alias=True)
+    line = json.dumps(payload, ensure_ascii=False) + "\n"
+    with open(path, "a", encoding="utf-8", newline="") as f:
+        f.write(line)
+        f.flush()
+        try:
+            os.fsync(f.fileno())
+        except OSError:  # pragma: no cover
+            pass
+    return path
+
+
 __all__ = [
+    "append_cross_agent_finding",
     "list_summary_model_versions",
     "next_summary_model_version",
     "write_agent_outputs",
+    "write_model_understanding_json",
+    "write_model_understanding_md",
     "write_summary_model",
     "write_table_tags",
 ]

@@ -26,6 +26,7 @@ class TestOntologyConfigLoading(unittest.TestCase):
         self.assertEqual(cfg.seed_llm_budget_max, 8)
         self.assertEqual(cfg.enrichment_llm_budget_max, 5)
         self.assertEqual(cfg.parallelism, 1)
+        self.assertTrue(cfg.use_llm)
 
     def test_yaml_seed_budget_matches_pydantic_default(self) -> None:
         """Item 6: PackBudgets default and config/stages.yaml must agree.
@@ -44,6 +45,7 @@ class TestOntologyConfigLoading(unittest.TestCase):
         bad = {
             "pack_name": "bim_v0",
             "packs_root": "xl_ontology/packs",
+            "use_llm": True,
             "seed_llm_budget_max": 20,
             "enrichment_llm_budget_max": 5,
             "llm_model": "gpt-4o-mini",
@@ -61,6 +63,7 @@ class TestOntologyConfigLoading(unittest.TestCase):
         partial = {
             "pack_name": "bim_v0",
             # packs_root missing
+            "use_llm": False,
             "seed_llm_budget_max": 20,
             "enrichment_llm_budget_max": 5,
             "llm_model": "gpt-4o-mini",

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, List
+from typing import ClassVar, Dict, List
 
 from xl_ontology.agents.prompts import (
     CALCULATIONS_LEXICON,
@@ -18,7 +18,7 @@ from xl_ontology.schemas import (
     NodeName,
     OverrideEvidence,
 )
-from xl_ontology.tools.lexicon import search_workbook_lexicon
+from xl_ontology.tools.lexicon import Hit, search_workbook_lexicon
 from xl_ontology.tools.writers import (
     AlreadyClassified,
     record_classification,
@@ -52,7 +52,17 @@ class CalculationsAgent(OntologyAgent):
             hits = search_workbook_lexicon(self.ctx, terms, "whole_table")
             if not hits:
                 continue
-            best = max(hits, key=lambda h: _LOCATION_WEIGHT.get(h.match_location, 0.0))
+            # Single best-weighted hit per concept (pre-v0.1 behavior).
+            # Filter out already-classified tables so the parent concept
+            # can fall back to its second-best hit (see inputs.py for
+            # the rationale).
+            unclaimed = [
+                h for h in hits
+                if h.table_id and not self.ctx.builder.is_classified(h.table_id)
+            ]
+            if not unclaimed:
+                continue
+            best = max(unclaimed, key=lambda h: _LOCATION_WEIGHT.get(h.match_location, 0.0))
             entry = self.ctx.final_map.get(best.table_id) if best.table_id else None
             if entry is None:
                 continue
@@ -81,6 +91,10 @@ class CalculationsAgent(OntologyAgent):
             dispatch_defect_stub(self.ctx, entry, self.node_name)
 
     def _classify(self, entry, concept, hit, in_starting: bool) -> None:
+        # v1.A Pass-1 eligibility (DAG residence + node_type not metadata/data_table).
+        from xl_ontology.upstream import is_pass1_eligible
+        if not is_pass1_eligible(self.ctx.dag, entry.table_id, entry.node_type):
+            return
         if self.ctx.builder.is_classified(entry.table_id):
             return
         # Calc tables are middle-of-DAG. Tables tagged 'output' upstream
@@ -153,6 +167,10 @@ class CalculationsAgent(OntologyAgent):
     def _classify_structural(
         self, entry: FinalMapEntry, density: float, fanin: int, fanout: int
     ) -> None:
+        # v1.A Pass-1 eligibility — same filter as `_classify`.
+        from xl_ontology.upstream import is_pass1_eligible
+        if not is_pass1_eligible(self.ctx.dag, entry.table_id, entry.node_type):
+            return
         cand = CandidateTable(
             table_id=entry.table_id,
             ontology_role="calculation",

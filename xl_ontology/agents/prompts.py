@@ -54,6 +54,16 @@ OVERALL_MODEL_LEXICON = {
     ],
 }
 
+# v1 inputs algorithm:
+#   - INPUTS_LEXICON: 4 ANCHOR concepts. Phase A picks single best-hit
+#     per anchor concept (title > header > row_label > body > formula).
+#     Anchors prove the workbook contains genuine input tables.
+#   - SECONDARY_INPUT_LEXICON: broader concepts that only fire on
+#     tables sharing a sheet with at least 2 anchors. Each match is
+#     classified as `structural_input_<concept>` with
+#     evidence_quality="partial". A single concept can claim multiple
+#     tables in Phase B (no single-best-hit cap), so e.g. both AE
+#     frequencies and AE costs can land as structural_input_adverse_event.
 INPUTS_LEXICON = {
     "population": [
         "population", "patient pop", "eligible pop", "target pop",
@@ -64,22 +74,67 @@ INPUTS_LEXICON = {
     ],
     "market_share": [
         "market share", "uptake", "penetration", "treatment mix",
+        "treatment distribution",
     ],
     "drug_cost": [
-        "drug cost", "unit cost", "list price", "WAC", "net price",
-        "cost per dose", "cost per pack",
+        "drug cost", "drug unit cost", "drug acquisition", "list price",
+        "WAC", "net price", "cost per dose", "cost per pack", "AAC",
+        "ASP", "ex-factory",
     ],
-    "administration_cost": [
+}
+
+
+# Secondary concepts: broad terms the v0.1 fine-grained subtypes are
+# rolled back into. Phase B applies these only to tables already on
+# anchor sheets (Phase A established that an "Inputs" sheet exists).
+SECONDARY_INPUT_LEXICON = {
+    "adverse_event": [
+        "adverse event", "adverse events", "AE cost", "AE rate",
+        "AE incidence", "toxicity", "side effect",
+    ],
+    "SCT": [
+        "SCT", "stem cell transplant", "stem cell",
+    ],
+    "hospitalization": [
+        "hospitalization", "hospitalisation", "inpatient",
+        "admission", "bed day", "bed days", "ward",
+    ],
+    "end_of_life": [
+        "end of life", "EOL", "terminal care", "palliative",
+        "hospice", "death cost", "dying",
+    ],
+    "subsequent_treatment": [
+        "subsequent treatment", "subsequent therapy", "later-line",
+        "post-progression", "salvage therapy", "follow-up treatment",
+    ],
+    "monitoring": [
+        "monitoring", "labs", "imaging", "follow-up", "surveillance",
+        "scans per", "visits per",
+    ],
+    "administration": [
         "admin cost", "administration", "infusion fee", "injection fee",
+        "day case",
     ],
-    "monitoring_cost": [
-        "monitoring", "labs", "imaging", "follow-up",
+    "dosing": [
+        "dose", "dosing", "regimen", "schedule", "mg/kg", "mg/m2",
     ],
-    "adverse_event_cost": [
-        "AE cost", "adverse event", "toxicity cost",
+    "scenario": [
+        "scenario", "switch", "toggle", "discount rate", "perspective",
+        "time horizon",
     ],
-    "hospitalisation_cost": [
-        "hospitalisation", "inpatient", "admission", "bed day",
+    # Anchor concepts repeat here so additional matches (e.g. multiple
+    # market_share tables, with/without intervention) get claimed in
+    # Phase B even though Phase A only takes the single best.
+    "market_share": [
+        "market share", "uptake", "penetration", "treatment mix",
+    ],
+    "drug_cost": [
+        "drug cost", "list price", "WAC", "net price", "cost per dose",
+        "cost per pack",
+    ],
+    "indirect_cost": [
+        "productivity loss", "indirect cost", "caregiver burden",
+        "absenteeism",
     ],
 }
 

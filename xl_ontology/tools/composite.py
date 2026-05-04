@@ -29,6 +29,21 @@ class CurrencyCell:
     symbol: str
 
 
+@dataclass
+class OverviewSheetText:
+    """Spatially-ordered textual content of one overview sheet.
+
+    Each non-empty cell is concatenated as ``[Sheet!Cell] value`` so
+    the LLM can locate context across cells. Truncated to
+    ``max_chars`` per sheet to keep prompt size bounded (default 10k).
+    """
+
+    sheet_name: str
+    text: str
+    length_chars: int
+    truncated: bool
+
+
 _CURRENCY_SYMBOLS = ("£", "$", "€", "¥", "₹", "R$")
 
 
@@ -63,6 +78,64 @@ def find_overview_sheets(
                 break
 
     return list(seen.keys())
+
+
+def read_overview_sheets(
+    ctx: ToolContext,
+    sheet_names: List[str],
+    *,
+    max_chars_per_sheet: int = 10_000,
+) -> List[OverviewSheetText]:
+    """Read all visible cells from the named sheets in spatial order.
+
+    Used by Stage 2.1 (overall agent) of v1 Pass 2: gives the LLM
+    enough text to extract intervention, comparators, country, etc.
+    Each cell is rendered as ``[Sheet!Cell] value`` so the model can
+    cite specific cells in its output.
+
+    Skips empty cells. Truncates per-sheet at ``max_chars_per_sheet``
+    so a single dense sheet can't blow up the prompt budget.
+    """
+    out: List[OverviewSheetText] = []
+    for sheet in sheet_names:
+        ws = ctx.workbook._acc.get_worksheet(sheet)  # type: ignore[attr-defined]
+        if ws is None:
+            out.append(
+                OverviewSheetText(
+                    sheet_name=sheet, text="", length_chars=0, truncated=False
+                )
+            )
+            continue
+        parts: List[str] = []
+        total = 0
+        truncated = False
+        for row in ws.iter_rows():
+            for cell in row:
+                v = cell.value
+                if v is None:
+                    continue
+                s = str(v).strip()
+                if not s:
+                    continue
+                addr = f"{_col_to_letters(cell.column)}{cell.row}"
+                fragment = f"[{sheet}!{addr}] {s}"
+                if total + len(fragment) + 1 > max_chars_per_sheet:
+                    truncated = True
+                    break
+                parts.append(fragment)
+                total += len(fragment) + 1  # +1 accounts for the joining newline
+            if truncated:
+                break
+        text = "\n".join(parts)
+        out.append(
+            OverviewSheetText(
+                sheet_name=sheet,
+                text=text,
+                length_chars=len(text),
+                truncated=truncated,
+            )
+        )
+    return out
 
 
 def list_data_validation_dropdowns(

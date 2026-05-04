@@ -3,7 +3,11 @@
 Usage::
 
     py -3 scripts/run_ontology.py --run-id myrun [--ontology bim_v0]
-        [--output-base data/output] [--workbook /path/to/wb.xlsx]
+        [--output-base data/output] [--workbook /path/to/wb.xlsx] [--no-llm]
+
+LLM usage is controlled by ``config/stages.yaml`` ``xl_ontology.use_llm`` (default
+true). When true and ``OPENAI_API_KEY`` is set, planner + overall_model summary
+calls run; use ``--no-llm`` to force a deterministic run for this invocation.
 """
 
 from __future__ import annotations
@@ -32,10 +36,16 @@ def main(argv=None) -> int:
     parser.add_argument("--output-base", default="data/output")
     parser.add_argument("--workbook", default=None,
                         help="Override workbook path (default: init_output/cleaned_workbook.xlsx)")
+    parser.add_argument(
+        "--no-llm",
+        action="store_true",
+        help="Disable LLM for this run (overrides stages.yaml xl_ontology.use_llm).",
+    )
     args = parser.parse_args(argv)
 
     pc = load_config()
-    cfg = ontology_config_from_pipeline(pc)
+    _overrides = {"use_llm": False} if args.no_llm else None
+    cfg = ontology_config_from_pipeline(pc, overrides=_overrides)
     if args.ontology:
         # Apply pack-name override.
         cfg.pack_name = args.ontology
