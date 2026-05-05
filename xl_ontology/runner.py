@@ -21,6 +21,7 @@ from core.paths import (
     get_ontology_build_errors_path,
     get_ontology_output_path,
     get_ontology_trace_path,
+    get_qc_repaired_final_table_map_path,
     get_v6_final_table_map_path,
 )
 from core.stage_config import ontology_config_from_pipeline
@@ -109,12 +110,21 @@ def run_ontology(
         effective_llm = resolve_llm_complete(config)
 
     # --- resolve upstream paths ---
-    final_map_path = get_v6_final_table_map_path(run_id, output_base)
+    # Honor `final_table_map_source`: when "v6_repaired" (default), prefer
+    # qc_repair_output/final_table_map_repaired.json if it exists, else
+    # fall back to V6's raw final_table_map.json.
+    source = getattr(config, "final_table_map_source", "v6_repaired")
+    qc_repaired_path = get_qc_repaired_final_table_map_path(run_id, output_base)
+    v6_raw_path = get_v6_final_table_map_path(run_id, output_base)
+    if source == "v6_repaired" and qc_repaired_path.is_file():
+        final_map_path = qc_repaired_path
+    else:
+        final_map_path = v6_raw_path
     dag_path = get_dag_graph_path(run_id, output_base)
     if not final_map_path.is_file():
         raise OntologyRunError(
             f"final_table_map.json missing at {final_map_path} — run V6 "
-            "finalize first."
+            "finalize (and optionally xl_qc_repair) first."
         )
     if not dag_path.is_file():
         raise OntologyRunError(

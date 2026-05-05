@@ -10,7 +10,7 @@ list every general key explicitly (no silent fallbacks in the loader).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -44,6 +44,7 @@ class PipelineConfig:
     xl_sheetagent_v6: Dict[str, Any]
     xl_dag: Dict[str, Any]
     xl_ontology: Dict[str, Any]
+    xl_qc_repair: Dict[str, Any] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -120,4 +121,5 @@ def load_config(
         xl_sheetagent_v6=stages["xl_sheetagent_v6"],
         xl_dag=stages["xl_dag"],
         xl_ontology=stages["xl_ontology"],
+        xl_qc_repair=stages.get("xl_qc_repair", {}) or {},
     )

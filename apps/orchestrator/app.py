@@ -99,10 +99,28 @@ def _load_ontology_viewer():
     return mod
 
 
+def _load_qc_repair_viewer():
+    path = Path(__file__).resolve().parent / "qc_repair_viewer.py"
+    spec = importlib.util.spec_from_file_location(
+        "orchestrator_qc_repair_viewer", path
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load qc_repair_viewer from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 _v3a_viewer = _load_v3a_viewer()
 _v6_viewer = _load_v6_viewer()
 _dag_viewer = _load_dag_viewer()
 _ontology_viewer = _load_ontology_viewer()
+_qc_repair_viewer = _load_qc_repair_viewer()
+
+
+def _render_qc_repair(run_id: str, output_base: str) -> None:
+    """Delegate to ``qc_repair_viewer`` — full audit + V6/repaired diff + LLM messages."""
+    _qc_repair_viewer.render(run_id, output_base)
 
 
 def _default_session() -> None:
@@ -139,6 +157,8 @@ def _default_session() -> None:
         st.session_state["orchestrator_view_saved_dag"] = False
     if "orchestrator_view_saved_ontology" not in st.session_state:
         st.session_state["orchestrator_view_saved_ontology"] = False
+    if "orchestrator_view_saved_qc_repair" not in st.session_state:
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
     # Older sessions may lack xl_sheetagent overrides
     _co = st.session_state.get("cfg_ov")
     if isinstance(_co, dict) and "xl_sheetagent" not in _co:
@@ -340,6 +360,7 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
         st.session_state["orchestrator_view_saved_ontology"] = False
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
 
     init_btn = st.sidebar.button("▶ Run xl_init", disabled=busy or not input_path)
     parse_btn = st.sidebar.button("▶ Run xl_parse", disabled=busy)
@@ -351,6 +372,46 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         help=(
             "Builds dag_output/* from v6 finalize output (final_table_map.json + summary.json) "
             "and cleaned_workbook.xlsx."
+        ),
+    )
+    # --- QC Repair: sheet picker + run button -----------------------
+    # The user picks one or more sheets first.  Tables on other sheets
+    # pass through to the repaired map untouched.
+    qc_sheet_options: list = []
+    qc_v6_final_map = v6_out / "final_table_map.json"
+    if qc_v6_final_map.is_file():
+        try:
+            import json as _qcj
+            qc_data = _qcj.loads(qc_v6_final_map.read_text(encoding="utf-8"))
+            if isinstance(qc_data, dict):
+                qc_sheet_options = sorted(qc_data.keys())
+        except Exception:
+            qc_sheet_options = []
+    qc_repair_sheets = st.sidebar.multiselect(
+        "QC Repair: sheets to process",
+        options=qc_sheet_options,
+        default=[],
+        help=(
+            "Pick one or more sheets to run QC on.  Tables on unselected "
+            "sheets are passed through to the repaired map unchanged.  "
+            "Empty selection = run on every sheet."
+        ),
+        disabled=busy or not qc_sheet_options,
+        key="qc_repair_sheets_pick",
+    )
+    if not qc_sheet_options:
+        st.sidebar.caption(
+            "QC Repair sheet picker is empty — run **xl_sheetagent** + "
+            "**xl_dag** for this Run ID first."
+        )
+    qc_repair_btn = st.sidebar.button(
+        "▶ Run QC Repair on selected sheets",
+        disabled=busy or not qc_sheet_options,
+        help=(
+            "Runs QC only on the sheets selected above (or all sheets if "
+            "none are selected).  Reads V6 raw + DAG + workbook; writes "
+            "qc_repair_output/final_table_map_repaired.json.  V6 raw "
+            "output stays untouched."
         ),
     )
     ontology_btn = st.sidebar.button(
@@ -493,6 +554,31 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["pipeline_started_at"] = time.time()
         st.rerun()
 
+    if qc_repair_btn and not busy:
+        _clear_for_run("xl_qc_repair")
+        pc_chain = load_config()
+        from core.stage_config import qc_repair_config_from_pipeline
+        _qc_cfg = qc_repair_config_from_pipeline(pc_chain)
+
+        _run_id_capture = run_id
+        _base_capture = base
+        _target_sheets_capture = list(qc_repair_sheets) if qc_repair_sheets else None
+
+        def _work():
+            from core.env_bootstrap import load_project_dotenv
+            load_project_dotenv()
+            from xl_qc_repair import run_qc_repair
+            return run_qc_repair(
+                _run_id_capture,
+                output_base=_base_capture,
+                config=_qc_cfg,
+                target_sheets=_target_sheets_capture,
+            )
+
+        st.session_state["pipeline_future"] = _executor.submit(_work)
+        st.session_state["pipeline_started_at"] = time.time()
+        st.rerun()
+
     if ontology_btn and not busy:
         _clear_for_run("xl_ontology")
         pc_chain = load_config()
@@ -529,6 +615,7 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
         st.session_state["orchestrator_view_saved_ontology"] = False
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
         st.rerun()
 
     view_v6_saved_btn = st.sidebar.button(
@@ -544,6 +631,7 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
         st.session_state["orchestrator_view_saved_ontology"] = False
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
         st.rerun()
 
     view_dag_saved_btn = st.sidebar.button(
@@ -556,6 +644,7 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_ontology"] = False
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
         st.rerun()
 
     view_ontology_btn = st.sidebar.button(
@@ -572,6 +661,24 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         st.session_state["orchestrator_view_saved_v3a"] = False
         st.session_state["orchestrator_view_saved_v6"] = False
         st.session_state["orchestrator_view_saved_dag"] = False
+        st.session_state["orchestrator_view_saved_qc_repair"] = False
+        st.rerun()
+
+    view_qc_repair_btn = st.sidebar.button(
+        "View saved QC Repair (no re-run)",
+        disabled=busy,
+        help=(
+            "Loads qc_repair_output/* for the current Run ID. Shows audit log, "
+            "per-sheet V6 vs Repaired comparison, and the LLM messages "
+            "(prompts + responses) for both per-sheet and per-table calls."
+        ),
+    )
+    if view_qc_repair_btn and not busy:
+        st.session_state["orchestrator_view_saved_qc_repair"] = True
+        st.session_state["orchestrator_view_saved_v3a"] = False
+        st.session_state["orchestrator_view_saved_v6"] = False
+        st.session_state["orchestrator_view_saved_dag"] = False
+        st.session_state["orchestrator_view_saved_ontology"] = False
         st.rerun()
 
     # --- Main area -----------------------------------------------------------
@@ -601,6 +708,8 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
     elif st.session_state.get("orchestrator_view_saved_ontology"):
         _ontology_viewer.render(run_id, output_base=base)
+    elif st.session_state.get("orchestrator_view_saved_qc_repair"):
+        _qc_repair_viewer.render(run_id, output_base=base)
     elif res is not None and op == "xl_table":
         rs = res.run_summary
         st.success(
@@ -649,6 +758,19 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         for err in errors:
             st.error(err)
         _dag_viewer.render_dag_from_output_dir(str(dag_out), run_id)
+    elif res is not None and op == "xl_qc_repair":
+        st.success(
+            f"QC Repair complete — targets={getattr(res, 'n_targets', 0)}, "
+            f"safe_auto={getattr(res, 'n_safe_auto', 0)}, "
+            f"llm_reviewed={getattr(res, 'n_llm_reviewed', 0)}, "
+            f"repaired={getattr(res, 'n_repaired', 0)}, "
+            f"unresolved={getattr(res, 'n_unresolved', 0)}, "
+            f"llm_calls={getattr(res, 'llm_calls_used', 0)}, "
+            f"{getattr(res, 'elapsed_seconds', 0.0):.2f}s"
+        )
+        for err in getattr(res, "errors", []) or []:
+            st.error(err)
+        _render_qc_repair(run_id, base)
     elif res is not None and op == "xl_ontology":
         st.success(
             f"xl_ontology complete — version=v{getattr(res, 'version_written', '?')}, "
@@ -674,6 +796,7 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         and not st.session_state.get("orchestrator_view_saved_v6")
         and not st.session_state.get("orchestrator_view_saved_dag")
         and not st.session_state.get("orchestrator_view_saved_ontology")
+        and not st.session_state.get("orchestrator_view_saved_qc_repair")
     ):
         st.info(
             "Upload a workbook, then run **xl_init** → **xl_parse** → **xl_table** "

@@ -35,7 +35,8 @@ def main():
     parser.add_argument("--with-image", action="store_true", help="Run optional xl_image stage")
     parser.add_argument("--with-sheetagent", action="store_true", help="Run optional xl_sheetagent stage")
     parser.add_argument("--with-dag", action="store_true", help="Run optional xl_dag stage (after v6 finalize)")
-    parser.add_argument("--with-ontology", action="store_true", help="Run optional xl_ontology seed phase (after xl_dag)")
+    parser.add_argument("--with-qc-repair", action="store_true", help="Run optional xl_qc_repair stage (after xl_dag, before xl_ontology)")
+    parser.add_argument("--with-ontology", action="store_true", help="Run optional xl_ontology seed phase (after xl_dag / qc_repair)")
     parser.add_argument("--no-vba-cleaning", action="store_true", help="Skip VBA cleaning")
 
     args = parser.parse_args()
@@ -232,6 +233,34 @@ def main():
         except Exception as exc:
             summary["stages"]["xl_dag"] = {"error": str(exc)}
             summary["warnings"].append(f"xl_dag failed: {exc}")
+            print(f"  FAILED: {exc}")
+
+    # -- Stage 6.5: xl_qc_repair (optional) --
+    if args.with_qc_repair:
+        print("\n" + "=" * 60)
+        print("Stage 6.5: xl_qc_repair (optional)")
+        print("=" * 60)
+        t0 = time.time()
+        try:
+            from core.stage_config import qc_repair_config_from_pipeline
+            from xl_qc_repair import run_qc_repair
+
+            qc_cfg = qc_repair_config_from_pipeline(load_config())
+            qc_result = run_qc_repair(run_id=run_id, output_base=base, config=qc_cfg)
+            summary["stages"]["xl_qc_repair"] = {
+                "duration_s": round(time.time() - t0, 2),
+                "n_targets": qc_result.n_targets,
+                "n_safe_auto": qc_result.n_safe_auto,
+                "n_llm_reviewed": qc_result.n_llm_reviewed,
+                "n_repaired": qc_result.n_repaired,
+                "n_unresolved": qc_result.n_unresolved,
+                "llm_calls_used": qc_result.llm_calls_used,
+            }
+            print(f"  Done in {summary['stages']['xl_qc_repair']['duration_s']}s")
+            print(f"  Targets: {qc_result.n_targets}, repaired: {qc_result.n_repaired}, llm: {qc_result.llm_calls_used}")
+        except Exception as exc:
+            summary["stages"]["xl_qc_repair"] = {"error": str(exc)}
+            summary["warnings"].append(f"xl_qc_repair failed: {exc}")
             print(f"  FAILED: {exc}")
 
     # -- Stage 7: xl_ontology (optional) --

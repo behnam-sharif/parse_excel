@@ -651,7 +651,15 @@ _FLAG_ORANGE = {
 
 
 def _flag_badge(flag: str) -> str:
-    if flag in _FLAG_RED:
+    # v6 finalize repair-pass colors take precedence so they're
+    # visually distinct from the standard Rule 6 flags.
+    if flag.startswith("truly_"):
+        color = "#7f1d1d"  # dark red — Rule 6 + repair both failed
+    elif "_repaired_" in flag or flag.startswith("title_repaired_") or flag.startswith("rownames_repaired_"):
+        color = "#2e7d32"  # green — repair succeeded
+    elif flag.startswith("bbox_shrunk_") or flag == "synthetic_setting":
+        color = "#1565c0"  # blue — neighbor mutated by repair / harvest
+    elif flag in _FLAG_RED:
         color = "#c0392b"  # red
     elif flag in _FLAG_ORANGE:
         color = "#d35400"  # orange
@@ -1180,25 +1188,135 @@ def _render_v6_results_body(
 
 def _render_audit(output_dir: str) -> None:
     audit_dir = Path(output_dir) / "audit"
-    if not audit_dir.exists():
+    if audit_dir.exists():
+        audit_files = list(audit_dir.glob("*.jsonl"))
+        if audit_files:
+            with st.expander("Audit artifacts (LLM calls)", expanded=False):
+                for af in sorted(audit_files):
+                    st.markdown(f"**{af.name}**")
+                    try:
+                        lines = af.read_text(encoding="utf-8").strip().split("\n")
+                        entries = [json.loads(line) for line in lines if line.strip()]
+                        if entries:
+                            import pandas as pd
+                            df = pd.DataFrame(entries)
+                            st.dataframe(df, use_container_width=True)
+                        else:
+                            st.caption("(empty)")
+                    except Exception as exc:
+                        st.caption(f"Error reading: {exc}")
+
+    # v6 finalize post-pass audits — repair + settings harvest. Show
+    # them as separate expanders next to the LLM-audit expander.
+    repair_path = Path(output_dir) / "repair_titles_rownames_audit.jsonl"
+    if repair_path.is_file():
+        _render_repair_audit_expander(repair_path)
+    settings_path = Path(output_dir) / "settings_harvest_audit.jsonl"
+    if settings_path.is_file():
+        _render_settings_audit_expander(settings_path)
+
+
+def _render_repair_audit_expander(path: Path) -> None:
+    """Repair pass audit — title/rowname fix outcomes per leaf."""
+    try:
+        lines = path.read_text(encoding="utf-8").strip().split("\n")
+        entries = [json.loads(line) for line in lines if line.strip()]
+    except Exception as exc:
+        with st.expander("Title/row-name repair audit", expanded=False):
+            st.caption(f"Error reading: {exc}")
         return
-    audit_files = list(audit_dir.glob("*.jsonl"))
-    if not audit_files:
-        return
-    with st.expander("Audit artifacts", expanded=False):
-        for af in sorted(audit_files):
-            st.markdown(f"**{af.name}**")
+
+    # Summary counts
+    by_kind_outcome: Dict[str, int] = {}
+    for e in entries:
+        key = f"{e.get('kind','?')}/{e.get('outcome','?')}"
+        by_kind_outcome[key] = by_kind_outcome.get(key, 0) + 1
+
+    with st.expander(
+        f"Title / row-name repair audit ({len(entries)} entries)", expanded=False,
+    ):
+        st.caption(
+            "Post-finalize repair: walks `title_missing` / `rowname_missing` leaves "
+            "and tries to fix them by reading cells just above (titles) or just "
+            "left (row-names) of the bbox. Repaired entries get `*_repaired_*` "
+            "flags; unrepairable ones get `truly_title_missing` / "
+            "`truly_rowname_missing`."
+        )
+        if by_kind_outcome:
+            st.markdown("**Counts by kind/outcome:**")
+            for k, v in sorted(by_kind_outcome.items()):
+                st.markdown(f"- `{k}`: **{v}**")
+        # Filters
+        kinds = sorted({e.get("kind", "?") for e in entries})
+        outcomes = sorted({e.get("outcome", "?") for e in entries})
+        col_a, col_b, col_c = st.columns(3)
+        with col_a:
+            kind_filter = st.multiselect(
+                "kind", options=kinds, default=kinds, key=f"v6_repair_kind_{path}",
+            )
+        with col_b:
+            outcome_filter = st.multiselect(
+                "outcome", options=outcomes, default=outcomes,
+                key=f"v6_repair_outcome_{path}",
+            )
+        with col_c:
+            sheet_filter = st.text_input(
+                "sheet contains (case-insensitive)", value="",
+                key=f"v6_repair_sheet_{path}",
+            )
+        sf = sheet_filter.strip().lower()
+        filtered = [
+            e for e in entries
+            if (not kind_filter or e.get("kind") in kind_filter)
+            and (not outcome_filter or e.get("outcome") in outcome_filter)
+            and (not sf or sf in str(e.get("sheet", "")).lower())
+        ]
+        if filtered:
             try:
-                lines = af.read_text(encoding="utf-8").strip().split("\n")
-                entries = [json.loads(line) for line in lines if line.strip()]
-                if entries:
-                    import pandas as pd
-                    df = pd.DataFrame(entries)
-                    st.dataframe(df, use_container_width=True)
-                else:
-                    st.caption("(empty)")
-            except Exception as exc:
-                st.caption(f"Error reading: {exc}")
+                import pandas as pd
+                df = pd.DataFrame(filtered)
+                st.dataframe(df, use_container_width=True)
+            except Exception:
+                for e in filtered[:50]:
+                    st.json(e)
+        else:
+            st.caption("(no entries match the filter)")
+
+
+def _render_settings_audit_expander(path: Path) -> None:
+    """Settings-harvest audit — harvested vs skipped named-range
+    destinations from v6 finalize post-pass."""
+    try:
+        lines = path.read_text(encoding="utf-8").strip().split("\n")
+        entries = [json.loads(line) for line in lines if line.strip()]
+    except Exception as exc:
+        with st.expander("Settings harvest audit", expanded=False):
+            st.caption(f"Error reading: {exc}")
+        return
+    by_outcome: Dict[str, int] = {}
+    for e in entries:
+        by_outcome[e.get("outcome", "?")] = by_outcome.get(e.get("outcome", "?"), 0) + 1
+    with st.expander(
+        f"Settings harvest audit ({len(entries)} defined names processed)",
+        expanded=False,
+    ):
+        st.caption(
+            "Workbook defined names enumerated at end of finalize. "
+            "`harvested` → synthesized as `node_type=\"setting\"` leaf "
+            "(named-range target wasn't in any existing core_region). "
+            "`skipped` → already attached, or formula/external/whole-row/col."
+        )
+        if by_outcome:
+            st.markdown("**Counts by outcome:**")
+            for k, v in sorted(by_outcome.items()):
+                st.markdown(f"- `{k}`: **{v}**")
+        try:
+            import pandas as pd
+            df = pd.DataFrame(entries)
+            st.dataframe(df, use_container_width=True)
+        except Exception:
+            for e in entries[:50]:
+                st.json(e)
 
 
 # ---------------------------------------------------------------------------

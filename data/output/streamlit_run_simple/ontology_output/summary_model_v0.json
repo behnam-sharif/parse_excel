@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-04T19:12:43.272Z",
+  "seed_timestamp": "2026-05-05T15:49:04.021Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "overall_model": {
@@ -228,11 +228,16 @@
       {
         "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_subsequent_treatment",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'subsequent_treatment'",
         "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Subsequent treatments in world without InO",
+            "matched_term": "subsequent treatment"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -262,11 +267,16 @@
       {
         "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_subsequent_treatment",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'subsequent_treatment'",
         "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Subsequent treatments in world with InO",
+            "matched_term": "subsequent treatment"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -377,10 +387,10 @@
         "ontology_subtype": "structural_input_SCT",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in row_label for concept 'SCT'",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'SCT'",
         "evidence_signals": [
           {
-            "type": "format_match",
+            "type": "title_match",
             "value": "SCT costs",
             "matched_term": "sct"
           },
@@ -490,7 +500,7 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "17 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+    "summary": "17 main calculation tables identified (aggregator, structural_calc, total_cost_with). 1 aggregator.",
     "summary_source": "template",
     "candidate_tables": [
       {
@@ -513,6 +523,39 @@
         "parent_path": [
           "Calculations",
           "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core0",
+        "ontology_role": "calculation",
+        "ontology_subtype": "aggregator",
+        "confidence": 0.7,
+        "evidence_quality": "high",
+        "why_selected": "lexicon match in title for concept 'aggregator'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Annual Data Summary",
+            "matched_term": "summary"
+          }
+        ],
+        "upstream_node_type": "mixed",
+        "node_type_override_proposed": false,
+        "parent_table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
+        "parent_path": [
+          "Calculations"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1157,33 +1200,28 @@
       "cost_component_calc": "absent",
       "patient_flow": "absent",
       "scenario_calc": "absent",
-      "aggregator": "absent"
+      "aggregator": "found"
     },
     "confidence": null
   },
   "results": {
     "present": true,
-    "evidence_quality": "partial",
-    "summary": "1 result table identified (structural_result). No incremental row located.",
+    "evidence_quality": "high",
+    "summary": "2 result tables identified (incremental_budget_impact, scenario_results). Incremental row present.",
     "summary_source": "template",
     "candidate_tables": [
       {
         "table_id": "262a4c0f1d47d09d",
         "ontology_role": "result",
-        "ontology_subtype": "structural_result",
+        "ontology_subtype": "incremental_budget_impact",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "structural sanity: terminal in DAG, multiple inputs, name matches results lexicon",
+        "why_selected": "lexicon match in title for concept 'incremental_budget_impact'",
         "evidence_signals": [
           {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "structural_fingerprint",
-            "value": "sheet_name",
-            "matched_term": null
+            "type": "title_match",
+            "value": "Budget Impact Analysis by Year",
+            "matched_term": "budget impact"
           }
         ],
         "upstream_node_type": "input",
@@ -1203,16 +1241,48 @@
           "fed_by": []
         },
         "flags": []
+      },
+      {
+        "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core2",
+        "ontology_role": "result",
+        "ontology_subtype": "scenario_results",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in title for concept 'scenario_results'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Cost Analysis for Treatment Scenarios",
+            "matched_term": "scenario"
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
+        "parent_path": [
+          "Calculations"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "has_cumulative_column": false,
+          "result_metrics": [],
+          "fed_by": []
+        },
+        "flags": []
       }
     ],
     "parent_groups": [],
     "expected_concepts_status": {
-      "incremental_budget_impact": "absent",
+      "incremental_budget_impact": "found",
       "total_cost_summary": "absent",
       "per_patient_impact": "absent",
       "annual_impact": "absent",
       "multi_year_impact": "absent",
-      "scenario_results": "absent"
+      "scenario_results": "found"
     },
     "confidence": null
   },

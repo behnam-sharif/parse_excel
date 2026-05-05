@@ -3,7 +3,7 @@
   "build_stats": {
     "build_version": "v7-mvp",
     "workbook_file_hash": "e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
-    "build_timestamp": "2026-05-04T19:12:33.280504+00:00",
+    "build_timestamp": "2026-05-05T15:17:24.365536+00:00",
     "total_nodes": 129,
     "total_edges": 192,
     "unresolved_edges": 46,

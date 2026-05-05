@@ -1,7 +1,7 @@
 {
   "model_id": "streamlit_run_simple",
   "ontology_id": "bim_v0",
-  "run_timestamp": "2026-05-04T19:12:43.272Z",
+  "run_timestamp": "2026-05-05T15:49:04.021Z",
   "tables": [
     {
       "table_id": "f57ac8d2e4e4931a_t3_child1",
@@ -51,10 +51,10 @@
     {
       "table_id": "262a4c0f1d47d09d",
       "sheet": "Results",
-      "title": null,
+      "title": "Budget Impact Analysis by Year",
       "upstream_node_type": "input",
       "ontology_role": "result",
-      "ontology_subtype": "structural_result",
+      "ontology_subtype": "incremental_budget_impact",
       "node_type_override_proposed": true,
       "in_top_candidates": true,
       "confidence": 0.55,
@@ -66,7 +66,7 @@
     {
       "table_id": "47ecc07e130eef5f_t10",
       "sheet": "Results",
-      "title": null,
+      "title": "Budget Impact Breakdown by Cost Component",
       "upstream_node_type": "input",
       "ontology_role": "calculation",
       "ontology_subtype": "structural_calc",
@@ -81,7 +81,7 @@
     {
       "table_id": "47ecc07e130eef5f_b10",
       "sheet": "Results",
-      "title": null,
+      "title": "Cost Breakdown by Category",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -186,10 +186,10 @@
     {
       "table_id": "9814fc53f594ba29_t118_b70_t46_child2",
       "sheet": "Inputs",
-      "title": null,
+      "title": "Subsequent treatments in world without InO",
       "upstream_node_type": "input",
       "ontology_role": "input",
-      "ontology_subtype": "structural_input",
+      "ontology_subtype": "structural_input_subsequent_treatment",
       "node_type_override_proposed": false,
       "in_top_candidates": true,
       "confidence": 0.55,
@@ -201,10 +201,10 @@
     {
       "table_id": "9814fc53f594ba29_t118_b70_t46_child4",
       "sheet": "Inputs",
-      "title": null,
+      "title": "Subsequent treatments in world with InO",
       "upstream_node_type": "input",
       "ontology_role": "input",
-      "ontology_subtype": "structural_input",
+      "ontology_subtype": "structural_input_subsequent_treatment",
       "node_type_override_proposed": false,
       "in_top_candidates": true,
       "confidence": 0.55,
@@ -261,7 +261,7 @@
     {
       "table_id": "9814fc53f594ba29_t118_b70_b46",
       "sheet": "Inputs",
-      "title": null,
+      "title": "SCT costs",
       "upstream_node_type": "mixed",
       "ontology_role": "input",
       "ontology_subtype": "structural_input_SCT",
@@ -428,7 +428,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Patient Survival Rates Over Years",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -443,7 +443,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Current situation",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -458,7 +458,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Patient Survival Rates by Year and Treatment",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -473,7 +473,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -488,7 +488,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_b17__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Estimates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -503,7 +503,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_b17__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for Future Situations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -518,7 +518,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_b17__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data for 2020-2024",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -533,7 +533,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_b17__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -548,7 +548,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -563,7 +563,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -578,7 +578,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Results",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -593,7 +593,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_t7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Mortality Rates of Patients",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -608,7 +608,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -623,7 +623,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future Situation Analysis",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -638,7 +638,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -653,7 +653,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_t15_b7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -668,7 +668,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -683,7 +683,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Current and Future Situations Analysis",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -698,22 +698,22 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Summary",
       "upstream_node_type": "mixed",
-      "ontology_role": "unclassified",
-      "ontology_subtype": null,
+      "ontology_role": "calculation",
+      "ontology_subtype": "aggregator",
       "node_type_override_proposed": false,
-      "in_top_candidates": false,
-      "confidence": null,
-      "evidence_quality": null,
-      "agent_owner": null,
+      "in_top_candidates": true,
+      "confidence": 0.7,
+      "evidence_quality": "high",
+      "agent_owner": "calculations",
       "applied_heuristics": [],
       "flags": []
     },
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -728,7 +728,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_b23__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Overview",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -743,7 +743,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_b23__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Projected Costs for Future Situations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -758,7 +758,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_b23__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -773,7 +773,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_b25_b23__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Patient Mortality Data by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -788,7 +788,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -803,7 +803,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -818,7 +818,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Overview",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -833,7 +833,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_t8__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Mortality Rates",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -848,7 +848,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -863,7 +863,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future Situation Analysis",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -878,7 +878,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Overview",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -893,7 +893,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_t16_b8__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Mortality Rates",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -908,7 +908,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Estimates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -923,7 +923,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -938,7 +938,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data for 2020-2024",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -953,7 +953,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_t7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -968,7 +968,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Results",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -983,7 +983,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future situation analysis for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -998,7 +998,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Results",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1013,7 +1013,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_t15_b7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1028,7 +1028,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Rates",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1043,7 +1043,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for 2023-2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1058,7 +1058,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data for 2020-2024",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1073,7 +1073,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_t23_b15__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1193,7 +1193,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1208,7 +1208,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future situation data for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1223,7 +1223,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Overview",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1238,7 +1238,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_t48_b16_b23__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Number of patients that die each year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1253,7 +1253,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1268,7 +1268,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1283,7 +1283,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Deaths by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1298,7 +1298,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_t8__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1313,7 +1313,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Deaths by Year",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1328,7 +1328,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future situation analysis for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1343,7 +1343,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Deaths by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1358,7 +1358,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_t16_b8__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1373,7 +1373,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Results",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1388,22 +1388,22 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis for Treatment Scenarios",
       "upstream_node_type": "input",
-      "ontology_role": "unclassified",
-      "ontology_subtype": null,
-      "node_type_override_proposed": false,
-      "in_top_candidates": false,
-      "confidence": null,
-      "evidence_quality": null,
-      "agent_owner": null,
+      "ontology_role": "result",
+      "ontology_subtype": "scenario_results",
+      "node_type_override_proposed": true,
+      "in_top_candidates": true,
+      "confidence": 0.55,
+      "evidence_quality": "partial",
+      "agent_owner": "results",
       "applied_heuristics": [],
       "flags": []
     },
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1418,7 +1418,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1433,7 +1433,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1448,7 +1448,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis for Future Situations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1463,7 +1463,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1478,7 +1478,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_b7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1493,7 +1493,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Estimates for Subsequent Treatment",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1508,7 +1508,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Current situation data",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1523,7 +1523,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Costs Overview",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1538,7 +1538,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_b15__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1553,7 +1553,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1568,7 +1568,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future situation costs for 2024",
       "upstream_node_type": "input",
       "ontology_role": "calculation",
       "ontology_subtype": "structural_calc",
@@ -1583,7 +1583,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Data Overview",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1598,7 +1598,7 @@
     {
       "table_id": "1f634d7d13c5e37c_b57_b48_b16_b23__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1628,7 +1628,7 @@
     {
       "table_id": "076daba6b93bd14c_t17_t9_child2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "TKI -Ponatinib",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1643,7 +1643,7 @@
     {
       "table_id": "076daba6b93bd14c_t17_b9__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Core Data for 2020-2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1658,7 +1658,7 @@
     {
       "table_id": "076daba6b93bd14c_t17_b9__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Calculations for Future Situations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1673,7 +1673,7 @@
     {
       "table_id": "076daba6b93bd14c_t17_b9__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data for 2020-2024",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1688,7 +1688,7 @@
     {
       "table_id": "076daba6b93bd14c_t17_b9__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1703,7 +1703,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_t7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Patient Mortality Data Over Years",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1718,7 +1718,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_t7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Current situation for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1733,7 +1733,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_t7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Deaths by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1748,7 +1748,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_t7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1763,7 +1763,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_b7__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Budget Impact Model Data for Years 2020-2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1778,7 +1778,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_b7__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Projected Costs for Future Situations",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1793,7 +1793,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_b7__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Cost Analysis by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1808,7 +1808,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_t15_b7__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1823,7 +1823,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_b15__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1838,7 +1838,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_b15__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Current situation",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1853,7 +1853,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_b15__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Patient Mortality Data by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1868,7 +1868,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_t23_b15__core3",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Mortality Data",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1883,7 +1883,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_b23__core1",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Core Data for Years 2020-2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1898,7 +1898,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_b23__core2",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Future situation analysis for 2024",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1913,7 +1913,7 @@
     {
       "table_id": "076daba6b93bd14c_b17_b23__core0",
       "sheet": "Calculations",
-      "title": null,
+      "title": "Annual Patient Deaths by Year",
       "upstream_node_type": "mixed",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1944,11 +1944,11 @@
   "tag_summary": {
     "total_tables": 129,
     "classified_input": 13,
-    "classified_calculation": 17,
-    "classified_result": 1,
+    "classified_calculation": 18,
+    "classified_result": 2,
     "classified_overall_evidence": 0,
-    "unclassified": 95,
+    "unclassified": 93,
     "out_of_scope_for_pass_1": 3,
-    "node_type_overrides_proposed": 27
+    "node_type_overrides_proposed": 28
   }
 }

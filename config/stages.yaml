@@ -407,6 +407,22 @@ xl_sheetagent_v6:
   finalize_flatten_depth: 1
   finalize_emit_stats: true
 
+  # Post-finalize repair pass — DEPRECATED. Repair has moved to the
+  # new `xl_qc_repair` stage (post-DAG, LLM-gated). Set this to
+  # `true` only if you specifically want the legacy in-V6 repair
+  # path; default is now `false` so V6 output stays an immutable
+  # upstream contract.
+  enable_post_finalize_repair: false
+  repair_title_search_rows_above: 2
+  # Maximum leftward search radius for row-names. We walk leftward
+  # until we hit the first non-empty non-numeric column (skipping
+  # blanks); cap at this many columns so dense workbooks don't spend
+  # forever on a single bad case.
+  repair_rowname_search_cols_left: 20
+  repair_rowname_min_count: 2
+  repair_rowname_max_blank_ratio: 0.3
+  repair_allow_neighbor_shrink: true
+
 xl_image:
   adaptive_enabled: true
   context_pad: 2
@@ -489,6 +505,10 @@ xl_ontology:
   # Per-sheet character cap for the overview-sheet read in Stage 2.1
   # (keeps the synthesis-prompt size bounded even on dense covers).
   pass2_overview_sheet_max_chars: 10000
+  # final_table_map source: "v6_repaired" → prefer qc_repair_output/
+  # final_table_map_repaired.json when it exists, falling back to V6
+  # raw. "v6_raw" → always read the immutable V6 output.
+  final_table_map_source: "v6_repaired"
 
 # ============================================================================
 # xl_dag — v7 DAG build (consumes v6 finalize output, writes dag_output/*.json)
@@ -503,3 +523,33 @@ xl_dag:
   max_representative_formulas_per_col: 4   # AST grouping cap; overflow → heterogeneous_formulas_in_column
   sheet_slug_lowercase: true
   max_workers: 1                           # build is mostly sequential
+
+
+# ============================================================================
+# xl_qc_repair — post-DAG repair stage. LLM-gated for risky cases (single-row,
+# low-context-node, multi-core-split, header-sequence titles). Reads V6's
+# immutable final_table_map.json + DAG + workbook; writes
+# qc_repair_output/final_table_map_repaired.json plus audit + trace logs.
+# ============================================================================
+xl_qc_repair:
+  use_llm: true
+  qc_repair_llm_budget_max: 150
+  qc_repair_llm_budget_strategy: "fixed"
+  llm_model: "gpt-4o-mini"
+  llm_max_tokens: 4096
+  llm_temperature: 0.0
+  search_rows_above: 3
+  search_cols_left: 25
+  enable_safe_autoapply: true
+  always_llm_triggers: []
+  max_tables_per_run: 1000
+  skip_node_types:
+    - metadata
+    - data_table
+    - setting
+  qc_repair_max_llm_calls_per_sheet: 5
+  qc_repair_scan_to_prev_table: true
+  qc_repair_above_scan_max_rows: 25
+  qc_repair_future_flags:
+    - core_region_split
+    - title_looks_like_footnote

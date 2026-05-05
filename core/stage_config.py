@@ -173,6 +173,21 @@ def dag_config_from_pipeline(
     return dag_config_from_mapping(merge_stage_dict(pc.xl_dag, overrides))
 
 
+def qc_repair_config_from_mapping(d: Mapping[str, Any]):
+    from xl_qc_repair.config import XlQcRepairConfig
+
+    data = _require_exact_keys(XlQcRepairConfig, d, "stages.yaml xl_qc_repair")
+    return XlQcRepairConfig(**data)
+
+
+def qc_repair_config_from_pipeline(
+    pc: PipelineConfig,
+    overrides: Optional[Dict[str, Any]] = None,
+):
+    raw = pc.xl_qc_repair if pc.xl_qc_repair else {}
+    return qc_repair_config_from_mapping(merge_stage_dict(raw, overrides))
+
+
 def ontology_config_from_mapping(d: Mapping[str, Any]):
     from xl_ontology.config import XlOntologyConfig
 

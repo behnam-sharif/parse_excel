@@ -114,6 +114,12 @@ def _finalize_one(
     if _is_rule2_case(child_summaries):
         return _emit_standalone_rule2(rt, sheet_name, child_summaries, grid_reader)
 
+    # Rule 2b — exactly 1 metadata + 1 numeric remain among the
+    # PRESERVED children (V3a had more, but reconciliation absorbed
+    # some). Collapse to standalone, donate metadata's title.
+    if _is_rule2b_case(rt):
+        return _emit_standalone_rule2b(rt, sheet_name, grid_reader)
+
     # Rule 5 — a preserved child is itself a parent (flatten one level)
     if rt.children and any(c.children for c in rt.children):
         return _emit_parent_rule5(rt, sheet_name, config, grid_reader)
@@ -218,6 +224,128 @@ def _emit_standalone_rule2(
     source_for_triggers = preserved_numeric if preserved_numeric is not None else None
     if source_for_triggers is not None:
         triggers = _merge_triggers(triggers, source_for_triggers.llm_gate_triggers)
+
+    return FinalMapEntryStandalone(
+        table_id=rt.table_id,
+        coordinates=bbox_to_coords(sheet_name, rt.bbox),
+        bbox=bbox_dict_copy(rt.bbox),
+        sheet_name=sheet_name,
+        title=title,
+        headers=headers,
+        row_names=row_names,
+        core_region=core_region,
+        node_type=node_type,
+        parent_path=[sheet_name],
+        footnotes_notes_refs=footnotes,
+        llm_gate_triggers=triggers,
+        source_flags=flags,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Rule 2b — preserved-children collapse (1 metadata + 1 numeric)
+# ---------------------------------------------------------------------------
+
+def _is_rule2b_case(rt: V6ResolvedTable) -> bool:
+    """Like Rule 2 but gates on PRESERVED children, not V3a child_summaries.
+
+    Fires when **exactly one numeric child** remains and every other
+    preserved child is metadata. This captures:
+      - [metadata, numeric] (the canonical Rule 2 shape).
+      - [metadata, metadata, numeric] — common when V6 keeps a silent
+        empty-title metadata leaf alongside a captioned one.
+      - [metadata, metadata, metadata, numeric].
+    The single numeric child carries the data; the metadata siblings'
+    titles cascade into the standalone's title (see _emit_standalone_rule2b).
+    """
+    if not rt.children or len(rt.children) < 2:
+        return False
+    metadata_count = sum(1 for c in rt.children if _is_metadata_child(c))
+    numeric_count = sum(1 for c in rt.children if _is_numeric_child(c))
+    if numeric_count != 1:
+        return False
+    if metadata_count + numeric_count != len(rt.children):
+        return False
+    return metadata_count >= 1
+
+
+def _emit_standalone_rule2b(
+    rt: V6ResolvedTable,
+    sheet_name: str,
+    grid_reader: GridReader,
+) -> FinalMapEntryStandalone:
+    """Collapse a 1-metadata + 1-numeric preserved-children parent
+    into a standalone leaf. Title cascade (per user's spec):
+
+    - If numeric child has no title → use metadata child's title.
+    - If both have titles AND they differ → ``metadata.title | numeric.title``.
+    - If only numeric has a title → use it.
+    - If neither has a title → fall back to parent's title (rt.title).
+    """
+    metadata_children: List[V6ResolvedTable] = []
+    numeric_child: Optional[V6ResolvedTable] = None
+    for c in rt.children:
+        if _is_metadata_child(c):
+            metadata_children.append(c)
+        else:
+            numeric_child = c
+
+    # Prefer the first metadata child with a non-empty title; then
+    # collect any other distinct metadata titles for cascade.
+    md_title: Optional[str] = None
+    metadata_child: Optional[V6ResolvedTable] = None
+    for mc in metadata_children:
+        t = (mc.title.strip() if mc and mc.title else None)
+        if t and md_title is None:
+            md_title = t
+            metadata_child = mc
+            break
+    num_title = (numeric_child.title.strip() if numeric_child and numeric_child.title else None)
+
+    if md_title and num_title and md_title != num_title:
+        title = f"{md_title} | {num_title}"
+    elif md_title and not num_title:
+        title = md_title
+    elif num_title and not md_title:
+        title = num_title
+    elif md_title and num_title and md_title == num_title:
+        title = md_title
+    else:
+        # Both empty — fall back to parent.
+        title = rt.title
+
+    flags = ["merged_from_metadata_and_numeric_child", "rule2b_collapsed_preserved_children"]
+
+    # Headers / row_names / core_region / node_type — from the numeric child.
+    if numeric_child is not None:
+        headers = _clone_headers(numeric_child.headers) or _clone_headers(rt.headers)
+        row_names = _clone_row_names(numeric_child.row_names)
+        core_region = _first_core_bbox(numeric_child.core_regions)
+        node_type = numeric_child.table_role
+    else:
+        headers = _clone_headers(rt.headers)
+        row_names = _clone_row_names(rt.row_names)
+        core_region = _first_core_bbox(rt.core_regions)
+        node_type = rt.table_role
+
+    # If the numeric child had a header conflict with the metadata child's
+    # headers, surface that for downstream review.
+    if (
+        metadata_child is not None
+        and metadata_child.headers
+        and numeric_child is not None
+        and numeric_child.headers
+        and _headers_differ(metadata_child.headers, numeric_child.headers)
+    ):
+        flags.append("header_conflict")
+
+    footnotes = compute_footnotes(rt.bbox, core_region, grid_reader)
+
+    triggers = _clone_triggers(rt.llm_gate_triggers)
+    if numeric_child is not None:
+        triggers = _merge_triggers(triggers, numeric_child.llm_gate_triggers)
+    if metadata_child is not None:
+        triggers = _merge_triggers(triggers, metadata_child.llm_gate_triggers)
 
     return FinalMapEntryStandalone(
         table_id=rt.table_id,

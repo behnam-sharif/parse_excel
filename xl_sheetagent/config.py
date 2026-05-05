@@ -124,3 +124,18 @@ class XlSheetAgentV6Config:
     finalize_note_keywords: list
     finalize_flatten_depth: int
     finalize_emit_stats: bool
+
+    # Post-finalize repair pass — fixes title_missing / rowname_missing
+    # by inspecting cells just above (titles) or just left (row-names)
+    # of the leaf bbox on the actual sheet. Defaults are conservative.
+    enable_post_finalize_repair: bool = True
+    repair_title_search_rows_above: int = 2
+    repair_rowname_search_cols_left: int = 2
+    repair_rowname_min_count: int = 2
+    repair_rowname_max_blank_ratio: float = 0.3
+    # When False, repair only lands on cells no sibling claims (no
+    # neighbor shrinking, no demotion). When True, neighbors whose
+    # bbox covers a candidate cell *outside* their core_region get
+    # shrunk; metadata-only leaves whose entire bbox is row-name
+    # strip get demoted.
+    repair_allow_neighbor_shrink: bool = True

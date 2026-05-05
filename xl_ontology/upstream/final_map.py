@@ -132,7 +132,12 @@ def _parse_entry(d: dict, kind: str, parent_id: Optional[str]) -> FinalMapEntry:
         parent_path=list(d.get("parent_path", []) or []),
         parent_table_id=parent_id,
         footnotes_notes_refs=[
-            FootnoteRef(**f) for f in d.get("footnotes_notes_refs", []) or []
+            FootnoteRef(
+                row=int(f.get("row", 0)),
+                col=int(f.get("col", 0)),
+                text=str(f.get("text", "")),
+            )
+            for f in d.get("footnotes_notes_refs", []) or []
         ],
         source_flags=list(d.get("source_flags", []) or []),
     )

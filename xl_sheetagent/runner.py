@@ -22,6 +22,7 @@ from .formatting_agent import extract_table_formatting
 from .exporter import export_results
 from .finalize import finalize_sheet
 from .final_map_exporter import export_final_map
+from .repair_titles_rownames import repair_titles_and_rownames
 from .settings_harvest import harvest_named_settings
 
 logger = logging.getLogger(__name__)
@@ -205,7 +206,43 @@ def run_v6_analysis(
 
     # Finalize export (deterministic flat map for DAG consumption)
     if getattr(config, "enable_finalize", False):
-        # Post-pass: harvest unattached named-variable cells into
+        import json as _json
+
+        # NOTE: deterministic post-finalize title/row-name repair has
+        # been moved to the new `xl_qc_repair` stage (post-DAG, LLM-
+        # gated). V6's final_table_map.json is now an immutable
+        # upstream contract. Set `enable_post_finalize_repair: true`
+        # in YAML if you really need the legacy in-V6 repair path.
+        if getattr(config, "enable_post_finalize_repair", False):
+            try:
+                _accessor = accessor
+                _accessor_owned_locally = False
+                if _accessor is None:
+                    _accessor = WorkbookAccessor(workbook_path)
+                    _accessor_owned_locally = True
+                try:
+                    n_titles, n_rownames, repair_audit = repair_titles_and_rownames(
+                        results, _accessor, config,
+                    )
+                    if n_titles or n_rownames:
+                        logger.info(
+                            "[deprecated] In-V6 repair pass: %d titles, %d rowname sets",
+                            n_titles, n_rownames,
+                        )
+                    audit_path = output_dir / "repair_titles_rownames_audit.jsonl"
+                    audit_path.parent.mkdir(parents=True, exist_ok=True)
+                    with open(audit_path, "w", encoding="utf-8") as f:
+                        for row in repair_audit:
+                            f.write(_json.dumps(row, ensure_ascii=False, default=str) + "\n")
+                finally:
+                    if _accessor_owned_locally:
+                        _accessor.close()
+            except Exception as exc:
+                logger.warning(
+                    "[deprecated] In-V6 repair failed; proceeding: %s", exc, exc_info=True,
+                )
+
+        # Post-pass B: harvest unattached named-variable cells into
         # synthetic ``node_type="setting"`` leaves so DAG can resolve
         # named-range references to a real source node.
         try:
@@ -213,7 +250,6 @@ def run_v6_analysis(
             if n_settings:
                 logger.info("Settings harvest: created %d synthetic settings", n_settings)
             # Persist audit log alongside the final_table_map.
-            import json as _json
             audit_path = output_dir / "settings_harvest_audit.jsonl"
             audit_path.parent.mkdir(parents=True, exist_ok=True)
             with open(audit_path, "w", encoding="utf-8") as f:

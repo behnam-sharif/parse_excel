@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-04T19:22:38.910Z",
+  "seed_timestamp": "2026-05-05T13:07:58.080Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:8018279055de31f7a44fc52bc3f9101c2328a7a5b75f9cb5ab1dbc1537579e87",
   "overall_model": {
@@ -18,11 +18,11 @@
   "inputs": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "66 input tables identified covering population, epidemiology, market_share, drug_cost.",
+    "summary": "67 input tables identified covering population, epidemiology, market_share, drug_cost.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "a9f916bc0a3ee753_b19_child3",
+        "table_id": "a9f916bc0a3ee753_b19",
         "ontology_role": "input",
         "ontology_subtype": "population",
         "confidence": 0.7,
@@ -37,10 +37,9 @@
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "a9f916bc0a3ee753_b19",
+        "parent_table_id": null,
         "parent_path": [
-          "Population by province ",
-          "Alberta markup cost parameters | Reference"
+          "Population by province "
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -108,7 +107,7 @@
         "flags": []
       },
       {
-        "table_id": "b57c564ff564a5a4_b9_child3",
+        "table_id": "b57c564ff564a5a4_b9",
         "ontology_role": "input",
         "ontology_subtype": "drug_cost",
         "confidence": 0.55,
@@ -123,10 +122,9 @@
         ],
         "upstream_node_type": "mixed",
         "node_type_override_proposed": true,
-        "parent_table_id": "b57c564ff564a5a4_b9",
+        "parent_table_id": null,
         "parent_path": [
-          "Treatment costs",
-          "*Ipilimumab is \"Ipilimumab monotherapy or + Nivolumab\""
+          "Treatment costs"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -175,7 +173,7 @@
         "flags": []
       },
       {
-        "table_id": "39c56a739c48ef9f_b1_child2",
+        "table_id": "39c56a739c48ef9f_b1",
         "ontology_role": "input",
         "ontology_subtype": "structural_input_adverse_event",
         "confidence": 0.55,
@@ -200,10 +198,9 @@
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "39c56a739c48ef9f_b1",
+        "parent_table_id": null,
         "parent_path": [
-          "Adverse events",
-          "Probability of adverse events - grade 3/4"
+          "Adverse events"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -214,74 +211,6 @@
         "flags": [
           "fanout_outlier_high"
         ]
-      },
-      {
-        "table_id": "f531fa14ef2b267e_t7_child1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "f531fa14ef2b267e_t7",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "Total number of BRAF tests"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "f531fa14ef2b267e_b7_child1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "f531fa14ef2b267e_b7",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "Total number of target population"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
       },
       {
         "table_id": "0a8c4f37f9c9f23c_t7_child1",
@@ -409,6 +338,74 @@
         "parent_table_id": "86702b279a35f373_b7",
         "parent_path": [
           "BI calculation_BC",
+          "Total number of target population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "f531fa14ef2b267e_t7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "f531fa14ef2b267e_t7",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "Total number of BRAF tests"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "f531fa14ef2b267e_b7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "f531fa14ef2b267e_b7",
+        "parent_path": [
+          "BI calculation_Manitoba",
           "Total number of target population"
         ],
         "sibling_count": 0,
@@ -760,6 +757,74 @@
         "flags": []
       },
       {
+        "table_id": "f250ea6713655cd7_t7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "f250ea6713655cd7_t7",
+        "parent_path": [
+          "BI calculation_PEI",
+          "Total number of BRAF tests"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "f250ea6713655cd7_b7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "f250ea6713655cd7_b7",
+        "parent_path": [
+          "BI calculation_PEI",
+          "Total number of target population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
         "table_id": "ac5fb794850fe74e_t24_t8_b1",
         "ontology_role": "input",
         "ontology_subtype": "structural_input_scenario",
@@ -904,7 +969,7 @@
         "flags": []
       },
       {
-        "table_id": "f250ea6713655cd7_t7_child1",
+        "table_id": "a345e30a9e72f004",
         "ontology_role": "input",
         "ontology_subtype": "structural_input",
         "confidence": 0.55,
@@ -924,9 +989,42 @@
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "f250ea6713655cd7_t7",
+        "parent_table_id": null,
         "parent_path": [
-          "BI calculation_PEI",
+          "Cover"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "30ce7d2c694b5abe_t7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "30ce7d2c694b5abe_t7",
+        "parent_path": [
+          "BI calculation_Sask.",
           "Total number of BRAF tests"
         ],
         "sibling_count": 0,
@@ -938,7 +1036,7 @@
         "flags": []
       },
       {
-        "table_id": "f250ea6713655cd7_b7_child1",
+        "table_id": "30ce7d2c694b5abe_b7_child1",
         "ontology_role": "input",
         "ontology_subtype": "structural_input",
         "confidence": 0.55,
@@ -958,9 +1056,9 @@
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "f250ea6713655cd7_b7",
+        "parent_table_id": "30ce7d2c694b5abe_b7",
         "parent_path": [
-          "BI calculation_PEI",
+          "BI calculation_Sask.",
           "Total number of target population"
         ],
         "sibling_count": 0,
@@ -972,13 +1070,18 @@
         "flags": []
       },
       {
-        "table_id": "a345e30a9e72f004_child1",
+        "table_id": "1b0d12a7ed371533_b6",
         "ontology_role": "input",
         "ontology_subtype": "structural_input",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in body_cell_value for concept 'unspecified'",
         "evidence_signals": [
+          {
+            "type": "format_match",
+            "value": "Adverse events cost",
+            "matched_term": "adverse event"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -986,16 +1089,15 @@
           },
           {
             "type": "dag_fanout",
-            "value": 0,
+            "value": 4,
             "matched_term": null
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "a345e30a9e72f004",
+        "parent_table_id": null,
         "parent_path": [
-          "Cover",
-          "Enco + Bini in the treatment of advanced unresectable/metastatic BRAF+ mutation melanoma"
+          "Ex summary"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1003,7 +1105,9 @@
         "extracted_payload": {
           "parameters": []
         },
-        "flags": []
+        "flags": [
+          "fanout_outlier_high"
+        ]
       },
       {
         "table_id": "b21afdaf10344a04_b2_t5",
@@ -1252,46 +1356,6 @@
         "flags": []
       },
       {
-        "table_id": "1b0d12a7ed371533_b6",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in body_cell_value for concept 'unspecified'",
-        "evidence_signals": [
-          {
-            "type": "format_match",
-            "value": "Adverse events cost",
-            "matched_term": "adverse event"
-          },
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": null,
-        "parent_path": [
-          "Ex summary"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": [
-          "fanout_outlier_high"
-        ]
-      },
-      {
         "table_id": "fe16602c7715dbe8_t16_t7",
         "ontology_role": "input",
         "ontology_subtype": "structural_input_scenario",
@@ -1370,30 +1434,34 @@
         "flags": []
       },
       {
-        "table_id": "30ce7d2c694b5abe_t7_child1",
+        "table_id": "fe16602c7715dbe8_t16_b7",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_scenario",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'scenario'",
         "evidence_signals": [
           {
+            "type": "title_match",
+            "value": "Treatment mix – Scenario with Enco + Bini in  Manitoba",
+            "matched_term": "scenario"
+          },
+          {
             "type": "dag_fanin",
-            "value": 0,
+            "value": 1,
             "matched_term": null
           },
           {
             "type": "dag_fanout",
-            "value": 0,
+            "value": 13,
             "matched_term": null
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": false,
-        "parent_table_id": "30ce7d2c694b5abe_t7",
+        "parent_table_id": null,
         "parent_path": [
-          "BI calculation_Sask.",
-          "Total number of BRAF tests"
+          "Market shares"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1401,109 +1469,9 @@
         "extracted_payload": {
           "parameters": []
         },
-        "flags": []
-      },
-      {
-        "table_id": "30ce7d2c694b5abe_b7_child1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "30ce7d2c694b5abe_b7",
-        "parent_path": [
-          "BI calculation_Sask.",
-          "Total number of target population"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "951040d558cdc524_t7_child1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "951040d558cdc524_t7",
-        "parent_path": [
-          "BI calculation_YK",
-          "Total number of BRAF tests"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "951040d558cdc524_b7_child1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "951040d558cdc524_b7",
-        "parent_path": [
-          "BI calculation_YK",
-          "Total number of target population"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
+        "flags": [
+          "fanout_outlier_high"
+        ]
       },
       {
         "table_id": "a9f916bc0a3ee753_t19_b5",
@@ -1640,6 +1608,74 @@
         "flags": []
       },
       {
+        "table_id": "951040d558cdc524_t7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "951040d558cdc524_t7",
+        "parent_path": [
+          "BI calculation_YK",
+          "Total number of BRAF tests"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "951040d558cdc524_b7_child1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "951040d558cdc524_b7",
+        "parent_path": [
+          "BI calculation_YK",
+          "Total number of target population"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
         "table_id": "c35ca62247b25515_b1",
         "ontology_role": "input",
         "ontology_subtype": "structural_input",
@@ -1698,6 +1734,39 @@
         "parent_table_id": null,
         "parent_path": [
           "Time on treatment"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "parameters": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "fb4df83b50ae254c_b1__core1",
+        "ontology_role": "input",
+        "ontology_subtype": "structural_input",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "evidence_signals": [
+          {
+            "type": "dag_fanin",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": false,
+        "parent_table_id": "fb4df83b50ae254c_b1",
+        "parent_path": [
+          "Treatment costs"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1776,13 +1845,18 @@
         "flags": []
       },
       {
-        "table_id": "885c4707ba8c9363_b8_child4",
+        "table_id": "885c4707ba8c9363_b8",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_subsequent_treatment",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'subsequent_treatment'",
         "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Treatment mix – post-progression (2nd line +)",
+            "matched_term": "post-progression"
+          },
           {
             "type": "dag_fanin",
             "value": 1,
@@ -1796,10 +1870,9 @@
         ],
         "upstream_node_type": "mixed",
         "node_type_override_proposed": true,
-        "parent_table_id": "885c4707ba8c9363_b8",
+        "parent_table_id": null,
         "parent_path": [
-          "Subsequent tx",
-          "Treatment mix – post-progression (2nd line +) | Subsequent antineoplastic tx distribution - proportion of the cohort receiving a new antineoplastic tx following discontinuation of primary tx | Primary tx"
+          "Subsequent tx"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1810,39 +1883,6 @@
         "flags": [
           "fanout_outlier_high"
         ]
-      },
-      {
-        "table_id": "fb4df83b50ae254c_b1__core1",
-        "ontology_role": "input",
-        "ontology_subtype": "structural_input",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
-        "evidence_signals": [
-          {
-            "type": "dag_fanin",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": false,
-        "parent_table_id": "fb4df83b50ae254c_b1",
-        "parent_path": [
-          "Treatment costs"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "parameters": []
-        },
-        "flags": []
       },
       {
         "table_id": "94f6909ecd7ce31f_t16_child3",
@@ -2001,7 +2041,7 @@
         "flags": []
       },
       {
-        "table_id": "94f6909ecd7ce31f_b16_t10_child2",
+        "table_id": "94f6909ecd7ce31f_b16_t10",
         "ontology_role": "input",
         "ontology_subtype": "structural_input_dosing",
         "confidence": 0.55,
@@ -2026,10 +2066,9 @@
         ],
         "upstream_node_type": "mixed",
         "node_type_override_proposed": true,
-        "parent_table_id": "94f6909ecd7ce31f_b16_t10",
+        "parent_table_id": null,
         "parent_path": [
-          "Treatment doses",
-          "Drug doses - IV"
+          "Treatment doses"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -2339,837 +2378,29 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "264 main calculation tables identified (structural_calc). 0 aggregators.",
+    "summary": "263 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "047b65706ebe602f_t17_t9_b4",
+        "table_id": "8c7ea0b7c24ea4ab_t6_child3",
         "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
+        "ontology_subtype": "total_cost_with",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "why_selected": "lexicon match in title for concept 'total_cost_with_intervention'",
         "evidence_signals": [
           {
-            "type": "formula_density",
-            "value": 0.7777777777777778,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 3,
-            "matched_term": null
+            "type": "title_match",
+            "value": "Total cost",
+            "matched_term": "total cost"
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": true,
-        "parent_table_id": null,
+        "parent_table_id": "8c7ea0b7c24ea4ab_t6",
         "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "047b65706ebe602f_t17_b9",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.7222222222222222,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 3,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "047b65706ebe602f_b17_t19_t8",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.7083333333333334,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 2,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "047b65706ebe602f_b17_t19_b8",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "047b65706ebe602f_b17_b19",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "143cd05a3d1269fc_t12_child1",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6333333333333333,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "143cd05a3d1269fc_t12",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "World without new intervention"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "143cd05a3d1269fc_t12_child2",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.8,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "143cd05a3d1269fc_t12",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "World without new intervention"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "143cd05a3d1269fc_b12_child2",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6857142857142857,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 6,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "143cd05a3d1269fc_b12",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "World without new intervention"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "93b1f6a6224a6854_t13_child2",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.95,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "93b1f6a6224a6854_t13",
-        "parent_path": [
-          "BI calculation_Manitoba",
+          "BI calculation_Alberta",
           "World without new intervention: Enco+Bini"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "93b1f6a6224a6854_t13_child4",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.96,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "93b1f6a6224a6854_t13",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "World without new intervention: Enco+Bini"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "93b1f6a6224a6854_b13_t2",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.8,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "30a10df1a18fbe85_t6_child3",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.8,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "30a10df1a18fbe85_t6",
-        "parent_path": [
-          "BI calculation_Manitoba",
-          "World without new intervention: Enco+Bini"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "95fc1cc71ca9ea3b_t14_b1",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5648148148148148,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "95fc1cc71ca9ea3b_b14",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "20da09442419abcb_t12",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5648148148148148,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "20da09442419abcb_b12",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "794f83cf7e7f58d9_t12",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5648148148148148,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "dca5f3b8a92d3774_t12",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5648148148148148,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "dca5f3b8a92d3774_b12_child2",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.76,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "dca5f3b8a92d3774_b12",
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "e12cacc441b042b1_b6",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5333333333333333,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "2fb9dc50974ea92b",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.5185185185185185,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 4,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "410cb5d0badb1a22_t6",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Manitoba"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -3593,45 +2824,6 @@
         "parent_table_id": null,
         "parent_path": [
           "BI calculation_Alberta"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "8c7ea0b7c24ea4ab_t6_child3",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.8,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "8c7ea0b7c24ea4ab_t6",
-        "parent_path": [
-          "BI calculation_Alberta",
-          "World without new intervention: Enco+Bini"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -4854,6 +4046,848 @@
         "parent_table_id": null,
         "parent_path": [
           "BI calculation_BC"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "047b65706ebe602f_t17_t9_b4",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.7777777777777778,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 3,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "047b65706ebe602f_t17_b9",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.7222222222222222,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 3,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_t19_t8",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.7083333333333334,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 2,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_t19_b8",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "047b65706ebe602f_b17_b19",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "143cd05a3d1269fc_t12_child1",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6333333333333333,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "143cd05a3d1269fc_t12",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "143cd05a3d1269fc_t12_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "143cd05a3d1269fc_t12",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "143cd05a3d1269fc_b12_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6857142857142857,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 6,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "143cd05a3d1269fc_b12",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "93b1f6a6224a6854_t13_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.95,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "93b1f6a6224a6854_t13",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention: Enco+Bini"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "93b1f6a6224a6854_t13_child4",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.96,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "93b1f6a6224a6854_t13",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention: Enco+Bini"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "93b1f6a6224a6854_b13_t2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "30a10df1a18fbe85_t6_child3",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "30a10df1a18fbe85_t6",
+        "parent_path": [
+          "BI calculation_Manitoba",
+          "World without new intervention: Enco+Bini"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "95fc1cc71ca9ea3b_t14_b1",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5648148148148148,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "95fc1cc71ca9ea3b_b14",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 4,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "20da09442419abcb_t12",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5648148148148148,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "20da09442419abcb_b12",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 4,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "794f83cf7e7f58d9_t12",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5648148148148148,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "dca5f3b8a92d3774_t12",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5648148148148148,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "dca5f3b8a92d3774_b12_child2",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.76,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 4,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "dca5f3b8a92d3774_b12",
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "e12cacc441b042b1_b6",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5333333333333333,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 4,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "2fb9dc50974ea92b",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.5185185185185185,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 4,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "410cb5d0badb1a22_t6",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -9921,122 +9955,6 @@
         "flags": []
       },
       {
-        "table_id": "6122ef6b4bd54d1f_child3",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.9230769230769231,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "6122ef6b4bd54d1f",
-        "parent_path": [
-          "Cost calculations",
-          "Primary treatment costs"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "db3970e19145e71e_child5",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.9230769230769231,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "db3970e19145e71e",
-        "parent_path": [
-          "Cost calculations",
-          "Primary treatment costs"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "1b0d12a7ed371533_t6",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.6666666666666666,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "Ex summary"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
         "table_id": "0d8fc9158b3e45a8_t17_t9_b4",
         "ontology_role": "calculation",
         "ontology_subtype": "structural_calc",
@@ -10864,6 +10782,120 @@
         "parent_table_id": null,
         "parent_path": [
           "BI calculation_Sask."
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "6122ef6b4bd54d1f",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.7100591715976331,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Cost calculations"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "db3970e19145e71e",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6153846153846154,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Cost calculations"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "1b0d12a7ed371533_t6",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6666666666666666,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Ex summary"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -11721,7 +11753,7 @@
         "flags": []
       },
       {
-        "table_id": "a9f916bc0a3ee753_t19_t5_child2",
+        "table_id": "fb4df83b50ae254c_b1__core0",
         "ontology_role": "calculation",
         "ontology_subtype": "structural_calc",
         "confidence": 0.55,
@@ -11730,21 +11762,58 @@
         "evidence_signals": [
           {
             "type": "formula_density",
-            "value": 0.8888888888888888,
+            "value": 1.0,
             "matched_term": null
           },
           {
             "type": "dag_fanout",
-            "value": 6,
+            "value": 24,
             "matched_term": null
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": true,
-        "parent_table_id": "a9f916bc0a3ee753_t19_t5",
+        "parent_table_id": "fb4df83b50ae254c_b1",
         "parent_path": [
-          "Population by province ",
-          "Live (in use)*"
+          "Treatment costs"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "422012c87f0daeec_b15",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.6227709190672154,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 13,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Subsequent tx"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -11783,83 +11852,6 @@
         "parent_table_id": null,
         "parent_path": [
           "Epidemiology"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "422012c87f0daeec_b15_child3",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.7310789049919485,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 13,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "422012c87f0daeec_b15",
-        "parent_path": [
-          "Subsequent tx",
-          "Subsequent tx %"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "fb4df83b50ae254c_b1__core0",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 1.0,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 24,
-            "matched_term": null
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "fb4df83b50ae254c_b1",
-        "parent_path": [
-          "Treatment costs"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -12223,7 +12215,7 @@
         "flags": []
       },
       {
-        "table_id": "37b18312b8780ed3_b14_child3",
+        "table_id": "37b18312b8780ed3_b14",
         "ontology_role": "calculation",
         "ontology_subtype": "structural_calc",
         "confidence": 0.55,
@@ -12232,7 +12224,7 @@
         "evidence_signals": [
           {
             "type": "formula_density",
-            "value": 0.8888888888888888,
+            "value": 0.6153846153846154,
             "matched_term": null
           },
           {
@@ -12243,10 +12235,9 @@
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": true,
-        "parent_table_id": "37b18312b8780ed3_b14",
+        "parent_table_id": null,
         "parent_path": [
-          "Results ",
-          "Administration costs ($)- Total"
+          "Results "
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -12454,8 +12445,8 @@
     ],
     "parent_groups": [],
     "expected_concepts_status": {
-      "total_cost_with_intervention": "absent",
-      "total_cost_without_intervention": "absent",
+      "total_cost_with_intervention": "found",
+      "total_cost_without_intervention": "found",
       "cost_component_calc": "absent",
       "patient_flow": "absent",
       "scenario_calc": "absent",
@@ -12466,11 +12457,11 @@
   "results": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "22 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
+    "summary": "23 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "30a10df1a18fbe85_b6",
+        "table_id": "eec1912982fee766_b13_b2",
         "ontology_role": "result",
         "ontology_subtype": "incremental_budget_impact",
         "confidence": 0.55,
@@ -12479,15 +12470,15 @@
         "evidence_signals": [
           {
             "type": "title_match",
-            "value": "Incremental",
-            "matched_term": "incremental"
+            "value": "3- year budget impact",
+            "matched_term": "budget impact"
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": true,
         "parent_table_id": null,
         "parent_path": [
-          "BI calculation_Manitoba"
+          "BI calculation_Alberta"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -12562,6 +12553,43 @@
         "parent_table_id": null,
         "parent_path": [
           "BI calculation_BC"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "has_cumulative_column": false,
+          "result_metrics": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "30a10df1a18fbe85_b6",
+        "ontology_role": "result",
+        "ontology_subtype": "structural_result",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: terminal in DAG, multiple inputs, name matches results lexicon",
+        "evidence_signals": [
+          {
+            "type": "dag_fanout",
+            "value": 0,
+            "matched_term": null
+          },
+          {
+            "type": "format_match",
+            "value": "title",
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "BI calculation_Manitoba"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,

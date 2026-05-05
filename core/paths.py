@@ -112,6 +112,25 @@ def get_node_type_override_log_path(run_id: str, base: str = "data/output") -> P
     return get_ontology_output_path(run_id, base) / "node_type_override_log.jsonl"
 
 
+def get_qc_repair_output_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the xl_qc_repair output directory."""
+    return get_run_root(run_id, base) / "qc_repair_output"
+
+
+def get_qc_repaired_final_table_map_path(run_id: str, base: str = "data/output") -> Path:
+    """Return the path to the QC-repaired final_table_map (overrides V6's
+    raw map for downstream consumers when present)."""
+    return get_qc_repair_output_path(run_id, base) / "final_table_map_repaired.json"
+
+
+def get_qc_repair_audit_path(run_id: str, base: str = "data/output") -> Path:
+    return get_qc_repair_output_path(run_id, base) / "qc_repair_audit.jsonl"
+
+
+def get_qc_repair_trace_path(run_id: str, base: str = "data/output") -> Path:
+    return get_qc_repair_output_path(run_id, base) / "qc_repair_trace.jsonl"
+
+
 # v1.B — Pass 2 (comprehension layer) artifacts.
 
 def get_model_understanding_md_path(

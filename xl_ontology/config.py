@@ -32,3 +32,7 @@ class XlOntologyConfig:
     pass2_max_iterations: int = 3
     pass2_llm_budget_max: int = 20
     pass2_overview_sheet_max_chars: int = 10_000
+    # Where to read final_table_map from. "v6_repaired" prefers
+    # qc_repair_output/final_table_map_repaired.json when present, falls
+    # back to V6 raw. "v6_raw" always reads V6 raw.
+    final_table_map_source: str = "v6_repaired"
