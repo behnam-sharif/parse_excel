@@ -3,24 +3,24 @@
   "build_stats": {
     "build_version": "v7-mvp",
     "workbook_file_hash": "e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
-    "build_timestamp": "2026-05-05T15:17:24.365536+00:00",
+    "build_timestamp": "2026-05-06T14:11:49.124569+00:00",
     "total_nodes": 129,
     "total_edges": 192,
     "unresolved_edges": 46,
     "nodes_by_type": {
-      "metadata": 3,
       "input": 69,
+      "metadata": 3,
       "mixed": 57
     },
     "flag_frequency": {
-      "all_metadata_no_numeric": 2,
-      "title_missing": 104,
-      "no_representative_formula": 7,
       "merged_from_metadata_and_numeric_child": 3,
+      "title_missing": 104,
       "rowname_sequence": 2,
       "header_conflict": 2,
       "header_sequence": 9,
       "header_missing": 102,
+      "all_metadata_no_numeric": 2,
+      "no_representative_formula": 7,
       "metadata_propagated_positional": 4,
       "derived_from_parent_core_split": 92,
       "rowname_missing": 93,
@@ -31,146 +31,6 @@
     "parse_errors": 0
   },
   "nodes": [
-    {
-      "node_id": "introduction__f57ac8d2e4e4931a_t3_child1__0",
-      "table_id": "f57ac8d2e4e4931a_t3_child1",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 10,
-        "c1": 2,
-        "r2": 10,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C11:E11",
-      "title": null,
-      "headers": [
-        [
-          "Value ",
-          "",
-          "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 10,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 10,
-          "col": 4,
-          "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value   The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed.  | Introduction | Introduction | metadata",
-      "flags": [
-        "all_metadata_no_numeric",
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
-    {
-      "node_id": "introduction__f57ac8d2e4e4931a_t3_child2__0",
-      "table_id": "f57ac8d2e4e4931a_t3_child2",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 12,
-        "c1": 2,
-        "r2": 12,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C13:E13",
-      "title": null,
-      "headers": [
-        [
-          "Value ",
-          "",
-          "The content of these cells can be changed to accommodate user inputs"
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 12,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 12,
-          "col": 4,
-          "text": "The content of these cells can be changed to accommodate user inputs"
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value   The content of these cells can be changed to accommodate user inputs | Introduction | Introduction | metadata",
-      "flags": [
-        "all_metadata_no_numeric",
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
-    {
-      "node_id": "introduction__f57ac8d2e4e4931a_b3__0",
-      "table_id": "f57ac8d2e4e4931a_b3",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 14,
-        "c1": 2,
-        "r2": 14,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C15:E15",
-      "title": null,
-      "headers": [
-        [
-          "Value",
-          "",
-          "The content of these cells is used in the model and can not be changed"
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 14,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 14,
-          "col": 4,
-          "text": "The content of these cells is used in the model and can not be changed"
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value  The content of these cells is used in the model and can not be changed | Introduction | Introduction | metadata",
-      "flags": [
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
     {
       "node_id": "results__262a4c0f1d47d09d__0",
       "table_id": "262a4c0f1d47d09d",
@@ -502,6 +362,146 @@
       "flags": [
         "title_missing",
         "header_missing"
+      ]
+    },
+    {
+      "node_id": "introduction__f57ac8d2e4e4931a_t3_child1__0",
+      "table_id": "f57ac8d2e4e4931a_t3_child1",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 10,
+        "c1": 2,
+        "r2": 10,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C11:E11",
+      "title": null,
+      "headers": [
+        [
+          "Value ",
+          "",
+          "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 10,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 10,
+          "col": 4,
+          "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value   The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed.  | Introduction | Introduction | metadata",
+      "flags": [
+        "all_metadata_no_numeric",
+        "title_missing",
+        "no_representative_formula"
+      ]
+    },
+    {
+      "node_id": "introduction__f57ac8d2e4e4931a_t3_child2__0",
+      "table_id": "f57ac8d2e4e4931a_t3_child2",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 12,
+        "c1": 2,
+        "r2": 12,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C13:E13",
+      "title": null,
+      "headers": [
+        [
+          "Value ",
+          "",
+          "The content of these cells can be changed to accommodate user inputs"
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 12,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 12,
+          "col": 4,
+          "text": "The content of these cells can be changed to accommodate user inputs"
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value   The content of these cells can be changed to accommodate user inputs | Introduction | Introduction | metadata",
+      "flags": [
+        "all_metadata_no_numeric",
+        "title_missing",
+        "no_representative_formula"
+      ]
+    },
+    {
+      "node_id": "introduction__f57ac8d2e4e4931a_b3__0",
+      "table_id": "f57ac8d2e4e4931a_b3",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 14,
+        "c1": 2,
+        "r2": 14,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C15:E15",
+      "title": null,
+      "headers": [
+        [
+          "Value",
+          "",
+          "The content of these cells is used in the model and can not be changed"
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 14,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 14,
+          "col": 4,
+          "text": "The content of these cells is used in the model and can not be changed"
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value  The content of these cells is used in the model and can not be changed | Introduction | Introduction | metadata",
+      "flags": [
+        "title_missing",
+        "no_representative_formula"
       ]
     },
     {

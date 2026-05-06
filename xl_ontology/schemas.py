@@ -673,7 +673,9 @@ class NodeTypeOverrideRecord(_Strict):
 # v1 (Pass 2) — comprehension layer artifacts (spec_xl_ontology_v1.md §11)
 # ---------------------------------------------------------------------------
 
-Pass2StageName = Literal["overall", "inputs", "results", "calculations"]
+Pass2StageName = Literal[
+    "overall", "inputs", "results", "calculations", "pre_overall",
+]
 CompletionStatus = Literal[
     "complete", "partial", "iteration_cap_reached", "budget_exhausted", "absent"
 ]

@@ -39,6 +39,27 @@ from xl_ontology.v1.config import Pass2Config
 
 
 @dataclass
+class StageFindingsReport:
+    """Structured handoff one Pass-2 stage emits to subsequent stages.
+
+    Used by the V1.J architecture flip: inputs / calculations / results
+    run first, each producing a report; the overall agent reads the
+    three reports plus the cover sheets and synthesises the final BIM
+    summary.
+
+    The report is intentionally small — concept name + table_id list +
+    short headline per concept — so it fits in the next stage's
+    prompt without chewing tokens.
+    """
+
+    stage: Pass2StageName
+    headline: str = ""  # 1-line agent self-summary (e.g. "Found 4 input concepts")
+    concepts: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    # ``concepts``: { concept_name: { "tables_found": [...], "summary": "...",
+    #                                 "items_satisfied": [...], "items_missing": [...] } }
+
+
+@dataclass
 class Pass2Context:
     """Wrapper around ToolContext with Pass-2-specific fields."""
 
@@ -46,6 +67,10 @@ class Pass2Context:
     config: Pass2Config
     # Findings from previous stages, passed forward (spec §4.1).
     upstream_results: Dict[Pass2StageName, "StageResult"] = field(default_factory=dict)
+    # Structured per-stage reports — populated by the runner from
+    # each StageResult before the next agent runs.  The overall agent
+    # consumes these to compose its final summary.
+    upstream_reports: Dict[Pass2StageName, StageFindingsReport] = field(default_factory=dict)
 
 
 @dataclass
@@ -284,6 +309,7 @@ class Pass2Agent(ABC):
 __all__ = [
     "Pass2Agent",
     "Pass2Context",
+    "StageFindingsReport",
     "StageResult",
     "ToolStep",
 ]

@@ -41,6 +41,25 @@ from xl_ontology.v1.react_base import Pass2ReactAgent
 # Parser tests
 # ---------------------------------------------------------------------------
 
+class TestToolSpecLiteralExtraction(unittest.TestCase):
+    """P2.C — Literal[...] annotations should surface their allowed
+    values in the tool spec so the LLM doesn't guess at enum members."""
+
+    def test_search_workbook_lexicon_scope_has_allowed_values(self) -> None:
+        from xl_ontology.v1.react import build_tool_specs
+
+        specs = build_tool_specs()
+        spec = next(s for s in specs if s["tool"] == "search_workbook_lexicon")
+        # Find the scope arg.
+        scope_arg = next(a for a in spec["args"] if a["name"] == "scope")
+        self.assertIn("allowed_values", scope_arg)
+        # Allowed values include the canonical scope literals.
+        allowed = scope_arg["allowed_values"]
+        # values are reprs ('all', 'whole_table', etc.)
+        self.assertTrue(any("all" in str(v) for v in allowed))
+        self.assertTrue(any("whole_table" in str(v) for v in allowed))
+
+
 class TestReactParser(unittest.TestCase):
     def test_action_turn(self) -> None:
         text = json.dumps({
@@ -229,6 +248,59 @@ class TestReactLoopTermination(unittest.TestCase):
                 _close(bundle)
             self.assertEqual(result.completion_status, "iteration_cap_reached")
             self.assertEqual(result.iterations_run, ctx.config.max_iterations)
+
+    def test_duplicate_call_guard_skips_repeat_invocation(self) -> None:
+        """P2.C — when the LLM calls the same (tool, args) twice, the
+        loop must skip the second invocation, append a duplicate-error
+        observation, and let the LLM pivot.
+        """
+        action_a = json.dumps({
+            "thought": "First call.",
+            "action": {
+                "tool": "list_tables_on_sheet",
+                "args": {"sheet_name": "S1"},
+                "rationale": "first",
+            },
+        })
+        action_b_duplicate = json.dumps({
+            "thought": "Same call again — should be intercepted.",
+            "action": {
+                "tool": "list_tables_on_sheet",
+                "args": {"sheet_name": "S1"},
+                "rationale": "duplicate",
+            },
+        })
+        action_c_different = json.dumps({
+            "thought": "Different sheet now.",
+            "action": {
+                "tool": "list_tables_on_sheet",
+                "args": {"sheet_name": "S2"},
+                "rationale": "different",
+            },
+        })
+        stop = json.dumps({
+            "thought": "Done.", "stop": True, "summary": "ok",
+        })
+        with tempfile.TemporaryDirectory() as tmp:
+            llm, _seen = _scripted_llm([
+                action_a, action_b_duplicate, action_c_different, stop,
+            ])
+            ctx, bundle = _make_pass2_ctx(Path(tmp), llm)
+            try:
+                agent = _RecordingReactAgent()
+                result = agent.run(ctx)
+            finally:
+                _close(bundle)
+        # Iteration 2's duplicate call should appear in observations
+        # as an error entry with a DUPLICATE_CALL marker.
+        duplicate_obs = [
+            o for o in agent._observations
+            if "DUPLICATE_CALL" in (o.observation_text or "")
+        ]
+        self.assertEqual(len(duplicate_obs), 1)
+        self.assertTrue(duplicate_obs[0].error)
+        # The agent eventually stops cleanly.
+        self.assertEqual(result.completion_status, "complete")
 
     def test_parse_error_retried_until_threshold(self) -> None:
         # LLM emits garbage; the loop should retry up to _MAX_IDLE_RETRIES,

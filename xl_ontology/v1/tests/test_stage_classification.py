@@ -158,7 +158,7 @@ class TestPass2EndToEnd(unittest.TestCase):
             )
             self.assertEqual(
                 set(result.stages.keys()),
-                {"overall", "inputs", "results", "calculations"},
+                {"overall", "inputs", "results", "calculations", "pre_overall"},
             )
             for name, stage in result.stages.items():
                 self.assertIn(
@@ -173,12 +173,15 @@ class TestPass2EndToEnd(unittest.TestCase):
 
 
 class TestDefaultAgentSequence(unittest.TestCase):
-    def test_sequence_order(self) -> None:
+    def test_sequence_order_v1j_with_pre_overall(self) -> None:
+        # V1.J + P2.A — the pre_overall stage runs between Results and
+        # Overall.  Overall stays last so it can synthesise from all
+        # upstream reports including pre_overall.
         pack = _load_default_pack()
         agents = default_pass2_agents(pack)
         self.assertEqual(
             [a.stage_name for a in agents],
-            ["overall", "inputs", "results", "calculations"],
+            ["inputs", "calculations", "results", "pre_overall", "overall"],
         )
 
 

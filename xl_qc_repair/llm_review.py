@@ -51,9 +51,16 @@ DECISION ORDER (apply in order):
             qualification rules.  This catches the common BIM pattern
             where the title sits in column B and data starts in C+.
             If a cell qualifies → ``assign_title`` with that text.
-       (b)  Else, if row_names exist AND a non-sequence row_name fits
-            as title → ``rowname_to_title`` (set the ``title`` field
-            to the exact row_name to promote).
+       (b)  Else consider ``rowname_to_title``.  STRICT REQUIREMENTS:
+            - the table must have EXACTLY ONE row_name (not more), AND
+            - that row_name must live OUTSIDE the core region's column
+              span (i.e. ``v6_state.bbox.c1 < v6_state.core_region.c1``).
+            When BOTH hold AND the row_name is not a sequence label,
+            emit ``rowname_to_title`` with ``title`` set to that
+            row_name.  When the table has multiple row_names — e.g. a
+            6-row cost-component breakdown — DO NOT pick this verdict;
+            jump to step (c) instead.  The server will downgrade
+            misuse to ``synthesize_title``.
        (c)  Else → ``synthesize_title``.  THIS IS A LAST RESORT.  Do
             NOT synthesize when any unclaimed non-sequence text cell
             exists above the bbox or in the narrow column band to the
@@ -146,6 +153,11 @@ def review_bundle(
     verdict = _parse_verdict(text, bundle.table_id)
     verdict = _coerce_claimed_cell_title(verdict, bundle)
     verdict = _coerce_premature_synthesis(verdict, bundle)
+    # rowname_to_title strict gate runs BEFORE the no-op-rowname coercion
+    # so a rowname_to_title verdict on a multi-row_name table is upgraded
+    # to synthesize_title (and gets the applier's fallback title) rather
+    # than passing through.
+    verdict = _coerce_rowname_to_title_strict(verdict, bundle)
     verdict = _coerce_rownames_vs_title(verdict, bundle)
     return verdict, int(tokens or 0), prompt, text
 
@@ -337,6 +349,53 @@ def _is_sequence_label_str(text: str) -> bool:
             if rest.isdigit():
                 return True
     return False
+
+
+def _coerce_rowname_to_title_strict(
+    verdict: QcVerdict, bundle: RepairCandidateBundle,
+) -> QcVerdict:
+    """Strict rowname_to_title rule (QCR.8):
+       - applies only when exactly ONE row_name exists, AND
+       - that row_name lives OUTSIDE the core region's column span.
+    Otherwise the verdict is upgraded to ``synthesize_title`` so the
+    table still gets a title (rather than getting stuck at
+    keep_unchanged).
+    """
+    if verdict.verdict != "rowname_to_title":
+        return verdict
+    v6 = bundle.v6_state or {}
+    rn = list(v6.get("row_names") or [])
+    cleaned = [str(r).strip() for r in rn if str(r).strip()]
+    bbox = v6.get("bbox") or {}
+    core = v6.get("core_region") or {}
+    inside_core = False
+    try:
+        if bbox and core:
+            inside_core = int(bbox.get("c1")) >= int(core.get("c1"))
+    except Exception:
+        inside_core = False
+
+    needs_upgrade = (len(cleaned) != 1) or inside_core
+    if not needs_upgrade:
+        return verdict
+
+    reason = (
+        f"row_names has {len(cleaned)} entries"
+        if len(cleaned) != 1
+        else "row_names live inside core column span"
+    )
+    return QcVerdict(
+        table_id=verdict.table_id,
+        verdict="synthesize_title",
+        rationale=(
+            f"server-upgraded from rowname_to_title to synthesize_title: "
+            f"{reason}; rowname promotion is forbidden here. "
+            f"Original LLM rationale: {verdict.rationale}"
+        ),
+        confidence=max(0.7, float(verdict.confidence or 0.0)),
+        title=None,  # let the applier's fallback compose one
+        source=verdict.source,
+    )
 
 
 def _coerce_rownames_vs_title(

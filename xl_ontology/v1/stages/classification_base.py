@@ -123,30 +123,75 @@ class ClassificationStageAgent(Pass2Agent):
     # ----- criteria -----
 
     def derive_criteria(self, ctx: Pass2Context):  # type: ignore[override]
-        overall_concepts = self._overall_context(ctx)
+        # P2.D: derive criteria DETERMINISTICALLY from Pass-1's
+        # candidate_tables + expected_concepts_status.  No LLM call.
+        #
+        # Pre-P2.D the criteria step called the LLM, which frequently
+        # returned ``{}`` (the prompt was overly conservative), causing
+        # the fallback to inject a meaningless ``{stage_name: ["overview"]}``
+        # criterion.  That broke pre_loop_seed_findings (no concept-key
+        # match) and made the ReAct loop run with empty findings.
+        #
+        # Pass 1 already KNOWS which concepts the workbook contains —
+        # ``candidate_tables[i].ontology_subtype`` enumerates them
+        # exactly.  Build criteria from those subtypes; one criterion
+        # per subtype with required_items=[subtype].  The fallback path
+        # only fires when Pass 1 has nothing whatsoever for this stage.
+        return self._derive_criteria_deterministic(ctx)
+
+    def _derive_criteria_deterministic(
+        self, ctx: Pass2Context,
+    ) -> Dict[str, CompletionCriterion]:
         summary = ctx.tool_ctx.builder.summary
-        hint = build_structural_hint(summary, self.stage_name)
-        node = self._pack.nodes.get(self.pack_node_name)
+        node = getattr(summary, self.stage_name, None)
         if node is None:
             return self._fallback_criteria()
-        try:
-            criteria = derive_completion_criteria_via_llm(
-                ctx.tool_ctx,
-                stage=self.stage_name,
-                overall_context_concepts=overall_concepts,
-                pack_node_txt=node.txt,
-                pack_node_context_md=node.context_md or "",
-                structural_hint=hint,
-                max_tokens=ctx.config.llm_max_tokens,
-                temperature=ctx.config.llm_temperature,
-            )
-        except BudgetExhausted:
-            raise
-        except Exception:
-            criteria = {}
-        if not criteria:
-            criteria = self._fallback_criteria()
-        return criteria
+
+        candidates = getattr(node, "candidate_tables", []) or []
+        subtypes: Dict[str, int] = {}
+        for c in candidates:
+            sub = getattr(c, "ontology_subtype", None)
+            if sub:
+                subtypes[str(sub)] = subtypes.get(str(sub), 0) + 1
+
+        if subtypes:
+            return {
+                subtype: CompletionCriterion(
+                    required_items=[subtype],
+                    rationale=(
+                        f"Pass 1 found {count} {self.stage_name} "
+                        f"candidate(s) for concept '{subtype}'; verify."
+                    ),
+                    source_signal=(
+                        f"pass1.{self.stage_name}.candidate_tables[{subtype}]"
+                    ),
+                )
+                for subtype, count in subtypes.items()
+            }
+
+        # Pass 1 had no candidates with ontology_subtype set — fall back
+        # to the expected_concepts_status keys so the loop has something
+        # to verify (these are concepts Pass 1 KNEW to look for but
+        # didn't find — agent should sweep cover sheets / DAG to confirm
+        # absence or pick up missed tables).
+        expected = getattr(node, "expected_concepts_status", {}) or {}
+        if expected:
+            return {
+                concept: CompletionCriterion(
+                    required_items=[concept],
+                    rationale=(
+                        f"Pass 1 expected concept '{concept}' but "
+                        f"reported status={expected.get(concept)!r}; "
+                        "verify via cover sheets / DAG."
+                    ),
+                    source_signal=(
+                        f"pass1.{self.stage_name}.expected_concepts_status"
+                    ),
+                )
+                for concept in expected
+            }
+
+        return self._fallback_criteria()
 
     def _fallback_criteria(self) -> Dict[str, CompletionCriterion]:
         """When the LLM fails to derive criteria, fall back to a single
@@ -458,33 +503,231 @@ class ReactClassificationStageAgent:
         Pass2ReactAgent.__init__(self)  # type: ignore[arg-type]
         self._pack = pack
 
+    # ----- Pass-1 inventory injection (the V1.J fix) -----
+
+    def pre_loop_seed_findings(  # type: ignore[override]
+        self,
+        ctx: Pass2Context,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+    ) -> None:
+        """Seed ``findings[concept].tables_found`` from Pass-1's
+        ``summary.<stage>.candidate_tables`` BEFORE the ReAct loop
+        runs.  Each candidate's ``ontology_subtype`` is used as the
+        concept key; if the agent's criteria includes that concept,
+        the candidate's ``table_id`` is appended to ``tables_found``.
+
+        Without this seeding, ``findings.tables_found`` only gets
+        populated when ``update_findings_from_result`` parses a tool
+        result whose return value contains a ``table_id`` field — and
+        the LLM often picks rationales that don't match criteria keys,
+        so attribution fails.  Seeding from Pass-1 makes the structured
+        ``StageFindingsReport`` carry concrete evidence regardless of
+        what the LLM does inside the loop.
+        """
+        summary = ctx.tool_ctx.builder.summary
+        node = getattr(summary, self.stage_name, None)
+        if node is None:
+            return
+        candidates = getattr(node, "candidate_tables", []) or []
+        # Group candidates by ontology_subtype.
+        by_subtype: Dict[str, List[Any]] = {}
+        for cand in candidates:
+            subtype = getattr(cand, "ontology_subtype", None)
+            if not subtype:
+                continue
+            by_subtype.setdefault(str(subtype), []).append(cand)
+        # For each criterion concept the agent will pursue, attach the
+        # matching Pass-1 candidates.  When concept names don't align
+        # one-to-one with subtype names (e.g. criterion "drug_cost"
+        # vs subtype "drug_cost"), exact match is used.  Subtypes
+        # without a matching criterion still get bucketed under the
+        # stage's name as a catch-all so they're not lost.
+        attached_subtypes: set[str] = set()
+        for concept_name, finding in findings.items():
+            cands = by_subtype.get(concept_name) or []
+            for cand in cands:
+                tid = getattr(cand, "table_id", None)
+                if tid and tid not in finding.tables_found:
+                    finding.tables_found.append(tid)
+            if cands:
+                attached_subtypes.add(concept_name)
+                # Mark the criterion's first required item as satisfied
+                # — Pass 1 already located evidence for this concept.
+                crit = criteria.get(concept_name)
+                if crit and crit.required_items:
+                    first = crit.required_items[0]
+                    if first not in finding.items_satisfied:
+                        finding.items_satisfied.append(first)
+                if not finding.notes:
+                    finding.notes = (
+                        f"seeded from Pass-1 candidate_tables: "
+                        f"{len(cands)} table(s)"
+                    )
+        # Catch-all bucket for unmatched subtypes — surface them under
+        # a stage-named bucket so downstream still sees them.
+        leftover = {
+            k: v for k, v in by_subtype.items() if k not in attached_subtypes
+        }
+        if leftover and self.stage_name in findings:
+            stage_finding = findings[self.stage_name]
+            for subtype, cands in leftover.items():
+                for cand in cands:
+                    tid = getattr(cand, "table_id", None)
+                    if tid and tid not in stage_finding.tables_found:
+                        stage_finding.tables_found.append(tid)
+
+    def _extra_prompt_context(  # type: ignore[override]
+        self,
+        ctx: Pass2Context,
+        findings: Dict[str, "StageFinding"],
+    ) -> Optional[Dict[str, Any]]:
+        """Inject Pass-1's table inventory ENRICHED with V6 structural
+        fields (bbox, core_region, headers, row_names, footnotes)
+        directly into the ReAct prompt.
+
+        The structural fields come from V6's ``final_table_map.json``
+        via ``ctx.tool_ctx.final_map.get(table_id)``.  With this
+        enrichment, most concept-verification questions can be answered
+        from the prompt alone — no tool calls needed.  When the agent
+        DOES want to read cell values, it calls
+        ``read_table_full_content`` (P2.B.2) on a specific table_id.
+        """
+        summary = ctx.tool_ctx.builder.summary
+        node = getattr(summary, self.stage_name, None)
+        if node is None:
+            return None
+        candidates = getattr(node, "candidate_tables", []) or []
+        final_map = ctx.tool_ctx.final_map
+        inventory: List[Dict[str, Any]] = []
+        for c in candidates:
+            table_id = getattr(c, "table_id", None)
+            entry = final_map.get(table_id) if table_id else None
+            row: Dict[str, Any] = {
+                "table_id": table_id,
+                "ontology_subtype": getattr(c, "ontology_subtype", None),
+                "confidence": getattr(c, "confidence", None),
+            }
+            if entry is not None:
+                # V6 structural fields — title, bbox, headers, row_names,
+                # footnotes, core_region.  These are what the LLM needs
+                # to verify the table without making any tool call.
+                row["sheet"] = entry.sheet_name
+                row["coordinates"] = entry.coordinates
+                row["bbox"] = {
+                    "r1": entry.bbox.r1, "c1": entry.bbox.c1,
+                    "r2": entry.bbox.r2, "c2": entry.bbox.c2,
+                }
+                if entry.core_region is not None:
+                    row["core_region"] = {
+                        "r1": entry.core_region.r1, "c1": entry.core_region.c1,
+                        "r2": entry.core_region.r2, "c2": entry.core_region.c2,
+                    }
+                else:
+                    row["core_region"] = None
+                row["title"] = entry.title
+                row["headers"] = [list(h) for h in (entry.headers or [])]
+                row["row_names"] = list(entry.row_names) if entry.row_names else []
+                row["node_type"] = entry.node_type
+                row["footnotes_notes_refs"] = [
+                    {"row": fn.row, "col": fn.col, "text": fn.text}
+                    for fn in (entry.footnotes_notes_refs or [])
+                ]
+            else:
+                row["sheet"] = getattr(c, "sheet", None)
+                row["title"] = getattr(c, "title", None)
+            inventory.append(row)
+
+        status = dict(getattr(node, "expected_concepts_status", {}) or {})
+        instruction = (
+            f"Pass 1 (deterministic) already labelled {len(inventory)} "
+            f"tables as {self.stage_name}.  Each entry in pass1_inventory "
+            "carries the table's coordinates, bbox, title, headers, "
+            "row_names, and footnotes — usually enough to VERIFY without "
+            "any tool call.  When you need cell values or formulas, call "
+            "read_table_full_content(table_id=...) on a specific entry.  "
+            "Do NOT call find_overview_sheets — Pass 1's catalogue is "
+            "sufficient.  For each criterion concept, append verified "
+            "table_ids to findings[concept].tables_found and stop early."
+        )
+        return {
+            "pass1_inventory": inventory,
+            "expected_concepts_status": status,
+            "instruction": instruction,
+        }
+
     # ----- criteria derivation (LLM-driven, same as before) -----
 
     def derive_criteria(self, ctx: Pass2Context):  # type: ignore[override]
-        overall_concepts = self._overall_context(ctx)
+        # P2.D: derive criteria DETERMINISTICALLY from Pass-1's
+        # candidate_tables + expected_concepts_status.  No LLM call.
+        #
+        # Pre-P2.D the criteria step called the LLM, which frequently
+        # returned ``{}`` (the prompt was overly conservative), causing
+        # the fallback to inject a meaningless ``{stage_name: ["overview"]}``
+        # criterion.  That broke pre_loop_seed_findings (no concept-key
+        # match) and made the ReAct loop run with empty findings.
+        #
+        # Pass 1 already KNOWS which concepts the workbook contains —
+        # ``candidate_tables[i].ontology_subtype`` enumerates them
+        # exactly.  Build criteria from those subtypes; one criterion
+        # per subtype with required_items=[subtype].  The fallback path
+        # only fires when Pass 1 has nothing whatsoever for this stage.
+        return self._derive_criteria_deterministic(ctx)
+
+    def _derive_criteria_deterministic(
+        self, ctx: Pass2Context,
+    ) -> Dict[str, CompletionCriterion]:
         summary = ctx.tool_ctx.builder.summary
-        hint = build_structural_hint(summary, self.stage_name)
-        node = self._pack.nodes.get(self.pack_node_name)
+        node = getattr(summary, self.stage_name, None)
         if node is None:
             return self._fallback_criteria()
-        try:
-            criteria = derive_completion_criteria_via_llm(
-                ctx.tool_ctx,
-                stage=self.stage_name,
-                overall_context_concepts=overall_concepts,
-                pack_node_txt=node.txt,
-                pack_node_context_md=node.context_md or "",
-                structural_hint=hint,
-                max_tokens=ctx.config.llm_max_tokens,
-                temperature=ctx.config.llm_temperature,
-            )
-        except BudgetExhausted:
-            raise
-        except Exception:
-            criteria = {}
-        if not criteria:
-            criteria = self._fallback_criteria()
-        return criteria
+
+        candidates = getattr(node, "candidate_tables", []) or []
+        subtypes: Dict[str, int] = {}
+        for c in candidates:
+            sub = getattr(c, "ontology_subtype", None)
+            if sub:
+                subtypes[str(sub)] = subtypes.get(str(sub), 0) + 1
+
+        if subtypes:
+            return {
+                subtype: CompletionCriterion(
+                    required_items=[subtype],
+                    rationale=(
+                        f"Pass 1 found {count} {self.stage_name} "
+                        f"candidate(s) for concept '{subtype}'; verify."
+                    ),
+                    source_signal=(
+                        f"pass1.{self.stage_name}.candidate_tables[{subtype}]"
+                    ),
+                )
+                for subtype, count in subtypes.items()
+            }
+
+        # Pass 1 had no candidates with ontology_subtype set — fall back
+        # to the expected_concepts_status keys so the loop has something
+        # to verify (these are concepts Pass 1 KNEW to look for but
+        # didn't find — agent should sweep cover sheets / DAG to confirm
+        # absence or pick up missed tables).
+        expected = getattr(node, "expected_concepts_status", {}) or {}
+        if expected:
+            return {
+                concept: CompletionCriterion(
+                    required_items=[concept],
+                    rationale=(
+                        f"Pass 1 expected concept '{concept}' but "
+                        f"reported status={expected.get(concept)!r}; "
+                        "verify via cover sheets / DAG."
+                    ),
+                    source_signal=(
+                        f"pass1.{self.stage_name}.expected_concepts_status"
+                    ),
+                )
+                for concept in expected
+            }
+
+        return self._fallback_criteria()
 
     def _fallback_criteria(self) -> Dict[str, CompletionCriterion]:
         return {

@@ -146,7 +146,23 @@ class TestDecisionApplier(unittest.TestCase):
         self.assertEqual(changes["action"], "assign_row_names")
         self.assertEqual(repaired["S"]["entries"][0]["row_names"], ["A", "B", "C"])
 
-    def test_rowname_to_title_honors_llm_choice(self) -> None:
+    def test_rowname_to_title_single_row_name_honored(self) -> None:
+        # QCR.8 strict rule: rowname_to_title applies only when len(row_names)==1.
+        repaired = self._repaired(row_names=["Total"])
+        verdict = QcVerdict(
+            table_id="T", verdict="rowname_to_title",
+            title="Total", confidence=0.9, source="llm",
+        )
+        changes = apply_verdict_to_final_map(
+            repaired, verdict, self._bundle(row_names=["Total"]),
+        )
+        self.assertEqual(changes["new_title"], "Total")
+        leaf = repaired["S"]["entries"][0]
+        self.assertEqual(leaf["title"], "Total")
+        self.assertEqual(leaf["row_names"], [])
+
+    def test_rowname_to_title_multi_row_names_rejected(self) -> None:
+        # QCR.8: multi-row_name tables must NOT promote at applier level.
         repaired = self._repaired(row_names=["2020", "2021", "Total"])
         verdict = QcVerdict(
             table_id="T", verdict="rowname_to_title",
@@ -155,31 +171,19 @@ class TestDecisionApplier(unittest.TestCase):
         changes = apply_verdict_to_final_map(
             repaired, verdict, self._bundle(row_names=["2020", "2021", "Total"]),
         )
-        self.assertEqual(changes["new_title"], "Total")
-        leaf = repaired["S"]["entries"][0]
-        self.assertEqual(leaf["title"], "Total")
-        self.assertEqual(leaf["row_names"], ["2020", "2021"])
+        self.assertEqual(changes["action"], "rowname_to_title_rejected")
+        self.assertIsNone(repaired["S"]["entries"][0]["title"])
 
-    def test_rowname_to_title_skips_sequence_labels(self) -> None:
-        repaired = self._repaired(row_names=["2020", "2021", "Total"])
+    def test_rowname_to_title_rejected_sequence_only_singleton(self) -> None:
+        # Single sequence-label row_name is still rejected (sequence labels
+        # are never viable titles).
+        repaired = self._repaired(row_names=["2020"])
         verdict = QcVerdict(
             table_id="T", verdict="rowname_to_title",
             title=None, confidence=0.9, source="llm",
         )
         changes = apply_verdict_to_final_map(
-            repaired, verdict, self._bundle(row_names=["2020", "2021", "Total"]),
-        )
-        # Applier picks first non-sequence row_name → "Total".
-        self.assertEqual(changes["new_title"], "Total")
-
-    def test_rowname_to_title_rejected_all_sequence(self) -> None:
-        repaired = self._repaired(row_names=["2020", "2021", "2022"])
-        verdict = QcVerdict(
-            table_id="T", verdict="rowname_to_title",
-            title=None, confidence=0.9, source="llm",
-        )
-        changes = apply_verdict_to_final_map(
-            repaired, verdict, self._bundle(row_names=["2020", "2021", "2022"]),
+            repaired, verdict, self._bundle(row_names=["2020"]),
         )
         self.assertEqual(changes["action"], "rowname_to_title_rejected")
         self.assertIsNone(repaired["S"]["entries"][0]["title"])
@@ -393,6 +397,199 @@ class TestLeftTitleAndPrematureSynthesis(unittest.TestCase):
         )
         coerced = _coerce_premature_synthesis(verdict, bundle)
         self.assertEqual(coerced.verdict, "synthesize_title")
+
+
+class TestQCR8FreestandingLabelOwner(unittest.TestCase):
+    """QCR.8 fix 1: cells claimed by a metadata-only / setting standalone
+    with no core_region are TRANSPARENT for title adoption."""
+
+    def test_metadata_only_owner_treated_as_unclaimed(self) -> None:
+        from xl_qc_repair.candidate_detector import _find_cell_owners
+
+        # `LABEL_TABLE` is a single-cell metadata standalone at I7 with
+        # no core_region — V6's "Epidemiological calculator" pattern.
+        leaves = [
+            {
+                "table_id": "LABEL_TABLE", "sheet_name": "Epidemiology",
+                "node_type": "metadata",
+                "bbox": {"r1": 6, "c1": 8, "r2": 6, "c2": 8},
+                "core_region": None,
+            },
+            {
+                "table_id": "DATA_TABLE", "sheet_name": "Epidemiology",
+                "node_type": "input",
+                "bbox": {"r1": 8, "c1": 8, "r2": 9, "c2": 12},
+                "core_region": {"r1": 9, "c1": 8, "r2": 9, "c2": 11},
+            },
+        ]
+        # Cell I7 (row=6, col=8) lives in LABEL_TABLE's bbox.  When the
+        # data table queries it, the freestanding-label rule should hide
+        # the LABEL_TABLE owner and report (None, None).
+        owner_bbox, owner_core = _find_cell_owners(
+            leaves, "Epidemiology", 6, 8, exclude_table_id="DATA_TABLE",
+        )
+        self.assertIsNone(owner_bbox)
+        self.assertIsNone(owner_core)
+
+    def test_real_data_owner_still_blocks(self) -> None:
+        from xl_qc_repair.candidate_detector import _find_cell_owners
+
+        leaves = [
+            {
+                "table_id": "OTHER_DATA", "sheet_name": "S",
+                "node_type": "input",
+                "bbox": {"r1": 5, "c1": 0, "r2": 8, "c2": 5},
+                "core_region": {"r1": 6, "c1": 0, "r2": 8, "c2": 5},
+            },
+        ]
+        owner_bbox, owner_core = _find_cell_owners(
+            leaves, "S", 6, 1, exclude_table_id="THIS",
+        )
+        # Cell is inside another data table's core — must be blocked.
+        self.assertEqual(owner_core, "OTHER_DATA")
+
+
+class TestQCR8SynthesizeFallback(unittest.TestCase):
+    """QCR.8 fix 2: when the LLM picks synthesize_title without supplying
+    a title, the applier generates a deterministic fallback."""
+
+    def test_synthesize_with_null_title_uses_fallback(self) -> None:
+        repaired = {
+            "Results": {"entries": [{
+                "kind": "standalone", "table_id": "T",
+                "sheet_name": "Results",
+                "bbox": {"r1": 0, "c1": 0, "r2": 5, "c2": 5},
+                "title": None, "headers": [], "row_names": [],
+                "core_region": {"r1": 1, "c1": 0, "r2": 5, "c2": 5},
+                "node_type": "result",
+                "source_flags": ["title_missing"],
+                "coordinates": "Results!A1:F6",
+            }]},
+        }
+        bundle = RepairCandidateBundle(
+            table_id="T", sheet_name="Results",
+            trigger="title_missing", triggers=["title_missing"],
+            classification="needs_llm",
+            v6_state={
+                "title": None, "row_names": [], "node_type": "result",
+                "sheet_name": "Results",
+            },
+        )
+        verdict = QcVerdict(
+            table_id="T", verdict="synthesize_title",
+            title=None,  # ← LLM forgot the title
+            confidence=0.9, source="llm",
+            rationale="No candidates — synthesize",
+        )
+        changes = apply_verdict_to_final_map(repaired, verdict, bundle)
+        self.assertEqual(changes["action"], "synthesize_title")
+        self.assertTrue(changes.get("fallback_used"))
+        new_title = repaired["Results"]["entries"][0]["title"]
+        self.assertIsNotNone(new_title)
+        self.assertGreater(len(new_title), 0)
+        self.assertIn(
+            "qc_title_synthesized_fallback",
+            repaired["Results"]["entries"][0]["source_flags"],
+        )
+
+
+class TestQCR8RowNameToTitleStrictRule(unittest.TestCase):
+    """QCR.8 fix 3: rowname_to_title only when len(row_names)==1 AND
+    row_name is OUTSIDE the core column span.  Multi-row_name tables
+    must synthesize, not promote a single row name."""
+
+    def _bundle(self, *, row_names, bbox_c1, core_c1) -> RepairCandidateBundle:
+        return RepairCandidateBundle(
+            table_id="T", sheet_name="Results",
+            trigger="title_missing", triggers=["title_missing"],
+            classification="needs_llm",
+            v6_state={
+                "title": None,
+                "row_names": list(row_names),
+                "bbox": {"r1": 0, "c1": bbox_c1, "r2": 10, "c2": 10},
+                "core_region": {"r1": 1, "c1": core_c1, "r2": 10, "c2": 10},
+                "node_type": "input",
+            },
+        )
+
+    def test_multi_rowname_table_upgraded_to_synthesize(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_rowname_to_title_strict
+
+        # 47ecc07e130eef5f_b10 shape: 6 row_names, bbox.c1=6, core.c1=7
+        # (row_names live in col G, core spans H..L).
+        bundle = self._bundle(
+            row_names=[
+                "Drug costs", "Adverse events costs",
+                "Subsequent treatment costs", "Hospitalization costs",
+                "SCT costs", "End-of-life costs",
+            ],
+            bbox_c1=6, core_c1=7,
+        )
+        verdict = QcVerdict(
+            table_id="T", verdict="rowname_to_title",
+            title="Drug costs", confidence=0.9, source="llm",
+            rationale="Promote first row name as title",
+        )
+        coerced = _coerce_rowname_to_title_strict(verdict, bundle)
+        self.assertEqual(coerced.verdict, "synthesize_title")
+        self.assertIn("6 entries", coerced.rationale)
+
+    def test_single_rowname_outside_core_passes(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_rowname_to_title_strict
+
+        bundle = self._bundle(
+            row_names=["End-of-life costs"], bbox_c1=6, core_c1=7,
+        )
+        verdict = QcVerdict(
+            table_id="T", verdict="rowname_to_title",
+            title="End-of-life costs", confidence=0.9, source="llm",
+        )
+        coerced = _coerce_rowname_to_title_strict(verdict, bundle)
+        self.assertEqual(coerced.verdict, "rowname_to_title")
+        self.assertEqual(coerced.title, "End-of-life costs")
+
+    def test_single_rowname_inside_core_upgraded(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_rowname_to_title_strict
+
+        # bbox.c1 == core.c1 → row_names live INSIDE the core column span.
+        bundle = self._bundle(
+            row_names=["Total"], bbox_c1=7, core_c1=7,
+        )
+        verdict = QcVerdict(
+            table_id="T", verdict="rowname_to_title",
+            title="Total", confidence=0.9, source="llm",
+        )
+        coerced = _coerce_rowname_to_title_strict(verdict, bundle)
+        self.assertEqual(coerced.verdict, "synthesize_title")
+        self.assertIn("inside core", coerced.rationale.lower())
+
+    def test_applier_rejects_multi_rowname_without_coercion(self) -> None:
+        """Even if the coercion is skipped, the applier itself enforces
+        the strict rule (defense in depth)."""
+        repaired = {
+            "Results": {"entries": [{
+                "kind": "standalone", "table_id": "T",
+                "sheet_name": "Results",
+                "bbox": {"r1": 0, "c1": 6, "r2": 10, "c2": 10},
+                "title": None, "headers": [],
+                "row_names": ["Drug costs", "Adverse events", "SCT"],
+                "core_region": {"r1": 1, "c1": 7, "r2": 10, "c2": 10},
+                "node_type": "input",
+                "source_flags": ["title_missing"],
+                "coordinates": "Results!G1:K11",
+            }]},
+        }
+        bundle = self._bundle(
+            row_names=["Drug costs", "Adverse events", "SCT"],
+            bbox_c1=6, core_c1=7,
+        )
+        verdict = QcVerdict(
+            table_id="T", verdict="rowname_to_title",
+            title="Drug costs", confidence=0.9, source="llm",
+        )
+        changes = apply_verdict_to_final_map(repaired, verdict, bundle)
+        self.assertEqual(changes["action"], "rowname_to_title_rejected")
+        self.assertIsNone(repaired["Results"]["entries"][0]["title"])
 
 
 class TestRunnerSignature(unittest.TestCase):

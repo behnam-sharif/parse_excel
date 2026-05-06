@@ -47,6 +47,26 @@ class OverviewSheetText:
 _CURRENCY_SYMBOLS = ("£", "$", "€", "¥", "₹", "R$")
 
 
+# Sheets that look like overview candidates by name but contain only
+# auto-generated content (xl_init's Shape_Info dump of shapes/buttons/
+# VBA refs).  Excluded from find_overview_sheets so the Pass-2 overall
+# agent doesn't waste turns reading them.
+_OVERVIEW_SHEET_BLOCKLIST_LOWER = frozenset({
+    "shape_info", "shape info", "shapeinfo",
+})
+
+
+def _is_blocked_overview_sheet(name: str) -> bool:
+    s = (name or "").strip().lower()
+    if not s:
+        return True
+    if s in _OVERVIEW_SHEET_BLOCKLIST_LOWER:
+        return True
+    if "shape" in s and ("info" in s or "_info" in s):
+        return True
+    return False
+
+
 def _col_to_letters(c: int) -> str:
     out = ""
     while c > 0:
@@ -59,18 +79,25 @@ def find_overview_sheets(
     ctx: ToolContext, name_patterns: List[str]
 ) -> List[str]:
     """find_sheets_by_name_pattern + first sheet + sheets with
-    metadata/data_table tables. Deduplicated, preserves sheet order."""
+    metadata/data_table tables. Deduplicated, preserves sheet order.
+
+    Excludes the auto-generated ``Shape_Info`` sheet (xl_init dumps
+    shape / button / VBA-code refs there — pure noise for overview
+    discovery).
+    """
     seen: Dict[str, None] = {}
 
     for s in find_sheets_by_name_pattern(ctx, name_patterns):
+        if _is_blocked_overview_sheet(s):
+            continue
         seen.setdefault(s, None)
 
     first = get_first_sheet(ctx)
-    if first is not None:
+    if first is not None and not _is_blocked_overview_sheet(first):
         seen.setdefault(first, None)
 
     for sheet in ctx.workbook.sheet_names():
-        if sheet in seen:
+        if sheet in seen or _is_blocked_overview_sheet(sheet):
             continue
         for entry in ctx.final_map.entries_for_sheet(sheet):
             if entry.node_type in ("data_table", "metadata"):
@@ -80,7 +107,7 @@ def find_overview_sheets(
     return list(seen.keys())
 
 
-def read_overview_sheets(
+def read_sheets(
     ctx: ToolContext,
     sheet_names: List[str],
     *,
@@ -88,13 +115,14 @@ def read_overview_sheets(
 ) -> List[OverviewSheetText]:
     """Read all visible cells from the named sheets in spatial order.
 
-    Used by Stage 2.1 (overall agent) of v1 Pass 2: gives the LLM
-    enough text to extract intervention, comparators, country, etc.
-    Each cell is rendered as ``[Sheet!Cell] value`` so the model can
-    cite specific cells in its output.
+    Renamed from ``read_overview_sheets`` (P2.D) — this tool can read
+    ANY sheet in the workbook, not just overview/cover ones.  Pass-2
+    agents use it to dump text from cover sheets, results sheets, etc.
 
-    Skips empty cells. Truncates per-sheet at ``max_chars_per_sheet``
-    so a single dense sheet can't blow up the prompt budget.
+    Each cell is rendered as ``[Sheet!Cell] value`` so the model can
+    cite specific cells in its output.  Skips empty cells.  Truncates
+    per-sheet at ``max_chars_per_sheet`` so a single dense sheet
+    can't blow up the prompt budget.
     """
     out: List[OverviewSheetText] = []
     for sheet in sheet_names:
@@ -136,6 +164,12 @@ def read_overview_sheets(
             )
         )
     return out
+
+
+# Backwards-compat alias.  ``read_overview_sheets`` was the original
+# name pre-P2.D; kept so older external callers (and any cached LLM
+# response that still mentions the old name) continue working.
+read_overview_sheets = read_sheets
 
 
 def list_data_validation_dropdowns(

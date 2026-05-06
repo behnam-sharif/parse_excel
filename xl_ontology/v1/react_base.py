@@ -22,6 +22,7 @@ Loop:
 
 from __future__ import annotations
 
+import json
 import time
 from abc import abstractmethod
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -100,6 +101,15 @@ class Pass2ReactAgent(Pass2Agent):
         findings: Dict[str, StageFinding] = {
             concept: StageFinding() for concept in criteria
         }
+        # Pre-seed findings from any deterministic source (e.g. Pass-1
+        # candidate_tables for classification stages, upstream stage
+        # reports for the overall stage).  Lets the agent's narration
+        # see concrete tables_found before the ReAct loop has run a
+        # single tool call.
+        try:
+            self.pre_loop_seed_findings(ctx, criteria, findings)
+        except Exception:
+            pass
         overrides: List[Pass2OverrideProposed] = []
         completion_status: CompletionStatus = "iteration_cap_reached"
         iteration = 0
@@ -217,6 +227,45 @@ class Pass2ReactAgent(Pass2Agent):
                 )
                 continue
 
+            # Redundancy guard — skip duplicate (tool, args) calls.
+            # Real-LLM traces show the agent re-calling the same tool
+            # with the same args in adjacent iterations, wasting an
+            # iteration.  Detect via canonical JSON of args.
+            args_canonical = json.dumps(args, sort_keys=True, default=str)
+            duplicate_of_iter: Optional[int] = None
+            for prior in self._observations:
+                if prior.error:
+                    continue
+                if prior.tool != tool:
+                    continue
+                if json.dumps(
+                    prior.args_summary, sort_keys=True, default=str,
+                ) == args_canonical:
+                    duplicate_of_iter = prior.iteration
+                    break
+            if duplicate_of_iter is not None:
+                obs_text = (
+                    f"DUPLICATE_CALL: {tool} with the same args was "
+                    f"already called in iteration {duplicate_of_iter}; "
+                    f"that observation is still in your log.  Pivot to "
+                    f"a different tool / args, or stop and narrate."
+                )
+                self._observations.append(ReactObservation(
+                    iteration=iteration, tool=tool,
+                    args_summary=args,
+                    observation_text=obs_text, error=True,
+                ))
+                ctx.tool_ctx.trace.emit(
+                    Pass2ReactObservation(
+                        ts=_TraceBase.now_ts(),
+                        stage=self.stage_name,
+                        iteration=iteration,
+                        tool=tool,
+                        observation_text=obs_text,
+                    )
+                )
+                continue
+
             # Run the tool.
             try:
                 result = call_tool(ctx.tool_ctx, step.tool_step)
@@ -305,7 +354,20 @@ class Pass2ReactAgent(Pass2Agent):
                 )
             )
 
-        # 3. Narrate.
+        # 3. Pre-narrate hook (deterministic post-loop work that should
+        #    be visible TO the narrator — e.g. overall agent's
+        #    currency→country fallback should fill `country` BEFORE
+        #    the narration prompt is built so the prose can cite it).
+        pre_narrate_extras: Dict[str, Any] = {}
+        try:
+            self.pre_narrate_hook(
+                ctx, criteria, findings, overrides,
+                pre_narrate_extras, completion_status,
+            )
+        except Exception:
+            pass
+
+        # 4. Narrate.
         try:
             prose, extras, applied_heuristics = self.narrate(
                 ctx, criteria, findings, overrides, completion_status,
@@ -317,8 +379,13 @@ class Pass2ReactAgent(Pass2Agent):
             if completion_status == "complete":
                 completion_status = "budget_exhausted"
 
-        # Stage-specific post-run hook (e.g. results' cross-agent findings,
-        # calculations' important_calc_tables).
+        # Merge any pre-narrate extras into the final extras dict.
+        if pre_narrate_extras:
+            extras = {**pre_narrate_extras, **(extras or {})}
+
+        # 5. Post-run hook (results' cross-agent findings, calculations'
+        # important_calc_tables — runs after narration so it can stamp
+        # extras with values the narrator's prose already referenced).
         try:
             self.post_run_hook(
                 ctx, criteria, findings, overrides, extras, completion_status,
@@ -352,6 +419,19 @@ class Pass2ReactAgent(Pass2Agent):
                 thought="(no LLM available — stopping immediately)",
                 summary="LLM not configured",
             )
+        # Compact dict of every prior stage's report — overall agent
+        # reads these to compose its summary; other stages can use them
+        # too (e.g. results agent sees the inputs report so it can run
+        # mismatch detection).
+        upstream_reports_dict: Dict[str, Any] = {}
+        for stage_name, report in (ctx.upstream_reports or {}).items():
+            try:
+                upstream_reports_dict[stage_name] = {
+                    "headline": report.headline,
+                    "concepts": report.concepts,
+                }
+            except Exception:
+                continue
         prompt = build_react_prompt(
             stage=self.stage_name,
             iteration=iteration,
@@ -360,6 +440,7 @@ class Pass2ReactAgent(Pass2Agent):
             criteria={k: v for k, v in criteria.items()},
             observations=self._observations,
             extra_context=self._extra_prompt_context(ctx, findings),
+            upstream_reports=upstream_reports_dict,
         )
         try:
             resp = ask_llm(
@@ -452,6 +533,41 @@ class Pass2ReactAgent(Pass2Agent):
         completion_status: CompletionStatus,
     ) -> None:
         """Default no-op."""
+        return
+
+    def pre_loop_seed_findings(
+        self,
+        ctx: Pass2Context,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+    ) -> None:
+        """Default no-op.
+
+        Subclasses override to pre-populate ``findings`` BEFORE the
+        ReAct loop starts.  Used by the classification stages to
+        seed ``findings[concept].tables_found`` from Pass-1's
+        ``candidate_tables`` so the agent's narration always cites
+        concrete tables — independent of what the LLM does inside the
+        loop.
+        """
+        return
+
+    def pre_narrate_hook(
+        self,
+        ctx: Pass2Context,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+        overrides: List[Pass2OverrideProposed],
+        extras: Dict[str, Any],
+        completion_status: CompletionStatus,
+    ) -> None:
+        """Default no-op.
+
+        Subclasses override to run deterministic work BEFORE narration
+        so the narrator's prompt can see the result (e.g. the overall
+        agent's currency→country fallback).  Extras populated here are
+        merged into the final extras dict.
+        """
         return
 
     # ``plan_iteration`` and ``execute_step`` are no longer used by ReAct

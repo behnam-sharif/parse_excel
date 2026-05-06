@@ -345,23 +345,12 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                 )
         st.markdown("---")
 
-    # §13.6 defect-frequency dashboard.
-    skipped = [e for e in events if e.get("event") == "defect_procedure_skipped"]
-    if skipped:
-        from collections import Counter
-        counts = Counter(e.get("flag_type") for e in skipped)
-        st.markdown("**Defect frequency dashboard (REVISION 1 / spec §13.6)**")
-        rows = [{"flag_type": k, "skipped_count": v} for k, v in counts.items()]
-        st.dataframe(rows, use_container_width=True)
-        st.caption(
-            "These counts size the future xl_table_repair pre-stage. "
-            "Each skip is a `defect_procedure_skipped` trace event."
-        )
-        st.markdown("---")
+    # P2.D — defect-procedure dashboard removed.  Defect handling has
+    # moved to xl_qc_repair + Pass-2's LLM-driven verification; Pass 1
+    # is purely deterministic table tagging.  No more
+    # ``defect_procedure_skipped`` / ``defect_procedure_invoked`` events
+    # are emitted.
     available_events = sorted({e.get("event") for e in events if e.get("event")})
-    only_skipped = st.checkbox(
-        "Filter: defect_procedure_skipped only (one-click per spec §13.2)"
-    )
     event_filter = st.multiselect(
         "Filter by event type", options=available_events
     )
@@ -370,8 +359,6 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
         options=sorted({e.get("agent") for e in events if e.get("agent")}),
     )
     rows = events
-    if only_skipped:
-        rows = [e for e in rows if e.get("event") == "defect_procedure_skipped"]
     if event_filter:
         rows = [e for e in rows if e.get("event") in event_filter]
     if agent_filter:

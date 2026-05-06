@@ -5,28 +5,18 @@
   "total_edges": 192,
   "total_unresolved_edges": 46,
   "nodes_by_type": {
-    "metadata": 3,
     "input": 69,
+    "metadata": 3,
     "mixed": 57
   },
   "named_ranges_count": 0,
   "top_sheets_by_nodes": [
     "Calculations",
     "Inputs",
-    "Introduction",
-    "Results"
+    "Results",
+    "Introduction"
   ],
   "sheets": [
-    {
-      "sheet_name": "Introduction",
-      "node_count": 3,
-      "node_types": {
-        "metadata": 3
-      },
-      "outgoing_edges": 0,
-      "incoming_edges": 0,
-      "cross_sheet_edges": 0
-    },
     {
       "sheet_name": "Results",
       "node_count": 3,
@@ -35,6 +25,16 @@
       },
       "outgoing_edges": 1,
       "incoming_edges": 5,
+      "cross_sheet_edges": 0
+    },
+    {
+      "sheet_name": "Introduction",
+      "node_count": 3,
+      "node_types": {
+        "metadata": 3
+      },
+      "outgoing_edges": 0,
+      "incoming_edges": 0,
       "cross_sheet_edges": 0
     },
     {

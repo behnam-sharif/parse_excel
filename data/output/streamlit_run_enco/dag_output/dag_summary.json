@@ -5,16 +5,16 @@
   "total_edges": 1452,
   "total_unresolved_edges": 121,
   "nodes_by_type": {
-    "mixed": 47,
     "metadata": 69,
     "input": 546,
+    "mixed": 47,
     "setting": 61
   },
   "named_ranges_count": 249,
   "top_sheets_by_nodes": [
+    "BI calculation_Manitoba",
     "BI calculation_Alberta",
     "BI calculation_BC",
-    "BI calculation_Manitoba",
     "BI calculation_NIHB",
     "BI calculation_New Brunswick ",
     "BI calculation_Newfoundland",
@@ -43,6 +43,18 @@
   ],
   "sheets": [
     {
+      "sheet_name": "BI calculation_Manitoba",
+      "node_count": 45,
+      "node_types": {
+        "metadata": 2,
+        "input": 41,
+        "mixed": 2
+      },
+      "outgoing_edges": 62,
+      "incoming_edges": 103,
+      "cross_sheet_edges": 6
+    },
+    {
       "sheet_name": "Adverse events",
       "node_count": 3,
       "node_types": {
@@ -68,18 +80,6 @@
     },
     {
       "sheet_name": "BI calculation_BC",
-      "node_count": 45,
-      "node_types": {
-        "metadata": 2,
-        "input": 41,
-        "mixed": 2
-      },
-      "outgoing_edges": 62,
-      "incoming_edges": 103,
-      "cross_sheet_edges": 6
-    },
-    {
-      "sheet_name": "BI calculation_Manitoba",
       "node_count": 45,
       "node_types": {
         "metadata": 2,
@@ -198,6 +198,17 @@
       "cross_sheet_edges": 6
     },
     {
+      "sheet_name": "Defaults",
+      "node_count": 12,
+      "node_types": {
+        "metadata": 5,
+        "input": 7
+      },
+      "outgoing_edges": 0,
+      "incoming_edges": 0,
+      "cross_sheet_edges": 0
+    },
+    {
       "sheet_name": "Cost calculations",
       "node_count": 19,
       "node_types": {
@@ -210,6 +221,17 @@
       "cross_sheet_edges": 78
     },
     {
+      "sheet_name": "Introduction",
+      "node_count": 16,
+      "node_types": {
+        "metadata": 12,
+        "setting": 4
+      },
+      "outgoing_edges": 0,
+      "incoming_edges": 0,
+      "cross_sheet_edges": 0
+    },
+    {
       "sheet_name": "Ex summary",
       "node_count": 14,
       "node_types": {
@@ -220,28 +242,6 @@
       "outgoing_edges": 135,
       "incoming_edges": 2,
       "cross_sheet_edges": 135
-    },
-    {
-      "sheet_name": "Defaults",
-      "node_count": 12,
-      "node_types": {
-        "metadata": 5,
-        "input": 7
-      },
-      "outgoing_edges": 0,
-      "incoming_edges": 0,
-      "cross_sheet_edges": 0
-    },
-    {
-      "sheet_name": "Introduction",
-      "node_count": 16,
-      "node_types": {
-        "metadata": 12,
-        "setting": 4
-      },
-      "outgoing_edges": 0,
-      "incoming_edges": 0,
-      "cross_sheet_edges": 0
     },
     {
       "sheet_name": "Market shares",
@@ -313,6 +313,18 @@
       "cross_sheet_edges": 32
     },
     {
+      "sheet_name": "Epidemiology",
+      "node_count": 17,
+      "node_types": {
+        "metadata": 1,
+        "input": 13,
+        "setting": 3
+      },
+      "outgoing_edges": 63,
+      "incoming_edges": 21,
+      "cross_sheet_edges": 47
+    },
+    {
       "sheet_name": "Subsequent tx",
       "node_count": 16,
       "node_types": {
@@ -336,18 +348,6 @@
       "outgoing_edges": 18,
       "incoming_edges": 7,
       "cross_sheet_edges": 13
-    },
-    {
-      "sheet_name": "Epidemiology",
-      "node_count": 17,
-      "node_types": {
-        "metadata": 1,
-        "input": 13,
-        "setting": 3
-      },
-      "outgoing_edges": 63,
-      "incoming_edges": 21,
-      "cross_sheet_edges": 47
     },
     {
       "sheet_name": "Results ",

@@ -19,26 +19,15 @@ from xl_ontology.agents.base import (
     ConceptResult,
     parse_expected_concepts,
 )
-from xl_ontology.agents.planner_parse import parse_tool_plan_from_planner_response
-from xl_ontology.budget import BudgetExhausted
-from xl_ontology.defects import (
-    recover_header_stub,
-    recover_rownames_stub,
-    recover_title_stub,
-    resolve_multi_core_stub,
-)
 from xl_ontology.schemas import (
     AgentComplete,
     AgentOutputRecord,
     AgentStart,
     BuildErrorRecord,
-    DefectProcedureInvoked,
     NodeName,
-    PlanProduced,
     _TraceBase,
 )
 from xl_ontology.tools import ToolContext
-from xl_ontology.tools.llm import ask_llm
 from xl_ontology.upstream.final_map import FinalMapEntry
 
 
@@ -78,32 +67,18 @@ def _detect_defect_flags(entry: FinalMapEntry) -> List[Tuple[str, str]]:
 def dispatch_defect_stub(
     ctx: ToolContext, entry: FinalMapEntry, agent: NodeName
 ) -> List[str]:
-    """Run any matching defect stubs for an entry. Returns the union of
-    flags_added across all stubs that fired (typically the single
-    sentinel "defect_procedure_disabled_in_v0")."""
-    flags_added: List[str] = []
-    for dtype, pid in _detect_defect_flags(entry):
-        ctx.trace.emit(
-            DefectProcedureInvoked(
-                ts=_TraceBase.now_ts(),
-                agent=agent,
-                table_id=entry.table_id,
-                defect_type=dtype,  # type: ignore[arg-type]
-                procedure=pid,  # type: ignore[arg-type]
-            )
-        )
-        if dtype == "title_missing":
-            outcome = recover_title_stub(ctx, table_id=entry.table_id, agent=agent)
-        elif dtype == "header_missing":
-            outcome = recover_header_stub(ctx, table_id=entry.table_id, agent=agent)
-        elif dtype == "rowname_missing":
-            outcome = recover_rownames_stub(ctx, table_id=entry.table_id, agent=agent)
-        elif dtype == "multi_core_detected":
-            outcome = resolve_multi_core_stub(ctx, table_id=entry.table_id, agent=agent)
-        else:  # pragma: no cover - exhaustive
-            continue
-        flags_added.extend(outcome.flags_added)
-    return flags_added
+    """No-op (P2.D): defect-procedure dispatch removed from Pass 1.
+
+    The function signature is preserved so existing call sites in
+    inputs / calculations / results don't crash, but the body returns
+    an empty flag list.  No ``DefectProcedureInvoked`` event is emitted
+    and no recovery stub fires.
+
+    Defect handling is now the job of ``xl_qc_repair`` and Pass 2's
+    LLM-driven verification — Pass 1 is purely deterministic table
+    tagging.
+    """
+    return []
 
 
 @dataclass
@@ -203,26 +178,11 @@ class OntologyAgent:
         return
 
     def _planner_phase(self, pack_overview_text: str) -> None:
-        """v1.A: removed. Pass 1 is fully deterministic. The planner LLM
-        call previously fired here was logged but never consumed by the
-        Inputs/Calculations/Results agents (only OverallModelAgent
-        executed the plan, and OverallModelAgent has been moved to
-        Pass 2 / Stage 2.1). Pass 2 owns its own bounded planner loop.
+        """No-op (V1.A + Pass-1 refactor): Pass 1 is fully deterministic.
+        The skeleton phase is kept so subclass override points stay
+        stable, but no LLM call ever fires here.
         """
         return
-
-    def _build_planner_payload(self) -> str:
-        return (
-            f"Agent: {self.node_name}\n"
-            f"Expected concepts: {', '.join(self.state.expected_concepts)}\n"
-            "Return a single JSON object (no prose outside JSON) with this shape:\n"
-            '{"tool_plan":{"steps":[{"step":"short label","action":"what to do"},'
-            "...]}}\n"
-            "Optional per step: "
-            '"tool" (one of find_overview_sheets, list_data_validation_dropdowns, '
-            "extract_currency_symbols, search_workbook_lexicon) and "
-            '"args" (e.g. {"name_patterns": [...]}, {"concepts": ["intervention"]}).'
-        )
 
     def _cross_check_phase(self) -> None:  # pragma: no cover - abstract
         raise NotImplementedError

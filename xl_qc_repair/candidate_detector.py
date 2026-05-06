@@ -502,10 +502,35 @@ def _read_cell(
     return str(val), is_f, bold
 
 
+# Node types whose freestanding-label cells should NOT block title
+# adoption by neighboring tables.  V6 sometimes promotes a single text
+# cell into its own metadata standalone (e.g. "Epidemiological
+# calculator" at I7 on the Epidemiology sheet); the data table below
+# rightfully wants to use that label as its title, so the claim check
+# treats such owners as transparent.
+_FREESTANDING_LABEL_NODE_TYPES = frozenset({"metadata", "setting"})
+
+
+def _is_freestanding_label_owner(leaf: Dict[str, Any]) -> bool:
+    """True iff ``leaf`` is a label-only standalone (no core_region) of
+    a node type that exists purely to carry a title cell."""
+    if leaf.get("core_region"):
+        return False
+    nt = (leaf.get("node_type") or "").lower()
+    return nt in _FREESTANDING_LABEL_NODE_TYPES
+
+
 def _find_cell_owners(
     leaves: List[Dict[str, Any]], sheet_name: str, r: int, c: int,
     *, exclude_table_id: str,
 ) -> Tuple[Optional[str], Optional[str]]:
+    """Return ``(bbox_owner, core_owner)`` table_ids for a cell.
+
+    Owners that are freestanding label standalones (metadata / setting
+    standalones with no ``core_region``) are TREATED AS TRANSPARENT —
+    the cell is reported as unclaimed.  This lets neighboring tables
+    legitimately adopt the label as their title.
+    """
     bbox_owner: Optional[str] = None
     core_owner: Optional[str] = None
     for leaf in leaves:
@@ -513,6 +538,8 @@ def _find_cell_owners(
             continue
         if leaf.get("table_id") == exclude_table_id:
             continue
+        if _is_freestanding_label_owner(leaf):
+            continue  # transparent for claim purposes
         if _bbox_contains(leaf.get("bbox") or {}, r, c) and bbox_owner is None:
             bbox_owner = leaf.get("table_id")
         core = leaf.get("core_region")

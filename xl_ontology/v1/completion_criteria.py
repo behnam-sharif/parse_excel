@@ -60,7 +60,6 @@ def derive_completion_criteria_via_llm(
     ctx: ToolContext,
     *,
     stage: Pass2StageName,
-    overall_context_concepts: Dict[str, Any],
     pack_node_txt: str,
     pack_node_context_md: str,
     structural_hint: Dict[str, Any],
@@ -69,23 +68,30 @@ def derive_completion_criteria_via_llm(
 ) -> Dict[str, CompletionCriterion]:
     """One LLM call → CompletionCriterion map. Emits a trace event.
 
+    V1.J + Pass-1 refactor: ``overall_context_concepts`` parameter was
+    removed.  Under the V1.J flipped order (Inputs → Calculations →
+    Results → Overall), the overall agent runs LAST, so the three
+    classification stages always saw an empty overall_context dict.
+    The misleading "overall context: {}" block is dropped from the
+    prompt entirely.
+
     On parse failure or empty response, returns an empty dict and emits
     no criteria event (the caller logs accordingly).
     """
     prompt = (
         "You are deriving completion criteria for a budget-impact-model "
-        f"comprehension agent (stage={stage}). The model's overall context "
-        "(intervention, comparators, country, time horizon, etc.) is:\n"
-        f"{json.dumps(overall_context_concepts, indent=2)}\n\n"
-        "The Pass-1 labelling distribution for this stage's concepts is:\n"
+        f"comprehension agent (stage={stage}). "
+        "The Pass-1 deterministic labelling distribution for this stage's "
+        "concepts is:\n"
         f"{json.dumps(structural_hint, indent=2)}\n\n"
         "Return a JSON object mapping concept name to "
         '{"required_items": [list of items], "rationale": "why these items '
-        'are required given the overall context", "source_signal": "which '
-        'overall_context fields motivated this requirement"}. '
+        'are required given the structural hint", "source_signal": "which '
+        'structural_hint fields motivated this requirement"}. '
         "Only emit criteria the workbook can plausibly support given the "
-        "structural hint. Output JSON only — no prose. Wrap the map in "
-        '{"criteria": {...}}.'
+        "structural hint (in particular, do not require a concept whose "
+        'expected_concepts_status is "absent"). Output JSON only — no '
+        'prose. Wrap the map in {"criteria": {...}}.'
     )
 
     resp = ask_llm(

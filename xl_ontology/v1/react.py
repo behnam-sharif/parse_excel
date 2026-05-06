@@ -30,7 +30,9 @@ The agent loop:
 
 from __future__ import annotations
 
+import inspect
 import json
+import typing
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -177,6 +179,134 @@ def format_error_observation(tool: str, error_type: str, message: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Tool documentation for the prompt
+# ---------------------------------------------------------------------------
+
+def _literal_allowed_values(annotation: Any) -> Optional[List[Any]]:
+    """If ``annotation`` is a ``typing.Literal[...]`` (or a type alias
+    that resolves to one), return the list of allowed values.
+
+    Handles both direct ``Literal["a", "b"]`` and aliased types like
+    ``SearchScope = Literal["all", "sheet"]`` as long as the alias is
+    fully resolvable via ``typing.get_origin`` / ``get_args``.
+    """
+    try:
+        origin = typing.get_origin(annotation)
+    except Exception:
+        return None
+    if origin is typing.Literal:  # type: ignore[comparison-overlap]
+        try:
+            return list(typing.get_args(annotation))
+        except Exception:
+            return None
+    # Older typing fallback — get_origin returns the Literal special form.
+    if str(origin) == "typing.Literal":
+        try:
+            return list(typing.get_args(annotation))
+        except Exception:
+            return None
+    return None
+
+
+def _tool_arg_spec(fn: Any) -> List[Dict[str, Any]]:
+    """Return one dict per parameter (skipping the leading ``ctx``)
+    listing name, required-vs-optional, default, annotation string,
+    and (when applicable) ``allowed_values`` for ``Literal[...]`` types.
+
+    Surfaces enough info that the LLM knows which args it MUST pass
+    AND which fixed enum values it must choose from.  Fixes the
+    ``scope="Workbook"`` failure mode where the LLM guessed at allowed
+    enum members.
+    """
+    try:
+        sig = inspect.signature(fn)
+    except (TypeError, ValueError):
+        return []
+    # Resolve type-alias annotations (``SearchScope = Literal["all", ...]``)
+    # to their underlying types via ``get_type_hints``.  Falls back to
+    # signature.parameters annotations on failure.
+    try:
+        resolved_hints = typing.get_type_hints(fn)
+    except Exception:
+        resolved_hints = {}
+    args: List[Dict[str, Any]] = []
+    skip_first = True
+    for name, param in sig.parameters.items():
+        if skip_first:
+            # The leading ``ctx: ToolContext`` is always supplied by the
+            # dispatcher — never asked of the LLM.
+            skip_first = False
+            continue
+        if param.kind in (
+            inspect.Parameter.VAR_POSITIONAL,
+            inspect.Parameter.VAR_KEYWORD,
+        ):
+            continue
+        annotation_raw = resolved_hints.get(name)
+        if annotation_raw is None and param.annotation is not inspect.Parameter.empty:
+            annotation_raw = param.annotation
+        annotation_str = (
+            "" if annotation_raw is None
+            else str(annotation_raw).replace("typing.", "")
+        )
+        required = param.default is inspect.Parameter.empty
+        spec: Dict[str, Any] = {
+            "name": name,
+            "required": required,
+            "default": (
+                None if param.default is inspect.Parameter.empty
+                else _safe_repr(param.default)
+            ),
+            "annotation": annotation_str,
+        }
+        # Literal[...] enum extraction — surface allowed_values so the
+        # LLM doesn't have to guess.
+        if annotation_raw is not None:
+            allowed = _literal_allowed_values(annotation_raw)
+            if allowed is not None:
+                spec["allowed_values"] = [_safe_repr(v) for v in allowed]
+        args.append(spec)
+    return args
+
+
+def _safe_repr(v: Any) -> str:
+    try:
+        return repr(v)
+    except Exception:
+        return type(v).__name__
+
+
+def _tool_docstring(fn: Any, *, max_chars: int = 400) -> str:
+    """First paragraph of the tool's docstring, trimmed."""
+    doc = (fn.__doc__ or "").strip()
+    if not doc:
+        return ""
+    # First paragraph = up to first blank line.
+    para = doc.split("\n\n", 1)[0].strip()
+    para = " ".join(para.split())  # collapse whitespace
+    if len(para) > max_chars:
+        para = para[:max_chars] + "..."
+    return para
+
+
+def build_tool_specs() -> List[Dict[str, Any]]:
+    """Per-tool dict with name, doc paragraph, and full arg spec.
+
+    Used to populate the ``AVAILABLE TOOLS`` block of the ReAct prompt
+    so the LLM doesn't guess argument names — the cause of every
+    ``TypeError: missing required argument`` we saw in v0 traces.
+    """
+    out: List[Dict[str, Any]] = []
+    for name, fn in PASS2_TOOL_REGISTRY.items():
+        out.append({
+            "tool": name,
+            "doc": _tool_docstring(fn),
+            "args": _tool_arg_spec(fn),
+        })
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Prompt building
 # ---------------------------------------------------------------------------
 
@@ -192,8 +322,8 @@ to the trace and is your reasoning.  Keep it concise (≤300 chars).
 STAGE: {stage}
 ITERATION: {iteration} / {max_iterations}
 
-OVERALL CONTEXT (Stage 2.1):
-{overall_context_json}
+UPSTREAM CONTEXT:
+{upstream_context_json}
 
 COMPLETION CRITERIA (concept → required items):
 {criteria_json}
@@ -201,7 +331,12 @@ COMPLETION CRITERIA (concept → required items):
 OBSERVATIONS SO FAR (oldest → newest):
 {observations_json}
 
-AVAILABLE TOOLS:
+AVAILABLE TOOLS — each entry shows the tool's name, a short doc, and
+its argument spec.  Every ``required: true`` arg MUST be present in
+your ``action.args`` dict.  Use the ``annotation`` field to pick valid
+shapes (e.g. ``List[str]`` means a list of strings).  Tools that take
+``sheet_name`` / ``sheets`` need real sheet names from the workbook —
+look at upstream context or prior observations to find them.
 {tools_json}
 
 WHEN TO STOP:
@@ -217,7 +352,7 @@ OUTPUT — return JSON ONLY, exactly one of these two shapes:
 Action turn:
 {{
   "thought": "...your reasoning...",
-  "action": {{"tool": "<name>", "args": {{...}}, "rationale": "<concept>"}}
+  "action": {{"tool": "<name>", "args": {{...required + optional args...}}, "rationale": "<concept>"}}
 }}
 
 Stop turn:
@@ -239,13 +374,16 @@ def build_react_prompt(
     observations: List[ReactObservation],
     extra_context: Optional[Dict[str, Any]] = None,
     max_observations_in_prompt: int = 12,
+    upstream_reports: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Assemble the per-iteration ReAct prompt.
 
     ``observations`` is appended-to in order; we keep the last N so the
     prompt size stays bounded.  ``extra_context`` is a per-stage hook
-    (e.g. for calculations: the terminal-result table_ids; for inputs:
-    the Pass-1 anchor distribution) — the stage decides what to inject.
+    (e.g. for calculations: the terminal-result table_ids).
+    ``upstream_reports`` is the structured summary handed forward by
+    earlier Pass-2 stages — used by the overall agent to consume the
+    inputs / calc / results agent reports.
     """
     obs_payload = []
     tail = observations[-max_observations_in_prompt:]
@@ -265,20 +403,27 @@ def build_react_prompt(
             crit_payload[concept] = body
         else:
             crit_payload[concept] = {"required_items": []}
-    tools_payload = [
-        {
-            "tool": name,
-            "description": (fn.__doc__ or "").strip().splitlines()[0][:120]
-            if (fn.__doc__ or "").strip()
-            else "",
-        }
-        for name, fn in PASS2_TOOL_REGISTRY.items()
-    ]
+
+    # Rich tool specs — name, doc, full arg signature.  Replaces the
+    # previous one-liner that left the LLM guessing at arg names.
+    tools_payload = build_tool_specs()
+
+    # The "upstream context" block carries:
+    #   - overall_context (Pass-2 Stage 2.1 output, when this stage is
+    #     not the overall agent itself)
+    #   - upstream_reports (this stage's view of every prior stage's
+    #     StageFindingsReport — populated for the overall agent in the
+    #     V1.J flipped order, empty for the first agent in the sequence)
+    upstream_context = {
+        "overall_concepts": overall_context or {},
+        "upstream_reports": upstream_reports or {},
+    }
+
     base = _REACT_PROMPT_TMPL.format(
         stage=stage,
         iteration=iteration,
         max_iterations=max_iterations,
-        overall_context_json=json.dumps(overall_context, indent=2, default=str),
+        upstream_context_json=json.dumps(upstream_context, indent=2, default=str),
         criteria_json=json.dumps(crit_payload, indent=2, default=str),
         observations_json=json.dumps(obs_payload, indent=2, default=str),
         tools_json=json.dumps(tools_payload, indent=2, default=str),
@@ -299,6 +444,7 @@ __all__ = [
     "ReactStep",
     "ReactStopStep",
     "build_react_prompt",
+    "build_tool_specs",
     "format_error_observation",
     "format_observation",
     "parse_react_step",

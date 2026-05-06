@@ -5,23 +5,6 @@
   "total_with_core_region": 126,
   "sheets": [
     {
-      "sheet_name": "Introduction",
-      "n_tables": 3,
-      "n_parents": 1,
-      "n_standalones": 1,
-      "n_children": 2,
-      "n_with_core_region": 0,
-      "n_without_core_region": 3,
-      "table_titles_preview": [],
-      "node_types": {
-        "metadata": 3
-      },
-      "flag_counts": {
-        "all_metadata_no_numeric": 3,
-        "title_missing": 3
-      }
-    },
-    {
       "sheet_name": "Results",
       "n_tables": 3,
       "n_parents": 0,
@@ -40,6 +23,23 @@
         "header_conflict": 1,
         "header_sequence": 1,
         "header_missing": 1
+      }
+    },
+    {
+      "sheet_name": "Introduction",
+      "n_tables": 3,
+      "n_parents": 1,
+      "n_standalones": 1,
+      "n_children": 2,
+      "n_with_core_region": 0,
+      "n_without_core_region": 3,
+      "table_titles_preview": [],
+      "node_types": {
+        "metadata": 3
+      },
+      "flag_counts": {
+        "all_metadata_no_numeric": 3,
+        "title_missing": 3
       }
     },
     {

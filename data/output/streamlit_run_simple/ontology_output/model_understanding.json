@@ -2,24 +2,399 @@
   "schema_version": "v1",
   "model_id": "streamlit_run_simple",
   "ontology_id": "bim_v0",
-  "v1_run_timestamp": "2026-05-06T00:00:05.767Z",
+  "v1_run_timestamp": "2026-05-06T19:29:59.289Z",
   "v1_pack_overview_text_hash": "sha256:b7649f4fed58f271ef5f50c7e9290a1c12b34ce2858033738887ce5032a153a1",
-  "summary_prose": "# Model Understanding\n\n## Overall context\nIn the context of Lebanon, a budget-impact model has been developed to evaluate the economic implications of using Inotuzumab Ozogamicin for patients suffering from relapsed or refractory acute lymphoblastic leukaemia. This model is complete but highlights several critical gaps in the data. Notably, there is no comparator identified, which is essential for assessing the relative cost-effectiveness of the intervention. Additionally, the model lacks clarity on the indication, time horizon, perspective, model structure, and key assumptions, all of which are vital for a comprehensive analysis. \n\nThe absence of these elements raises concerns about the robustness of the findings, as they limit the ability to fully understand the economic impact of Inotuzumab Ozogamicin within the specified population. Without a defined comparator, the model cannot effectively benchmark the intervention against existing treatment options, which is crucial for stakeholders in making informed healthcare decisions. As it stands, the model provides a partial view of the budgetary implications, necessitating further data collection to fill in these gaps and enhance its utility for policymakers in Lebanon.\n\n## Inputs\nIn the inputs stage of the budget-impact model for Inotuzumab Ozogamicin, the analysis has reached an iteration cap, indicating that the model's criteria derivation process encountered challenges. Specifically, the required overview item was not satisfied, and the findings revealed that no tables were found to support the necessary inputs. This lack of data has resulted in an empty return for the rationale, suggesting that the model could not derive meaningful insights from the available information. Consequently, the absence of key inputs has hindered the progression of the model, leaving several critical concepts unaddressed.\n\nThe current context focuses on the population of patients with relapsed or refractory acute lymphoblastic leukaemia in Lebanon, yet without a comparator or additional details such as time horizon or perspective, the model's robustness is compromised. The findings indicate that items remain missing, which could include essential data points or assumptions that are vital for a comprehensive analysis. As it stands, the model is at a standstill, awaiting further input to fulfill the necessary criteria and advance to the next stage of evaluation.\n\n## Results\nIn the results stage of the budget-impact model for Inotuzumab Ozogamicin in the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant limitation. The iteration cap was reached, resulting in an incomplete analysis where no tables were found to support the findings. Consequently, the required overview was not satisfied, and the rationale for the model's criteria derivation failed to yield any meaningful insights. This lack of data leaves a gap in understanding the potential budget impact of the intervention, as no comparative analysis or financial projections could be established.\n\nFurthermore, the absence of any satisfied items highlights the critical need for additional data to inform decision-making. The model's inability to provide a comprehensive overview of the budget implications for Inotuzumab Ozogamicin underscores the challenges faced in this analysis. As it stands, the findings remain unsubstantiated, and without further input or adjustments, the model cannot effectively guide stakeholders in Lebanon regarding the economic considerations of this treatment option.\n\n## Calculations\nIn the calculations stage of the budget-impact model for Inotuzumab Ozogamicin in the context of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant challenge. The iteration cap was reached, indicating that the model could not derive the necessary calculations to provide a comprehensive overview. Specifically, the required items, including an overview of the calculations, were not satisfied, as the model returned empty results. This failure to derive criteria suggests that the underlying logic or data inputs may need to be revisited to ensure that the model can generate the expected outputs.\n\nFurthermore, the findings revealed that no tables were found, and there were several items missing that are critical for a complete analysis. The absence of these elements highlights the need for a thorough review of the model structure and key assumptions, which were not specified in the current context. As a result, no overrides were proposed, as the model's limitations necessitate a foundational reassessment before any adjustments can be made. Addressing these gaps will be essential for advancing the budget-impact analysis and ensuring that it meets the necessary criteria for decision-making.\n",
+  "summary_prose": "# Model Understanding\n\n## Overall context\nThe budget impact model evaluates the financial implications of implementing Inotuzumab Ozogamicin for the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon (source: Introduction!E3). The model does not specify a comparator and lacks details on the time horizon. Key inputs utilized in the model include the patient population (table_id: 9814fc53f594ba29_t118_t70_t45_child2), market shares (table_id: 9814fc53f594ba29_t118_t70_t45_child3), drug cost (table_id: 9814fc53f594ba29_t118_t70_t45_child5), and various structural inputs related to adverse events, subsequent treatments, hospitalization, and SCT (table_ids: 9814fc53f594ba29_t118_t70_b45_child1, 9814fc53f594ba29_t118_t70_b45_child2, 9814fc53f594ba29_t118_b70_t46_child2, 9814fc53f594ba29_t118_b70_t46_child4, 9814fc53f594ba29_t118_b70_t46_child7, 9814fc53f594ba29_t118_b70_t46_child8, 9814fc53f594ba29_t118_b70_b46, 9814fc53f594ba29_b118, 1f634d7d13c5e37c_t57_t25_t17_t8). The headline result of the model indicates the incremental budget impact (table_id: 262a4c0f1d47d09d). The calculations rely on important tables including 94c8c58d611b9e70_t103_child8 and 94c8c58d611b9e70_b103_child7.\n\nHowever, several critical concepts remain absent from the model, including the comparator, population details, time horizon, perspective, model structure, and key assumptions. These missing elements may limit the comprehensiveness and applicability of the budget impact analysis.\n\n## Pre-overall extraction\nPre-overall extraction: intervention='Inotuzumab Ozogamicin', country='Lebanon'. 6/9 concept(s) not located: comparator, population, time_horizon, perspective, model_structure, key_assumptions.\n\n## Inputs\nIn the initial phase of the budget-impact model comprehension run, several key concepts were identified for verification, including population, market share, and drug cost. The analysis revealed that a table corresponding to the population concept was successfully located, specifically the table identified as '9814fc53f594ba29_t118_t70_t45_child2'. This table satisfied the requirement for the population input, indicating that the foundational demographic data is in place for further analysis. Similarly, the market share concept was addressed with the discovery of the table '9814fc53f594ba29_t118_t70_t45_child3', which also met the necessary criteria for verification. Additionally, the drug cost was confirmed through the table '9814fc53f594ba29_t118_t70_t45_child5', ensuring that the financial aspects of the model are adequately represented.\n\nHowever, the process did not conclude without challenges. While the primary inputs were satisfied, the structural inputs related to adverse events, subsequent treatments, hospitalization, and stem cell transplants (SCT) required further scrutiny. Notably, two tables were found for both adverse events and subsequent treatments, while single tables were identified for hospitalization and SCT. This indicates a robust dataset for some structural inputs, yet the need for verification remains critical to ensure comprehensive coverage of all necessary components. As the process continues, attention will be directed towards confirming these structural inputs to solidify the model's integrity and accuracy.\n\n## Results\nIn the results stage of the budget-impact model comprehension run, the agent successfully identified a table corresponding to the concept of 'incremental_budget_impact'. The table, designated with the ID '262a4c0f1d47d09d', was sourced from the initial pass, where it was flagged as a candidate for further verification. Upon executing the 'read_table_full_content' tool, the agent confirmed that the table contained the necessary data, satisfying the required item for incremental budget impact. Notably, there were no items missing from the findings, indicating a complete alignment with the completion criteria set forth for this stage.\n\nHowever, the process was not without its challenges. The agent encountered multiple parsing errors during subsequent iterations, which hindered the ability to extract additional insights from the table. Despite these setbacks, the agent's initial findings remained intact, and the content of the identified table was deemed sufficient for the current analysis. As the iteration cap was reached, the agent concluded the run with a clear understanding of the incremental budget impact, while also recognizing the need for further exploration to address the parsing issues encountered during the verification process.\n\n## Calculations\nDuring the calculations stage of the budget-impact model comprehension run, the agent encountered a partial completion status. The primary focus was on verifying the calculations for the concept of 'total_cost_with', which was identified as a required item in the initial pass. The agent noted that there was one relevant table found in the pass1 inventory, specifically '94c8c58d611b9e70_t103_child3', which satisfied the criteria for 'total_cost_with'. However, despite this finding, the agent faced repeated parsing errors that hindered the verification process, indicating a need for further troubleshooting to ensure accurate data extraction and interpretation.\n\nIn addition to 'total_cost_with', the agent also aimed to validate the 'structural_calc' concept, which had a more extensive set of candidate tables. A total of 16 tables were identified, including '47ecc07e130eef5f_t10' and several others from the '94c8c58d611b9e70' series. All required items for 'structural_calc' were satisfied, yet the agent's attempts to parse the data were met with similar errors, leading to a halt in progress. The agent's observations highlighted the necessity of addressing these parsing issues to move forward effectively with the budget-impact model calculations.\n",
   "stages": {
-    "overall": {
-      "stage": "overall",
+    "inputs": {
+      "stage": "inputs",
+      "completion_status": "partial",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 25.1655383000616,
+      "prose": "In the initial phase of the budget-impact model comprehension run, several key concepts were identified for verification, including population, market share, and drug cost. The analysis revealed that a table corresponding to the population concept was successfully located, specifically the table identified as '9814fc53f594ba29_t118_t70_t45_child2'. This table satisfied the requirement for the population input, indicating that the foundational demographic data is in place for further analysis. Similarly, the market share concept was addressed with the discovery of the table '9814fc53f594ba29_t118_t70_t45_child3', which also met the necessary criteria for verification. Additionally, the drug cost was confirmed through the table '9814fc53f594ba29_t118_t70_t45_child5', ensuring that the financial aspects of the model are adequately represented.\n\nHowever, the process did not conclude without challenges. While the primary inputs were satisfied, the structural inputs related to adverse events, subsequent treatments, hospitalization, and stem cell transplants (SCT) required further scrutiny. Notably, two tables were found for both adverse events and subsequent treatments, while single tables were identified for hospitalization and SCT. This indicates a robust dataset for some structural inputs, yet the need for verification remains critical to ensure comprehensive coverage of all necessary components. As the process continues, attention will be directed towards confirming these structural inputs to solidify the model's integrity and accuracy.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "population": {
+          "required_items": [
+            "population"
+          ],
+          "rationale": "Pass 1 found 1 inputs candidate(s) for concept 'population'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[population]"
+        },
+        "market_share": {
+          "required_items": [
+            "market_share"
+          ],
+          "rationale": "Pass 1 found 1 inputs candidate(s) for concept 'market_share'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[market_share]"
+        },
+        "drug_cost": {
+          "required_items": [
+            "drug_cost"
+          ],
+          "rationale": "Pass 1 found 1 inputs candidate(s) for concept 'drug_cost'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[drug_cost]"
+        },
+        "structural_input_market_share": {
+          "required_items": [
+            "structural_input_market_share"
+          ],
+          "rationale": "Pass 1 found 1 inputs candidate(s) for concept 'structural_input_market_share'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input_market_share]"
+        },
+        "structural_input_adverse_event": {
+          "required_items": [
+            "structural_input_adverse_event"
+          ],
+          "rationale": "Pass 1 found 2 inputs candidate(s) for concept 'structural_input_adverse_event'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input_adverse_event]"
+        },
+        "structural_input_subsequent_treatment": {
+          "required_items": [
+            "structural_input_subsequent_treatment"
+          ],
+          "rationale": "Pass 1 found 2 inputs candidate(s) for concept 'structural_input_subsequent_treatment'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input_subsequent_treatment]"
+        },
+        "structural_input_hospitalization": {
+          "required_items": [
+            "structural_input_hospitalization"
+          ],
+          "rationale": "Pass 1 found 1 inputs candidate(s) for concept 'structural_input_hospitalization'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input_hospitalization]"
+        },
+        "structural_input_SCT": {
+          "required_items": [
+            "structural_input_SCT"
+          ],
+          "rationale": "Pass 1 found 2 inputs candidate(s) for concept 'structural_input_SCT'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input_SCT]"
+        },
+        "structural_input": {
+          "required_items": [
+            "structural_input"
+          ],
+          "rationale": "Pass 1 found 2 inputs candidate(s) for concept 'structural_input'; verify.",
+          "source_signal": "pass1.inputs.candidate_tables[structural_input]"
+        }
+      },
+      "findings": {
+        "population": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_t70_t45_child2"
+          ],
+          "items_satisfied": [
+            "population"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "market_share": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_t70_t45_child3"
+          ],
+          "items_satisfied": [
+            "market_share"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "drug_cost": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_t70_t45_child5"
+          ],
+          "items_satisfied": [
+            "drug_cost"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "structural_input_market_share": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_t70_t45_child4"
+          ],
+          "items_satisfied": [
+            "structural_input_market_share"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "structural_input_adverse_event": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_t70_b45_child1",
+            "9814fc53f594ba29_t118_t70_b45_child2"
+          ],
+          "items_satisfied": [
+            "structural_input_adverse_event"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 2 table(s)"
+        },
+        "structural_input_subsequent_treatment": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_b70_t46_child2",
+            "9814fc53f594ba29_t118_b70_t46_child4"
+          ],
+          "items_satisfied": [
+            "structural_input_subsequent_treatment"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 2 table(s)"
+        },
+        "structural_input_hospitalization": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_b70_t46_child7"
+          ],
+          "items_satisfied": [
+            "structural_input_hospitalization"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "structural_input_SCT": {
+          "tables_found": [
+            "9814fc53f594ba29_t118_b70_t46_child8",
+            "9814fc53f594ba29_t118_b70_b46"
+          ],
+          "items_satisfied": [
+            "structural_input_SCT"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 2 table(s)"
+        },
+        "structural_input": {
+          "tables_found": [
+            "9814fc53f594ba29_b118",
+            "1f634d7d13c5e37c_t57_t25_t17_t8"
+          ],
+          "items_satisfied": [
+            "structural_input"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 2 table(s)"
+        }
+      }
+    },
+    "calculations": {
+      "stage": "calculations",
+      "completion_status": "partial",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 20.79769410006702,
+      "prose": "During the calculations stage of the budget-impact model comprehension run, the agent encountered a partial completion status. The primary focus was on verifying the calculations for the concept of 'total_cost_with', which was identified as a required item in the initial pass. The agent noted that there was one relevant table found in the pass1 inventory, specifically '94c8c58d611b9e70_t103_child3', which satisfied the criteria for 'total_cost_with'. However, despite this finding, the agent faced repeated parsing errors that hindered the verification process, indicating a need for further troubleshooting to ensure accurate data extraction and interpretation.\n\nIn addition to 'total_cost_with', the agent also aimed to validate the 'structural_calc' concept, which had a more extensive set of candidate tables. A total of 16 tables were identified, including '47ecc07e130eef5f_t10' and several others from the '94c8c58d611b9e70' series. All required items for 'structural_calc' were satisfied, yet the agent's attempts to parse the data were met with similar errors, leading to a halt in progress. The agent's observations highlighted the necessity of addressing these parsing issues to move forward effectively with the budget-impact model calculations.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "total_cost_with": {
+          "required_items": [
+            "total_cost_with"
+          ],
+          "rationale": "Pass 1 found 1 calculations candidate(s) for concept 'total_cost_with'; verify.",
+          "source_signal": "pass1.calculations.candidate_tables[total_cost_with]"
+        },
+        "structural_calc": {
+          "required_items": [
+            "structural_calc"
+          ],
+          "rationale": "Pass 1 found 16 calculations candidate(s) for concept 'structural_calc'; verify.",
+          "source_signal": "pass1.calculations.candidate_tables[structural_calc]"
+        }
+      },
+      "findings": {
+        "total_cost_with": {
+          "tables_found": [
+            "94c8c58d611b9e70_t103_child3"
+          ],
+          "items_satisfied": [
+            "total_cost_with"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s)"
+        },
+        "structural_calc": {
+          "tables_found": [
+            "47ecc07e130eef5f_t10",
+            "94c8c58d611b9e70_t103_child1",
+            "94c8c58d611b9e70_t103_child2",
+            "94c8c58d611b9e70_t103_child4",
+            "94c8c58d611b9e70_t103_child5",
+            "94c8c58d611b9e70_t103_child6",
+            "94c8c58d611b9e70_t103_child7",
+            "94c8c58d611b9e70_t103_child8",
+            "94c8c58d611b9e70_b103_child1",
+            "94c8c58d611b9e70_b103_child2",
+            "94c8c58d611b9e70_b103_child3",
+            "94c8c58d611b9e70_b103_child4",
+            "94c8c58d611b9e70_b103_child5",
+            "94c8c58d611b9e70_b103_child6",
+            "94c8c58d611b9e70_b103_child7",
+            "1f634d7d13c5e37c_b57_b48_b16_b23__core2"
+          ],
+          "items_satisfied": [
+            "structural_calc"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 16 table(s)"
+        }
+      },
+      "important_calc_tables": [
+        "94c8c58d611b9e70_t103_child8",
+        "94c8c58d611b9e70_b103_child7"
+      ]
+    },
+    "results": {
+      "stage": "results",
+      "completion_status": "partial",
+      "iterations_run": 5,
+      "llm_calls_used": 6,
+      "elapsed_seconds": 30.101274699904025,
+      "prose": "In the results stage of the budget-impact model comprehension run, the agent successfully identified a table corresponding to the concept of 'incremental_budget_impact'. The table, designated with the ID '262a4c0f1d47d09d', was sourced from the initial pass, where it was flagged as a candidate for further verification. Upon executing the 'read_table_full_content' tool, the agent confirmed that the table contained the necessary data, satisfying the required item for incremental budget impact. Notably, there were no items missing from the findings, indicating a complete alignment with the completion criteria set forth for this stage.\n\nHowever, the process was not without its challenges. The agent encountered multiple parsing errors during subsequent iterations, which hindered the ability to extract additional insights from the table. Despite these setbacks, the agent's initial findings remained intact, and the content of the identified table was deemed sufficient for the current analysis. As the iteration cap was reached, the agent concluded the run with a clear understanding of the incremental budget impact, while also recognizing the need for further exploration to address the parsing issues encountered during the verification process.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "incremental_budget_impact": {
+          "required_items": [
+            "incremental_budget_impact"
+          ],
+          "rationale": "Pass 1 found 1 results candidate(s) for concept 'incremental_budget_impact'; verify.",
+          "source_signal": "pass1.results.candidate_tables[incremental_budget_impact]"
+        }
+      },
+      "findings": {
+        "incremental_budget_impact": {
+          "tables_found": [
+            "262a4c0f1d47d09d"
+          ],
+          "items_satisfied": [
+            "incremental_budget_impact"
+          ],
+          "items_missing": [],
+          "notes": "seeded from Pass-1 candidate_tables: 1 table(s); tool=read_table_full_content"
+        }
+      }
+    },
+    "pre_overall": {
+      "stage": "pre_overall",
       "completion_status": "complete",
       "iterations_run": 1,
-      "llm_calls_used": 3,
-      "elapsed_seconds": 11.208820499945432,
-      "prose": "In the context of Lebanon, a budget-impact model has been developed to evaluate the economic implications of using Inotuzumab Ozogamicin for patients suffering from relapsed or refractory acute lymphoblastic leukaemia. This model is complete but highlights several critical gaps in the data. Notably, there is no comparator identified, which is essential for assessing the relative cost-effectiveness of the intervention. Additionally, the model lacks clarity on the indication, time horizon, perspective, model structure, and key assumptions, all of which are vital for a comprehensive analysis. \n\nThe absence of these elements raises concerns about the robustness of the findings, as they limit the ability to fully understand the economic impact of Inotuzumab Ozogamicin within the specified population. Without a defined comparator, the model cannot effectively benchmark the intervention against existing treatment options, which is crucial for stakeholders in making informed healthcare decisions. As it stands, the model provides a partial view of the budgetary implications, necessitating further data collection to fill in these gaps and enhance its utility for policymakers in Lebanon.",
+      "llm_calls_used": 2,
+      "elapsed_seconds": 5.946778899990022,
+      "prose": "Pre-overall extraction: intervention='Inotuzumab Ozogamicin', country='Lebanon'. 6/9 concept(s) not located: comparator, population, time_horizon, perspective, model_structure, key_assumptions.",
       "overrides_proposed": [],
       "applied_heuristics": [],
       "concepts": {
         "intervention": "Inotuzumab Ozogamicin",
         "comparator": null,
-        "population": "relapsed or refractory acute lymphoblastic leukaemia",
-        "indication": null,
+        "population": null,
+        "indication": "relapsed or refractory acute lymphoblastic leukaemia",
+        "country": "Lebanon",
+        "time_horizon": null,
+        "perspective": null,
+        "model_structure": null,
+        "key_assumptions": null
+      },
+      "concept_sources": {
+        "intervention": "Introduction!E3",
+        "indication": "Introduction!E3",
+        "country": "Introduction!E3"
+      },
+      "overview_sheets_read": [
+        "Introduction"
+      ],
+      "n_sheets_extracted": 1,
+      "findings": {
+        "intervention": {
+          "tables_found": [],
+          "items_satisfied": [
+            "intervention"
+          ],
+          "items_missing": [],
+          "notes": "value: 'Inotuzumab Ozogamicin' (source: Introduction!E3)"
+        },
+        "comparator": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "comparator"
+          ],
+          "notes": "absent in overview sheets"
+        },
+        "population": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "population"
+          ],
+          "notes": "absent in overview sheets"
+        },
+        "indication": {
+          "tables_found": [],
+          "items_satisfied": [
+            "indication"
+          ],
+          "items_missing": [],
+          "notes": "value: 'relapsed or refractory acute lymphoblastic leukaemia' (source: Introduction!E3)"
+        },
+        "country": {
+          "tables_found": [],
+          "items_satisfied": [
+            "country"
+          ],
+          "items_missing": [],
+          "notes": "value: 'Lebanon' (source: Introduction!E3)"
+        },
+        "time_horizon": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "time_horizon"
+          ],
+          "notes": "absent in overview sheets"
+        },
+        "perspective": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "perspective"
+          ],
+          "notes": "absent in overview sheets"
+        },
+        "model_structure": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "model_structure"
+          ],
+          "notes": "absent in overview sheets"
+        },
+        "key_assumptions": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [
+            "key_assumptions"
+          ],
+          "notes": "absent in overview sheets"
+        }
+      }
+    },
+    "overall": {
+      "stage": "overall",
+      "completion_status": "complete",
+      "iterations_run": 12,
+      "llm_calls_used": 13,
+      "elapsed_seconds": 44.904254799941555,
+      "prose": "The budget impact model evaluates the financial implications of implementing Inotuzumab Ozogamicin for the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon (source: Introduction!E3). The model does not specify a comparator and lacks details on the time horizon. Key inputs utilized in the model include the patient population (table_id: 9814fc53f594ba29_t118_t70_t45_child2), market shares (table_id: 9814fc53f594ba29_t118_t70_t45_child3), drug cost (table_id: 9814fc53f594ba29_t118_t70_t45_child5), and various structural inputs related to adverse events, subsequent treatments, hospitalization, and SCT (table_ids: 9814fc53f594ba29_t118_t70_b45_child1, 9814fc53f594ba29_t118_t70_b45_child2, 9814fc53f594ba29_t118_b70_t46_child2, 9814fc53f594ba29_t118_b70_t46_child4, 9814fc53f594ba29_t118_b70_t46_child7, 9814fc53f594ba29_t118_b70_t46_child8, 9814fc53f594ba29_t118_b70_b46, 9814fc53f594ba29_b118, 1f634d7d13c5e37c_t57_t25_t17_t8). The headline result of the model indicates the incremental budget impact (table_id: 262a4c0f1d47d09d). The calculations rely on important tables including 94c8c58d611b9e70_t103_child8 and 94c8c58d611b9e70_b103_child7.\n\nHowever, several critical concepts remain absent from the model, including the comparator, population details, time horizon, perspective, model structure, and key assumptions. These missing elements may limit the comprehensiveness and applicability of the budget impact analysis.",
+      "overrides_proposed": [],
+      "applied_heuristics": [
+        "pre_overall_extraction"
+      ],
+      "concepts": {
+        "intervention": "Inotuzumab Ozogamicin",
+        "comparator": null,
+        "population": null,
+        "indication": "relapsed or refractory acute lymphoblastic leukaemia",
         "country": "Lebanon",
         "time_horizon": null,
         "perspective": null,
@@ -29,88 +404,6 @@
       "overview_sheets_read": [
         "Introduction"
       ]
-    },
-    "inputs": {
-      "stage": "inputs",
-      "completion_status": "iteration_cap_reached",
-      "iterations_run": 3,
-      "llm_calls_used": 4,
-      "elapsed_seconds": 7.549839700106531,
-      "prose": "In the inputs stage of the budget-impact model for Inotuzumab Ozogamicin, the analysis has reached an iteration cap, indicating that the model's criteria derivation process encountered challenges. Specifically, the required overview item was not satisfied, and the findings revealed that no tables were found to support the necessary inputs. This lack of data has resulted in an empty return for the rationale, suggesting that the model could not derive meaningful insights from the available information. Consequently, the absence of key inputs has hindered the progression of the model, leaving several critical concepts unaddressed.\n\nThe current context focuses on the population of patients with relapsed or refractory acute lymphoblastic leukaemia in Lebanon, yet without a comparator or additional details such as time horizon or perspective, the model's robustness is compromised. The findings indicate that items remain missing, which could include essential data points or assumptions that are vital for a comprehensive analysis. As it stands, the model is at a standstill, awaiting further input to fulfill the necessary criteria and advance to the next stage of evaluation.",
-      "overrides_proposed": [],
-      "applied_heuristics": [],
-      "completion_criteria": {
-        "inputs": {
-          "required_items": [
-            "overview"
-          ],
-          "rationale": "LLM criteria derivation failed or returned empty",
-          "source_signal": "fallback"
-        }
-      },
-      "findings": {
-        "inputs": {
-          "tables_found": [],
-          "items_satisfied": [],
-          "items_missing": [],
-          "notes": ""
-        }
-      }
-    },
-    "results": {
-      "stage": "results",
-      "completion_status": "iteration_cap_reached",
-      "iterations_run": 3,
-      "llm_calls_used": 4,
-      "elapsed_seconds": 13.69121369998902,
-      "prose": "In the results stage of the budget-impact model for Inotuzumab Ozogamicin in the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant limitation. The iteration cap was reached, resulting in an incomplete analysis where no tables were found to support the findings. Consequently, the required overview was not satisfied, and the rationale for the model's criteria derivation failed to yield any meaningful insights. This lack of data leaves a gap in understanding the potential budget impact of the intervention, as no comparative analysis or financial projections could be established.\n\nFurthermore, the absence of any satisfied items highlights the critical need for additional data to inform decision-making. The model's inability to provide a comprehensive overview of the budget implications for Inotuzumab Ozogamicin underscores the challenges faced in this analysis. As it stands, the findings remain unsubstantiated, and without further input or adjustments, the model cannot effectively guide stakeholders in Lebanon regarding the economic considerations of this treatment option.",
-      "overrides_proposed": [],
-      "applied_heuristics": [],
-      "completion_criteria": {
-        "results": {
-          "required_items": [
-            "overview"
-          ],
-          "rationale": "LLM criteria derivation failed or returned empty",
-          "source_signal": "fallback"
-        }
-      },
-      "findings": {
-        "results": {
-          "tables_found": [],
-          "items_satisfied": [],
-          "items_missing": [],
-          "notes": ""
-        }
-      }
-    },
-    "calculations": {
-      "stage": "calculations",
-      "completion_status": "iteration_cap_reached",
-      "iterations_run": 3,
-      "llm_calls_used": 4,
-      "elapsed_seconds": 7.287500399863347,
-      "prose": "In the calculations stage of the budget-impact model for Inotuzumab Ozogamicin in the context of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant challenge. The iteration cap was reached, indicating that the model could not derive the necessary calculations to provide a comprehensive overview. Specifically, the required items, including an overview of the calculations, were not satisfied, as the model returned empty results. This failure to derive criteria suggests that the underlying logic or data inputs may need to be revisited to ensure that the model can generate the expected outputs.\n\nFurthermore, the findings revealed that no tables were found, and there were several items missing that are critical for a complete analysis. The absence of these elements highlights the need for a thorough review of the model structure and key assumptions, which were not specified in the current context. As a result, no overrides were proposed, as the model's limitations necessitate a foundational reassessment before any adjustments can be made. Addressing these gaps will be essential for advancing the budget-impact analysis and ensuring that it meets the necessary criteria for decision-making.",
-      "overrides_proposed": [],
-      "applied_heuristics": [],
-      "completion_criteria": {
-        "calculations": {
-          "required_items": [
-            "overview"
-          ],
-          "rationale": "LLM criteria derivation failed or returned empty",
-          "source_signal": "fallback"
-        }
-      },
-      "findings": {
-        "calculations": {
-          "tables_found": [],
-          "items_satisfied": [],
-          "items_missing": [],
-          "notes": ""
-        }
-      },
-      "important_calc_tables": []
     }
   }
 }

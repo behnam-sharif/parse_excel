@@ -1,7 +1,7 @@
 {
   "model_id": "streamlit_run_simple",
   "ontology_id": "bim_v0",
-  "run_timestamp": "2026-05-05T23:59:22.102Z",
+  "run_timestamp": "2026-05-06T19:27:44.961Z",
   "agents": {
     "inputs": {
       "status": "complete",
@@ -26,7 +26,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 2.758663299959153,
+      "elapsed_seconds": 6.369169300189242,
       "key_decisions": [
         "override 9814fc53f594ba29_t118_t70_t45_child2 (mixed → input) via lexicon hit 'population' in title",
         "override 9814fc53f594ba29_t118_t70_t45_child3 (mixed → input) via lexicon hit 'market share' in title",
@@ -69,7 +69,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 0.610047300113365,
+      "elapsed_seconds": 0.6062247999943793,
       "key_decisions": [
         "override 94c8c58d611b9e70_t103_child3 (input → calculation) via lexicon hit 'total cost'",
         "structural override 47ecc07e130eef5f_t10 → calculation (density=0.77)",
@@ -116,7 +116,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 0.4646552000194788,
+      "elapsed_seconds": 0.3682941000442952,
       "key_decisions": [
         "override 262a4c0f1d47d09d (input → result) via lexicon hit 'budget impact'"
       ],

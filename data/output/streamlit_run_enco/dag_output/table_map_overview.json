@@ -5,6 +5,37 @@
   "total_with_core_region": 654,
   "sheets": [
     {
+      "sheet_name": "BI calculation_Manitoba",
+      "n_tables": 45,
+      "n_parents": 8,
+      "n_standalones": 29,
+      "n_children": 16,
+      "n_with_core_region": 43,
+      "n_without_core_region": 2,
+      "table_titles_preview": [
+        "Population projections",
+        "Total number of BRAF tests",
+        "World without new intervention",
+        "Total number of target population",
+        "World without new intervention"
+      ],
+      "node_types": {
+        "metadata": 2,
+        "input": 41,
+        "mixed": 2
+      },
+      "flag_counts": {
+        "header_missing": 5,
+        "merged_from_metadata_and_numeric_child": 18,
+        "title_missing": 29,
+        "header_sequence": 23,
+        "rowname_sequence": 1,
+        "rowname_missing": 4,
+        "metadata_propagated_positional": 3,
+        "header_conflict": 8
+      }
+    },
+    {
       "sheet_name": "Adverse events",
       "n_tables": 3,
       "n_parents": 1,
@@ -64,37 +95,6 @@
     },
     {
       "sheet_name": "BI calculation_BC",
-      "n_tables": 45,
-      "n_parents": 8,
-      "n_standalones": 29,
-      "n_children": 16,
-      "n_with_core_region": 43,
-      "n_without_core_region": 2,
-      "table_titles_preview": [
-        "Population projections",
-        "Total number of BRAF tests",
-        "World without new intervention",
-        "Total number of target population",
-        "World without new intervention"
-      ],
-      "node_types": {
-        "metadata": 2,
-        "input": 41,
-        "mixed": 2
-      },
-      "flag_counts": {
-        "header_missing": 5,
-        "merged_from_metadata_and_numeric_child": 18,
-        "title_missing": 29,
-        "header_sequence": 23,
-        "rowname_sequence": 1,
-        "rowname_missing": 4,
-        "metadata_propagated_positional": 3,
-        "header_conflict": 8
-      }
-    },
-    {
-      "sheet_name": "BI calculation_Manitoba",
       "n_tables": 45,
       "n_parents": 8,
       "n_standalones": 29,
@@ -391,6 +391,34 @@
       }
     },
     {
+      "sheet_name": "Defaults",
+      "n_tables": 12,
+      "n_parents": 0,
+      "n_standalones": 12,
+      "n_children": 0,
+      "n_with_core_region": 7,
+      "n_without_core_region": 5,
+      "table_titles_preview": [
+        "Defaults",
+        "Population by province sheet",
+        "Alberta Markup cost",
+        "Epidemiology sheet",
+        "Epidemiological calculator"
+      ],
+      "node_types": {
+        "metadata": 5,
+        "input": 7
+      },
+      "flag_counts": {
+        "merged_from_metadata_and_numeric_child": 5,
+        "title_missing": 5,
+        "header_missing": 4,
+        "rowname_missing": 3,
+        "low_context_node": 2,
+        "header_conflict": 1
+      }
+    },
+    {
       "sheet_name": "Cost calculations",
       "n_tables": 19,
       "n_parents": 2,
@@ -422,6 +450,33 @@
       }
     },
     {
+      "sheet_name": "Introduction",
+      "n_tables": 16,
+      "n_parents": 3,
+      "n_standalones": 8,
+      "n_children": 8,
+      "n_with_core_region": 4,
+      "n_without_core_region": 12,
+      "table_titles_preview": [
+        "Objective",
+        "The aim of the BIM is to estimate the impact of introducing Enco + Bini to the currently available treatment mix for patients with BRAF mutated metastatic melanoma from the Canadian healthcare payer perspective over a time horizon of 3 years (with 1 year baseline) (Figure 1). Given that the treatment duration can last more than 1 year for variety for treatments, a cohort -based approach was followed to capture the costs in subsequent years. | Figure 1. BIM structure",
+        "Population",
+        "Patients with unresectable or metastatic cutaneous melanoma with a BRAFV600 mutation",
+        "Scenarios"
+      ],
+      "node_types": {
+        "metadata": 12,
+        "setting": 4
+      },
+      "flag_counts": {
+        "all_metadata_no_numeric": 11,
+        "header_missing": 6,
+        "title_looks_like_footnote": 1,
+        "title_missing": 4,
+        "synthetic_setting": 4
+      }
+    },
+    {
       "sheet_name": "Ex summary",
       "n_tables": 14,
       "n_parents": 0,
@@ -447,61 +502,6 @@
         "title_missing": 3,
         "header_sequence": 1,
         "synthetic_setting": 10
-      }
-    },
-    {
-      "sheet_name": "Defaults",
-      "n_tables": 12,
-      "n_parents": 0,
-      "n_standalones": 12,
-      "n_children": 0,
-      "n_with_core_region": 7,
-      "n_without_core_region": 5,
-      "table_titles_preview": [
-        "Defaults",
-        "Population by province sheet",
-        "Alberta Markup cost",
-        "Epidemiology sheet",
-        "Epidemiological calculator"
-      ],
-      "node_types": {
-        "metadata": 5,
-        "input": 7
-      },
-      "flag_counts": {
-        "merged_from_metadata_and_numeric_child": 5,
-        "title_missing": 5,
-        "header_missing": 4,
-        "rowname_missing": 3,
-        "low_context_node": 2,
-        "header_conflict": 1
-      }
-    },
-    {
-      "sheet_name": "Introduction",
-      "n_tables": 16,
-      "n_parents": 3,
-      "n_standalones": 8,
-      "n_children": 8,
-      "n_with_core_region": 4,
-      "n_without_core_region": 12,
-      "table_titles_preview": [
-        "Objective",
-        "The aim of the BIM is to estimate the impact of introducing Enco + Bini to the currently available treatment mix for patients with BRAF mutated metastatic melanoma from the Canadian healthcare payer perspective over a time horizon of 3 years (with 1 year baseline) (Figure 1). Given that the treatment duration can last more than 1 year for variety for treatments, a cohort -based approach was followed to capture the costs in subsequent years. | Figure 1. BIM structure",
-        "Population",
-        "Patients with unresectable or metastatic cutaneous melanoma with a BRAFV600 mutation",
-        "Scenarios"
-      ],
-      "node_types": {
-        "metadata": 12,
-        "setting": 4
-      },
-      "flag_counts": {
-        "all_metadata_no_numeric": 11,
-        "header_missing": 6,
-        "title_looks_like_footnote": 1,
-        "title_missing": 4,
-        "synthetic_setting": 4
       }
     },
     {
@@ -665,6 +665,34 @@
       }
     },
     {
+      "sheet_name": "Epidemiology",
+      "n_tables": 17,
+      "n_parents": 3,
+      "n_standalones": 7,
+      "n_children": 10,
+      "n_with_core_region": 16,
+      "n_without_core_region": 1,
+      "table_titles_preview": [
+        "Epidemiological calculator",
+        "Epidemiology_Pat_Flow_eligible_pop",
+        "Epidemiology_Proportion_diagnosed_at_an_unresectable_or_metastatic_stage",
+        "Epidemiology_Proportion_of_patients_receiving_BRAF_test_metastatic"
+      ],
+      "node_types": {
+        "metadata": 1,
+        "input": 13,
+        "setting": 3
+      },
+      "flag_counts": {
+        "header_missing": 12,
+        "title_missing": 13,
+        "rowname_missing": 12,
+        "header_sequence": 2,
+        "low_context_node": 10,
+        "synthetic_setting": 3
+      }
+    },
+    {
       "sheet_name": "Subsequent tx",
       "n_tables": 16,
       "n_parents": 2,
@@ -725,34 +753,6 @@
         "title_missing": 1,
         "rowname_missing": 2,
         "synthetic_setting": 2
-      }
-    },
-    {
-      "sheet_name": "Epidemiology",
-      "n_tables": 17,
-      "n_parents": 3,
-      "n_standalones": 7,
-      "n_children": 10,
-      "n_with_core_region": 16,
-      "n_without_core_region": 1,
-      "table_titles_preview": [
-        "Epidemiological calculator",
-        "Epidemiology_Pat_Flow_eligible_pop",
-        "Epidemiology_Proportion_diagnosed_at_an_unresectable_or_metastatic_stage",
-        "Epidemiology_Proportion_of_patients_receiving_BRAF_test_metastatic"
-      ],
-      "node_types": {
-        "metadata": 1,
-        "input": 13,
-        "setting": 3
-      },
-      "flag_counts": {
-        "header_missing": 12,
-        "title_missing": 13,
-        "rowname_missing": 12,
-        "header_sequence": 2,
-        "low_context_node": 10,
-        "synthetic_setting": 3
       }
     },
     {

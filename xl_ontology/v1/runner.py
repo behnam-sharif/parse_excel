@@ -54,19 +54,32 @@ class Pass2RunResult:
 def default_pass2_agents(pack: OntologyPack) -> List[Pass2Agent]:
     """Build the canonical Pass-2 agent sequence.
 
-    Order matters: each subsequent stage reads ``upstream_results`` set by
-    the previous stages.
+    V1.J architecture flip: the order is
+        Inputs → Calculations → Results → Overall
+    so the overall stage can SYNTHESISE from the three stage reports
+    plus the cover sheets, instead of guessing concepts from cover
+    sheets alone before any tables have been examined.
+
+    Each subsequent stage reads:
+      * ``upstream_results`` (full StageResult of every prior stage)
+      * ``upstream_reports`` (compact StageFindingsReport per prior stage)
     """
     from xl_ontology.v1.stages.calculations import CalculationsAgent
     from xl_ontology.v1.stages.inputs import InputsAgent
     from xl_ontology.v1.stages.overall import OverallAgent
+    from xl_ontology.v1.stages.pre_overall import PreOverallStage
     from xl_ontology.v1.stages.results import ResultsAgent
 
     return [
-        OverallAgent(),
         InputsAgent(pack=pack),
-        ResultsAgent(pack=pack),
         CalculationsAgent(pack=pack),
+        ResultsAgent(pack=pack),
+        # Pre-overall: deterministic 3-LLM-call extraction of the 9
+        # goal concepts (intervention, country, time_horizon, ...) from
+        # cover sheets.  Emits a StageFindingsReport with concept values
+        # + citations that the OverallAgent ReAct loop reads.
+        PreOverallStage(),
+        OverallAgent(),
     ]
 
 
@@ -122,6 +135,12 @@ def run_pass2(
         # Pass forward to the next stage. Stages decide which prior
         # stages they read from; the runner makes them all available.
         pass2_ctx.upstream_results[result.stage] = result
+        # Distil into a StageFindingsReport for downstream stages
+        # (used by the overall agent in the V1.J flipped order).
+        try:
+            pass2_ctx.upstream_reports[result.stage] = _stage_to_report(result)
+        except Exception:
+            pass
 
     # Build the on-disk artifacts.
     summary_prose = _assemble_summary_prose(stages)
@@ -150,15 +169,22 @@ def run_pass2(
 
 
 def _assemble_summary_prose(stages: Dict[Pass2StageName, StageResult]) -> str:
-    """Concatenate stage prose into one Markdown narrative."""
+    """Concatenate stage prose into one Markdown narrative.
+
+    Order in the rendered narrative is the most readable for humans —
+    overall context first, then the contributing stages.  Internal
+    execution order (Inputs → Calc → Results → PreOverall → Overall)
+    differs from the rendering order.
+    """
     sections: List[str] = ["# Model Understanding\n"]
     titles = {
-        "overall": "## Overall context",
-        "inputs": "## Inputs",
-        "results": "## Results",
+        "overall":      "## Overall context",
+        "pre_overall":  "## Pre-overall extraction",
+        "inputs":       "## Inputs",
+        "results":      "## Results",
         "calculations": "## Calculations",
     }
-    for stage_name in ("overall", "inputs", "results", "calculations"):
+    for stage_name in ("overall", "pre_overall", "inputs", "results", "calculations"):
         if stage_name not in stages:
             continue
         sections.append(titles[stage_name])
@@ -225,7 +251,89 @@ def _stage_result_to_output(result: StageResult):
             findings=result.findings,
             important_calc_tables=result.extras.get("important_calc_tables", []),
         )
+    if result.stage == "pre_overall":
+        # pre_overall doesn't have a typed Pydantic model.  Emit a
+        # plain-dict shape via a minimal class that exposes
+        # ``model_dump(mode="json")`` so the runner's serialiser path
+        # is uniform.
+        return _PreOverallOutput(
+            stage="pre_overall",
+            **base_kwargs,
+            concepts=result.extras.get("concepts", {}),
+            concept_sources=result.extras.get("concept_sources", {}),
+            overview_sheets_read=result.extras.get("overview_sheets_read", []),
+            n_sheets_extracted=result.extras.get("n_sheets_extracted", 0),
+            findings={
+                k: v.model_dump(mode="json") if hasattr(v, "model_dump")
+                else dict(v.__dict__) if hasattr(v, "__dict__") else v
+                for k, v in (result.findings or {}).items()
+            },
+        )
     raise ValueError(f"Unknown stage: {result.stage!r}")
+
+
+class _PreOverallOutput:
+    """Tiny duck-type that exposes ``model_dump(mode="json")`` so the
+    runner's serializer treats pre_overall like the typed Stage2NOutput
+    Pydantic models.  Avoids needing a separate Pydantic schema for a
+    stage that's structurally identical to Stage21Output + extras.
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
+        self._payload: Dict[str, Any] = {}
+        for k, v in kwargs.items():
+            if hasattr(v, "model_dump"):
+                self._payload[k] = v.model_dump(mode="json")
+            else:
+                self._payload[k] = v
+
+    def model_dump(self, mode: str = "json") -> Dict[str, Any]:
+        return dict(self._payload)
+
+
+def _stage_to_report(result: StageResult) -> "StageFindingsReport":
+    """Compress a StageResult into the inter-stage handoff schema.
+
+    Keeps only the small, structured pieces the next stage actually
+    needs (concept → tables_found / items_satisfied / items_missing /
+    short notes) plus a 1-line headline.  Avoids forwarding the full
+    ReAct observation log — that lives on ``upstream_results`` for
+    callers that want it.
+    """
+    from xl_ontology.v1.agent_base import StageFindingsReport
+
+    concepts: Dict[str, Dict[str, Any]] = {}
+    for concept, finding in (result.findings or {}).items():
+        concepts[concept] = {
+            "tables_found": list(finding.tables_found or []),
+            "items_satisfied": list(finding.items_satisfied or []),
+            "items_missing": list(finding.items_missing or []),
+            "summary": (finding.notes or "")[:200],
+        }
+    n_concepts = len(concepts)
+    n_satisfied = sum(
+        1 for c in concepts.values() if not c["items_missing"]
+    )
+    headline = (
+        f"Stage {result.stage}: {n_satisfied}/{n_concepts} concept(s) "
+        f"satisfied; status={result.completion_status}"
+    )
+    # Stage-specific extras worth surfacing to the overall agent.
+    extras = result.extras or {}
+    if "important_calc_tables" in extras:
+        headline += (
+            f"; important_calc_tables={extras.get('important_calc_tables') or []}"
+        )
+    if "concepts" in extras:
+        # Stage 2.1 (overall) — but in the flipped order overall runs
+        # last, so this branch is only relevant if a non-default order
+        # is passed in.
+        headline += f"; overall_concepts={extras['concepts']}"
+    return StageFindingsReport(
+        stage=result.stage,
+        headline=headline,
+        concepts=concepts,
+    )
 
 
 __all__ = [

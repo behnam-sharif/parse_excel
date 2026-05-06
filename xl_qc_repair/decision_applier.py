@@ -166,13 +166,26 @@ def apply_verdict_to_final_map(
             changes = {"action": "assign_title", "old": old, "new": verdict.title}
 
     elif verdict.verdict == "synthesize_title":
-        if verdict.title:
+        # The LLM is supposed to supply ``title`` when picking
+        # synthesize_title.  Some responses come back with a verdict
+        # but a null/empty title — in that case we generate a
+        # deterministic fallback rather than leaving the table
+        # untitled.
+        title_text = (verdict.title or "").strip()
+        synth_source = "qc_title_synthesized_by_llm"
+        if not title_text:
+            title_text = _synthesize_fallback_title(leaf, bundle)
+            synth_source = "qc_title_synthesized_fallback"
+        if title_text:
             old = leaf.get("title")
-            leaf["title"] = verdict.title
+            leaf["title"] = title_text
             _remove_flag(flags, "title_missing")
             _remove_flag(flags, "truly_title_missing")
-            _add_flag(flags, "qc_title_synthesized_by_llm")
-            changes = {"action": "synthesize_title", "old": old, "new": verdict.title}
+            _add_flag(flags, synth_source)
+            changes = {
+                "action": "synthesize_title", "old": old, "new": title_text,
+                "fallback_used": synth_source == "qc_title_synthesized_fallback",
+            }
 
     elif verdict.verdict == "assign_row_names":
         if verdict.row_names:
@@ -185,6 +198,33 @@ def apply_verdict_to_final_map(
 
     elif verdict.verdict == "rowname_to_title":
         rn = list(leaf.get("row_names") or [])
+        # Strict rule (QCR.8): rowname_to_title applies only when
+        #   - exactly ONE row_name exists, AND
+        #   - that row_name lives OUTSIDE the core region
+        # (the row_name column is to the left of core.c1).
+        # Tables with multiple row_names — e.g. a 6-row cost-component
+        # breakdown — must NOT promote any single row to title; they
+        # should synthesize instead.
+        rejection: Optional[str] = None
+        cleaned = [str(r).strip() for r in rn if str(r).strip()]
+        if len(cleaned) != 1:
+            rejection = (
+                f"row_names has {len(cleaned)} entries; "
+                "rowname_to_title requires exactly 1"
+            )
+        elif _row_names_inside_core(leaf):
+            rejection = (
+                "row_names live inside the core region (bbox.c1 == core.c1); "
+                "promoting would steal a data cell as title"
+            )
+        if rejection is not None:
+            _add_flag(flags, "qc_rowname_to_title_rejected_strict_rule")
+            changes = {
+                "action": "rowname_to_title_rejected",
+                "reason": rejection,
+                "row_names": rn,
+            }
+            return changes
         promoted = _select_promotable_row_name(rn, verdict.title)
         if promoted is None:
             _add_flag(flags, "qc_rowname_to_title_rejected_sequence_only")
@@ -251,6 +291,53 @@ def _add_flag(flags: List[str], name: str) -> None:
 def _remove_flag(flags: List[str], name: str) -> None:
     while name in flags:
         flags.remove(name)
+
+
+def _row_names_inside_core(leaf: Dict[str, Any]) -> bool:
+    """True iff the row_names appear to live INSIDE the core region's
+    column span.  V6 places row_names in the leftmost column of the
+    bbox; when ``bbox.c1 == core.c1`` there's no left-of-core column,
+    so the row_names must be inside the core (i.e. they're data, not
+    labels).  In that case promoting one to title would steal a data
+    cell.
+    """
+    bbox = leaf.get("bbox") or {}
+    core = leaf.get("core_region") or {}
+    if not bbox or not core:
+        return False
+    try:
+        bbox_c1 = int(bbox.get("c1"))
+        core_c1 = int(core.get("c1"))
+    except Exception:
+        return False
+    return bbox_c1 >= core_c1
+
+
+def _synthesize_fallback_title(
+    leaf: Dict[str, Any],
+    bundle: Optional["RepairCandidateBundle"],  # forward-ref-safe
+) -> str:
+    """Compose a deterministic title when the LLM picks synthesize_title
+    but doesn't provide one.
+
+    Priority:
+      1. Sheet name + node_type, e.g. "Results — input table"
+      2. Coordinates as last-ditch identifier
+    Always returns a non-empty string so the title slot can be filled.
+    """
+    sheet = (leaf.get("sheet_name") or "").strip()
+    node_type = (leaf.get("node_type") or "").strip()
+    coords = (leaf.get("coordinates") or "").strip()
+    parts: List[str] = []
+    if sheet:
+        parts.append(sheet)
+    if node_type and node_type not in ("data_table",):
+        parts.append(f"({node_type} table)")
+    if not parts and coords:
+        parts.append(f"Untitled {coords}")
+    if not parts:
+        parts.append("Untitled table")
+    return " ".join(parts)
 
 
 _SEQ_LABEL_PREFIXES = (

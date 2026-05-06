@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-05T23:59:22.102Z",
+  "seed_timestamp": "2026-05-06T19:27:44.961Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "overall_model": {
@@ -1181,13 +1181,13 @@
         "table_id": "262a4c0f1d47d09d",
         "ontology_role": "result",
         "ontology_subtype": "incremental_budget_impact",
-        "confidence": 0.55,
+        "confidence": 0.44000000000000006,
         "evidence_quality": "partial",
-        "why_selected": "lexicon match in title for concept 'incremental_budget_impact'",
+        "why_selected": "lexicon match in header for concept 'incremental_budget_impact'",
         "evidence_signals": [
           {
-            "type": "title_match",
-            "value": "Budget Impact Analysis by Year",
+            "type": "format_match",
+            "value": "Budget impact",
             "matched_term": "budget impact"
           }
         ],

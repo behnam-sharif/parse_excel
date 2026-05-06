@@ -1,327 +1,4 @@
 {
-  "Introduction": {
-    "run_id": "streamlit_run_simple",
-    "sheet_name": "Introduction",
-    "resolved_tables": [
-      {
-        "table_id": "f57ac8d2e4e4931a_t3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_t3",
-          "f57ac8d2e4e4931a_t3_child1",
-          "f57ac8d2e4e4931a_t3_child2"
-        ],
-        "bbox": {
-          "r1": 10,
-          "c1": 2,
-          "r2": 12,
-          "c2": 4,
-          "hierarchy_role": "parent",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_t3"
-        },
-        "title": null,
-        "headers": [
-          [
-            "Value ",
-            "",
-            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-          ]
-        ],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "metadata",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "consumed_header",
-            "confidence": 0.55
-          },
-          {
-            "row_index": 1,
-            "layer1_tag": "data_candidate",
-            "layer2_tag": "data",
-            "confidence": 0.3
-          },
-          {
-            "row_index": 2,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "unassigned_context",
-            "confidence": 0.55
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": null,
-            "headers": "Values must be of type <class 'str'>"
-          },
-          "borders": {
-            "headers": "none"
-          },
-          "alignment": {
-            "data": "center"
-          },
-          "header_merges": []
-        },
-        "confidence": 0.343,
-        "signals": {
-          "excel_range": "C11:E13",
-          "no_core_regions": true,
-          "title_source": "none",
-          "header_source": "local",
-          "n_children_absorbed": 0,
-          "n_children_preserved": 2
-        },
-        "child_summaries": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "hierarchy_role": "child_metadata",
-            "table_role": "metadata",
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "has_core_region": false,
-            "absorbed": false
-          }
-        ],
-        "metadata_source": "heuristic",
-        "llm_metadata": null,
-        "child_titles": [
-          null,
-          null
-        ],
-        "children": [
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child1",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child1"
-            ],
-            "bbox": {
-              "r1": 10,
-              "c1": 2,
-              "r2": 10,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
-            },
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-              ]
-            ],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_header_candidate",
-                "layer2_tag": "consumed_header",
-                "confidence": 0.55
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
-              },
-              "borders": {
-                "headers": "none"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.35,
-            "signals": {
-              "excel_range": "C11:E11",
-              "no_core_regions": true,
-              "title_source": "none",
-              "header_source": "local"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "llm_metadata": null,
-            "child_titles": [],
-            "children": []
-          },
-          {
-            "table_id": "f57ac8d2e4e4931a_t3_child2",
-            "source_table_ids": [
-              "f57ac8d2e4e4931a_t3_child2"
-            ],
-            "bbox": {
-              "r1": 12,
-              "c1": 2,
-              "r2": 12,
-              "c2": 4,
-              "hierarchy_role": "child_metadata",
-              "parent_table_id": "f57ac8d2e4e4931a_t3",
-              "split_depth": 1,
-              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
-            },
-            "title": null,
-            "headers": [
-              [
-                "Value ",
-                "",
-                "The content of these cells can be changed to accommodate user inputs"
-              ]
-            ],
-            "row_names": null,
-            "notes": [],
-            "core_regions": [],
-            "table_role": "metadata",
-            "row_tags": [
-              {
-                "row_index": 0,
-                "layer1_tag": "title_header_candidate",
-                "layer2_tag": "consumed_header",
-                "confidence": 0.55
-              }
-            ],
-            "formatting": {
-              "bold": {
-                "title": false,
-                "headers": false,
-                "row_names": false,
-                "notes": false
-              },
-              "fill": {
-                "title": null,
-                "headers": "Values must be of type <class 'str'>"
-              },
-              "borders": {
-                "headers": "outline"
-              },
-              "alignment": {},
-              "header_merges": []
-            },
-            "confidence": 0.35,
-            "signals": {
-              "excel_range": "C13:E13",
-              "no_core_regions": true,
-              "title_source": "none",
-              "header_source": "local"
-            },
-            "child_summaries": [],
-            "metadata_source": "heuristic",
-            "llm_metadata": null,
-            "child_titles": [],
-            "children": []
-          }
-        ]
-      },
-      {
-        "table_id": "f57ac8d2e4e4931a_b3",
-        "source_table_ids": [
-          "f57ac8d2e4e4931a_b3"
-        ],
-        "bbox": {
-          "r1": 14,
-          "c1": 2,
-          "r2": 14,
-          "c2": 4,
-          "hierarchy_role": "standalone",
-          "parent_table_id": null,
-          "split_depth": 0,
-          "v3a_table_id": "f57ac8d2e4e4931a_b3"
-        },
-        "title": null,
-        "headers": [
-          [
-            "Value",
-            "",
-            "The content of these cells is used in the model and can not be changed"
-          ]
-        ],
-        "row_names": null,
-        "notes": [],
-        "core_regions": [],
-        "table_role": "metadata",
-        "row_tags": [
-          {
-            "row_index": 0,
-            "layer1_tag": "title_header_candidate",
-            "layer2_tag": "consumed_header",
-            "confidence": 0.55
-          }
-        ],
-        "formatting": {
-          "bold": {
-            "title": false,
-            "headers": false,
-            "row_names": false,
-            "notes": false
-          },
-          "fill": {
-            "title": null,
-            "headers": "Values must be of type <class 'str'>"
-          },
-          "borders": {
-            "headers": "outline"
-          },
-          "alignment": {},
-          "header_merges": []
-        },
-        "confidence": 0.35,
-        "signals": {
-          "excel_range": "C15:E15",
-          "no_core_regions": true,
-          "title_source": "none",
-          "header_source": "local"
-        },
-        "child_summaries": [],
-        "metadata_source": "heuristic",
-        "llm_metadata": null,
-        "child_titles": [],
-        "children": []
-      }
-    ]
-  },
   "Results": {
     "run_id": "streamlit_run_simple",
     "sheet_name": "Results",
@@ -1279,6 +956,329 @@
             "missing_header"
           ],
           "llm_called": false
+        },
+        "child_summaries": [],
+        "metadata_source": "heuristic",
+        "llm_metadata": null,
+        "child_titles": [],
+        "children": []
+      }
+    ]
+  },
+  "Introduction": {
+    "run_id": "streamlit_run_simple",
+    "sheet_name": "Introduction",
+    "resolved_tables": [
+      {
+        "table_id": "f57ac8d2e4e4931a_t3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_t3",
+          "f57ac8d2e4e4931a_t3_child1",
+          "f57ac8d2e4e4931a_t3_child2"
+        ],
+        "bbox": {
+          "r1": 10,
+          "c1": 2,
+          "r2": 12,
+          "c2": 4,
+          "hierarchy_role": "parent",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_t3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value ",
+            "",
+            "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          },
+          {
+            "row_index": 1,
+            "layer1_tag": "data_candidate",
+            "layer2_tag": "data",
+            "confidence": 0.3
+          },
+          {
+            "row_index": 2,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "unassigned_context",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "none"
+          },
+          "alignment": {
+            "data": "center"
+          },
+          "header_merges": []
+        },
+        "confidence": 0.343,
+        "signals": {
+          "excel_range": "C11:E13",
+          "no_core_regions": true,
+          "title_source": "none",
+          "header_source": "local",
+          "n_children_absorbed": 0,
+          "n_children_preserved": 2
+        },
+        "child_summaries": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "hierarchy_role": "child_metadata",
+            "table_role": "metadata",
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "has_core_region": false,
+            "absorbed": false
+          }
+        ],
+        "metadata_source": "heuristic",
+        "llm_metadata": null,
+        "child_titles": [
+          null,
+          null
+        ],
+        "children": [
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child1",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child1"
+            ],
+            "bbox": {
+              "r1": 10,
+              "c1": 2,
+              "r2": 10,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child1"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "none"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.35,
+            "signals": {
+              "excel_range": "C11:E11",
+              "no_core_regions": true,
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "llm_metadata": null,
+            "child_titles": [],
+            "children": []
+          },
+          {
+            "table_id": "f57ac8d2e4e4931a_t3_child2",
+            "source_table_ids": [
+              "f57ac8d2e4e4931a_t3_child2"
+            ],
+            "bbox": {
+              "r1": 12,
+              "c1": 2,
+              "r2": 12,
+              "c2": 4,
+              "hierarchy_role": "child_metadata",
+              "parent_table_id": "f57ac8d2e4e4931a_t3",
+              "split_depth": 1,
+              "v3a_table_id": "f57ac8d2e4e4931a_t3_child2"
+            },
+            "title": null,
+            "headers": [
+              [
+                "Value ",
+                "",
+                "The content of these cells can be changed to accommodate user inputs"
+              ]
+            ],
+            "row_names": null,
+            "notes": [],
+            "core_regions": [],
+            "table_role": "metadata",
+            "row_tags": [
+              {
+                "row_index": 0,
+                "layer1_tag": "title_header_candidate",
+                "layer2_tag": "consumed_header",
+                "confidence": 0.55
+              }
+            ],
+            "formatting": {
+              "bold": {
+                "title": false,
+                "headers": false,
+                "row_names": false,
+                "notes": false
+              },
+              "fill": {
+                "title": null,
+                "headers": "Values must be of type <class 'str'>"
+              },
+              "borders": {
+                "headers": "outline"
+              },
+              "alignment": {},
+              "header_merges": []
+            },
+            "confidence": 0.35,
+            "signals": {
+              "excel_range": "C13:E13",
+              "no_core_regions": true,
+              "title_source": "none",
+              "header_source": "local"
+            },
+            "child_summaries": [],
+            "metadata_source": "heuristic",
+            "llm_metadata": null,
+            "child_titles": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "table_id": "f57ac8d2e4e4931a_b3",
+        "source_table_ids": [
+          "f57ac8d2e4e4931a_b3"
+        ],
+        "bbox": {
+          "r1": 14,
+          "c1": 2,
+          "r2": 14,
+          "c2": 4,
+          "hierarchy_role": "standalone",
+          "parent_table_id": null,
+          "split_depth": 0,
+          "v3a_table_id": "f57ac8d2e4e4931a_b3"
+        },
+        "title": null,
+        "headers": [
+          [
+            "Value",
+            "",
+            "The content of these cells is used in the model and can not be changed"
+          ]
+        ],
+        "row_names": null,
+        "notes": [],
+        "core_regions": [],
+        "table_role": "metadata",
+        "row_tags": [
+          {
+            "row_index": 0,
+            "layer1_tag": "title_header_candidate",
+            "layer2_tag": "consumed_header",
+            "confidence": 0.55
+          }
+        ],
+        "formatting": {
+          "bold": {
+            "title": false,
+            "headers": false,
+            "row_names": false,
+            "notes": false
+          },
+          "fill": {
+            "title": null,
+            "headers": "Values must be of type <class 'str'>"
+          },
+          "borders": {
+            "headers": "outline"
+          },
+          "alignment": {},
+          "header_merges": []
+        },
+        "confidence": 0.35,
+        "signals": {
+          "excel_range": "C15:E15",
+          "no_core_regions": true,
+          "title_source": "none",
+          "header_source": "local"
         },
         "child_summaries": [],
         "metadata_source": "heuristic",

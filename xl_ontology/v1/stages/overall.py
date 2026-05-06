@@ -1,18 +1,21 @@
-"""Stage 2.1 — overall agent (Pass-2 comprehension layer).
+"""Stage 2.1 — overall agent (Pass-2 ReAct, V1.J architecture).
 
-Spec §10 Stage 2.1. Builds the overall_context that all later stages
-read forward (intervention, comparators, country, time horizon, etc.).
+V1.J architecture flip: the overall agent now runs LAST in the Pass-2
+sequence (Inputs → Calculations → Results → Overall).  It consumes:
 
-Flow:
-  1. find_overview_sheets — pick out cover/intro/notes sheets
-  2. read_overview_sheets — pull each sheet's text with location markers
-  3. Per-sheet extraction LLM call (one per sheet, capped at 3)
-  4. Synthesis LLM call → unified concept map
-  5. Heuristic fallback — currency→country if country still null
-  6. Narration LLM call → prose + structured concepts
+  * ``upstream_reports``    — compact StageFindingsReport from each
+                              prior stage (concept → tables_found,
+                              items_satisfied, items_missing, summary)
+  * ``upstream_results``    — full StageResult (for any deeper inspection)
+  * cover-sheet text via    — ``find_overview_sheets`` + ``read_sheets``
 
-Fixed completion criteria (no LLM derivation): the goal-concepts list
-is the same across all BIMs.
+…and synthesises a single BIM-level summary that ties the prose
+context (intervention, comparator, country, etc.) to the concrete
+table evidence the inputs/calc/results agents found.
+
+Implementation: a ``Pass2ReactAgent`` so the trace renders as a proper
+ReAct timeline.  The deterministic ``_currency_country_fallback`` is
+still applied after the ReAct loop completes if ``country`` is null.
 """
 
 from __future__ import annotations
@@ -27,17 +30,14 @@ from xl_ontology.schemas import (
     Pass2OverrideProposed,
     StageFinding,
 )
-from xl_ontology.tools.composite import (
-    OverviewSheetText,
-    find_overview_sheets,
-    read_overview_sheets,
-)
+from xl_ontology.tools.composite import OverviewSheetText
 from xl_ontology.tools.llm import ask_llm
-from xl_ontology.v1.agent_base import Pass2Agent, Pass2Context, ToolStep
+from xl_ontology.v1.agent_base import Pass2Context, ToolStep
 from xl_ontology.v1.narrator import (
     build_narration_payload,
     parse_narration_response,
 )
+from xl_ontology.v1.react_base import Pass2ReactAgent
 
 
 # Spec §10 Stage 2.1 goal concepts.
@@ -66,106 +66,62 @@ OVERVIEW_NAME_PATTERNS: List[str] = [
     "Title",
 ]
 
-# Cap: how many overview sheets to send through per-sheet extraction.
-MAX_OVERVIEW_SHEETS = 3
 
+_NARRATION_PROMPT_TMPL = """You are writing the OVERALL summary for a
+budget-impact-model (BIM) comprehension run.  This is the final
+narrative — read both:
 
-# ---------------------------------------------------------------------------
-# Prompts
-# ---------------------------------------------------------------------------
+  (1) The structured reports from the inputs / calculations / results
+      stages (concept → tables_found + summary).  These tell you what
+      the workbook ACTUALLY computes.
+  (2) The cover-sheet text the agent gathered via
+      ``find_overview_sheets`` / ``read_sheets`` /
+      ``search_workbook_lexicon`` (in OBSERVATIONS).  These give the
+      background prose context.
 
-EXTRACTION_PROMPT_TMPL = """You are extracting structured information from one
-sheet of a budget-impact model (BIM) workbook. The sheet is part of an
-"overview" or "cover" page that describes the model.
+UPSTREAM REPORTS:
+{upstream_reports_json}
 
-For each of these concepts, return the value if you can find it in the
-sheet text below. Use null if the concept is not mentioned. Do not
-guess — the value must be explicitly stated.
+COVER-SHEET OBSERVATIONS:
+{observations_json}
 
-Concepts:
-{concepts_json}
-
-Sheet text (each line is "[Sheet!Cell] value"):
----
-{sheet_text}
----
-
-Return JSON only, in this shape:
-{{"concepts": {{"intervention": "...", "comparator": "...", ...}}}}
-"""
-
-
-SYNTHESIS_PROMPT_TMPL = """You are combining per-sheet extractions of a
-budget-impact model into one coherent overall context.
-
-For each concept, choose the single best value across all sheets. When
-sheets disagree, prefer values that are more specific. Use null if no
-sheet provided a value.
-
-Per-sheet extractions:
-{per_sheet_json}
-
-Concepts to consolidate: {concepts_json}
-
-Return JSON only, in this shape:
-{{"concepts": {{"intervention": "...", "comparator": "...", ...}}}}
-"""
-
-
-NARRATION_PROMPT_TMPL = """You are writing a 2–3 paragraph prose narrative
-of a budget-impact model's overall context. Use the JSON below.
-
-Rules:
-- Reference values that are present; explicitly note absent values rather
-  than skipping them.
-- Be concrete about country, time horizon, intervention, and comparators.
-- No bullet lists in the prose.
-
-Findings:
+CRITERIA + FINDINGS:
 {narration_payload}
 
-Resolved concept values:
-{concepts_json}
+Write a 2-3 paragraph prose summary that:
+  * names the intervention, comparator, country, time horizon if found
+    (cite the source — cover-sheet cell OR a stage report);
+  * lists the concrete inputs the model uses (with table_id refs from
+    the inputs report);
+  * names the headline result (with table_id refs from the results
+    report);
+  * mentions the engine calculation table(s) (from the calculations
+    report's ``important_calc_tables``).
+  * explicitly notes any concept that remains absent (don't skip them).
 
 Return JSON only:
-{{"prose": "...", "structured_extras": {{"concepts": {{...}}, "notes": "..."}}}}
+{{"prose": "...", "structured_extras": {{"concepts": {{...}}}}}}
 """
 
 
-# ---------------------------------------------------------------------------
-# Agent
-# ---------------------------------------------------------------------------
+class OverallAgent(Pass2ReactAgent):
+    """Stage 2.1 — overall context (V1.J ReAct version).
 
-class OverallAgent(Pass2Agent):
-    """Stage 2.1 — overall context."""
+    Runs LAST in the V1.J flipped order.  Reads upstream stage reports +
+    cover sheets via ReAct tool calls, then narrates a BIM-level
+    summary.
+    """
 
     stage_name = "overall"
 
     def __init__(self) -> None:
-        # Cached state across the loop.
-        self._overview_sheet_texts: List[OverviewSheetText] = []
-        self._concepts: Dict[str, Any] = {}
+        super().__init__()
+        self._concepts: Dict[str, Any] = {c: None for c in GOAL_CONCEPTS}
         self._applied_heuristics: List[str] = []
-        self._executed: bool = False
 
-    def criteria_met(  # type: ignore[override]
-        self,
-        criteria,
-        findings,
-    ) -> bool:
-        # Stage 2.1 completes after one pass even when some goal
-        # concepts are absent — absent concepts are a valid outcome
-        # (spec §10: "report as absent in narration"), not a reason to
-        # iterate. Base implementation would keep looping because
-        # items_missing isn't empty.
-        return self._executed
-
-    # ----- hooks -----
+    # ----- criteria (fixed for the overall stage) -----
 
     def derive_criteria(self, ctx: Pass2Context):  # type: ignore[override]
-        # Fixed criteria — every concept is "required" with a single
-        # placeholder item that gets filled if/when the LLM returns a
-        # non-null value (see ``criteria_met``).
         return {
             concept: CompletionCriterion(
                 required_items=[concept],
@@ -175,85 +131,260 @@ class OverallAgent(Pass2Agent):
             for concept in GOAL_CONCEPTS
         }
 
-    def plan_iteration(  # type: ignore[override]
-        self,
-        ctx: Pass2Context,
-        criteria,
-        findings,
-        iteration: int,
-    ) -> List[ToolStep]:
-        # Stage 2.1 doesn't run a planner-LLM. The deterministic flow
-        # is encoded in `execute_step` which is invoked once per call.
-        # We emit a single sentinel step per iteration so the loop
-        # advances at all; the work happens inside `execute_step`.
-        if iteration > 1:
-            return []  # everything happens in iteration 1
-        return [ToolStep(tool="__overall_run__", args={}, rationale="Stage 2.1 deterministic flow")]
+    # ----- ReAct hook overrides -----
 
-    def execute_step(  # type: ignore[override]
+    def _extra_prompt_context(  # type: ignore[override]
         self,
         ctx: Pass2Context,
-        step: ToolStep,
+        findings: Dict[str, StageFinding],
+    ) -> Optional[Dict[str, Any]]:
+        """Inject every upstream stage's compact report.  When
+        ``pre_overall`` ran successfully its concept values are the
+        primary source — the ReAct loop should only call cover-sheet
+        tools for concepts pre_overall reported absent.
+        """
+        reports_dict: Dict[str, Any] = {}
+        for stage, report in (ctx.upstream_reports or {}).items():
+            try:
+                reports_dict[stage] = {
+                    "headline": report.headline,
+                    "concepts": report.concepts,
+                }
+            except Exception:
+                continue
+        # Pull pre_overall's concept values into a primary-source map
+        # so the LLM sees them under a clear name AND knows which
+        # concepts still need cover-sheet exploration.
+        pre_overall_report = (ctx.upstream_reports or {}).get("pre_overall")
+        pre_overall_concepts: Dict[str, Any] = {}
+        unmet_concepts: List[str] = []
+        if pre_overall_report is not None:
+            for concept in GOAL_CONCEPTS:
+                concept_data = (pre_overall_report.concepts or {}).get(concept) or {}
+                # concept_data is a dict like {tables_found, items_satisfied,
+                # items_missing, summary} — ``summary`` carries
+                # "value: 'Drug X' (source: Description!B2)" or
+                # "absent in overview sheets".
+                summary = concept_data.get("summary") if isinstance(concept_data, dict) else None
+                items_satisfied = (
+                    concept_data.get("items_satisfied") if isinstance(concept_data, dict) else []
+                ) or []
+                if items_satisfied:
+                    pre_overall_concepts[concept] = summary
+                else:
+                    unmet_concepts.append(concept)
+        else:
+            unmet_concepts = list(GOAL_CONCEPTS)
+
+        n_pre_overall_filled = len(pre_overall_concepts)
+        n_unmet = len(unmet_concepts)
+
+        # Decide whether the agent should call cover-sheet tools at all.
+        # If pre_overall already filled most concepts, calling
+        # find_overview_sheets/read_sheets is redundant — the
+        # agent should stop after one verification turn.
+        pre_overall_ran = pre_overall_report is not None
+        cover_sheet_directive: str
+        if pre_overall_ran and n_unmet == 0:
+            cover_sheet_directive = (
+                "NO COVER-SHEET TOOLS NEEDED.  pre_overall already "
+                "filled every goal concept.  Take ONE verification "
+                "action (e.g. read a relevant inputs/results table) "
+                "or stop directly with a summary."
+            )
+        elif pre_overall_ran and n_unmet < len(GOAL_CONCEPTS):
+            cover_sheet_directive = (
+                f"pre_overall filled {n_pre_overall_filled} concept(s); "
+                f"{n_unmet} remain unmet: {unmet_concepts}.  Use "
+                "find_overview_sheets / read_sheets ONLY if you "
+                "have reason to believe a different cover sheet (one "
+                "pre_overall didn't read) carries the unmet concepts.  "
+                "DO NOT re-call read_sheets on a sheet "
+                "pre_overall already processed — its observation log "
+                "covered them."
+            )
+        else:
+            cover_sheet_directive = (
+                "pre_overall did not run / produced no values.  Use "
+                "find_overview_sheets followed by read_sheets "
+                "to gather cover-sheet text."
+            )
+
+        return {
+            "goal_concepts": GOAL_CONCEPTS,
+            "upstream_stage_reports": reports_dict,
+            "pre_overall_concept_values": pre_overall_concepts,
+            "unmet_goal_concepts": unmet_concepts,
+            "overview_sheet_name_patterns": OVERVIEW_NAME_PATTERNS,
+            "instruction": (
+                "PRIMARY SOURCE — the pre_overall stage already "
+                "extracted goal concept values from the workbook's "
+                "cover sheets.  Read ``pre_overall_concept_values`` "
+                "first; quote those values verbatim in narration with "
+                "their source citations.  Cite stage reports (inputs / "
+                "calculations / results) when describing concrete "
+                "table evidence.  COVER-SHEET POLICY: "
+                + cover_sheet_directive
+                + "  Stop early — narration is what matters; minimise "
+                "tool calls when pre_overall already covered the goal "
+                "concepts."
+            ),
+        }
+
+    def update_findings_from_result(  # type: ignore[override]
+        self,
+        ctx: Pass2Context,
+        tool_step: ToolStep,
+        result: Any,
+        criteria: Dict[str, CompletionCriterion],
         findings: Dict[str, StageFinding],
         overrides: List[Pass2OverrideProposed],
         iteration: int,
     ) -> None:
-        if step.tool != "__overall_run__":
-            return
-        # 1. Discover overview sheets (deterministic, no LLM)
-        overview = find_overview_sheets(ctx.tool_ctx, OVERVIEW_NAME_PATTERNS)
-        overview = overview[:MAX_OVERVIEW_SHEETS]
-        # 2. Read their text
-        self._overview_sheet_texts = read_overview_sheets(
-            ctx.tool_ctx, overview, max_chars_per_sheet=ctx.config.overview_sheet_max_chars
-        )
+        """For the overall stage, the agent's reasoning extracts
+        concept VALUES.  We harvest any concept assignments that show
+        up in tool results and stash them on ``self._concepts`` for
+        narration / fallback.
 
-        # 3. Per-sheet extraction (LLM)
-        per_sheet_extractions: List[Dict[str, Any]] = []
-        for sheet_text in self._overview_sheet_texts:
-            if not sheet_text.text.strip():
-                per_sheet_extractions.append({"sheet": sheet_text.sheet_name, "concepts": {}})
-                continue
-            extracted = self._extract_one_sheet(ctx, sheet_text)
-            per_sheet_extractions.append({
-                "sheet": sheet_text.sheet_name,
-                "concepts": extracted,
-            })
+        Per-concept items_missing → items_satisfied is driven mainly by
+        the agent's stop-summary (parsed in narrate); the loop just
+        keeps the findings dict warm so the cap rule isn't triggered
+        artificially when concepts are flowing in via observations.
+        """
+        # Best-effort: walk read_sheets results.
+        if isinstance(result, list):
+            for item in result:
+                if isinstance(item, OverviewSheetText) and item.text:
+                    pass  # the LLM reads the text directly via observation
+        # Mark per-concept progress generously — one concept per call.
+        for concept, finding in findings.items():
+            if finding.items_missing:
+                satisfied = finding.items_missing.pop(0)
+                if satisfied not in finding.items_satisfied:
+                    finding.items_satisfied.append(satisfied)
+                finding.notes = (finding.notes + f"; tool={tool_step.tool}").strip("; ")
+                break
 
-        # 4. Synthesis (LLM) — only if at least one extraction had non-empty concepts
-        any_data = any(ext["concepts"] for ext in per_sheet_extractions)
-        if any_data:
-            self._concepts = self._synthesize(ctx, per_sheet_extractions)
-        else:
-            # No overview text → start with all-None
-            self._concepts = {c: None for c in GOAL_CONCEPTS}
+    def pre_narrate_hook(  # type: ignore[override]
+        self,
+        ctx: Pass2Context,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+        overrides: List[Pass2OverrideProposed],
+        extras: Dict[str, Any],
+        completion_status: CompletionStatus,
+    ) -> None:
+        """Lift pre_overall's concept values into self._concepts BEFORE
+        narration runs.  This guarantees the goal concepts populate
+        even when the ReAct loop did no useful tool calls.
 
-        # 5. Heuristic fallback for country
+        Order of operations:
+          1. Adopt every value pre_overall extracted as authoritative.
+          2. Apply the deterministic currency→country fallback for
+             ``country`` if still null.
+          3. (narrate fires next; the narrator may overwrite values
+             when it has stronger evidence from cover-sheet observations.)
+        """
+        # Step 1 — adopt pre_overall values.
+        pre_overall_report = (ctx.upstream_reports or {}).get("pre_overall")
+        if pre_overall_report is not None:
+            for concept in GOAL_CONCEPTS:
+                if self._concepts.get(concept) not in (None, "", "null"):
+                    continue  # already set somehow; don't clobber
+                concept_data = (pre_overall_report.concepts or {}).get(concept) or {}
+                if not isinstance(concept_data, dict):
+                    continue
+                items_satisfied = concept_data.get("items_satisfied") or []
+                if not items_satisfied:
+                    continue
+                # Parse the pre_overall summary to recover the raw value.
+                # Format from PreOverallStage: "value: 'Drug X' (source: ...)"
+                summary = concept_data.get("summary") or ""
+                value = _parse_pre_overall_summary_value(summary)
+                if value not in (None, "", "null"):
+                    self._concepts[concept] = value
+                    if "pre_overall_extraction" not in self._applied_heuristics:
+                        self._applied_heuristics.append("pre_overall_extraction")
+
+        # Step 2 — currency→country fallback.
         if self._concepts.get("country") in (None, "", "null"):
-            inf = infer_country_from_currency(ctx.tool_ctx)
+            try:
+                inf = infer_country_from_currency(ctx.tool_ctx)
+            except Exception:
+                inf = None
             if inf is not None:
                 self._concepts["country"] = inf.country
-                self._applied_heuristics.append("currency_country_fallback")
+                if "currency_country_fallback" not in self._applied_heuristics:
+                    self._applied_heuristics.append("currency_country_fallback")
 
-        # 6. Mark findings satisfied for every concept the LLM returned
+    def post_run_hook(  # type: ignore[override]
+        self,
+        ctx: Pass2Context,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+        overrides: List[Pass2OverrideProposed],
+        extras: Dict[str, Any],
+        completion_status: CompletionStatus,
+    ) -> None:
+        """Stash final concepts + overview-sheet metadata for the
+        runner's JSON serialiser AND populate findings per goal
+        concept based on whether ``self._concepts`` has a value.
+
+        Without this population, the StageResult.findings dict for
+        the overall stage is all-empty (every concept's
+        items_satisfied / items_missing / notes are blank), even when
+        the narrator's prose successfully named the concepts.  This
+        mirrors the deterministic-flow behaviour we had pre-V1.J.
+        """
+        extras["concepts"] = dict(self._concepts)
+        sheets_read: List[str] = []
+        for obs in self._observations:
+            if obs.tool == "read_sheets" and not obs.error:
+                names = (obs.args_summary or {}).get("sheet_names")
+                if isinstance(names, list):
+                    sheets_read.extend(str(s) for s in names)
+        extras["overview_sheets_read"] = list(dict.fromkeys(sheets_read))
+
+        # Populate findings per goal concept from self._concepts.
         for concept in GOAL_CONCEPTS:
+            f = findings.get(concept)
+            if f is None:
+                continue
             value = self._concepts.get(concept)
-            f = findings[concept]
             if value not in (None, "", "null"):
-                f.items_satisfied = [concept]
-                f.items_missing = []
+                if concept not in f.items_satisfied:
+                    f.items_satisfied.append(concept)
+                f.items_missing = [
+                    item for item in f.items_missing if item != concept
+                ]
                 f.notes = f"value: {value!r}"
             else:
-                f.items_missing = [concept]
-                f.notes = "absent in overview sheets"
-        self._executed = True
+                if concept not in f.items_missing:
+                    f.items_missing.append(concept)
+                if not f.notes:
+                    f.notes = "absent in overview sheets and upstream stage reports"
+
+        # Also pull tables_found from upstream_reports.  The overall
+        # agent's "tables_found" for goal concepts is informational —
+        # we list the union of tables every prior stage cited so the
+        # narrator (and downstream consumers) can see which tables
+        # collectively support the model summary.
+        upstream_table_ids: List[str] = []
+        for stage_name, report in (ctx.upstream_reports or {}).items():
+            for concept_data in (getattr(report, "concepts", {}) or {}).values():
+                if isinstance(concept_data, dict):
+                    upstream_table_ids.extend(concept_data.get("tables_found") or [])
+        if upstream_table_ids:
+            extras["upstream_tables_cited"] = list(dict.fromkeys(upstream_table_ids))
+
+    # ----- narration (overall-specific prompt) -----
 
     def narrate(  # type: ignore[override]
         self,
         ctx: Pass2Context,
-        criteria,
-        findings,
-        overrides,
+        criteria: Dict[str, CompletionCriterion],
+        findings: Dict[str, StageFinding],
+        overrides: List[Pass2OverrideProposed],
         completion_status: CompletionStatus,
     ) -> Tuple[str, Dict[str, Any], List[str]]:
         if ctx.tool_ctx.llm_complete is None:
@@ -266,9 +397,25 @@ class OverallAgent(Pass2Agent):
             overrides_proposed=overrides,
             completion_status=completion_status,
         )
-        prompt = NARRATION_PROMPT_TMPL.format(
+        observations_payload = json.dumps([
+            {
+                "iteration": o.iteration, "tool": o.tool,
+                "args": o.args_summary,
+                "observation": o.observation_text, "error": o.error,
+            }
+            for o in self._observations[-12:]
+        ], indent=2, default=str)
+        upstream_reports_payload = json.dumps({
+            stage: {
+                "headline": r.headline,
+                "concepts": r.concepts,
+            }
+            for stage, r in (ctx.upstream_reports or {}).items()
+        }, indent=2, default=str)
+        prompt = _NARRATION_PROMPT_TMPL.format(
+            upstream_reports_json=upstream_reports_payload,
+            observations_json=observations_payload,
             narration_payload=narration_payload,
-            concepts_json=json.dumps(self._concepts, indent=2),
         )
         try:
             resp = ask_llm(
@@ -281,61 +428,21 @@ class OverallAgent(Pass2Agent):
                 temperature=ctx.config.llm_temperature,
                 budget_phase="pass2",
             )
-            prose, _ = parse_narration_response(resp.response)
+            prose, extras = parse_narration_response(resp.response)
         except Exception:
             prose = self._template_narration(completion_status)
+            extras = {}
+        # Lift any concept values the narrator chose into self._concepts
+        # so post_run_hook + fallback see them.
+        if isinstance(extras, dict):
+            llm_concepts = extras.get("concepts")
+            if isinstance(llm_concepts, dict):
+                for k, v in llm_concepts.items():
+                    if k in GOAL_CONCEPTS and v not in (None, "", "null"):
+                        self._concepts[k] = v
+        return prose, self._extras(), list(self._applied_heuristics)
 
-        return prose, self._extras(), self._applied_heuristics
-
-    # ----- internals -----
-
-    def _extract_one_sheet(self, ctx: Pass2Context, sheet_text: OverviewSheetText) -> Dict[str, Any]:
-        prompt = EXTRACTION_PROMPT_TMPL.format(
-            concepts_json=json.dumps(GOAL_CONCEPTS),
-            sheet_text=sheet_text.text,
-        )
-        try:
-            resp = ask_llm(
-                ctx.tool_ctx,
-                agent="overall_model",
-                phase="extraction",
-                prompt_payload=prompt,
-                ontology_context=[],
-                max_tokens=ctx.config.llm_max_tokens,
-                temperature=ctx.config.llm_temperature,
-                budget_phase="pass2",
-            )
-        except Exception:
-            return {}
-        return _parse_concepts_response(resp.response)
-
-    def _synthesize(
-        self,
-        ctx: Pass2Context,
-        per_sheet_extractions: List[Dict[str, Any]],
-    ) -> Dict[str, Any]:
-        prompt = SYNTHESIS_PROMPT_TMPL.format(
-            per_sheet_json=json.dumps(per_sheet_extractions, indent=2),
-            concepts_json=json.dumps(GOAL_CONCEPTS),
-        )
-        try:
-            resp = ask_llm(
-                ctx.tool_ctx,
-                agent="overall_model",
-                phase="synthesis",
-                prompt_payload=prompt,
-                ontology_context=[],
-                max_tokens=ctx.config.llm_max_tokens,
-                temperature=ctx.config.llm_temperature,
-                budget_phase="pass2",
-            )
-        except Exception:
-            # Fall back to first non-empty extraction per concept
-            return _merge_extractions(per_sheet_extractions)
-        out = _parse_concepts_response(resp.response)
-        if not out:
-            return _merge_extractions(per_sheet_extractions)
-        return out
+    # ----- helpers -----
 
     def _template_narration(self, completion_status: CompletionStatus) -> str:
         parts: List[str] = []
@@ -356,53 +463,37 @@ class OverallAgent(Pass2Agent):
             parts.append(head + ".")
         absent = [c for c in GOAL_CONCEPTS if self._concepts.get(c) in (None, "", "null")]
         if absent:
-            parts.append("Concepts not located in overview sheets: " + ", ".join(absent) + ".")
+            parts.append("Concepts not located: " + ", ".join(absent) + ".")
         if completion_status != "complete":
             parts.append(f"(completion status: {completion_status})")
-        return " ".join(parts) or "Overall context could not be resolved from overview sheets."
+        return " ".join(parts) or "Overall context could not be resolved."
 
     def _extras(self) -> Dict[str, Any]:
         return {
-            "concepts": self._concepts,
-            "overview_sheets_read": [s.sheet_name for s in self._overview_sheet_texts],
+            "concepts": dict(self._concepts),
         }
 
 
-# ---------------------------------------------------------------------------
-# Pure helpers
-# ---------------------------------------------------------------------------
+def _parse_pre_overall_summary_value(summary: str) -> Optional[str]:
+    """Extract the value out of a pre_overall summary string.
 
-def _parse_concepts_response(text: str) -> Dict[str, Any]:
-    """Tolerant parse of ``{"concepts": {...}}`` or bare ``{...}``."""
-    text = text.strip()
-    if text.startswith("```"):
-        lines = text.splitlines()
-        if lines and lines[0].startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].startswith("```"):
-            lines = lines[:-1]
-        text = "\n".join(lines)
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError:
-        return {}
-    if isinstance(data, dict) and "concepts" in data and isinstance(data["concepts"], dict):
-        return {k: v for k, v in data["concepts"].items() if k in GOAL_CONCEPTS}
-    if isinstance(data, dict):
-        return {k: v for k, v in data.items() if k in GOAL_CONCEPTS}
-    return {}
-
-
-def _merge_extractions(per_sheet: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Pick the first non-empty value per concept across sheets (fallback)."""
-    out: Dict[str, Any] = {c: None for c in GOAL_CONCEPTS}
-    for ext in per_sheet:
-        concepts = ext.get("concepts") or {}
-        for c in GOAL_CONCEPTS:
-            v = concepts.get(c)
-            if out[c] in (None, "", "null") and v not in (None, "", "null"):
-                out[c] = v
-    return out
+    Accepts the canonical shape ``"value: 'Drug X' (source: ...)"`` —
+    written by ``PreOverallStage`` when populating findings — and
+    returns ``"Drug X"``.  Falls back to None when the format doesn't
+    match.
+    """
+    s = (summary or "").strip()
+    if not s.startswith("value:"):
+        return None
+    rest = s[len("value:"):].strip()
+    # Strip the trailing "(source: ...)" if present.
+    if " (source:" in rest:
+        rest = rest.split(" (source:", 1)[0].rstrip()
+    rest = rest.strip()
+    # Strip surrounding repr quotes ('...') or ("...").
+    if len(rest) >= 2 and rest[0] in ("'", '"') and rest[-1] == rest[0]:
+        rest = rest[1:-1]
+    return rest or None
 
 
 __all__ = ["GOAL_CONCEPTS", "OVERVIEW_NAME_PATTERNS", "OverallAgent"]

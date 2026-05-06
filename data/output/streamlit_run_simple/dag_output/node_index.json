@@ -1,145 +1,5 @@
 {
   "by_id": {
-    "introduction__f57ac8d2e4e4931a_t3_child1__0": {
-      "node_id": "introduction__f57ac8d2e4e4931a_t3_child1__0",
-      "table_id": "f57ac8d2e4e4931a_t3_child1",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 10,
-        "c1": 2,
-        "r2": 10,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C11:E11",
-      "title": null,
-      "headers": [
-        [
-          "Value ",
-          "",
-          "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 10,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 10,
-          "col": 4,
-          "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value   The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed.  | Introduction | Introduction | metadata",
-      "flags": [
-        "all_metadata_no_numeric",
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
-    "introduction__f57ac8d2e4e4931a_t3_child2__0": {
-      "node_id": "introduction__f57ac8d2e4e4931a_t3_child2__0",
-      "table_id": "f57ac8d2e4e4931a_t3_child2",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 12,
-        "c1": 2,
-        "r2": 12,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C13:E13",
-      "title": null,
-      "headers": [
-        [
-          "Value ",
-          "",
-          "The content of these cells can be changed to accommodate user inputs"
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 12,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 12,
-          "col": 4,
-          "text": "The content of these cells can be changed to accommodate user inputs"
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value   The content of these cells can be changed to accommodate user inputs | Introduction | Introduction | metadata",
-      "flags": [
-        "all_metadata_no_numeric",
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
-    "introduction__f57ac8d2e4e4931a_b3__0": {
-      "node_id": "introduction__f57ac8d2e4e4931a_b3__0",
-      "table_id": "f57ac8d2e4e4931a_b3",
-      "sheet_name": "Introduction",
-      "sheet_slug": "introduction",
-      "bbox": {
-        "r1": 14,
-        "c1": 2,
-        "r2": 14,
-        "c2": 4
-      },
-      "coordinates": "Introduction!C15:E15",
-      "title": null,
-      "headers": [
-        [
-          "Value",
-          "",
-          "The content of these cells is used in the model and can not be changed"
-        ]
-      ],
-      "row_names": null,
-      "footnotes_notes_refs": [
-        {
-          "row": 14,
-          "col": 2,
-          "text": "Value"
-        },
-        {
-          "row": 14,
-          "col": 4,
-          "text": "The content of these cells is used in the model and can not be changed"
-        }
-      ],
-      "parent_path": [
-        "Introduction"
-      ],
-      "node_type": "metadata",
-      "referenced_cells": [],
-      "referenced_ranges": [],
-      "referenced_named_ranges": [],
-      "search_text": "Value  The content of these cells is used in the model and can not be changed | Introduction | Introduction | metadata",
-      "flags": [
-        "title_missing",
-        "no_representative_formula"
-      ]
-    },
     "results__262a4c0f1d47d09d__0": {
       "node_id": "results__262a4c0f1d47d09d__0",
       "table_id": "262a4c0f1d47d09d",
@@ -471,6 +331,146 @@
       "flags": [
         "title_missing",
         "header_missing"
+      ]
+    },
+    "introduction__f57ac8d2e4e4931a_t3_child1__0": {
+      "node_id": "introduction__f57ac8d2e4e4931a_t3_child1__0",
+      "table_id": "f57ac8d2e4e4931a_t3_child1",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 10,
+        "c1": 2,
+        "r2": 10,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C11:E11",
+      "title": null,
+      "headers": [
+        [
+          "Value ",
+          "",
+          "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed. "
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 10,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 10,
+          "col": 4,
+          "text": "The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed."
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value   The content of these cells should not be changed. These cells contain important formulas or refer to other cells that can be changed.  | Introduction | Introduction | metadata",
+      "flags": [
+        "all_metadata_no_numeric",
+        "title_missing",
+        "no_representative_formula"
+      ]
+    },
+    "introduction__f57ac8d2e4e4931a_t3_child2__0": {
+      "node_id": "introduction__f57ac8d2e4e4931a_t3_child2__0",
+      "table_id": "f57ac8d2e4e4931a_t3_child2",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 12,
+        "c1": 2,
+        "r2": 12,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C13:E13",
+      "title": null,
+      "headers": [
+        [
+          "Value ",
+          "",
+          "The content of these cells can be changed to accommodate user inputs"
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 12,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 12,
+          "col": 4,
+          "text": "The content of these cells can be changed to accommodate user inputs"
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value   The content of these cells can be changed to accommodate user inputs | Introduction | Introduction | metadata",
+      "flags": [
+        "all_metadata_no_numeric",
+        "title_missing",
+        "no_representative_formula"
+      ]
+    },
+    "introduction__f57ac8d2e4e4931a_b3__0": {
+      "node_id": "introduction__f57ac8d2e4e4931a_b3__0",
+      "table_id": "f57ac8d2e4e4931a_b3",
+      "sheet_name": "Introduction",
+      "sheet_slug": "introduction",
+      "bbox": {
+        "r1": 14,
+        "c1": 2,
+        "r2": 14,
+        "c2": 4
+      },
+      "coordinates": "Introduction!C15:E15",
+      "title": null,
+      "headers": [
+        [
+          "Value",
+          "",
+          "The content of these cells is used in the model and can not be changed"
+        ]
+      ],
+      "row_names": null,
+      "footnotes_notes_refs": [
+        {
+          "row": 14,
+          "col": 2,
+          "text": "Value"
+        },
+        {
+          "row": 14,
+          "col": 4,
+          "text": "The content of these cells is used in the model and can not be changed"
+        }
+      ],
+      "parent_path": [
+        "Introduction"
+      ],
+      "node_type": "metadata",
+      "referenced_cells": [],
+      "referenced_ranges": [],
+      "referenced_named_ranges": [],
+      "search_text": "Value  The content of these cells is used in the model and can not be changed | Introduction | Introduction | metadata",
+      "flags": [
+        "title_missing",
+        "no_representative_formula"
       ]
     },
     "inputs__9814fc53f594ba29_t118_t70_t45_child2__0": {
@@ -9407,15 +9407,15 @@
     }
   },
   "by_sheet": {
-    "Introduction": [
-      "introduction__f57ac8d2e4e4931a_t3_child1__0",
-      "introduction__f57ac8d2e4e4931a_t3_child2__0",
-      "introduction__f57ac8d2e4e4931a_b3__0"
-    ],
     "Results": [
       "results__262a4c0f1d47d09d__0",
       "results__47ecc07e130eef5f_t10__0",
       "results__47ecc07e130eef5f_b10__0"
+    ],
+    "Introduction": [
+      "introduction__f57ac8d2e4e4931a_t3_child1__0",
+      "introduction__f57ac8d2e4e4931a_t3_child2__0",
+      "introduction__f57ac8d2e4e4931a_b3__0"
     ],
     "Inputs": [
       "inputs__9814fc53f594ba29_t118_t70_t45_child2__0",
@@ -9546,11 +9546,6 @@
     ]
   },
   "by_node_type": {
-    "metadata": [
-      "introduction__f57ac8d2e4e4931a_t3_child1__0",
-      "introduction__f57ac8d2e4e4931a_t3_child2__0",
-      "introduction__f57ac8d2e4e4931a_b3__0"
-    ],
     "input": [
       "results__262a4c0f1d47d09d__0",
       "results__47ecc07e130eef5f_t10__0",
@@ -9622,6 +9617,11 @@
       "calculations__076daba6b93bd14c_b17_b23__core1__0",
       "calculations__076daba6b93bd14c_b17_b23__core2__0"
     ],
+    "metadata": [
+      "introduction__f57ac8d2e4e4931a_t3_child1__0",
+      "introduction__f57ac8d2e4e4931a_t3_child2__0",
+      "introduction__f57ac8d2e4e4931a_b3__0"
+    ],
     "mixed": [
       "inputs__9814fc53f594ba29_t118_t70_t45_child2__0",
       "inputs__9814fc53f594ba29_t118_t70_t45_child3__0",
@@ -9683,15 +9683,6 @@
     ]
   },
   "by_table_id": {
-    "f57ac8d2e4e4931a_t3_child1": [
-      "introduction__f57ac8d2e4e4931a_t3_child1__0"
-    ],
-    "f57ac8d2e4e4931a_t3_child2": [
-      "introduction__f57ac8d2e4e4931a_t3_child2__0"
-    ],
-    "f57ac8d2e4e4931a_b3": [
-      "introduction__f57ac8d2e4e4931a_b3__0"
-    ],
     "262a4c0f1d47d09d": [
       "results__262a4c0f1d47d09d__0"
     ],
@@ -9700,6 +9691,15 @@
     ],
     "47ecc07e130eef5f_b10": [
       "results__47ecc07e130eef5f_b10__0"
+    ],
+    "f57ac8d2e4e4931a_t3_child1": [
+      "introduction__f57ac8d2e4e4931a_t3_child1__0"
+    ],
+    "f57ac8d2e4e4931a_t3_child2": [
+      "introduction__f57ac8d2e4e4931a_t3_child2__0"
+    ],
+    "f57ac8d2e4e4931a_b3": [
+      "introduction__f57ac8d2e4e4931a_b3__0"
     ],
     "9814fc53f594ba29_t118_t70_t45_child2": [
       "inputs__9814fc53f594ba29_t118_t70_t45_child2__0"
@@ -10072,15 +10072,6 @@
     ]
   },
   "cell_to_node": {
-    "Introduction::10::2": "introduction__f57ac8d2e4e4931a_t3_child1__0",
-    "Introduction::10::3": "introduction__f57ac8d2e4e4931a_t3_child1__0",
-    "Introduction::10::4": "introduction__f57ac8d2e4e4931a_t3_child1__0",
-    "Introduction::12::2": "introduction__f57ac8d2e4e4931a_t3_child2__0",
-    "Introduction::12::3": "introduction__f57ac8d2e4e4931a_t3_child2__0",
-    "Introduction::12::4": "introduction__f57ac8d2e4e4931a_t3_child2__0",
-    "Introduction::14::2": "introduction__f57ac8d2e4e4931a_b3__0",
-    "Introduction::14::3": "introduction__f57ac8d2e4e4931a_b3__0",
-    "Introduction::14::4": "introduction__f57ac8d2e4e4931a_b3__0",
     "Results::4::2": "results__262a4c0f1d47d09d__0",
     "Results::4::3": "results__262a4c0f1d47d09d__0",
     "Results::4::4": "results__262a4c0f1d47d09d__0",
@@ -10209,6 +10200,15 @@
     "Results::63::9": "results__47ecc07e130eef5f_b10__0",
     "Results::63::10": "results__47ecc07e130eef5f_b10__0",
     "Results::63::11": "results__47ecc07e130eef5f_b10__0",
+    "Introduction::10::2": "introduction__f57ac8d2e4e4931a_t3_child1__0",
+    "Introduction::10::3": "introduction__f57ac8d2e4e4931a_t3_child1__0",
+    "Introduction::10::4": "introduction__f57ac8d2e4e4931a_t3_child1__0",
+    "Introduction::12::2": "introduction__f57ac8d2e4e4931a_t3_child2__0",
+    "Introduction::12::3": "introduction__f57ac8d2e4e4931a_t3_child2__0",
+    "Introduction::12::4": "introduction__f57ac8d2e4e4931a_t3_child2__0",
+    "Introduction::14::2": "introduction__f57ac8d2e4e4931a_b3__0",
+    "Introduction::14::3": "introduction__f57ac8d2e4e4931a_b3__0",
+    "Introduction::14::4": "introduction__f57ac8d2e4e4931a_b3__0",
     "Inputs::4::2": "inputs__9814fc53f594ba29_t118_t70_t45_child2__0",
     "Inputs::4::3": "inputs__9814fc53f594ba29_t118_t70_t45_child2__0",
     "Inputs::4::4": "inputs__9814fc53f594ba29_t118_t70_t45_child2__0",

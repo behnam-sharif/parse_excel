@@ -1,4 +1,189 @@
 {
+  "Results": {
+    "sheet_name": "Results",
+    "finalize_version": "v6-finalize-mvp",
+    "entries": [
+      {
+        "kind": "standalone",
+        "table_id": "262a4c0f1d47d09d",
+        "coordinates": "Results!B4:E10",
+        "bbox": {
+          "r1": 3,
+          "c1": 1,
+          "r2": 9,
+          "c2": 4
+        },
+        "sheet_name": "Results",
+        "title": "Results (input table)",
+        "headers": [
+          [
+            "Year",
+            "Without InO",
+            "With InO",
+            "Budget impact"
+          ]
+        ],
+        "row_names": [
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "Total"
+        ],
+        "core_region": {
+          "r1": 4,
+          "c1": 2,
+          "r2": 9,
+          "c2": 4
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "missing_header",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "merged_from_metadata_and_numeric_child",
+          "rowname_sequence",
+          "qc_title_synthesized_fallback"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "47ecc07e130eef5f_t10",
+        "coordinates": "Results!B48:L57",
+        "bbox": {
+          "r1": 47,
+          "c1": 1,
+          "r2": 56,
+          "c2": 11
+        },
+        "sheet_name": "Results",
+        "title": "Budget impact breakdown by cost component",
+        "headers": [
+          [
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "Without InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO",
+            "With InO"
+          ],
+          [
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024"
+          ]
+        ],
+        "row_names": [
+          "Drug costs",
+          "Adverse events costs",
+          "Subsequent treatment costs",
+          "Hospitalization costs",
+          "SCT costs",
+          "End-of-life costs",
+          "Total",
+          "Annual budget impact"
+        ],
+        "core_region": {
+          "r1": 49,
+          "c1": 2,
+          "r2": 56,
+          "c2": 11
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "core_validation_ambiguous",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "merged_from_metadata_and_numeric_child",
+          "header_conflict",
+          "header_sequence",
+          "qc_title_assigned"
+        ]
+      },
+      {
+        "kind": "standalone",
+        "table_id": "47ecc07e130eef5f_b10",
+        "coordinates": "Results!G59:L64",
+        "bbox": {
+          "r1": 58,
+          "c1": 6,
+          "r2": 63,
+          "c2": 11
+        },
+        "sheet_name": "Results",
+        "title": "Results (input table)",
+        "headers": [],
+        "row_names": [
+          "Drug costs",
+          "Adverse events costs",
+          "Subsequent treatment costs",
+          "Hospitalization costs",
+          "SCT costs",
+          "End-of-life costs"
+        ],
+        "core_region": {
+          "r1": 58,
+          "c1": 7,
+          "r2": 63,
+          "c2": 11
+        },
+        "node_type": "input",
+        "parent_path": [
+          "Results"
+        ],
+        "footnotes_notes_refs": [],
+        "llm_gate_triggers": [
+          {
+            "name": "missing_header",
+            "source": "raw_v6"
+          }
+        ],
+        "source_flags": [
+          "header_missing",
+          "qc_title_synthesized_fallback"
+        ]
+      }
+    ],
+    "stats": {
+      "standalone_count": 3,
+      "parent_count": 0,
+      "total_children": 0,
+      "flag_frequency": {
+        "merged_from_metadata_and_numeric_child": 2,
+        "title_missing": 3,
+        "rowname_sequence": 1,
+        "header_conflict": 1,
+        "header_sequence": 1,
+        "header_missing": 1
+      }
+    }
+  },
   "Introduction": {
     "sheet_name": "Introduction",
     "finalize_version": "v6-finalize-mvp",
@@ -160,190 +345,6 @@
       "flag_frequency": {
         "all_metadata_no_numeric": 3,
         "title_missing": 3
-      }
-    }
-  },
-  "Results": {
-    "sheet_name": "Results",
-    "finalize_version": "v6-finalize-mvp",
-    "entries": [
-      {
-        "kind": "standalone",
-        "table_id": "262a4c0f1d47d09d",
-        "coordinates": "Results!B4:E10",
-        "bbox": {
-          "r1": 3,
-          "c1": 1,
-          "r2": 9,
-          "c2": 4
-        },
-        "sheet_name": "Results",
-        "title": "Budget Impact Analysis by Year",
-        "headers": [
-          [
-            "Year",
-            "Without InO",
-            "With InO",
-            "Budget impact"
-          ]
-        ],
-        "row_names": [
-          "2020",
-          "2021",
-          "2022",
-          "2023",
-          "2024",
-          "Total"
-        ],
-        "core_region": {
-          "r1": 4,
-          "c1": 2,
-          "r2": 9,
-          "c2": 4
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "merged_from_metadata_and_numeric_child",
-          "rowname_sequence",
-          "qc_title_synthesized_by_llm"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "47ecc07e130eef5f_t10",
-        "coordinates": "Results!B48:L57",
-        "bbox": {
-          "r1": 47,
-          "c1": 1,
-          "r2": 56,
-          "c2": 11
-        },
-        "sheet_name": "Results",
-        "title": "Budget impact breakdown by cost component",
-        "headers": [
-          [
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "Without InO",
-            "With InO",
-            "With InO",
-            "With InO",
-            "With InO",
-            "With InO"
-          ],
-          [
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024",
-            "2020",
-            "2021",
-            "2022",
-            "2023",
-            "2024"
-          ]
-        ],
-        "row_names": [
-          "Drug costs",
-          "Adverse events costs",
-          "Subsequent treatment costs",
-          "Hospitalization costs",
-          "SCT costs",
-          "End-of-life costs",
-          "Total",
-          "Annual budget impact"
-        ],
-        "core_region": {
-          "r1": 49,
-          "c1": 2,
-          "r2": 56,
-          "c2": 11
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "core_validation_ambiguous",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "merged_from_metadata_and_numeric_child",
-          "header_conflict",
-          "header_sequence",
-          "qc_title_assigned"
-        ]
-      },
-      {
-        "kind": "standalone",
-        "table_id": "47ecc07e130eef5f_b10",
-        "coordinates": "Results!G59:L64",
-        "bbox": {
-          "r1": 58,
-          "c1": 6,
-          "r2": 63,
-          "c2": 11
-        },
-        "sheet_name": "Results",
-        "title": "Drug costs",
-        "headers": [],
-        "row_names": [
-          "Adverse events costs",
-          "Subsequent treatment costs",
-          "Hospitalization costs",
-          "SCT costs",
-          "End-of-life costs"
-        ],
-        "core_region": {
-          "r1": 58,
-          "c1": 7,
-          "r2": 63,
-          "c2": 11
-        },
-        "node_type": "input",
-        "parent_path": [
-          "Results"
-        ],
-        "footnotes_notes_refs": [],
-        "llm_gate_triggers": [
-          {
-            "name": "missing_header",
-            "source": "raw_v6"
-          }
-        ],
-        "source_flags": [
-          "header_missing",
-          "qc_rowname_promoted_to_title"
-        ]
-      }
-    ],
-    "stats": {
-      "standalone_count": 3,
-      "parent_count": 0,
-      "total_children": 0,
-      "flag_frequency": {
-        "merged_from_metadata_and_numeric_child": 2,
-        "title_missing": 3,
-        "rowname_sequence": 1,
-        "header_conflict": 1,
-        "header_sequence": 1,
-        "header_missing": 1
       }
     }
   },
@@ -2075,17 +2076,9 @@
               "c2": 26
             },
             "sheet_name": "Calculations",
-            "title": null,
+            "title": "2024",
             "headers": [],
-            "row_names": [
-              "2024",
-              "2023",
-              "2022",
-              "2021",
-              "2020",
-              "Current situation",
-              "INO"
-            ],
+            "row_names": null,
             "core_region": {
               "r1": 21,
               "c1": 22,
@@ -2109,10 +2102,10 @@
             ],
             "source_flags": [
               "derived_from_parent_core_split",
-              "title_missing",
               "header_missing",
+              "rowname_missing",
               "low_context_node",
-              "qc_row_names_assigned"
+              "qc_title_assigned"
             ]
           },
           {
@@ -2167,7 +2160,7 @@
               "c2": 20
             },
             "sheet_name": "Calculations",
-            "title": "Budget Impact Model for 2020-2024",
+            "title": null,
             "headers": [],
             "row_names": null,
             "core_region": {
@@ -2193,10 +2186,11 @@
             ],
             "source_flags": [
               "derived_from_parent_core_split",
+              "title_missing",
               "header_missing",
               "rowname_missing",
               "low_context_node",
-              "qc_title_synthesized_by_llm"
+              "qc_keep_unchanged"
             ]
           },
           {
@@ -2209,7 +2203,7 @@
               "c2": 27
             },
             "sheet_name": "Calculations",
-            "title": "Total ",
+            "title": "Number of patients that die each year",
             "headers": [],
             "row_names": null,
             "core_region": {
@@ -2329,7 +2323,7 @@
               "c2": 26
             },
             "sheet_name": "Calculations",
-            "title": "Budget Impact Model Calculations",
+            "title": "2024",
             "headers": [],
             "row_names": null,
             "core_region": {
@@ -2358,7 +2352,7 @@
               "header_missing",
               "rowname_missing",
               "low_context_node",
-              "qc_title_synthesized_by_llm"
+              "qc_title_assigned"
             ]
           },
           {
