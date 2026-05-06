@@ -71,6 +71,10 @@ class OntologyRunResult:
     errors: List[str] = field(default_factory=list)
     llm_calls_used: int = 0
     elapsed_seconds: float = 0.0
+    pass2_skipped: bool = False
+    pass2_skip_reason: Optional[str] = None
+    pass2_artifacts: List[Path] = field(default_factory=list)
+    pass2_llm_calls_used: int = 0
 
 
 class OntologyRunError(Exception):
@@ -277,6 +281,49 @@ def run_ontology(
             # build_errors.jsonl exists too (created on writer open).
             artifacts.append(get_ontology_build_errors_path(run_id, output_base))
 
+            # ----- Pass 2 (comprehension layer) -----
+            pass2_skipped = False
+            pass2_skip_reason: Optional[str] = None
+            pass2_artifacts: List[Path] = []
+            pass2_llm_calls = 0
+            if config.pass2_enabled and effective_llm is not None:
+                from xl_ontology.v1 import (
+                    Pass2Config,
+                    default_pass2_agents,
+                    run_pass2,
+                )
+                pass2_cfg = Pass2Config.from_stage_config(config)
+                pass2_result = run_pass2(
+                    run_id=run_id,
+                    output_base=output_base,
+                    config=pass2_cfg,
+                    pack=pack,
+                    tool_ctx=ctx,
+                    agents=default_pass2_agents(pack),
+                )
+                pass2_skipped = pass2_result.skipped
+                pass2_skip_reason = pass2_result.skip_reason
+                pass2_artifacts = [Path(p) for p in pass2_result.artifacts]
+                pass2_llm_calls = sum(
+                    s.llm_calls_used for s in pass2_result.stages.values()
+                )
+                artifacts.extend(pass2_artifacts)
+            else:
+                pass2_skipped = True
+                pass2_skip_reason = (
+                    "pass2_disabled_via_config"
+                    if not config.pass2_enabled
+                    else "no_llm_available"
+                )
+                trace.emit(
+                    WarningEvent(
+                        ts=_TraceBase.now_ts(),
+                        category="pass2_skipped",
+                        message=f"Pass 2 skipped: {pass2_skip_reason}",
+                        file_path=None,
+                    )
+                )
+
             elapsed = time.perf_counter() - t0
             trace.emit(
                 RunComplete(
@@ -284,7 +331,7 @@ def run_ontology(
                     status="complete",
                     agents_run=agents_run,
                     total_elapsed_seconds=elapsed,
-                    total_llm_calls=llm_calls_used,
+                    total_llm_calls=llm_calls_used + pass2_llm_calls,
                 )
             )
             return OntologyRunResult(
@@ -294,6 +341,10 @@ def run_ontology(
                 errors=error_list,
                 llm_calls_used=llm_calls_used,
                 elapsed_seconds=elapsed,
+                pass2_skipped=pass2_skipped,
+                pass2_skip_reason=pass2_skip_reason,
+                pass2_artifacts=pass2_artifacts,
+                pass2_llm_calls_used=pass2_llm_calls,
             )
         finally:
             workbook.close()

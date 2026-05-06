@@ -1,7 +1,7 @@
 {
   "model_id": "streamlit_run_simple",
   "ontology_id": "bim_v0",
-  "run_timestamp": "2026-05-05T15:49:04.021Z",
+  "run_timestamp": "2026-05-05T23:59:22.102Z",
   "agents": {
     "inputs": {
       "status": "complete",
@@ -26,7 +26,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 1.6350458001252264,
+      "elapsed_seconds": 2.758663299959153,
       "key_decisions": [
         "override 9814fc53f594ba29_t118_t70_t45_child2 (mixed → input) via lexicon hit 'population' in title",
         "override 9814fc53f594ba29_t118_t70_t45_child3 (mixed → input) via lexicon hit 'market share' in title",
@@ -47,21 +47,21 @@
     "calculations": {
       "status": "complete",
       "evidence_quality": "high",
-      "summary": "17 main calculation tables identified (aggregator, structural_calc, total_cost_with). 1 aggregator.",
+      "summary": "17 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
       "summary_source": "template",
       "concepts_resolved": null,
       "concepts_absent": null,
-      "tables_classified": 18,
+      "tables_classified": 17,
       "node_type_overrides_proposed": 17,
       "expected_concepts_found": [
         "total_cost_with_intervention",
-        "total_cost_without_intervention",
-        "aggregator"
+        "total_cost_without_intervention"
       ],
       "expected_concepts_absent": [
         "cost_component_calc",
         "patient_flow",
-        "scenario_calc"
+        "scenario_calc",
+        "aggregator"
       ],
       "applied_heuristics": [],
       "tools_called": [
@@ -69,7 +69,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 0.29436269984580576,
+      "elapsed_seconds": 0.610047300113365,
       "key_decisions": [
         "override 94c8c58d611b9e70_t103_child3 (input → calculation) via lexicon hit 'total cost'",
         "structural override 47ecc07e130eef5f_t10 → calculation (density=0.77)",
@@ -89,26 +89,26 @@
         "structural override 94c8c58d611b9e70_b103_child7 → calculation (density=0.78)",
         "structural override 1f634d7d13c5e37c_b57_b48_b16_b23__core2 → calculation (density=1.00)"
       ],
-      "human_readable_output": "The calculations agent classified 18 table(s).\n\nExpected concepts found: total_cost_with_intervention, total_cost_without_intervention, aggregator.\n\nExpected concepts absent: cost_component_calc, patient_flow, scenario_calc.\n\nProposed 17 node_type override(s) (logged to node_type_override_log.jsonl)."
+      "human_readable_output": "The calculations agent classified 17 table(s).\n\nExpected concepts found: total_cost_with_intervention, total_cost_without_intervention.\n\nExpected concepts absent: cost_component_calc, patient_flow, scenario_calc, aggregator.\n\nProposed 17 node_type override(s) (logged to node_type_override_log.jsonl)."
     },
     "results": {
       "status": "complete",
       "evidence_quality": "high",
-      "summary": "2 result tables identified (incremental_budget_impact, scenario_results). Incremental row present.",
+      "summary": "1 result table identified (incremental_budget_impact). Incremental row present.",
       "summary_source": "template",
       "concepts_resolved": null,
       "concepts_absent": null,
-      "tables_classified": 2,
-      "node_type_overrides_proposed": 2,
+      "tables_classified": 1,
+      "node_type_overrides_proposed": 1,
       "expected_concepts_found": [
-        "incremental_budget_impact",
-        "scenario_results"
+        "incremental_budget_impact"
       ],
       "expected_concepts_absent": [
         "total_cost_summary",
         "per_patient_impact",
         "annual_impact",
-        "multi_year_impact"
+        "multi_year_impact",
+        "scenario_results"
       ],
       "applied_heuristics": [],
       "tools_called": [
@@ -116,12 +116,11 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 0.25705519993789494,
+      "elapsed_seconds": 0.4646552000194788,
       "key_decisions": [
-        "override 262a4c0f1d47d09d (input → result) via lexicon hit 'budget impact'",
-        "override 1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core2 (input → result) via lexicon hit 'scenario'"
+        "override 262a4c0f1d47d09d (input → result) via lexicon hit 'budget impact'"
       ],
-      "human_readable_output": "The results agent classified 2 table(s).\n\nExpected concepts found: incremental_budget_impact, scenario_results.\n\nExpected concepts absent: total_cost_summary, per_patient_impact, annual_impact, multi_year_impact.\n\nProposed 2 node_type override(s) (logged to node_type_override_log.jsonl)."
+      "human_readable_output": "The results agent classified 1 table(s).\n\nExpected concepts found: incremental_budget_impact.\n\nExpected concepts absent: total_cost_summary, per_patient_impact, annual_impact, multi_year_impact, scenario_results.\n\nProposed 1 node_type override(s) (logged to node_type_override_log.jsonl)."
     }
   }
 }

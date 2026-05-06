@@ -420,8 +420,23 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
         help=(
             "Seed-phase ontology run. Reads v6 final_table_map.json + xl_dag dag.json + "
             "cleaned_workbook.xlsx and writes ontology_output/* (summary_model_v{N}.json, "
-            "agent_outputs, table_tags, trace, override log, build errors)."
+            "agent_outputs, table_tags, trace, override log, build errors). "
+            "When `pass2_enabled: true` and OPENAI_API_KEY is set, also runs the "
+            "Pass-2 comprehension stages and writes model_understanding.{md,json} "
+            "+ cross_agent_findings.jsonl."
         ),
+    )
+    ontology_pass2_enabled = st.sidebar.checkbox(
+        "Run Pass 2 (LLM comprehension)",
+        value=True,
+        disabled=busy,
+        help=(
+            "Toggles the Pass-2 comprehension layer (4 sequential agents: "
+            "overall → inputs → results → calculations).  Requires "
+            "OPENAI_API_KEY.  When off, only the deterministic Pass 1 "
+            "labeller runs."
+        ),
+        key="ontology_pass2_enabled_chk",
     )
     st.sidebar.caption(
         "xl_sheetagent runs **V3a** first (`sheetagent_output/v3a_results.json`), "
@@ -582,7 +597,9 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
     if ontology_btn and not busy:
         _clear_for_run("xl_ontology")
         pc_chain = load_config()
-        _ont_user = st.session_state["cfg_ov"].get("xl_ontology") or {}
+        _ont_user = dict(st.session_state["cfg_ov"].get("xl_ontology") or {})
+        # Reflect the sidebar checkbox into the per-run override.
+        _ont_user["pass2_enabled"] = bool(ontology_pass2_enabled)
         _ont_cfg = ontology_config_from_pipeline(pc_chain, overrides=_ont_user)
 
         _run_id_capture = run_id
@@ -772,9 +789,18 @@ py -3 scripts/run_ontology.py --run-id {run_id} --output-base {base}
             st.error(err)
         _render_qc_repair(run_id, base)
     elif res is not None and op == "xl_ontology":
+        pass2_skipped = bool(getattr(res, "pass2_skipped", True))
+        pass2_calls = int(getattr(res, "pass2_llm_calls_used", 0))
+        pass2_reason = getattr(res, "pass2_skip_reason", None)
+        pass2_msg = (
+            f"pass2_skipped ({pass2_reason})"
+            if pass2_skipped
+            else f"pass2_llm_calls={pass2_calls}"
+        )
         st.success(
             f"xl_ontology complete — version=v{getattr(res, 'version_written', '?')}, "
-            f"llm_calls={getattr(res, 'llm_calls_used', 0)}, "
+            f"pass1_llm_calls={getattr(res, 'llm_calls_used', 0)}, "
+            f"{pass2_msg}, "
             f"{len(getattr(res, 'artifacts', []) or [])} artifact(s), "
             f"{getattr(res, 'elapsed_seconds', 0.0):.2f}s"
         )

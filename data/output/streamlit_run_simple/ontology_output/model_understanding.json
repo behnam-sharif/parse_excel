@@ -1,0 +1,116 @@
+{
+  "schema_version": "v1",
+  "model_id": "streamlit_run_simple",
+  "ontology_id": "bim_v0",
+  "v1_run_timestamp": "2026-05-06T00:00:05.767Z",
+  "v1_pack_overview_text_hash": "sha256:b7649f4fed58f271ef5f50c7e9290a1c12b34ce2858033738887ce5032a153a1",
+  "summary_prose": "# Model Understanding\n\n## Overall context\nIn the context of Lebanon, a budget-impact model has been developed to evaluate the economic implications of using Inotuzumab Ozogamicin for patients suffering from relapsed or refractory acute lymphoblastic leukaemia. This model is complete but highlights several critical gaps in the data. Notably, there is no comparator identified, which is essential for assessing the relative cost-effectiveness of the intervention. Additionally, the model lacks clarity on the indication, time horizon, perspective, model structure, and key assumptions, all of which are vital for a comprehensive analysis. \n\nThe absence of these elements raises concerns about the robustness of the findings, as they limit the ability to fully understand the economic impact of Inotuzumab Ozogamicin within the specified population. Without a defined comparator, the model cannot effectively benchmark the intervention against existing treatment options, which is crucial for stakeholders in making informed healthcare decisions. As it stands, the model provides a partial view of the budgetary implications, necessitating further data collection to fill in these gaps and enhance its utility for policymakers in Lebanon.\n\n## Inputs\nIn the inputs stage of the budget-impact model for Inotuzumab Ozogamicin, the analysis has reached an iteration cap, indicating that the model's criteria derivation process encountered challenges. Specifically, the required overview item was not satisfied, and the findings revealed that no tables were found to support the necessary inputs. This lack of data has resulted in an empty return for the rationale, suggesting that the model could not derive meaningful insights from the available information. Consequently, the absence of key inputs has hindered the progression of the model, leaving several critical concepts unaddressed.\n\nThe current context focuses on the population of patients with relapsed or refractory acute lymphoblastic leukaemia in Lebanon, yet without a comparator or additional details such as time horizon or perspective, the model's robustness is compromised. The findings indicate that items remain missing, which could include essential data points or assumptions that are vital for a comprehensive analysis. As it stands, the model is at a standstill, awaiting further input to fulfill the necessary criteria and advance to the next stage of evaluation.\n\n## Results\nIn the results stage of the budget-impact model for Inotuzumab Ozogamicin in the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant limitation. The iteration cap was reached, resulting in an incomplete analysis where no tables were found to support the findings. Consequently, the required overview was not satisfied, and the rationale for the model's criteria derivation failed to yield any meaningful insights. This lack of data leaves a gap in understanding the potential budget impact of the intervention, as no comparative analysis or financial projections could be established.\n\nFurthermore, the absence of any satisfied items highlights the critical need for additional data to inform decision-making. The model's inability to provide a comprehensive overview of the budget implications for Inotuzumab Ozogamicin underscores the challenges faced in this analysis. As it stands, the findings remain unsubstantiated, and without further input or adjustments, the model cannot effectively guide stakeholders in Lebanon regarding the economic considerations of this treatment option.\n\n## Calculations\nIn the calculations stage of the budget-impact model for Inotuzumab Ozogamicin in the context of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant challenge. The iteration cap was reached, indicating that the model could not derive the necessary calculations to provide a comprehensive overview. Specifically, the required items, including an overview of the calculations, were not satisfied, as the model returned empty results. This failure to derive criteria suggests that the underlying logic or data inputs may need to be revisited to ensure that the model can generate the expected outputs.\n\nFurthermore, the findings revealed that no tables were found, and there were several items missing that are critical for a complete analysis. The absence of these elements highlights the need for a thorough review of the model structure and key assumptions, which were not specified in the current context. As a result, no overrides were proposed, as the model's limitations necessitate a foundational reassessment before any adjustments can be made. Addressing these gaps will be essential for advancing the budget-impact analysis and ensuring that it meets the necessary criteria for decision-making.\n",
+  "stages": {
+    "overall": {
+      "stage": "overall",
+      "completion_status": "complete",
+      "iterations_run": 1,
+      "llm_calls_used": 3,
+      "elapsed_seconds": 11.208820499945432,
+      "prose": "In the context of Lebanon, a budget-impact model has been developed to evaluate the economic implications of using Inotuzumab Ozogamicin for patients suffering from relapsed or refractory acute lymphoblastic leukaemia. This model is complete but highlights several critical gaps in the data. Notably, there is no comparator identified, which is essential for assessing the relative cost-effectiveness of the intervention. Additionally, the model lacks clarity on the indication, time horizon, perspective, model structure, and key assumptions, all of which are vital for a comprehensive analysis. \n\nThe absence of these elements raises concerns about the robustness of the findings, as they limit the ability to fully understand the economic impact of Inotuzumab Ozogamicin within the specified population. Without a defined comparator, the model cannot effectively benchmark the intervention against existing treatment options, which is crucial for stakeholders in making informed healthcare decisions. As it stands, the model provides a partial view of the budgetary implications, necessitating further data collection to fill in these gaps and enhance its utility for policymakers in Lebanon.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "concepts": {
+        "intervention": "Inotuzumab Ozogamicin",
+        "comparator": null,
+        "population": "relapsed or refractory acute lymphoblastic leukaemia",
+        "indication": null,
+        "country": "Lebanon",
+        "time_horizon": null,
+        "perspective": null,
+        "model_structure": null,
+        "key_assumptions": null
+      },
+      "overview_sheets_read": [
+        "Introduction"
+      ]
+    },
+    "inputs": {
+      "stage": "inputs",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 7.549839700106531,
+      "prose": "In the inputs stage of the budget-impact model for Inotuzumab Ozogamicin, the analysis has reached an iteration cap, indicating that the model's criteria derivation process encountered challenges. Specifically, the required overview item was not satisfied, and the findings revealed that no tables were found to support the necessary inputs. This lack of data has resulted in an empty return for the rationale, suggesting that the model could not derive meaningful insights from the available information. Consequently, the absence of key inputs has hindered the progression of the model, leaving several critical concepts unaddressed.\n\nThe current context focuses on the population of patients with relapsed or refractory acute lymphoblastic leukaemia in Lebanon, yet without a comparator or additional details such as time horizon or perspective, the model's robustness is compromised. The findings indicate that items remain missing, which could include essential data points or assumptions that are vital for a comprehensive analysis. As it stands, the model is at a standstill, awaiting further input to fulfill the necessary criteria and advance to the next stage of evaluation.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "inputs": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "inputs": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      }
+    },
+    "results": {
+      "stage": "results",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 13.69121369998902,
+      "prose": "In the results stage of the budget-impact model for Inotuzumab Ozogamicin in the treatment of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant limitation. The iteration cap was reached, resulting in an incomplete analysis where no tables were found to support the findings. Consequently, the required overview was not satisfied, and the rationale for the model's criteria derivation failed to yield any meaningful insights. This lack of data leaves a gap in understanding the potential budget impact of the intervention, as no comparative analysis or financial projections could be established.\n\nFurthermore, the absence of any satisfied items highlights the critical need for additional data to inform decision-making. The model's inability to provide a comprehensive overview of the budget implications for Inotuzumab Ozogamicin underscores the challenges faced in this analysis. As it stands, the findings remain unsubstantiated, and without further input or adjustments, the model cannot effectively guide stakeholders in Lebanon regarding the economic considerations of this treatment option.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "results": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "results": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      }
+    },
+    "calculations": {
+      "stage": "calculations",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 7.287500399863347,
+      "prose": "In the calculations stage of the budget-impact model for Inotuzumab Ozogamicin in the context of relapsed or refractory acute lymphoblastic leukaemia in Lebanon, we encountered a significant challenge. The iteration cap was reached, indicating that the model could not derive the necessary calculations to provide a comprehensive overview. Specifically, the required items, including an overview of the calculations, were not satisfied, as the model returned empty results. This failure to derive criteria suggests that the underlying logic or data inputs may need to be revisited to ensure that the model can generate the expected outputs.\n\nFurthermore, the findings revealed that no tables were found, and there were several items missing that are critical for a complete analysis. The absence of these elements highlights the need for a thorough review of the model structure and key assumptions, which were not specified in the current context. As a result, no overrides were proposed, as the model's limitations necessitate a foundational reassessment before any adjustments can be made. Addressing these gaps will be essential for advancing the budget-impact analysis and ensuring that it meets the necessary criteria for decision-making.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "calculations": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "calculations": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      },
+      "important_calc_tables": []
+    }
+  }
+}

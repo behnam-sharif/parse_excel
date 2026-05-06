@@ -41,13 +41,24 @@ Allowed verdicts:
 
 DECISION ORDER (apply in order):
   1. Is title missing?
-       (a) Look at ``above_candidates`` / ``looking_around_above`` first.
-           A cell qualifies as a title only when ALL of:
-             - value is non-empty AND not a sequence label (year/Cycle N/Q1/Drug 2/etc.)
-             - ``claimed_by_table_id`` is null OR equals this table's id
-           If a cell qualifies → ``assign_title`` with that text.
-       (b) Else, if row_names exist and a non-sequence row_name fits as title → ``rowname_to_title`` (set the ``title`` field).
-       (c) Else → ``synthesize_title``.
+       (a)  Look ABOVE the bbox: ``above_candidates`` /
+            ``looking_around_above``.  A cell qualifies only when ALL:
+              - value non-empty AND not a sequence label (year/Cycle N/Q1/Drug 2/...)
+              - ``claimed_by_table_id`` is null OR equals this table's id
+            If a cell qualifies → ``assign_title`` with that text.
+       (a') Else look LEFT of the bbox: ``left_title_candidates`` /
+            the narrow head of ``looking_around_left``.  Same
+            qualification rules.  This catches the common BIM pattern
+            where the title sits in column B and data starts in C+.
+            If a cell qualifies → ``assign_title`` with that text.
+       (b)  Else, if row_names exist AND a non-sequence row_name fits
+            as title → ``rowname_to_title`` (set the ``title`` field
+            to the exact row_name to promote).
+       (c)  Else → ``synthesize_title``.  THIS IS A LAST RESORT.  Do
+            NOT synthesize when any unclaimed non-sequence text cell
+            exists above the bbox or in the narrow column band to the
+            left of the bbox at the core's top row.  The server WILL
+            REJECT premature synthesis verdicts.
   2. Is row_names missing?
        (a) Look at ``left_candidates`` / ``looking_around_left``.  If a non-empty unclaimed left column adjacent to the core has labels for each core row → ``assign_row_names`` with that list.
        (b) Else → ``unresolved`` for the row_names slot (don't fabricate).
@@ -86,6 +97,9 @@ def _bundle_payload(bundle: RepairCandidateBundle) -> Dict[str, Any]:
         ],
         "left_candidates": [
             c.model_dump(mode="json") for c in bundle.left_candidates[:20]
+        ],
+        "left_title_candidates": [
+            c.model_dump(mode="json") for c in bundle.left_title_candidates[:10]
         ],
         "looking_around_above": [
             [c.model_dump(mode="json") for c in row]
@@ -131,6 +145,7 @@ def review_bundle(
 
     verdict = _parse_verdict(text, bundle.table_id)
     verdict = _coerce_claimed_cell_title(verdict, bundle)
+    verdict = _coerce_premature_synthesis(verdict, bundle)
     verdict = _coerce_rownames_vs_title(verdict, bundle)
     return verdict, int(tokens or 0), prompt, text
 
@@ -178,6 +193,9 @@ def _coerce_claimed_cell_title(
 ) -> QcVerdict:
     """Refuse ``assign_title`` when the chosen title text matches a cell
     owned by another table.  Stealing another table's title is never OK.
+
+    Scans both above- and left-of-bbox candidate lists + grids so the
+    same guard applies to titles picked up from the narrow left band.
     """
     if verdict.verdict != "assign_title":
         return verdict
@@ -190,13 +208,16 @@ def _coerce_claimed_cell_title(
     def _is_other_owner(owner_id: Optional[str]) -> bool:
         return bool(owner_id) and owner_id != self_id
 
-    for cand in bundle.above_candidates:
-        if (cand.text or "").strip().lower() != target_low:
-            continue
-        if _is_other_owner(cand.claimed_by_table_id):
-            return _refuse_claimed(verdict, proposed, cand.claimed_by_table_id, cand.cell)
+    for cand_list in (bundle.above_candidates, bundle.left_title_candidates):
+        for cand in cand_list:
+            if (cand.text or "").strip().lower() != target_low:
+                continue
+            if _is_other_owner(cand.claimed_by_table_id):
+                return _refuse_claimed(
+                    verdict, proposed, cand.claimed_by_table_id, cand.cell,
+                )
 
-    for grid in (bundle.looking_around_above,):
+    for grid in (bundle.looking_around_above, bundle.looking_around_left):
         for row in grid:
             for c in row:
                 if c.value is None:
@@ -208,6 +229,74 @@ def _coerce_claimed_cell_title(
                         verdict, proposed, c.claimed_by_table_id, c.addr,
                     )
     return verdict
+
+
+def _coerce_premature_synthesis(
+    verdict: QcVerdict, bundle: RepairCandidateBundle,
+) -> QcVerdict:
+    """Refuse ``synthesize_title`` when an unclaimed non-sequence text
+    cell exists above OR in the narrow left band.  The LLM should have
+    picked ``assign_title`` for that cell instead.
+
+    Reverts to ``keep_unchanged`` so the user can re-run after fixing
+    the upstream bbox / detector and the cell will be picked up
+    deterministically.
+    """
+    if verdict.verdict != "synthesize_title":
+        return verdict
+    self_id = bundle.table_id
+
+    def _is_self_or_unclaimed(owner_id: Optional[str]) -> bool:
+        return (not owner_id) or owner_id == self_id
+
+    # Check candidate lists first (they're already de-duplicated).
+    for cand_list in (bundle.above_candidates, bundle.left_title_candidates):
+        for cand in cand_list:
+            text = (cand.text or "").strip()
+            if not text or _is_sequence_label_str(text):
+                continue
+            if _is_self_or_unclaimed(cand.claimed_by_table_id):
+                return _refuse_premature_synthesis(
+                    verdict, text, cand.cell,
+                    src=("above" if cand.source == "above" else "left"),
+                )
+
+    # Walk the look-around grids as backup.
+    for grid_name, grid in (
+        ("above", bundle.looking_around_above),
+        ("left", bundle.looking_around_left),
+    ):
+        for row in grid:
+            for c in row:
+                v = c.value
+                if v is None:
+                    continue
+                text = str(v).strip()
+                if not text or _is_sequence_label_str(text):
+                    continue
+                if _is_self_or_unclaimed(c.claimed_by_table_id):
+                    return _refuse_premature_synthesis(
+                        verdict, text, c.addr, src=grid_name,
+                    )
+    return verdict
+
+
+def _refuse_premature_synthesis(
+    verdict: QcVerdict, missed_text: str, cell: Optional[str], *, src: str,
+) -> QcVerdict:
+    return QcVerdict(
+        table_id=verdict.table_id,
+        verdict="keep_unchanged",
+        rationale=(
+            f"server-rejected premature synthesize_title: an unclaimed "
+            f"non-sequence text cell exists "
+            f"{src}-of-bbox at {cell or '?'} (text={missed_text!r}). "
+            f"LLM should have picked assign_title for that cell. "
+            f"Original LLM rationale: {verdict.rationale}"
+        ),
+        confidence=0.0,
+        source=verdict.source,
+    )
 
 
 def _refuse_claimed(

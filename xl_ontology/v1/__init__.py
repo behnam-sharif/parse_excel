@@ -17,12 +17,13 @@ from xl_ontology.v1.agent_base import (
     StageResult,
 )
 from xl_ontology.v1.config import Pass2Config
-from xl_ontology.v1.runner import run_pass2
+from xl_ontology.v1.runner import default_pass2_agents, run_pass2
 
 __all__ = [
     "Pass2Agent",
     "Pass2Config",
     "Pass2Context",
     "StageResult",
+    "default_pass2_agents",
     "run_pass2",
 ]

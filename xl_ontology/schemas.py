@@ -459,6 +459,8 @@ class LlmCall(_TraceBase):
         "synthesis",
         "completion_criteria",
         "narration",
+        # v1.I Pass 2 ReAct phase (one ReAct turn = one LLM call):
+        "react",
     ]
     prompt: str
     prompt_size_chars: int
@@ -862,3 +864,49 @@ class IterationCapReached(_TraceBase):
     stage: Pass2StageName
     iterations: int
     items_missing_count: int
+
+
+# v1.I — ReAct loop trace events.  Each iteration of a Pass-2 ReAct
+# stage emits the trio (thought → action → observation), or a final
+# stop event.  Lets the orchestrator render the agent's reasoning as
+# a per-stage timeline.
+
+class Pass2ReactThought(_TraceBase):
+    """Free-text reasoning the LLM emitted before deciding an action."""
+
+    event: Literal["pass2_react_thought"] = "pass2_react_thought"
+    stage: Pass2StageName
+    iteration: int
+    thought: str
+
+
+class Pass2ReactAction(_TraceBase):
+    """The action the LLM chose this iteration (tool + args + rationale)."""
+
+    event: Literal["pass2_react_action"] = "pass2_react_action"
+    stage: Pass2StageName
+    iteration: int
+    tool: str
+    args_summary: Dict[str, Any] = Field(default_factory=dict)
+    rationale: str = ""
+
+
+class Pass2ReactObservation(_TraceBase):
+    """One-line summary of what the tool returned, fed back into the
+    next iteration's prompt as the agent's observation."""
+
+    event: Literal["pass2_react_observation"] = "pass2_react_observation"
+    stage: Pass2StageName
+    iteration: int
+    tool: str
+    observation_text: str
+
+
+class Pass2ReactStop(_TraceBase):
+    """LLM-driven termination — agent decided it has enough comprehension."""
+
+    event: Literal["pass2_react_stop"] = "pass2_react_stop"
+    stage: Pass2StageName
+    iteration: int
+    thought: str = ""
+    summary: str = ""

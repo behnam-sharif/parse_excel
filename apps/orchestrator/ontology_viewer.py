@@ -26,6 +26,9 @@ import streamlit as st
 
 from core.paths import (
     get_agent_outputs_path,
+    get_cross_agent_findings_path,
+    get_model_understanding_json_path,
+    get_model_understanding_md_path,
     get_node_type_override_log_path,
     get_ontology_build_errors_path,
     get_ontology_output_path,
@@ -124,6 +127,14 @@ def render(run_id: str, output_base: str = "data/output") -> None:
     errors = _read_jsonl(get_ontology_build_errors_path(run_id, output_base))
     table_id_to_coords = _table_id_to_coordinates(final_table_map)
 
+    # Pass-2 artifacts (loaded lazily — viewer renders an info banner if absent).
+    mu_md_path = get_model_understanding_md_path(run_id, output_base)
+    mu_json_path = get_model_understanding_json_path(run_id, output_base)
+    cross_path = get_cross_agent_findings_path(run_id, output_base)
+    mu_md = mu_md_path.read_text(encoding="utf-8") if mu_md_path.is_file() else None
+    mu_json = _read_json(mu_json_path) if mu_json_path.is_file() else None
+    cross_findings = _read_jsonl(cross_path) if cross_path.is_file() else []
+
     tab_labels = [
         "Final output (prose)",
         "Per-agent output",
@@ -131,6 +142,9 @@ def render(run_id: str, output_base: str = "data/output") -> None:
         "Inspect run (trace)",
         "Upstream label disagreements",
         "Errors",
+        "Model understanding (prose)",
+        "Model understanding (structured)",
+        "Cross-agent findings",
     ]
     tabs = st.tabs(tab_labels)
 
@@ -146,6 +160,12 @@ def render(run_id: str, output_base: str = "data/output") -> None:
         _render_overrides(overrides)
     with tabs[5]:
         _render_errors(errors)
+    with tabs[6]:
+        _render_model_understanding_md(mu_md)
+    with tabs[7]:
+        _render_model_understanding_json(mu_json)
+    with tabs[8]:
+        _render_cross_agent_findings(cross_findings)
 
 
 # ---------------------------------------------------------------------------
@@ -262,6 +282,69 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
     if not events:
         st.info("ontology_trace.jsonl is empty.")
         return
+
+    # v1.I — ReAct timeline (per-stage).  Renders thought → action →
+    # observation → stop sequences so you can read the agent's reasoning.
+    react_events = [
+        e for e in events
+        if e.get("event", "").startswith("pass2_react_")
+        or e.get("event") == "pass2_stage_start"
+        or e.get("event") == "pass2_stage_complete"
+    ]
+    if react_events:
+        st.markdown("### Pass-2 ReAct timeline")
+        stages = sorted({
+            e.get("stage") for e in react_events if e.get("stage")
+        })
+        chosen_stage = st.selectbox(
+            "Stage", options=stages, key="pass2_react_stage_filter",
+        )
+        stage_events = [e for e in react_events if e.get("stage") == chosen_stage]
+        # Group by iteration where applicable.
+        for e in stage_events:
+            event_type = e.get("event")
+            iteration = e.get("iteration")
+            ts = e.get("ts")
+            label = f"iter {iteration}" if iteration is not None else "—"
+            if event_type == "pass2_stage_start":
+                st.markdown(f"▶️ **{ts}** — stage `{chosen_stage}` started")
+            elif event_type == "pass2_react_thought":
+                thought = e.get("thought") or ""
+                st.markdown(f"💭 _{label}_  **{ts}**")
+                st.markdown(f"> {thought}")
+            elif event_type == "pass2_react_action":
+                tool = e.get("tool")
+                rationale = e.get("rationale") or ""
+                args = e.get("args_summary") or {}
+                st.markdown(
+                    f"🔧 _{label}_  **{ts}** — `{tool}`  "
+                    + (f"({rationale})" if rationale else "")
+                )
+                if args:
+                    st.code(json.dumps(args, indent=2), language="json")
+            elif event_type == "pass2_react_observation":
+                tool = e.get("tool")
+                obs = e.get("observation_text") or ""
+                st.markdown(f"👁️ _{label}_  **{ts}** — `{tool}`")
+                st.code(obs, language="text")
+            elif event_type == "pass2_react_stop":
+                summary = e.get("summary") or ""
+                thought = e.get("thought") or ""
+                st.markdown(f"🛑 _{label}_  **{ts}** — stage stopped")
+                if thought:
+                    st.markdown(f"> {thought}")
+                if summary:
+                    st.markdown(f"**Summary:** {summary}")
+            elif event_type == "pass2_stage_complete":
+                status = e.get("completion_status")
+                iters = e.get("iterations_run")
+                calls = e.get("llm_calls_used")
+                st.markdown(
+                    f"🏁 **{ts}** — `{chosen_stage}` complete  "
+                    f"status=`{status}`, iterations={iters}, llm_calls={calls}"
+                )
+        st.markdown("---")
+
     # §13.6 defect-frequency dashboard.
     skipped = [e for e in events if e.get("event") == "defect_procedure_skipped"]
     if skipped:
@@ -339,3 +422,115 @@ def _render_errors(errors: List[Dict[str, Any]]) -> None:
         st.success("No build errors recorded.")
         return
     st.dataframe(_flatten_for_dataframe(errors), use_container_width=True)
+
+
+# ---------------------------------------------------------------------------
+# Pass-2 (v1) renderers
+# ---------------------------------------------------------------------------
+
+def _render_model_understanding_md(md_text: Optional[str]) -> None:
+    if not md_text:
+        st.info(
+            "model_understanding.md not found — Pass 2 either skipped or "
+            "didn't reach narration.  Set `pass2_enabled: true` and ensure "
+            "OPENAI_API_KEY is set."
+        )
+        return
+    st.markdown(md_text)
+
+
+def _render_model_understanding_json(payload: Optional[Dict[str, Any]]) -> None:
+    if not payload:
+        st.info("model_understanding.json not found.")
+        return
+    st.markdown(
+        f"**model_id:** `{payload.get('model_id')}`  |  "
+        f"**ontology_id:** `{payload.get('ontology_id')}`  |  "
+        f"**run_ts:** {payload.get('v1_run_timestamp')}"
+    )
+    st.markdown("---")
+    stages = payload.get("stages") or {}
+    if not stages:
+        st.warning("No stages recorded.")
+        return
+    for stage_name in ("overall", "inputs", "results", "calculations"):
+        stage = stages.get(stage_name)
+        if not stage:
+            continue
+        with st.expander(f"Stage: {stage_name}", expanded=False):
+            head_cols = st.columns(4)
+            head_cols[0].metric("status", str(stage.get("completion_status")))
+            head_cols[1].metric("iterations", int(stage.get("iterations_run", 0)))
+            head_cols[2].metric("LLM calls", int(stage.get("llm_calls_used", 0)))
+            head_cols[3].metric("elapsed s", f"{float(stage.get('elapsed_seconds', 0.0)):.2f}")
+            prose = stage.get("prose")
+            if prose:
+                st.markdown("**Prose**")
+                st.markdown(prose)
+            criteria = stage.get("completion_criteria") or {}
+            if criteria:
+                st.markdown("**Completion criteria**")
+                rows = []
+                for concept, body in criteria.items():
+                    rows.append({
+                        "concept": concept,
+                        "required_items": ", ".join(body.get("required_items") or []),
+                        "rationale": body.get("rationale"),
+                        "source_signal": body.get("source_signal"),
+                    })
+                st.dataframe(rows, use_container_width=True)
+            findings = stage.get("findings") or {}
+            if findings:
+                st.markdown("**Findings**")
+                rows = []
+                for concept, body in findings.items():
+                    rows.append({
+                        "concept": concept,
+                        "tables_found": ", ".join(body.get("tables_found") or []),
+                        "items_satisfied": ", ".join(body.get("items_satisfied") or []),
+                        "items_missing": ", ".join(body.get("items_missing") or []),
+                        "notes": body.get("notes"),
+                    })
+                st.dataframe(rows, use_container_width=True)
+            concepts = stage.get("concepts") or {}
+            if concepts:
+                st.markdown("**Concepts**")
+                st.json(concepts)
+            important = stage.get("important_calc_tables") or []
+            if important:
+                st.markdown("**Important calc tables**")
+                st.write(", ".join(important))
+
+
+def _render_cross_agent_findings(findings: List[Dict[str, Any]]) -> None:
+    if not findings:
+        st.success(
+            "No cross-agent findings — every result component has a "
+            "matching classified input."
+        )
+        return
+    st.markdown(f"**{len(findings)}** cross-agent finding(s) recorded.")
+    types = sorted({r.get("type") for r in findings if r.get("type")})
+    type_filter = st.multiselect(
+        "type", options=types, default=types,
+        key="ontology_cross_findings_type_filter",
+    )
+    filtered = [r for r in findings if r.get("type") in type_filter]
+    flat: List[Dict[str, Any]] = []
+    for r in filtered:
+        details = r.get("details") or {}
+        flat.append({
+            "ts": r.get("ts"),
+            "type": r.get("type"),
+            "stage_origin": r.get("stage_origin"),
+            **{f"detail.{k}": _flatten_value(v) for k, v in details.items()},
+        })
+    st.dataframe(flat, use_container_width=True)
+
+
+def _flatten_value(v: Any) -> str:
+    if isinstance(v, list):
+        return ", ".join(str(x) for x in v)
+    if isinstance(v, dict):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v) if v is not None else ""

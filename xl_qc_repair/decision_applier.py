@@ -35,6 +35,7 @@ def derive_safe_auto_verdict(bundle: RepairCandidateBundle) -> QcVerdict:
     triggers = bundle.triggers or [bundle.trigger]
 
     if "title_missing" in triggers:
+        # First: bold unclaimed cell immediately above.
         for cand in bundle.above_candidates:
             if cand.source != "above":
                 continue
@@ -50,6 +51,26 @@ def derive_safe_auto_verdict(bundle: RepairCandidateBundle) -> QcVerdict:
                 table_id=table_id,
                 verdict="assign_title",
                 rationale=f"safe-auto: bold unclaimed above at {cand.cell}",
+                confidence=0.9,
+                title=cand.text,
+                source="deterministic_safe_auto",
+            )
+        # Then: bold unclaimed cell immediately left (BIM left-anchor pattern).
+        for cand in bundle.left_title_candidates:
+            if cand.source != "left_for_title":
+                continue
+            if cand.distance != 1:
+                continue
+            if cand.claimed_by_table_id is not None:
+                continue
+            if not cand.bold:
+                continue
+            if _is_sequence_label(cand.text):
+                continue
+            return QcVerdict(
+                table_id=table_id,
+                verdict="assign_title",
+                rationale=f"safe-auto: bold unclaimed left at {cand.cell}",
                 confidence=0.9,
                 title=cand.text,
                 source="deterministic_safe_auto",

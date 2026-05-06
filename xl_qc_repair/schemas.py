@@ -57,6 +57,12 @@ class RepairCandidateBundle(_Strict):
     v6_state: Dict[str, Any] = Field(default_factory=dict)
     above_candidates: List[Candidate] = Field(default_factory=list)
     left_candidates: List[Candidate] = Field(default_factory=list)
+    # Title-only left-of-bbox scan (narrow band, distinct from
+    # ``left_candidates`` which feeds rowname_missing).  Populated when
+    # ``title_missing`` fires.  These cells are evaluated as
+    # ``assign_title`` candidates by the LLM and the server-side
+    # premature-synthesis coercion.
+    left_title_candidates: List[Candidate] = Field(default_factory=list)
     looking_around_above: List[List[LookAroundCell]] = Field(default_factory=list)
     looking_around_left: List[List[LookAroundCell]] = Field(default_factory=list)
     future_flags: List[str] = Field(default_factory=list)

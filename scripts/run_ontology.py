@@ -41,10 +41,20 @@ def main(argv=None) -> int:
         action="store_true",
         help="Disable LLM for this run (overrides stages.yaml xl_ontology.use_llm).",
     )
+    parser.add_argument(
+        "--pass1-only",
+        action="store_true",
+        help="Skip Pass 2 (comprehension layer) — run only the deterministic Pass 1 labeller.",
+    )
     args = parser.parse_args(argv)
 
     pc = load_config()
-    _overrides = {"use_llm": False} if args.no_llm else None
+    overrides_dict: dict = {}
+    if args.no_llm:
+        overrides_dict["use_llm"] = False
+    if args.pass1_only:
+        overrides_dict["pass2_enabled"] = False
+    _overrides = overrides_dict or None
     cfg = ontology_config_from_pipeline(pc, overrides=_overrides)
     if args.ontology:
         # Apply pack-name override.
@@ -62,7 +72,10 @@ def main(argv=None) -> int:
         return 1
 
     print(f"OK — version={result.version_written}, "
-          f"llm_calls={result.llm_calls_used}, "
+          f"pass1_llm_calls={result.llm_calls_used}, "
+          f"pass2_skipped={result.pass2_skipped}"
+          + (f" ({result.pass2_skip_reason})" if result.pass2_skipped else "")
+          + f", pass2_llm_calls={result.pass2_llm_calls_used}, "
           f"elapsed={result.elapsed_seconds:.2f}s")
     for p in result.artifacts:
         print(f"  {p}")

@@ -1,7 +1,7 @@
 {
   "model_id": "streamlit_run_enco",
   "ontology_id": "bim_v0",
-  "run_timestamp": "2026-05-05T13:07:58.080Z",
+  "run_timestamp": "2026-05-05T23:36:05.657Z",
   "agents": {
     "inputs": {
       "status": "complete",
@@ -25,7 +25,7 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 57.39466690015979,
+      "elapsed_seconds": 46.037423900095746,
       "key_decisions": [
         "override b57c564ff564a5a4_b9 (mixed → input) via lexicon hit 'drug cost' in title",
         "phase_b: 721d31377f9c163d -> structural_input_hospitalization",
@@ -66,7 +66,7 @@
         "phase_b: fe16602c7715dbe8_t16_t7 -> structural_input_scenario (flags: fanout_outlier_high)",
         "phase_b: 61a17568c26801dd_t7 -> structural_input_scenario",
         "phase_b: fe16602c7715dbe8_t16_b7 -> structural_input_scenario (flags: fanout_outlier_high)",
-        "phase_b: a9f916bc0a3ee753_t19_b5 -> structural_input",
+        "phase_b: a9f916bc0a3ee753_b19 -> structural_input",
         "phase_b: 80c5c0e6426a79a2_child2 -> structural_input",
         "phase_b: 10cbce237222d03d_child1 -> structural_input",
         "phase_b: 10cbce237222d03d_child3 -> structural_input",
@@ -87,7 +87,7 @@
         "phase_b: 94f6909ecd7ce31f_b16_b10_child5 -> structural_input",
         "phase_b: 94f6909ecd7ce31f_b16_b10_child6 -> structural_input",
         "phase_b: 94f6909ecd7ce31f_b16_b10_child7 -> structural_input",
-        "phase_b: 94f6909ecd7ce31f_b16_b10_child8 -> structural_input",
+        "phase_b: 94f6909ecd7ce31f_b16_b10_child8 -> structural_input_dosing",
         "phase_b: 94f6909ecd7ce31f_b16_b10_child9 -> structural_input",
         "phase_b: d08c86edd9f56be0_t13_b5_child1 -> structural_input",
         "phase_b: d08c86edd9f56be0_b13_child1 -> structural_input"
@@ -97,17 +97,16 @@
     "calculations": {
       "status": "complete",
       "evidence_quality": "high",
-      "summary": "263 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+      "summary": "263 main calculation tables identified (structural_calc). 0 aggregators.",
       "summary_source": "template",
       "concepts_resolved": null,
       "concepts_absent": null,
       "tables_classified": 263,
       "node_type_overrides_proposed": 263,
-      "expected_concepts_found": [
-        "total_cost_with_intervention",
-        "total_cost_without_intervention"
-      ],
+      "expected_concepts_found": [],
       "expected_concepts_absent": [
+        "total_cost_with_intervention",
+        "total_cost_without_intervention",
         "cost_component_calc",
         "patient_flow",
         "scenario_calc",
@@ -119,9 +118,8 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 11.823479500133544,
+      "elapsed_seconds": 21.57976570003666,
       "key_decisions": [
-        "override 8c7ea0b7c24ea4ab_t6_child3 (input → calculation) via lexicon hit 'total cost'",
         "structural override a6ccdaf330b06725_t17_t9_b4 → calculation (density=0.78)",
         "structural override a6ccdaf330b06725_t17_b9 → calculation (density=0.72)",
         "structural override a6ccdaf330b06725_b17_t19_t8 → calculation (density=0.71)",
@@ -133,6 +131,7 @@
         "structural override eec1912982fee766_t13_child2 → calculation (density=0.95)",
         "structural override eec1912982fee766_t13_child4 → calculation (density=0.96)",
         "structural override eec1912982fee766_b13_t2 → calculation (density=0.80)",
+        "structural override 8c7ea0b7c24ea4ab_t6_child3 → calculation (density=0.80)",
         "structural override e2d8a30be49a61ee_t14_b1 → calculation (density=0.56)",
         "structural override e2d8a30be49a61ee_b14 → calculation (density=0.67)",
         "structural override 52c6e0ddd77e6286_t12 → calculation (density=0.56)",
@@ -385,17 +384,17 @@
         "structural override 0377597e02803162 → calculation (density=0.59)",
         "structural override bef2dfb9c7d2b697_t7 → calculation (density=0.69)"
       ],
-      "human_readable_output": "The calculations agent classified 263 table(s).\n\nExpected concepts found: total_cost_with_intervention, total_cost_without_intervention.\n\nExpected concepts absent: cost_component_calc, patient_flow, scenario_calc, aggregator.\n\nProposed 263 node_type override(s) (logged to node_type_override_log.jsonl)."
+      "human_readable_output": "The calculations agent classified 263 table(s).\n\nExpected concepts absent: total_cost_with_intervention, total_cost_without_intervention, cost_component_calc, patient_flow, scenario_calc, aggregator.\n\nProposed 263 node_type override(s) (logged to node_type_override_log.jsonl)."
     },
     "results": {
       "status": "complete",
       "evidence_quality": "high",
-      "summary": "23 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
+      "summary": "22 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
       "summary_source": "template",
       "concepts_resolved": null,
       "concepts_absent": null,
-      "tables_classified": 23,
-      "node_type_overrides_proposed": 23,
+      "tables_classified": 22,
+      "node_type_overrides_proposed": 22,
       "expected_concepts_found": [
         "incremental_budget_impact"
       ],
@@ -412,10 +411,9 @@
         "structural_sanity"
       ],
       "llm_calls_used": 0,
-      "elapsed_seconds": 9.864729300141335,
+      "elapsed_seconds": 21.542174100177363,
       "key_decisions": [
-        "override eec1912982fee766_b13_b2 (input → result) via lexicon hit 'budget impact'",
-        "structural override 8c7ea0b7c24ea4ab_b6 → result (terminal + named like result)",
+        "override 8c7ea0b7c24ea4ab_b6 (input → result) via lexicon hit 'incremental'",
         "structural override 01fc3035ff6da185_b6 → result (terminal + named like result)",
         "structural override 30a10df1a18fbe85_b6 → result (terminal + named like result)",
         "structural override f619f3b2d01e1f88_b6 → result (terminal + named like result)",
@@ -438,7 +436,7 @@
         "structural override 3cae79cfe24d1a66_t8_child2 → result (terminal + named like result)",
         "structural override 3cae79cfe24d1a66_t8_child4 → result (terminal + named like result)"
       ],
-      "human_readable_output": "The results agent classified 23 table(s).\n\nExpected concepts found: incremental_budget_impact.\n\nExpected concepts absent: total_cost_summary, per_patient_impact, annual_impact, multi_year_impact, scenario_results.\n\nProposed 23 node_type override(s) (logged to node_type_override_log.jsonl)."
+      "human_readable_output": "The results agent classified 22 table(s).\n\nExpected concepts found: incremental_budget_impact.\n\nExpected concepts absent: total_cost_summary, per_patient_impact, annual_impact, multi_year_impact, scenario_results.\n\nProposed 22 node_type override(s) (logged to node_type_override_log.jsonl)."
     }
   }
 }

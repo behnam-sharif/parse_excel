@@ -51,6 +51,25 @@ class Pass2RunResult:
     elapsed_seconds: float = 0.0
 
 
+def default_pass2_agents(pack: OntologyPack) -> List[Pass2Agent]:
+    """Build the canonical Pass-2 agent sequence.
+
+    Order matters: each subsequent stage reads ``upstream_results`` set by
+    the previous stages.
+    """
+    from xl_ontology.v1.stages.calculations import CalculationsAgent
+    from xl_ontology.v1.stages.inputs import InputsAgent
+    from xl_ontology.v1.stages.overall import OverallAgent
+    from xl_ontology.v1.stages.results import ResultsAgent
+
+    return [
+        OverallAgent(),
+        InputsAgent(pack=pack),
+        ResultsAgent(pack=pack),
+        CalculationsAgent(pack=pack),
+    ]
+
+
 def run_pass2(
     *,
     run_id: str,
@@ -84,6 +103,17 @@ def run_pass2(
         tool_ctx.budget.pass2_calls_max = config.llm_budget_max
 
     pass2_ctx = Pass2Context(tool_ctx=tool_ctx, config=config)
+
+    # Allow stages to know where to write side-channel artifacts (e.g.
+    # results stage's cross_agent_findings.jsonl).  Done lazily via a
+    # protocol-style attribute check so unrelated stages remain inert.
+    for agent in agents:
+        configure = getattr(agent, "configure_output", None)
+        if callable(configure):
+            try:
+                configure(run_id=run_id, output_base=output_base)
+            except Exception:
+                pass
 
     stages: Dict[Pass2StageName, StageResult] = {}
     for agent in agents:
@@ -200,5 +230,6 @@ def _stage_result_to_output(result: StageResult):
 
 __all__ = [
     "Pass2RunResult",
+    "default_pass2_agents",
     "run_pass2",
 ]

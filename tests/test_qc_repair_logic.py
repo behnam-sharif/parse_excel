@@ -275,6 +275,126 @@ class TestServerSideCoercions(unittest.TestCase):
         self.assertIn("sequence label", coerced.rationale.lower())
 
 
+class TestLeftTitleAndPrematureSynthesis(unittest.TestCase):
+    """QCR.7 — when there's no above-cell title, look LEFT before
+    synthesising.  Server-side coercion downgrades premature synthesis."""
+
+    def _bundle_with_left_title(
+        self, *, text: str = "Population", owner: Optional[str] = None,
+    ) -> RepairCandidateBundle:
+        return RepairCandidateBundle(
+            table_id="THIS", sheet_name="Epidemiology",
+            trigger="title_missing", triggers=["title_missing"],
+            classification="needs_llm",
+            v6_state={"title": None, "row_names": [], "node_type": "input"},
+            above_candidates=[],
+            left_title_candidates=[
+                Candidate(
+                    source="left_for_title", text=text, cell="B17",
+                    distance=2, bold=True,
+                    claimed_by_table_id=owner,
+                ),
+            ],
+            looking_around_left=[[
+                LookAroundCell(
+                    row=16, col=1, addr="B17", value=text,
+                    bold=True, claimed_by_table_id=owner,
+                ),
+            ]],
+        )
+
+    def test_assign_title_from_left_unclaimed_passes(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_claimed_cell_title
+
+        bundle = self._bundle_with_left_title(text="Population", owner=None)
+        verdict = QcVerdict(
+            table_id="THIS", verdict="assign_title",
+            title="Population", confidence=0.9, source="llm",
+        )
+        coerced = _coerce_claimed_cell_title(verdict, bundle)
+        self.assertEqual(coerced.verdict, "assign_title")
+        self.assertEqual(coerced.title, "Population")
+
+    def test_assign_title_from_left_claimed_rejected(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_claimed_cell_title
+
+        bundle = self._bundle_with_left_title(
+            text="Population", owner="OTHER_TABLE",
+        )
+        verdict = QcVerdict(
+            table_id="THIS", verdict="assign_title",
+            title="Population", confidence=0.9, source="llm",
+        )
+        coerced = _coerce_claimed_cell_title(verdict, bundle)
+        self.assertEqual(coerced.verdict, "keep_unchanged")
+        self.assertIn("OTHER_TABLE", coerced.rationale)
+
+    def test_premature_synthesize_downgraded_when_left_cell_qualifies(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_premature_synthesis
+
+        bundle = self._bundle_with_left_title(text="Population", owner=None)
+        verdict = QcVerdict(
+            table_id="THIS", verdict="synthesize_title",
+            title="Some synthesised name", confidence=0.85, source="llm",
+            rationale="No above-cell or row_name found",
+        )
+        coerced = _coerce_premature_synthesis(verdict, bundle)
+        self.assertEqual(coerced.verdict, "keep_unchanged")
+        self.assertIn("Population", coerced.rationale)
+
+    def test_premature_synthesize_downgraded_when_above_cell_qualifies(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_premature_synthesis
+
+        bundle = RepairCandidateBundle(
+            table_id="THIS", sheet_name="S",
+            trigger="title_missing", triggers=["title_missing"],
+            classification="needs_llm",
+            v6_state={"title": None, "row_names": []},
+            above_candidates=[
+                Candidate(
+                    source="above", text="Drug Costs", cell="C5",
+                    distance=2, bold=True, claimed_by_table_id=None,
+                ),
+            ],
+        )
+        verdict = QcVerdict(
+            table_id="THIS", verdict="synthesize_title",
+            title="Composed", confidence=0.9, source="llm",
+        )
+        coerced = _coerce_premature_synthesis(verdict, bundle)
+        self.assertEqual(coerced.verdict, "keep_unchanged")
+        self.assertIn("Drug Costs", coerced.rationale)
+
+    def test_synthesize_passes_when_no_qualifying_cell(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_premature_synthesis
+
+        # No above_candidates, no left_title_candidates, no looking-around grids.
+        bundle = RepairCandidateBundle(
+            table_id="THIS", sheet_name="S",
+            trigger="title_missing", triggers=["title_missing"],
+            classification="needs_llm",
+            v6_state={"title": None, "row_names": []},
+        )
+        verdict = QcVerdict(
+            table_id="THIS", verdict="synthesize_title",
+            title="A reasonable title", confidence=0.85, source="llm",
+        )
+        coerced = _coerce_premature_synthesis(verdict, bundle)
+        self.assertEqual(coerced.verdict, "synthesize_title")
+        self.assertEqual(coerced.title, "A reasonable title")
+
+    def test_sequence_label_left_cell_does_not_block_synthesis(self) -> None:
+        from xl_qc_repair.llm_review import _coerce_premature_synthesis
+
+        bundle = self._bundle_with_left_title(text="Year 1", owner=None)
+        verdict = QcVerdict(
+            table_id="THIS", verdict="synthesize_title",
+            title="Composed title", confidence=0.85, source="llm",
+        )
+        coerced = _coerce_premature_synthesis(verdict, bundle)
+        self.assertEqual(coerced.verdict, "synthesize_title")
+
+
 class TestRunnerSignature(unittest.TestCase):
     def test_run_qc_repair_accepts_target_sheets(self) -> None:
         import inspect

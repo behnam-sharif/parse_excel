@@ -29,8 +29,14 @@ class XlOntologyConfig:
     # loads without modification — the pipeline-config builder doesn't
     # require these keys when use_llm=false or pass2_enabled=false.
     pass2_enabled: bool = True
-    pass2_max_iterations: int = 3
-    pass2_llm_budget_max: int = 20
+    # ReAct loop cap (raised from 3 → 12 in v1.I — each iteration is
+    # ONE LLM call, not a multi-step plan, so the cap counts turns).
+    pass2_max_iterations: int = 12
+    # Total LLM calls across all four Pass-2 stages (criteria + ReAct
+    # turns + narration).  Generous to give ReAct room to converge on
+    # complex BIMs; the per-stage iteration cap above is the tighter
+    # control.
+    pass2_llm_budget_max: int = 80
     pass2_overview_sheet_max_chars: int = 10_000
     # Where to read final_table_map from. "v6_repaired" prefers
     # qc_repair_output/final_table_map_repaired.json when present, falls

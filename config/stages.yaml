@@ -500,8 +500,8 @@ xl_ontology:
   # cross_agent_findings.jsonl. See spec_xl_ontology_v1.md.
   pass2_enabled: true
   # Hard caps for the bounded planner-executor loop (spec §6, §12).
-  pass2_max_iterations: 3
-  pass2_llm_budget_max: 20
+  pass2_max_iterations: 12
+  pass2_llm_budget_max: 80
   # Per-sheet character cap for the overview-sheet read in Stage 2.1
   # (keeps the synthesis-prompt size bounded even on dense covers).
   pass2_overview_sheet_max_chars: 10000
@@ -550,6 +550,7 @@ xl_qc_repair:
   qc_repair_max_llm_calls_per_sheet: 5
   qc_repair_scan_to_prev_table: true
   qc_repair_above_scan_max_rows: 25
+  qc_repair_left_title_search_cols: 3
   qc_repair_future_flags:
     - core_region_split
     - title_looks_like_footnote

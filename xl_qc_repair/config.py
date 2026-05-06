@@ -42,6 +42,14 @@ class XlQcRepairConfig:
     qc_repair_scan_to_prev_table: bool = True
     qc_repair_above_scan_max_rows: int = 25
 
+    # When `title_missing` fires, also scan up to this many columns to
+    # the LEFT of the bbox at the core's top row.  These cells become
+    # ``left_title_candidates`` in the bundle.  Narrow on purpose — the
+    # row-name scan still uses the wider ``search_cols_left=25``.  A
+    # small depth here prevents cells from a sibling table being
+    # picked up as a title.
+    qc_repair_left_title_search_cols: int = 3
+
     # Future flags QC should recognise but NOT yet act on.  Listed here
     # so V6 / downstream stages don't need to second-guess what's
     # supported.  Wire up handlers in a future iteration:

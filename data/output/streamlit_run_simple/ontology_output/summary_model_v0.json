@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-05T15:49:04.021Z",
+  "seed_timestamp": "2026-05-05T23:59:22.102Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "overall_model": {
@@ -500,7 +500,7 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "17 main calculation tables identified (aggregator, structural_calc, total_cost_with). 1 aggregator.",
+    "summary": "17 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
     "summary_source": "template",
     "candidate_tables": [
       {
@@ -523,39 +523,6 @@
         "parent_path": [
           "Calculations",
           "BIM calculation"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "1f634d7d13c5e37c_t57_b25_t23_b15__core0",
-        "ontology_role": "calculation",
-        "ontology_subtype": "aggregator",
-        "confidence": 0.7,
-        "evidence_quality": "high",
-        "why_selected": "lexicon match in title for concept 'aggregator'",
-        "evidence_signals": [
-          {
-            "type": "title_match",
-            "value": "Annual Data Summary",
-            "matched_term": "summary"
-          }
-        ],
-        "upstream_node_type": "mixed",
-        "node_type_override_proposed": false,
-        "parent_table_id": "1f634d7d13c5e37c_t57_b25_t23_b15",
-        "parent_path": [
-          "Calculations"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -1200,14 +1167,14 @@
       "cost_component_calc": "absent",
       "patient_flow": "absent",
       "scenario_calc": "absent",
-      "aggregator": "found"
+      "aggregator": "absent"
     },
     "confidence": null
   },
   "results": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "2 result tables identified (incremental_budget_impact, scenario_results). Incremental row present.",
+    "summary": "1 result table identified (incremental_budget_impact). Incremental row present.",
     "summary_source": "template",
     "candidate_tables": [
       {
@@ -1241,38 +1208,6 @@
           "fed_by": []
         },
         "flags": []
-      },
-      {
-        "table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7__core2",
-        "ontology_role": "result",
-        "ontology_subtype": "scenario_results",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "lexicon match in title for concept 'scenario_results'",
-        "evidence_signals": [
-          {
-            "type": "title_match",
-            "value": "Cost Analysis for Treatment Scenarios",
-            "matched_term": "scenario"
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "1f634d7d13c5e37c_b57_b48_b16_t23_t15_t7",
-        "parent_path": [
-          "Calculations"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "has_cumulative_column": false,
-          "result_metrics": [],
-          "fed_by": []
-        },
-        "flags": []
       }
     ],
     "parent_groups": [],
@@ -1282,7 +1217,7 @@
       "per_patient_impact": "absent",
       "annual_impact": "absent",
       "multi_year_impact": "absent",
-      "scenario_results": "found"
+      "scenario_results": "absent"
     },
     "confidence": null
   },

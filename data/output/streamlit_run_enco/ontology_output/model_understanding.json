@@ -1,0 +1,118 @@
+{
+  "schema_version": "v1",
+  "model_id": "streamlit_run_enco",
+  "ontology_id": "bim_v0",
+  "v1_run_timestamp": "2026-05-05T23:38:15.649Z",
+  "v1_pack_overview_text_hash": "sha256:b7649f4fed58f271ef5f50c7e9290a1c12b34ce2858033738887ce5032a153a1",
+  "summary_prose": "# Model Understanding\n\n## Overall context\nIn Canada, a budget-impact model has been developed to evaluate the economic implications of using Enco + Bini for the treatment of advanced unresectable or metastatic BRAF+ mutation melanoma. This model is structured from a Canadian healthcare payer perspective and spans a time horizon of three years, including one year of baseline data. The primary population targeted by this intervention consists of patients diagnosed with unresectable or metastatic cutaneous melanoma harboring a BRAFV600 mutation. The model compares the intervention against a scenario described as the 'World without Enco + Bini', which serves as the comparator in this analysis.\n\nWhile the model successfully identifies the intervention, comparator, population, country, time horizon, perspective, and model structure, it notably lacks specific details regarding the indication and key assumptions, which are absent from the overview sheets. These missing elements may limit the comprehensiveness of the findings, as they are crucial for understanding the context and implications of the budget-impact analysis. Nonetheless, the framework established provides a foundational understanding of the potential economic impact of Enco + Bini in the specified patient population over the defined time period.\n\n## Inputs\nIn the inputs stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, it was noted that the iteration cap has been reached without fulfilling the necessary criteria for a comprehensive overview. The model aims to compare the outcomes of patients receiving this treatment against a world without Enco + Bini, specifically focusing on individuals with unresectable or metastatic cutaneous melanoma harboring the BRAFV600 mutation in Canada. However, the findings indicate that no tables were found to support the required inputs, and critical items remain unsatisfied, particularly the overview, which is essential for understanding the context and implications of the model from a Canadian healthcare payer perspective over a three-year time horizon, including a one-year baseline.\n\nThe absence of concrete data and the lack of a structured overview highlight significant gaps in the current model setup. Without these foundational elements, the model cannot effectively assess the budget impact of the proposed intervention. As such, it is imperative to address the missing items to ensure a robust analysis that can inform decision-making in the Canadian healthcare landscape. No overrides have been proposed at this stage, indicating that the current framework requires further development to meet the established criteria for a successful iteration.\n\n## Results\nIn the results stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, we reached an iteration cap without generating the expected comprehensive overview. The analysis was conducted from the perspective of the Canadian healthcare payer, focusing on a population of patients with unresectable or metastatic cutaneous melanoma harboring the BRAFV600 mutation. Unfortunately, no tables were found to substantiate the findings, and the model did not satisfy the required items, leaving us without a clear rationale or supporting data to inform decision-making. \n\nThe absence of concrete results highlights significant gaps in the analysis, particularly the lack of an overview that would typically summarize the budget impact over the specified three-year time horizon. As a result, the findings remain incomplete, with no items satisfied and several critical components missing. Given the current state of the model, it is essential to consider potential overrides to enhance the robustness of the analysis, although none were proposed in this iteration. Moving forward, addressing these deficiencies will be crucial for a comprehensive understanding of the budget implications of Enco + Bini in the specified patient population.\n\n## Calculations\nIn the calculations stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, we encountered a significant challenge. The iteration cap was reached, resulting in a failure to derive or return the necessary criteria for the calculations. Specifically, the model did not yield any tables or items that could satisfy the required overview, leaving us with a void in the data needed to assess the financial implications of this treatment compared to a world without Enco + Bini. This lack of output indicates a critical gap in our analysis, as no concrete tables were found to support the evaluation of the intervention's impact on the Canadian healthcare system over the specified three-year time horizon.\n\nAs we reflect on the findings, it is evident that the absence of satisfied items and the presence of missing elements hinder our ability to draw meaningful conclusions. The calculations stage remains incomplete, with no notes or additional insights to guide our next steps. Without the necessary data, we cannot fully understand the budgetary consequences of introducing Enco + Bini for patients with unresectable or metastatic cutaneous melanoma with a BRAFV600 mutation. Given the current state, we must consider potential overrides to address these gaps, although none have been proposed at this time. Moving forward, it will be essential to revisit the model structure and assumptions to ensure that we can generate the required outputs for a comprehensive analysis.\n",
+  "stages": {
+    "overall": {
+      "stage": "overall",
+      "completion_status": "complete",
+      "iterations_run": 1,
+      "llm_calls_used": 5,
+      "elapsed_seconds": 16.260504300007597,
+      "prose": "In Canada, a budget-impact model has been developed to evaluate the economic implications of using Enco + Bini for the treatment of advanced unresectable or metastatic BRAF+ mutation melanoma. This model is structured from a Canadian healthcare payer perspective and spans a time horizon of three years, including one year of baseline data. The primary population targeted by this intervention consists of patients diagnosed with unresectable or metastatic cutaneous melanoma harboring a BRAFV600 mutation. The model compares the intervention against a scenario described as the 'World without Enco + Bini', which serves as the comparator in this analysis.\n\nWhile the model successfully identifies the intervention, comparator, population, country, time horizon, perspective, and model structure, it notably lacks specific details regarding the indication and key assumptions, which are absent from the overview sheets. These missing elements may limit the comprehensiveness of the findings, as they are crucial for understanding the context and implications of the budget-impact analysis. Nonetheless, the framework established provides a foundational understanding of the potential economic impact of Enco + Bini in the specified patient population over the defined time period.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "concepts": {
+        "intervention": "Enco + Bini in the treatment of advanced unresectable/metastatic BRAF+ mutation melanoma",
+        "comparator": "World without Enco + Bini",
+        "population": "Patients with unresectable or metastatic cutaneous melanoma with a BRAFV600 mutation",
+        "indication": null,
+        "country": "Canada",
+        "time_horizon": "3 years (with 1 year baseline)",
+        "perspective": "Canadian healthcare payer perspective",
+        "model_structure": "Pan-Canadian Model",
+        "key_assumptions": null
+      },
+      "overview_sheets_read": [
+        "Cover",
+        "Introduction",
+        "Ex summary"
+      ]
+    },
+    "inputs": {
+      "stage": "inputs",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 6.484609600156546,
+      "prose": "In the inputs stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, it was noted that the iteration cap has been reached without fulfilling the necessary criteria for a comprehensive overview. The model aims to compare the outcomes of patients receiving this treatment against a world without Enco + Bini, specifically focusing on individuals with unresectable or metastatic cutaneous melanoma harboring the BRAFV600 mutation in Canada. However, the findings indicate that no tables were found to support the required inputs, and critical items remain unsatisfied, particularly the overview, which is essential for understanding the context and implications of the model from a Canadian healthcare payer perspective over a three-year time horizon, including a one-year baseline.\n\nThe absence of concrete data and the lack of a structured overview highlight significant gaps in the current model setup. Without these foundational elements, the model cannot effectively assess the budget impact of the proposed intervention. As such, it is imperative to address the missing items to ensure a robust analysis that can inform decision-making in the Canadian healthcare landscape. No overrides have been proposed at this stage, indicating that the current framework requires further development to meet the established criteria for a successful iteration.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "inputs": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "inputs": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      }
+    },
+    "results": {
+      "stage": "results",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 8.588944100076333,
+      "prose": "In the results stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, we reached an iteration cap without generating the expected comprehensive overview. The analysis was conducted from the perspective of the Canadian healthcare payer, focusing on a population of patients with unresectable or metastatic cutaneous melanoma harboring the BRAFV600 mutation. Unfortunately, no tables were found to substantiate the findings, and the model did not satisfy the required items, leaving us without a clear rationale or supporting data to inform decision-making. \n\nThe absence of concrete results highlights significant gaps in the analysis, particularly the lack of an overview that would typically summarize the budget impact over the specified three-year time horizon. As a result, the findings remain incomplete, with no items satisfied and several critical components missing. Given the current state of the model, it is essential to consider potential overrides to enhance the robustness of the analysis, although none were proposed in this iteration. Moving forward, addressing these deficiencies will be crucial for a comprehensive understanding of the budget implications of Enco + Bini in the specified patient population.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "results": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "results": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      }
+    },
+    "calculations": {
+      "stage": "calculations",
+      "completion_status": "iteration_cap_reached",
+      "iterations_run": 3,
+      "llm_calls_used": 4,
+      "elapsed_seconds": 9.25733430008404,
+      "prose": "In the calculations stage of the budget-impact model for the intervention of Enco + Bini in treating advanced unresectable/metastatic BRAF+ mutation melanoma, we encountered a significant challenge. The iteration cap was reached, resulting in a failure to derive or return the necessary criteria for the calculations. Specifically, the model did not yield any tables or items that could satisfy the required overview, leaving us with a void in the data needed to assess the financial implications of this treatment compared to a world without Enco + Bini. This lack of output indicates a critical gap in our analysis, as no concrete tables were found to support the evaluation of the intervention's impact on the Canadian healthcare system over the specified three-year time horizon.\n\nAs we reflect on the findings, it is evident that the absence of satisfied items and the presence of missing elements hinder our ability to draw meaningful conclusions. The calculations stage remains incomplete, with no notes or additional insights to guide our next steps. Without the necessary data, we cannot fully understand the budgetary consequences of introducing Enco + Bini for patients with unresectable or metastatic cutaneous melanoma with a BRAFV600 mutation. Given the current state, we must consider potential overrides to address these gaps, although none have been proposed at this time. Moving forward, it will be essential to revisit the model structure and assumptions to ensure that we can generate the required outputs for a comprehensive analysis.",
+      "overrides_proposed": [],
+      "applied_heuristics": [],
+      "completion_criteria": {
+        "calculations": {
+          "required_items": [
+            "overview"
+          ],
+          "rationale": "LLM criteria derivation failed or returned empty",
+          "source_signal": "fallback"
+        }
+      },
+      "findings": {
+        "calculations": {
+          "tables_found": [],
+          "items_satisfied": [],
+          "items_missing": [],
+          "notes": ""
+        }
+      },
+      "important_calc_tables": []
+    }
+  }
+}

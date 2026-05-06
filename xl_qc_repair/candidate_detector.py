@@ -176,8 +176,25 @@ def build_bundle(
             sheet_leaves=sheet_leaves,
         )
 
+    # Title-from-left scan: a narrow band at the core's top row.
+    # Populated whenever ``title_missing`` fires so the LLM can find
+    # left-anchored titles (common BIM pattern: title in column B,
+    # data in C..G) before falling back to ``synthesize_title``.
+    left_title_cols = int(getattr(config, "qc_repair_left_title_search_cols", 3))
+    left_title_candidates: List[Candidate] = []
+    if title_missing and left_title_cols > 0:
+        left_title_candidates = _candidates_left_for_title(
+            accessor, sheet_name, bbox, leaf.get("core_region"), sheet_leaves,
+            cols_left=left_title_cols, exclude_table_id=table_id,
+        )
+
     left_candidates: List[Candidate] = []
     looking_left: List[List[LookAroundCell]] = []
+    # Populate looking_around_left when EITHER trigger fires.  When
+    # rowname_missing is on, scan the wider band for row-names; when
+    # only title_missing is on, scan the narrow ``left_title_cols`` band
+    # so the server-side premature-synthesis coercion can verify a
+    # left-cell title was visible.
     if rowname_missing:
         left_candidates = _candidates_left(
             accessor, sheet_name, bbox, leaf.get("core_region"), sheet_leaves,
@@ -185,7 +202,13 @@ def build_bundle(
         )
         looking_left = _look_around_grid(
             accessor, sheet_name, leaf,
-            direction="left", n=2,
+            direction="left", n=max(2, left_title_cols),
+            sheet_leaves=sheet_leaves,
+        )
+    elif title_missing and left_title_cols > 0:
+        looking_left = _look_around_grid(
+            accessor, sheet_name, leaf,
+            direction="left", n=left_title_cols,
             sheet_leaves=sheet_leaves,
         )
 
@@ -221,6 +244,7 @@ def build_bundle(
         },
         above_candidates=above_candidates,
         left_candidates=left_candidates,
+        left_title_candidates=left_title_candidates,
         looking_around_above=looking_above,
         looking_around_left=looking_left,
         future_flags=future_flags,
@@ -363,6 +387,59 @@ def _candidates_above(
                 claimed_by_table_id=(owner_bbox or owner_core),
             ))
             break  # leftmost only per row
+    return out
+
+
+def _candidates_left_for_title(
+    accessor: WorkbookAccessor, sheet_name: str,
+    bbox: Dict[str, Any], core_region: Optional[Dict[str, Any]],
+    sheet_leaves: List[Dict[str, Any]],
+    *, cols_left: int, exclude_table_id: str,
+) -> List[Candidate]:
+    """Title-from-left scan: examine cells in a narrow band of columns
+    just to the left of the bbox at the core's top row (±1 row of fuzz
+    to absorb merged-cell offsets).
+
+    Returns ``Candidate(source="left_for_title", ...)`` entries — kept
+    distinct from ``_candidates_left``'s rowname-oriented results so
+    the LLM and server-side coercion can reason about title sources
+    separately.
+    """
+    out: List[Candidate] = []
+    if not bbox or cols_left <= 0:
+        return out
+    bbox_r1 = int(bbox.get("r1", 0))
+    bbox_r2 = int(bbox.get("r2", 0))
+    c1 = int(bbox.get("c1", 0))
+    if core_region:
+        anchor_row = int(core_region.get("r1", bbox_r1))
+    else:
+        anchor_row = bbox_r1
+    # ±1 vertical fuzz for merged-cell title rows.
+    candidate_rows = sorted({anchor_row - 1, anchor_row, anchor_row + 1})
+    candidate_rows = [r for r in candidate_rows if 0 <= r <= bbox_r2]
+    ws = accessor.get_worksheet(sheet_name)
+    for offset in range(1, cols_left + 1):
+        c = c1 - offset
+        if c < 0:
+            break
+        for r in candidate_rows:
+            text, _is_f, bold = _read_cell(accessor, ws, sheet_name, r, c)
+            if text is None or not text.strip():
+                continue
+            owner_bbox, owner_core = _find_cell_owners(
+                sheet_leaves, sheet_name, r, c,
+                exclude_table_id=exclude_table_id,
+            )
+            out.append(Candidate(
+                source="left_for_title",
+                text=text.strip(),
+                cell=_cell_addr(r, c),
+                distance=offset,
+                bold=bold,
+                claimed_by_table_id=(owner_bbox or owner_core),
+            ))
+            break  # take the first non-empty row per column offset
     return out
 
 

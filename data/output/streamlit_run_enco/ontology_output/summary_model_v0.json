@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-05T13:07:58.080Z",
+  "seed_timestamp": "2026-05-05T23:36:05.657Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:8018279055de31f7a44fc52bc3f9101c2328a7a5b75f9cb5ab1dbc1537579e87",
   "overall_model": {
@@ -22,16 +22,16 @@
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "a9f916bc0a3ee753_b19",
+        "table_id": "a9f916bc0a3ee753_t19_b5",
         "ontology_role": "input",
         "ontology_subtype": "population",
         "confidence": 0.7,
         "evidence_quality": "high",
-        "why_selected": "lexicon match in header for concept 'population'",
+        "why_selected": "lexicon match in title for concept 'population'",
         "evidence_signals": [
           {
-            "type": "format_match",
-            "value": "Population size - year 1",
+            "type": "title_match",
+            "value": "Population parameters by province",
             "matched_term": "population"
           }
         ],
@@ -830,12 +830,12 @@
         "ontology_subtype": "structural_input_scenario",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in header for concept 'scenario'",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'scenario'",
         "evidence_signals": [
           {
-            "type": "format_match",
-            "value": "from the perspective of ",
-            "matched_term": "perspective"
+            "type": "title_match",
+            "value": "Time horizon",
+            "matched_term": "time horizon"
           },
           {
             "type": "dag_fanin",
@@ -936,10 +936,10 @@
         "ontology_subtype": "structural_input_subsequent_treatment",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in row_label for concept 'subsequent_treatment'",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'subsequent_treatment'",
         "evidence_signals": [
           {
-            "type": "format_match",
+            "type": "title_match",
             "value": "Control for subsequent treatment %",
             "matched_term": "subsequent treatment"
           },
@@ -1115,12 +1115,12 @@
         "ontology_subtype": "structural_input_scenario",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in header for concept 'scenario'",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'scenario'",
         "evidence_signals": [
           {
-            "type": "format_match",
-            "value": "Perspective",
-            "matched_term": "perspective"
+            "type": "title_match",
+            "value": "Time horizon",
+            "matched_term": "time horizon"
           },
           {
             "type": "dag_fanin",
@@ -1474,16 +1474,21 @@
         ]
       },
       {
-        "table_id": "a9f916bc0a3ee753_t19_b5",
+        "table_id": "a9f916bc0a3ee753_b19",
         "ontology_role": "input",
         "ontology_subtype": "structural_input",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in body_cell_value for concept 'unspecified'",
         "evidence_signals": [
           {
+            "type": "format_match",
+            "value": "Statistics Canada. Table 17-10-0057-01 Projected population, by projection scenario, age and sex, as of July 1, Canada, provinces and territories, annual (persons), 18 years and over. CANSIM (database). Accessed September 11, 2020 https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1710005701",
+            "matched_term": "scenario"
+          },
+          {
             "type": "dag_fanin",
-            "value": 1,
+            "value": 0,
             "matched_term": null
           },
           {
@@ -2227,11 +2232,16 @@
       {
         "table_id": "94f6909ecd7ce31f_b16_b10_child8",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_dosing",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'dosing'",
         "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "Treatment doses for Comparator 6",
+            "matched_term": "dose"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -2378,43 +2388,9 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "263 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+    "summary": "263 main calculation tables identified (structural_calc). 0 aggregators.",
     "summary_source": "template",
     "candidate_tables": [
-      {
-        "table_id": "8c7ea0b7c24ea4ab_t6_child3",
-        "ontology_role": "calculation",
-        "ontology_subtype": "total_cost_with",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "lexicon match in title for concept 'total_cost_with_intervention'",
-        "evidence_signals": [
-          {
-            "type": "title_match",
-            "value": "Total cost",
-            "matched_term": "total cost"
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": "8c7ea0b7c24ea4ab_t6",
-        "parent_path": [
-          "BI calculation_Alberta",
-          "World without new intervention: Enco+Bini"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
       {
         "table_id": "a6ccdaf330b06725_t17_t9_b4",
         "ontology_role": "calculation",
@@ -2824,6 +2800,45 @@
         "parent_table_id": null,
         "parent_path": [
           "BI calculation_Alberta"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "8c7ea0b7c24ea4ab_t6_child3",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.8,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 1,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "8c7ea0b7c24ea4ab_t6",
+        "parent_path": [
+          "BI calculation_Alberta",
+          "World without new intervention: Enco+Bini"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -12445,8 +12460,8 @@
     ],
     "parent_groups": [],
     "expected_concepts_status": {
-      "total_cost_with_intervention": "found",
-      "total_cost_without_intervention": "found",
+      "total_cost_with_intervention": "absent",
+      "total_cost_without_intervention": "absent",
       "cost_component_calc": "absent",
       "patient_flow": "absent",
       "scenario_calc": "absent",
@@ -12457,11 +12472,11 @@
   "results": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "23 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
+    "summary": "22 result tables identified (incremental_budget_impact, structural_result). Incremental row present.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "eec1912982fee766_b13_b2",
+        "table_id": "8c7ea0b7c24ea4ab_b6",
         "ontology_role": "result",
         "ontology_subtype": "incremental_budget_impact",
         "confidence": 0.55,
@@ -12470,45 +12485,8 @@
         "evidence_signals": [
           {
             "type": "title_match",
-            "value": "3- year budget impact",
-            "matched_term": "budget impact"
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "BI calculation_Alberta"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "has_cumulative_column": false,
-          "result_metrics": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "8c7ea0b7c24ea4ab_b6",
-        "ontology_role": "result",
-        "ontology_subtype": "structural_result",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: terminal in DAG, multiple inputs, name matches results lexicon",
-        "evidence_signals": [
-          {
-            "type": "dag_fanout",
-            "value": 0,
-            "matched_term": null
-          },
-          {
-            "type": "format_match",
-            "value": "title",
-            "matched_term": null
+            "value": "Incremental",
+            "matched_term": "incremental"
           }
         ],
         "upstream_node_type": "input",
