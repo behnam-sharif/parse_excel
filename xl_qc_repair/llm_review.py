@@ -61,11 +61,30 @@ DECISION ORDER (apply in order):
             6-row cost-component breakdown — DO NOT pick this verdict;
             jump to step (c) instead.  The server will downgrade
             misuse to ``synthesize_title``.
-       (c)  Else → ``synthesize_title``.  THIS IS A LAST RESORT.  Do
-            NOT synthesize when any unclaimed non-sequence text cell
+       (c)  Else → ``synthesize_title``.  Last resort.  Do NOT
+            synthesize when any unclaimed non-sequence text cell
             exists above the bbox or in the narrow column band to the
             left of the bbox at the core's top row.  The server WILL
             REJECT premature synthesis verdicts.
+
+            WHEN you do synthesize, USE ``synthesis_context_dag``
+            (when present) to ground the title in the workbook's DAG
+            structure.  Specifically, read
+            ``synthesis_context_dag.sample_incoming_node_titles`` and
+            ``sample_outgoing_node_titles`` — these are the titles of
+            tables that feed INTO this leaf and tables this leaf
+            FEEDS, respectively.  Compose a title that names what
+            this table DOES given those neighbours.  Examples:
+              * upstream titles=['Drug cost','AE cost'], downstream='Annual incremental cost'
+                → "Cost components by year"
+              * upstream='Population by province', downstream='Treatment cohort'
+                → "Population eligible per province"
+              * representative_formulas show SUMPRODUCT pattern
+                → "Aggregator over <upstream concepts>"
+            Always set ``title`` to a non-empty string when you pick
+            ``synthesize_title``.  Empty/null title triggers a server
+            fallback that produces "<sheet> (<node_type> table)" — that
+            is generic and uninformative, prefer a real synthesised name.
   2. Is row_names missing?
        (a) Look at ``left_candidates`` / ``looking_around_left``.  If a non-empty unclaimed left column adjacent to the core has labels for each core row → ``assign_row_names`` with that list.
        (b) Else → ``unresolved`` for the row_names slot (don't fabricate).
@@ -117,6 +136,7 @@ def _bundle_payload(bundle: RepairCandidateBundle) -> Dict[str, Any]:
             for col in bundle.looking_around_left
         ],
         "future_flags_recognised_but_not_acted_on": list(bundle.future_flags),
+        "synthesis_context_dag": bundle.synthesis_context_dag,
         "provenance": bundle.provenance,
     }
 

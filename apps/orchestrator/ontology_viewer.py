@@ -283,14 +283,31 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
         st.info("ontology_trace.jsonl is empty.")
         return
 
-    # v1.I — ReAct timeline (per-stage).  Renders thought → action →
-    # observation → stop sequences so you can read the agent's reasoning.
+    # v1.I + visibility — ReAct timeline (per-stage).  Renders the
+    # thought → action → observation → stop sequence so the agent's
+    # reasoning is readable.  Now ALSO renders pass2_tool_call_failed
+    # events (parse errors / unknown tools) as ❌ blocks with an
+    # expander showing the matching llm_call's raw prompt + response —
+    # so iterations that look "missing" from the timeline (because the
+    # LLM returned malformed JSON) become observable.
     react_events = [
         e for e in events
         if e.get("event", "").startswith("pass2_react_")
         or e.get("event") == "pass2_stage_start"
         or e.get("event") == "pass2_stage_complete"
+        or e.get("event") == "pass2_tool_call_failed"
     ]
+    # Index llm_call events by (stage, iteration) for raw-response
+    # correlation.  ``llm_call`` carries ``agent`` not ``stage``, so we
+    # match by whatever the trace events agree on; in practice
+    # ``agent`` aligns with ``stage`` for Pass-2 calls.
+    llm_calls_by_key: Dict[Any, List[Dict[str, Any]]] = {}
+    for e in events:
+        if e.get("event") != "llm_call":
+            continue
+        key = (e.get("agent"), e.get("phase"))
+        llm_calls_by_key.setdefault(key, []).append(e)
+
     if react_events:
         st.markdown("### Pass-2 ReAct timeline")
         stages = sorted({
@@ -299,8 +316,28 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
         chosen_stage = st.selectbox(
             "Stage", options=stages, key="pass2_react_stage_filter",
         )
+        # Order events for the chosen stage chronologically by ts.
         stage_events = [e for e in react_events if e.get("stage") == chosen_stage]
-        # Group by iteration where applicable.
+        stage_events.sort(key=lambda e: e.get("ts") or "")
+
+        # Walk the stage's llm_calls to align them to iterations: the
+        # k-th 'react' or 'extraction'/'synthesis' call corresponds to
+        # the k-th iteration (best-effort).  We use the chronological
+        # sort + a counter to pair them.
+        stage_llm_calls = [
+            e for e in events
+            if e.get("event") == "llm_call"
+            and e.get("agent") == chosen_stage
+            and e.get("phase") in ("react", "extraction", "synthesis", "narration")
+        ]
+        stage_llm_calls.sort(key=lambda e: e.get("ts") or "")
+        # Index by (stage, iteration) — the runner doesn't write
+        # iteration on llm_call, so we index by chronological order.
+        llm_call_for_iter: Dict[int, Dict[str, Any]] = {}
+        # Map each ReAct iteration to the closest preceding llm_call by ts.
+        # When multiple LLMs fire per iteration (e.g. parse-retry path),
+        # we just take the most recent one before the iteration's events.
+
         for e in stage_events:
             event_type = e.get("event")
             iteration = e.get("iteration")
@@ -335,12 +372,52 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                     st.markdown(f"> {thought}")
                 if summary:
                     st.markdown(f"**Summary:** {summary}")
+            elif event_type == "pass2_tool_call_failed":
+                # NEW (P2.D viewer fix) — iterations that fail to parse
+                # used to be invisible.  Render them as ❌ blocks with
+                # the error type + the truncated raw response from the
+                # message field.  Optionally pull the matching
+                # llm_call's full prompt + response into an expander.
+                tool = e.get("tool", "<unknown>")
+                error_type = e.get("error_type", "Error")
+                message = e.get("message") or ""
+                st.markdown(
+                    f"❌ _{label}_  **{ts}** — `{tool}` failed: "
+                    f"`{error_type}`"
+                )
+                # Truncated message goes inline.
+                short_msg = message if len(message) <= 800 else (message[:800] + "...")
+                st.code(short_msg, language="text")
+
+                # Try to surface the matching llm_call.  Heuristic:
+                # find the most recent llm_call (any phase) on the same
+                # agent before this event's ts.
+                matched_call = None
+                for cand in stage_llm_calls:
+                    if (cand.get("ts") or "") <= (ts or ""):
+                        matched_call = cand
+                    else:
+                        break
+                if matched_call is not None:
+                    with st.expander(
+                        f"Raw LLM call (phase=`{matched_call.get('phase')}`, "
+                        f"prompt_chars={matched_call.get('prompt_size_chars', 0)}, "
+                        f"response_chars={matched_call.get('response_size_chars', 0)})",
+                        expanded=False,
+                    ):
+                        st.markdown("**Prompt** (full):")
+                        st.code(matched_call.get("prompt") or "", language="text")
+                        st.markdown("**Response** (raw, may be truncated by the model):")
+                        st.code(matched_call.get("response") or "", language="text")
             elif event_type == "pass2_stage_complete":
                 status = e.get("completion_status")
                 iters = e.get("iterations_run")
                 calls = e.get("llm_calls_used")
+                # Highlight partial / iteration_cap_reached visibly so
+                # the user notices when a stage didn't finish cleanly.
+                emoji = "🏁" if status == "complete" else "⚠️"
                 st.markdown(
-                    f"🏁 **{ts}** — `{chosen_stage}` complete  "
+                    f"{emoji} **{ts}** — `{chosen_stage}` complete  "
                     f"status=`{status}`, iterations={iters}, llm_calls={calls}"
                 )
         st.markdown("---")

@@ -36,6 +36,15 @@ class XlQcRepairConfig:
     # that sheet collapse to keep_unchanged.
     qc_repair_max_llm_calls_per_sheet: int = 5
 
+    # When ``title_missing`` fires, also surface a small DAG + formula
+    # context snippet to the LLM so it can synthesise titles grounded
+    # in upstream / downstream node titles + 1-2 representative
+    # formulas.  Without this, ``synthesize_title`` frequently
+    # produces a null title that falls back to "Sheet (input table)".
+    qc_repair_include_dag_context_for_synthesis: bool = True
+    qc_repair_synthesis_max_neighbour_titles: int = 4
+    qc_repair_synthesis_max_representative_formulas: int = 2
+
     # Above-cell scan depth.  When ``qc_repair_scan_to_prev_table`` is
     # on, we scan up to the previous table's r2 (or sheet top), capped
     # by ``qc_repair_above_scan_max_rows``.

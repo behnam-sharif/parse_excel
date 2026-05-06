@@ -135,9 +135,10 @@ def build_bundle(
     triggers: Optional[List[str]] = None,
     config: XlQcRepairConfig,
     accessor: WorkbookAccessor,
-    dag_data: Optional[Dict[str, Any]] = None,        # ignored — kept for caller compat
-    node_index: Optional[Dict[str, Any]] = None,      # ignored
-    formulas_data: Optional[Dict[str, Any]] = None,   # ignored
+    final_map: Optional[Dict[str, Any]] = None,       # for synthesis_context_dag
+    dag_data: Optional[Dict[str, Any]] = None,        # for synthesis_context_dag
+    node_index: Optional[Dict[str, Any]] = None,      # for synthesis_context_dag
+    formulas_data: Optional[Dict[str, Any]] = None,   # for synthesis_context_dag
     parent_flags: Optional[List[str]] = None,
     parent_entry: Optional[Dict[str, Any]] = None,    # ignored — kept for caller compat
 ) -> RepairCandidateBundle:
@@ -226,6 +227,36 @@ def build_bundle(
 
     future_flags = _future_flags_for(leaf, parent_flags or [], config)
 
+    # QC.A — synthesise-time DAG + formula context.  Built only when
+    # title_missing fires AND the config flag is on AND the runner
+    # actually loaded DAG / node_index / formulas data.  Otherwise
+    # remains None (LLM falls back to ``Sheet (input table)`` like
+    # before).
+    synthesis_context_dag: Optional[Dict[str, Any]] = None
+    if (
+        title_missing
+        and getattr(config, "qc_repair_include_dag_context_for_synthesis", False)
+        and dag_data and node_index and final_map
+    ):
+        try:
+            from xl_qc_repair.synthesis_context import build_synthesis_context
+            synthesis_context_dag = build_synthesis_context(
+                table_id=table_id,
+                sheet_name=sheet_name,
+                final_map=final_map,
+                dag_data=dag_data,
+                node_index=node_index,
+                formulas_data=formulas_data or {},
+                max_neighbour_titles=int(getattr(
+                    config, "qc_repair_synthesis_max_neighbour_titles", 4,
+                )),
+                max_representative_formulas=int(getattr(
+                    config, "qc_repair_synthesis_max_representative_formulas", 2,
+                )),
+            )
+        except Exception:
+            synthesis_context_dag = None
+
     return RepairCandidateBundle(
         table_id=table_id,
         sheet_name=sheet_name,
@@ -248,6 +279,7 @@ def build_bundle(
         looking_around_above=looking_above,
         looking_around_left=looking_left,
         future_flags=future_flags,
+        synthesis_context_dag=synthesis_context_dag,
         provenance=provenance,
     )
 

@@ -592,6 +592,100 @@ class TestQCR8RowNameToTitleStrictRule(unittest.TestCase):
         self.assertIsNone(repaired["Results"]["entries"][0]["title"])
 
 
+class TestSynthesisContext(unittest.TestCase):
+    """QC.A — synthesis_context_dag carries upstream/downstream node
+    titles + representative formulas to help the LLM ground synthesised
+    titles instead of returning null.
+    """
+
+    def test_builds_context_with_upstream_titles(self) -> None:
+        from xl_qc_repair.synthesis_context import build_synthesis_context
+
+        # Synthetic DAG: this leaf has node_id=N1; one inbound from
+        # N_UP (table T_UP titled "Drug cost"), one outbound to
+        # N_DOWN (table T_DOWN titled "Annual cost").
+        final_map = {
+            "Calculations": {
+                "entries": [
+                    {
+                        "kind": "standalone", "table_id": "T_THIS",
+                        "title": None,  # the leaf we're synthesising for
+                    },
+                    {
+                        "kind": "standalone", "table_id": "T_UP",
+                        "title": "Drug cost",
+                    },
+                    {
+                        "kind": "standalone", "table_id": "T_DOWN",
+                        "title": "Annual cost",
+                    },
+                ],
+            },
+        }
+        node_index = {
+            "by_table_id": {"T_THIS": ["N1"], "T_UP": ["N_UP"], "T_DOWN": ["N_DOWN"]},
+            "by_id": {
+                "N1": {"table_id": "T_THIS", "sheet": "Calculations", "node_type": "calc"},
+                "N_UP": {"table_id": "T_UP", "sheet": "Inputs", "node_type": "input"},
+                "N_DOWN": {"table_id": "T_DOWN", "sheet": "Results", "node_type": "result"},
+            },
+        }
+        dag_data = {
+            "edges": [
+                {"source_node_id": "N_UP", "target_node_id": "N1"},
+                {"source_node_id": "N1", "target_node_id": "N_DOWN"},
+            ],
+        }
+        formulas_data = {
+            "by_node_id": {
+                "N1": {
+                    "representative_formulas": [
+                        {"cell": "B5", "formula": "=Inputs!C2*1.05"},
+                    ],
+                },
+            },
+        }
+
+        ctx = build_synthesis_context(
+            table_id="T_THIS",
+            sheet_name="Calculations",
+            final_map=final_map,
+            dag_data=dag_data,
+            node_index=node_index,
+            formulas_data=formulas_data,
+            max_neighbour_titles=4,
+            max_representative_formulas=2,
+        )
+        self.assertIsNotNone(ctx)
+        self.assertEqual(ctx["fanin"], 1)
+        self.assertEqual(ctx["fanout"], 1)
+        # Upstream/downstream titles resolved from final_map.
+        upstream = ctx["sample_incoming_node_titles"]
+        self.assertEqual(len(upstream), 1)
+        self.assertEqual(upstream[0]["title"], "Drug cost")
+        downstream = ctx["sample_outgoing_node_titles"]
+        self.assertEqual(len(downstream), 1)
+        self.assertEqual(downstream[0]["title"], "Annual cost")
+        # Representative formula included.
+        self.assertEqual(len(ctx["representative_formulas"]), 1)
+        self.assertEqual(ctx["representative_formulas"][0]["formula"], "=Inputs!C2*1.05")
+        # Guidance string mentions the recipe.
+        self.assertIn("synthesise", ctx["guidance"].lower())
+
+    def test_no_dag_node_returns_none(self) -> None:
+        from xl_qc_repair.synthesis_context import build_synthesis_context
+
+        ctx = build_synthesis_context(
+            table_id="T_NO_DAG",
+            sheet_name="X",
+            final_map={},
+            dag_data={"edges": []},
+            node_index={"by_table_id": {}, "by_id": {}},
+            formulas_data={},
+        )
+        self.assertIsNone(ctx)
+
+
 class TestRunnerSignature(unittest.TestCase):
     def test_run_qc_repair_accepts_target_sheets(self) -> None:
         import inspect

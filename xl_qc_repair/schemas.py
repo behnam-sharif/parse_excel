@@ -66,6 +66,16 @@ class RepairCandidateBundle(_Strict):
     looking_around_above: List[List[LookAroundCell]] = Field(default_factory=list)
     looking_around_left: List[List[LookAroundCell]] = Field(default_factory=list)
     future_flags: List[str] = Field(default_factory=list)
+    # Synthesis-only DAG + formula context.  Populated when
+    # ``title_missing`` is in triggers and the
+    # ``qc_repair_include_dag_context_for_synthesis`` flag is on.
+    # Carries ``fanin``, ``fanout``, ``sample_incoming_node_titles``,
+    # ``sample_outgoing_node_titles``, and 1-2
+    # ``representative_formulas``.  Helps the LLM compose grounded
+    # titles for ``synthesize_title`` verdicts (e.g., upstream is
+    # "Drug cost" / "AE cost", downstream is "Annual incremental cost"
+    # → synthesise "Cost components by year").
+    synthesis_context_dag: Optional[Dict[str, Any]] = None
     provenance: Dict[str, Any] = Field(default_factory=dict)
 
 

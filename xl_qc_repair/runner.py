@@ -30,6 +30,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from core.workbook_accessor import WorkbookAccessor
 from core.paths import (
+    get_dag_graph_path,
     get_init_output_path,
     get_v6_final_table_map_path,
 )
@@ -132,6 +133,29 @@ def run_qc_repair(
     final_map = json.loads(final_map_path.read_text(encoding="utf-8"))
     wb_path = _resolve_workbook_path(run_id, output_base)
 
+    # QC.A — load DAG + formulas + node_index when synthesis-context
+    # injection is enabled.  Empty dicts on failure (best-effort: the
+    # bundle just won't carry the synthesis_context_dag block).
+    dag_data: Dict[str, Any] = {}
+    node_index: Dict[str, Any] = {}
+    formulas_data: Dict[str, Any] = {}
+    if getattr(config, "qc_repair_include_dag_context_for_synthesis", False):
+        try:
+            dag_path = get_dag_graph_path(run_id, output_base)
+            if dag_path.is_file():
+                dag_data = json.loads(dag_path.read_text(encoding="utf-8"))
+                node_index_path = dag_path.parent / "node_index.json"
+                if node_index_path.is_file():
+                    node_index = json.loads(node_index_path.read_text(encoding="utf-8"))
+                formulas_path = dag_path.parent / "formulas.json"
+                if formulas_path.is_file():
+                    formulas_data = json.loads(formulas_path.read_text(encoding="utf-8"))
+        except Exception:
+            # Best-effort — synthesis_context just won't be injected.
+            dag_data = {}
+            node_index = {}
+            formulas_data = {}
+
     out_dir = Path(output_base) / run_id / "qc_repair_output"
     out_dir.mkdir(parents=True, exist_ok=True)
     audit_path = out_dir / "qc_repair_audit.jsonl"
@@ -220,6 +244,10 @@ def run_qc_repair(
                     trigger=triggers[0], triggers=triggers,
                     config=config, accessor=accessor,
                     parent_flags=parent_flags,
+                    final_map=final_map,
+                    dag_data=dag_data,
+                    node_index=node_index,
+                    formulas_data=formulas_data,
                 )
             except Exception as exc:
                 error_lines.append(f"build_bundle failed for {leaf.get('table_id')}: {exc}")
