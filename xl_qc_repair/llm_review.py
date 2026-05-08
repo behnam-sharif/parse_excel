@@ -67,24 +67,97 @@ DECISION ORDER (apply in order):
             left of the bbox at the core's top row.  The server WILL
             REJECT premature synthesis verdicts.
 
-            WHEN you do synthesize, USE ``synthesis_context_dag``
-            (when present) to ground the title in the workbook's DAG
-            structure.  Specifically, read
-            ``synthesis_context_dag.sample_incoming_node_titles`` and
-            ``sample_outgoing_node_titles`` — these are the titles of
-            tables that feed INTO this leaf and tables this leaf
-            FEEDS, respectively.  Compose a title that names what
-            this table DOES given those neighbours.  Examples:
-              * upstream titles=['Drug cost','AE cost'], downstream='Annual incremental cost'
-                → "Cost components by year"
-              * upstream='Population by province', downstream='Treatment cohort'
-                → "Population eligible per province"
-              * representative_formulas show SUMPRODUCT pattern
-                → "Aggregator over <upstream concepts>"
+            === HOW TO SYNTHESISE THE TITLE ===
+
+            STEP 1 — INFER THE ROLE.  ``v6_state.node_type`` is NOT
+            given (intentionally — finalize's role tag is unreliable).
+            Decide between {{result, calculation, input}} using these
+            signals, in order of weight:
+              * ``sheet_name`` — Results / Output / Outcome sheets
+                lean RESULT; Calculations / Calc / Engine sheets lean
+                CALCULATION; Inputs / Parameters / Settings sheets
+                lean INPUT.
+              * ``synthesis_context_dag.fanout`` — fanout = 0 on a
+                Results-flavoured sheet ⇒ result.  fanout > 0 with a
+                non-trivial fanin ⇒ calculation.  fanin = 0 ⇒ input.
+              * ``v6_state.siblings_with_title`` — match the pattern
+                of named siblings on the same sheet (e.g. siblings
+                titled "result_… by year" indicate this leaf is also a
+                result).
+              * ``v6_state.headers`` — header words like "Budget
+                impact" / "ICER" / "NPV" / "Total cost" / "Net" point
+                to RESULT; "Mortality" / "Discounted" / "Cumulative"
+                point to CALCULATION; pure parameter words ("Cost",
+                "Rate", "Population", "Probability", "Utility") with
+                no temporal axis point to INPUT.
+
+            STEP 2 — COMPOSE the title using the role-specific
+            pattern.  Title MUST start with the role and an underscore
+            (no spaces around the underscore).  All examples below
+            assume row_names are the years 2020..2024 + Total — adapt
+            "by year" to whatever dimension the row_names actually
+            describe (year / cycle / quarter / age band / cost
+            component / scenario / arm / …).
+
+            ROLE = result
+              Pattern:  result_<headline metric, including with/
+                        without arms when present> by <row dimension>
+              Examples (driven by headers + row_names):
+                * headers=[Year, Without InO, With InO, Budget impact]
+                  row_names=[2020..2024, Total]
+                  → "result_total budget impact with and without by year"
+                * headers=[Cost component, Without, With, Δ]
+                  row_names=[Drug, Admin, AE, Monitoring, Total]
+                  → "result_total budget impact with and without by cost component"
+                * headers=[Year, Cost, QALY, ICER]
+                  → "result_ICER by year"
+
+            ROLE = input
+              Pattern:  input_<concept>_<type>[ by <row dimension>]
+              Where <concept> is the entity the input describes
+              (drug name, intervention, population subgroup, disease
+              stage) detected from headers / row_names / siblings, and
+              <type> is the parameter family (Cost / Rate / Population
+              / Probability / Utility / Dose / …).  Drop "by …" when
+              there's only one row of data (no temporal/categorical
+              axis).
+              Examples:
+                * headers=[Cost], single row "Stem cell transplant"
+                  → "input_SCT_Cost"
+                * headers=[2020..2024], row_names=[Lebanon, Jordan]
+                  → "input_population_by year"
+                * headers=[Probability], rows=[Year 1..Year 5]
+                  → "input_progression_Probability by year"
+                * headers=[AE rate], single row "Inotuzumab"
+                  → "input_InO_AE rate"
+
+            ROLE = calculation
+              Pattern:  calculation_<what is computed>[ by <row dim>]
+              "What is computed" is a short noun phrase derived from
+              representative_formulas + headers + sibling pattern (NOT
+              a paraphrase of a single upstream title).
+              Examples:
+                * headers=[Year, Mortality], formula=SUMPRODUCT/IF
+                  → "calculation_mortality by year"
+                * headers=[Year], row_names=[Drug 1, Drug 2, Drug 3]
+                  formula references Inputs!Cost*Inputs!Doses
+                  → "calculation_with drug drug cost by year"
+                * headers=[Year, With InO], upstream=[Drug cost,
+                  Admin cost, AE cost], outgoing → result table
+                  → "calculation_with InO total annual cost by year"
+
+            ANTI-PATTERNS — the server WILL flag and re-run if it
+            sees these:
+              * Title is just one upstream neighbour's title with a
+                tail-word swap (e.g. upstream "End-of-life costs" →
+                title "End-of-life cost analysis").  This is
+                forbidden.
+              * Title omits the role prefix.
+              * Title invents words not present in headers, row_names,
+                core_values, or sibling titles.
+
             Always set ``title`` to a non-empty string when you pick
-            ``synthesize_title``.  Empty/null title triggers a server
-            fallback that produces "<sheet> (<node_type> table)" — that
-            is generic and uninformative, prefer a real synthesised name.
+            ``synthesize_title``.
   2. Is row_names missing?
        (a) Look at ``left_candidates`` / ``looking_around_left``.  If a non-empty unclaimed left column adjacent to the core has labels for each core row → ``assign_row_names`` with that list.
        (b) Else → ``unresolved`` for the row_names slot (don't fabricate).

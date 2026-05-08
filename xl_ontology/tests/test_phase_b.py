@@ -43,7 +43,6 @@ from xl_ontology.tools.dag_tools import (
 from xl_ontology.tools.discovery import (
     find_sheets_by_name_pattern,
     get_first_sheet,
-    get_table_content,
     list_tables_on_sheet,
 )
 from xl_ontology.tools.lexicon import (
@@ -216,15 +215,22 @@ class TestDiscoveryTools(unittest.TestCase):
             finally:
                 _close(bundle)
 
-    def test_get_table_content(self) -> None:
+    def test_read_table_full_content_returns_formulas(self) -> None:
+        from xl_ontology.tools.discovery import read_table_full_content
+
         with tempfile.TemporaryDirectory() as tmp:
             f = build_synthetic_run(Path(tmp))
             ctx, bundle = _make_ctx(Path(tmp), f)
             try:
-                content = get_table_content(ctx, "Costs__t3__c0")
-                self.assertIsNotNone(content)
-                # Total Cost calc table — body cells should have formulas.
-                self.assertGreater(len(content.formulas), 0)
+                # A.2 — replaces the deleted get_table_content path.
+                # read_table_full_content returns a flat dict of cell
+                # triples; the calc table's core_cells should include
+                # is_formula=True entries.
+                content = read_table_full_content(
+                    ctx, table_id="Costs__t3__c0",
+                )
+                self.assertIn("core_cells", content)
+                self.assertGreater(content["n_formula_cells"], 0)
             finally:
                 _close(bundle)
 

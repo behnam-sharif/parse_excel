@@ -65,6 +65,34 @@ from xl_ontology.v1.react import (
 
 _MAX_IDLE_RETRIES = 2  # parse errors before forcing a stop
 
+# P2.F — cap the JSON-serialised tool result we attach to trace events.
+# Trace lives in ontology_trace.jsonl; bigger payloads bloat the log
+# and slow the orchestrator viewer.  8 KB is enough for a typical
+# get_table_content / read_table_full_content payload while still
+# being parseable as JSON when truncated (we add a "...TRUNCATED" tail
+# instead of slicing mid-token).
+_MAX_RESULT_FULL_CHARS = 8_000
+
+
+def _serialize_tool_result_for_trace(result: Any) -> Optional[str]:
+    """JSON-serialise a tool result for the trace.  Truncates at
+    ``_MAX_RESULT_FULL_CHARS`` with a clear marker so the viewer can
+    still render valid JSON (the viewer's code-block rendering
+    tolerates trailing prose).
+    """
+    if result is None:
+        return None
+    try:
+        text = json.dumps(result, default=str, ensure_ascii=False, indent=2)
+    except Exception as exc:
+        return f"<serialisation error: {type(exc).__name__}: {exc}>"
+    if len(text) <= _MAX_RESULT_FULL_CHARS:
+        return text
+    return (
+        text[:_MAX_RESULT_FULL_CHARS]
+        + f"\n... TRUNCATED ({len(text) - _MAX_RESULT_FULL_CHARS} more chars)"
+    )
+
 
 class Pass2ReactAgent(Pass2Agent):
     """Pass-2 agent that runs a ReAct loop instead of plan-execute."""
@@ -303,6 +331,7 @@ class Pass2ReactAgent(Pass2Agent):
                 continue
 
             obs_text = format_observation(tool, result)
+            result_full = _serialize_tool_result_for_trace(result)
             ctx.tool_ctx.trace.emit(
                 Pass2ToolCall(
                     ts=_TraceBase.now_ts(),
@@ -311,6 +340,7 @@ class Pass2ReactAgent(Pass2Agent):
                     tool=tool,
                     args_summary=args,
                     result_summary=obs_text[:300],
+                    result_full=result_full,
                 )
             )
             ctx.tool_ctx.trace.emit(
@@ -320,6 +350,7 @@ class Pass2ReactAgent(Pass2Agent):
                     iteration=iteration,
                     tool=tool,
                     observation_text=obs_text,
+                    result_full=result_full,
                 )
             )
             self._observations.append(ReactObservation(

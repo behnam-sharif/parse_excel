@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-06T19:27:44.961Z",
+  "seed_timestamp": "2026-05-08T00:02:25.094Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "overall_model": {
@@ -500,29 +500,28 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "17 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+    "summary": "18 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "94c8c58d611b9e70_t103_child3",
+        "table_id": "47ecc07e130eef5f_b10",
         "ontology_role": "calculation",
         "ontology_subtype": "total_cost_with",
-        "confidence": 0.385,
+        "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "lexicon match in row_label for concept 'total_cost_with_intervention'",
+        "why_selected": "lexicon match in title for concept 'total_cost_with_intervention'",
         "evidence_signals": [
           {
-            "type": "format_match",
-            "value": "Total costs of treatment",
+            "type": "title_match",
+            "value": "result_total costs by cost component",
             "matched_term": "total cost"
           }
         ],
         "upstream_node_type": "input",
         "node_type_override_proposed": true,
-        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_table_id": null,
         "parent_path": [
-          "Calculations",
-          "BIM calculation"
+          "Results"
         ],
         "sibling_count": 0,
         "parent_split_appears_artificial": false,
@@ -630,6 +629,45 @@
           {
             "type": "dag_fanout",
             "value": 17,
+            "matched_term": null
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": "94c8c58d611b9e70_t103",
+        "parent_path": [
+          "Calculations",
+          "BIM calculation"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "treatment_dimension": "n/a",
+          "key_formulas": [],
+          "feeds_into": [],
+          "fed_by": []
+        },
+        "flags": []
+      },
+      {
+        "table_id": "94c8c58d611b9e70_t103_child3",
+        "ontology_role": "calculation",
+        "ontology_subtype": "structural_calc",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
+        "evidence_signals": [
+          {
+            "type": "formula_density",
+            "value": 0.9081632653061225,
+            "matched_term": null
+          },
+          {
+            "type": "dag_fanout",
+            "value": 3,
             "matched_term": null
           }
         ],
@@ -1163,7 +1201,7 @@
     "parent_groups": [],
     "expected_concepts_status": {
       "total_cost_with_intervention": "found",
-      "total_cost_without_intervention": "found",
+      "total_cost_without_intervention": "absent",
       "cost_component_calc": "absent",
       "patient_flow": "absent",
       "scenario_calc": "absent",
@@ -1181,13 +1219,13 @@
         "table_id": "262a4c0f1d47d09d",
         "ontology_role": "result",
         "ontology_subtype": "incremental_budget_impact",
-        "confidence": 0.44000000000000006,
+        "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "lexicon match in header for concept 'incremental_budget_impact'",
+        "why_selected": "lexicon match in title for concept 'incremental_budget_impact'",
         "evidence_signals": [
           {
-            "type": "format_match",
-            "value": "Budget impact",
+            "type": "title_match",
+            "value": "result_budget impact with and without by year",
             "matched_term": "budget impact"
           }
         ],

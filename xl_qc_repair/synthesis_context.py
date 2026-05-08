@@ -83,7 +83,6 @@ def build_synthesis_context(
                     "table_id": tid,
                     "sheet": sheet,
                     "title": title,
-                    "node_type": node.get("node_type"),
                 })
         return out
 
@@ -120,13 +119,17 @@ def build_synthesis_context(
         "sample_outgoing_node_titles": outgoing_titles,
         "representative_formulas": rep_formulas,
         "guidance": (
-            "Use sample_incoming_node_titles + sample_outgoing_node_titles "
-            "to compose a synthesised title that names what this table "
-            "DOES in the model.  E.g. if upstream is 'Drug cost' / "
-            "'AE cost' and downstream is 'Annual incremental cost', "
-            "synthesise 'Cost components by year'.  Reference the "
-            "representative formulas only when they reveal the table's "
-            "computational role (e.g. SUMPRODUCT → aggregator)."
+            "PRIORITY ORDER for synthesising the title: (1) v6_state.headers "
+            "+ v6_state.row_names + v6_state.core_values are the PRIMARY "
+            "signal — name what the table actually contains.  (2) "
+            "v6_state.siblings_with_title shows how other tables on this "
+            "sheet are named — match their pattern.  (3) sample_incoming/"
+            "outgoing_node_titles + fanin/fanout are TIE-BREAKERS to "
+            "disambiguate the role (e.g. fanout=0 on a Results sheet → "
+            "result table).  Do NOT just paraphrase a single upstream "
+            "neighbour title — the prior synthesise_title prompt did this "
+            "and produced wrong titles like 'End-of-life cost analysis' "
+            "for what was actually 'total budget impact by year'."
         ),
     }
 

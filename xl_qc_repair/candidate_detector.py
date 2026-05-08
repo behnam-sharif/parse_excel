@@ -257,6 +257,17 @@ def build_bundle(
         except Exception:
             synthesis_context_dag = None
 
+    core_values = _sample_core_values(
+        accessor, sheet_name, leaf.get("core_region") or {},
+        max_rows=int(getattr(config, "qc_repair_synthesis_core_value_rows", 6)),
+        max_cols=int(getattr(config, "qc_repair_synthesis_core_value_cols", 6)),
+    ) if title_missing else []
+
+    siblings_with_title = _sample_sibling_titles(
+        sheet_leaves, table_id,
+        max_siblings=int(getattr(config, "qc_repair_synthesis_max_sibling_titles", 2)),
+    ) if title_missing else []
+
     return RepairCandidateBundle(
         table_id=table_id,
         sheet_name=sheet_name,
@@ -269,9 +280,10 @@ def build_bundle(
             "row_names": list(leaf.get("row_names") or []),
             "core_region": leaf.get("core_region"),
             "bbox": leaf.get("bbox"),
-            "node_type": leaf.get("node_type"),
             "parent_path": list(leaf.get("parent_path") or []),
             "source_flags": list(leaf.get("source_flags") or []),
+            "core_values": core_values,
+            "siblings_with_title": siblings_with_title,
         },
         above_candidates=above_candidates,
         left_candidates=left_candidates,
@@ -653,6 +665,83 @@ def _look_around_grid(
                     claimed_by_table_id=_owner(r, c),
                 ))
             out.append(col_cells)
+    return out
+
+
+def _sample_core_values(
+    accessor: WorkbookAccessor,
+    sheet_name: str,
+    core_region: Dict[str, Any],
+    *,
+    max_rows: int,
+    max_cols: int,
+) -> List[List[Any]]:
+    """Return a max_rows x max_cols sample of cell values inside the
+    core region, top-left anchored.  Used by the LLM synthesise_title
+    prompt to ground the title in real cell content (e.g. spotting
+    "Budget impact" / "ICER" / numeric ranges).
+    """
+    if not core_region:
+        return []
+    try:
+        r1 = int(core_region.get("r1", 0))
+        c1 = int(core_region.get("c1", 0))
+        r2 = int(core_region.get("r2", -1))
+        c2 = int(core_region.get("c2", -1))
+    except Exception:
+        return []
+    if r2 < r1 or c2 < c1:
+        return []
+    ws = accessor.get_worksheet(sheet_name)
+    if ws is None:
+        return []
+    rows_to_read = min(max_rows, r2 - r1 + 1)
+    cols_to_read = min(max_cols, c2 - c1 + 1)
+    out: List[List[Any]] = []
+    for r in range(r1, r1 + rows_to_read):
+        row_out: List[Any] = []
+        for c in range(c1, c1 + cols_to_read):
+            text, _is_f, _bold = _read_cell(accessor, ws, sheet_name, r, c)
+            row_out.append(text)
+        out.append(row_out)
+    return out
+
+
+def _sample_sibling_titles(
+    sheet_leaves: List[Dict[str, Any]],
+    self_table_id: str,
+    *,
+    max_siblings: int,
+) -> List[Dict[str, Any]]:
+    """Return up to ``max_siblings`` other tables on the same sheet that
+    have a non-empty title.  Each entry carries title + first header row +
+    first 2 row_names so the LLM can see the naming pattern used by
+    siblings (e.g. on a Results sheet, spotting "Budget impact summary"
+    on a sibling tells the LLM the current leaf is also a result).
+    """
+    if max_siblings <= 0:
+        return []
+    out: List[Dict[str, Any]] = []
+    for leaf in sheet_leaves:
+        if leaf.get("table_id") == self_table_id:
+            continue
+        title = leaf.get("title")
+        if not title or not str(title).strip():
+            continue
+        headers_first = []
+        headers = leaf.get("headers") or []
+        if headers:
+            headers_first = list(headers[0])[:6]
+        rn = leaf.get("row_names") or []
+        rn_first = [str(r) for r in rn[:2]]
+        out.append({
+            "table_id": leaf.get("table_id"),
+            "title": str(title).strip(),
+            "headers_first_row": headers_first,
+            "row_names_first_2": rn_first,
+        })
+        if len(out) >= max_siblings:
+            break
     return out
 
 

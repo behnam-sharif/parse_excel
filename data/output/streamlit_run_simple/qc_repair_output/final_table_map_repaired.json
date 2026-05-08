@@ -14,7 +14,7 @@
           "c2": 4
         },
         "sheet_name": "Results",
-        "title": "Results (input table)",
+        "title": "result_budget impact with and without by year",
         "headers": [
           [
             "Year",
@@ -51,7 +51,7 @@
         "source_flags": [
           "merged_from_metadata_and_numeric_child",
           "rowname_sequence",
-          "qc_title_synthesized_fallback"
+          "qc_title_synthesized_by_llm"
         ]
       },
       {
@@ -137,7 +137,7 @@
           "c2": 11
         },
         "sheet_name": "Results",
-        "title": "Results (input table)",
+        "title": "result_total costs by cost component",
         "headers": [],
         "row_names": [
           "Drug costs",
@@ -166,7 +166,7 @@
         ],
         "source_flags": [
           "header_missing",
-          "qc_title_synthesized_fallback"
+          "qc_title_synthesized_by_llm"
         ]
       }
     ],
@@ -2076,7 +2076,7 @@
               "c2": 26
             },
             "sheet_name": "Calculations",
-            "title": "2024",
+            "title": "input_population_by year",
             "headers": [],
             "row_names": null,
             "core_region": {
@@ -2105,7 +2105,7 @@
               "header_missing",
               "rowname_missing",
               "low_context_node",
-              "qc_title_assigned"
+              "qc_title_synthesized_by_llm"
             ]
           },
           {
@@ -2323,9 +2323,15 @@
               "c2": 26
             },
             "sheet_name": "Calculations",
-            "title": "2024",
+            "title": null,
             "headers": [],
-            "row_names": null,
+            "row_names": [
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+              "2024"
+            ],
             "core_region": {
               "r1": 29,
               "c1": 22,
@@ -2349,10 +2355,10 @@
             ],
             "source_flags": [
               "derived_from_parent_core_split",
+              "title_missing",
               "header_missing",
-              "rowname_missing",
               "low_context_node",
-              "qc_title_assigned"
+              "qc_row_names_assigned"
             ]
           },
           {

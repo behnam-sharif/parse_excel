@@ -551,6 +551,10 @@ xl_qc_repair:
   qc_repair_include_dag_context_for_synthesis: true
   qc_repair_synthesis_max_neighbour_titles: 4
   qc_repair_synthesis_max_representative_formulas: 2
+  # QC.B — synthesise-title grounding (core_values + sibling titles).
+  qc_repair_synthesis_core_value_rows: 6
+  qc_repair_synthesis_core_value_cols: 6
+  qc_repair_synthesis_max_sibling_titles: 2
   qc_repair_scan_to_prev_table: true
   qc_repair_above_scan_max_rows: 25
   qc_repair_left_title_search_cols: 3

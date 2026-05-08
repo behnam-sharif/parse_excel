@@ -72,8 +72,8 @@ budget-impact-model (BIM) comprehension run.  This is the final
 narrative — read both:
 
   (1) The structured reports from the inputs / calculations / results
-      stages (concept → tables_found + summary).  These tell you what
-      the workbook ACTUALLY computes.
+      stages (concept → tables_found + coordinates + summary).  These
+      tell you what the workbook ACTUALLY computes.
   (2) The cover-sheet text the agent gathered via
       ``find_overview_sheets`` / ``read_sheets`` /
       ``search_workbook_lexicon`` (in OBSERVATIONS).  These give the
@@ -88,15 +88,35 @@ COVER-SHEET OBSERVATIONS:
 CRITERIA + FINDINGS:
 {narration_payload}
 
+EVIDENCE CITATION CONTRACT (read carefully — narration is rejected if you violate this):
+- EVERY sentence that makes a claim about the workbook's content must
+  carry an evidence reference in parentheses.  Format:
+    * ``(Sheet!A1)``      — single cell (cover-sheet text values)
+    * ``(Sheet!A1:F30)``  — range (any input/calc/result table)
+  Use the ``coordinates`` map inside each finding (table_id → range)
+  to look up the right reference for tables.  For cover-sheet
+  concept values, use the ``source_cell`` carried in the upstream
+  ``pre_overall`` report (e.g. ``"value: 'Inotuzumab' (source: Description!B5)"``).
+- NEVER cite a bare ``table_id`` (e.g. ``(table_id: 9814fc...)``).
+  Cite the Excel range — readers want the cell address, not the
+  internal id.
+- A ``claim sentence`` describes the workbook's structure, content,
+  or values — e.g. "the intervention is Inotuzumab Ozogamicin",
+  "drug costs are itemised per cycle", "the headline result is the
+  annual incremental cost".  These MUST carry a citation.
+- Sentences that describe THIS RUN itself (e.g. "Stage 2.1 ran
+  complete with 8 of 9 concepts found") do NOT need a citation.
+
 Write a 2-3 paragraph prose summary that:
   * names the intervention, comparator, country, time horizon if found
-    (cite the source — cover-sheet cell OR a stage report);
-  * lists the concrete inputs the model uses (with table_id refs from
-    the inputs report);
-  * names the headline result (with table_id refs from the results
-    report);
-  * mentions the engine calculation table(s) (from the calculations
-    report's ``important_calc_tables``).
+    — cite the cover-sheet cell (Sheet!Cell) OR the stage's table
+    range (Sheet!Range);
+  * lists the concrete inputs the model uses, citing the Excel range
+    of each input table from the inputs report's ``coordinates``;
+  * names the headline result, citing the Excel range from the
+    results report's ``coordinates``;
+  * mentions the engine calculation table(s) from the calculations
+    report's ``important_calc_tables``, citing each by Excel range;
   * explicitly notes any concept that remains absent (don't skip them).
 
 Return JSON only:
@@ -396,6 +416,7 @@ class OverallAgent(Pass2ReactAgent):
             findings=findings,
             overrides_proposed=overrides,
             completion_status=completion_status,
+            final_map=getattr(ctx.tool_ctx, "final_map", None),
         )
         observations_payload = json.dumps([
             {
@@ -440,7 +461,25 @@ class OverallAgent(Pass2ReactAgent):
                 for k, v in llm_concepts.items():
                     if k in GOAL_CONCEPTS and v not in (None, "", "null"):
                         self._concepts[k] = v
-        return prose, self._extras(), list(self._applied_heuristics)
+        # D.1 — post-narration evidence check.  Flags claim sentences
+        # in the OverallAgent's narration that lack an Excel-range
+        # citation.  Reported in extras for the orchestrator viewer.
+        out_extras = self._extras()
+        try:
+            from xl_ontology.v1.evidence_check import check_narration_evidence
+            ec_report = check_narration_evidence(prose)
+            out_extras["evidence_check"] = {
+                "n_sentences": ec_report.n_sentences,
+                "n_claim_sentences": ec_report.n_claim_sentences,
+                "n_claim_with_citation": ec_report.n_claim_with_citation,
+                "claim_sentences_without_citation": (
+                    ec_report.claim_sentences_without_citation
+                ),
+                "all_claims_cited": ec_report.all_claims_cited,
+            }
+        except Exception:
+            pass
+        return prose, out_extras, list(self._applied_heuristics)
 
     # ----- helpers -----
 

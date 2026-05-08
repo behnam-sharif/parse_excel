@@ -29,7 +29,6 @@ from xl_ontology.tools.dag_tools import (
     get_terminal_nodes,
 )
 from xl_ontology.tools.discovery import (
-    get_table_content,
     list_tables_on_sheet,
     read_table_full_content,
 )
@@ -49,7 +48,6 @@ PASS2_TOOL_REGISTRY: Dict[str, ToolFn] = {
     "read_sheets": read_sheets,
     "extract_currency_symbols": extract_currency_symbols,
     "list_tables_on_sheet": list_tables_on_sheet,
-    "get_table_content": get_table_content,
     "read_table_full_content": read_table_full_content,
     "get_cells_in_range": get_cells_in_range,
     "get_cells_above": get_cells_above,

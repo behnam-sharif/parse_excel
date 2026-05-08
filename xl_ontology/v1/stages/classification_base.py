@@ -70,12 +70,16 @@ AVAILABLE TOOLS:
 
 PLANNING RULES:
 - Plan AT MOST 3 tool calls this iteration; fewer is fine.
-- Prefer search_workbook_lexicon and get_table_content for inputs/results;
+- Prefer search_workbook_lexicon and read_table_full_content for inputs/results;
   prefer get_dag_neighbours / get_terminal_nodes / get_high_fanin_nodes
   for calculations.
 - Do NOT plan tools that aren't in the registry above.
 - Args must match the tool's docstring.  When unsure, omit the call.
 - Use ``rationale`` to record which concept the call advances.
+- Copy ``table_id`` values VERBATIM from upstream context / prior
+  observations.  Children are SPARSE (e.g. ..._child2, ..._child4,
+  ..._child7) — never guess ``_childN``; an invented id returns
+  ``error: unknown_table_id`` and wastes the call.
 
 Return JSON ONLY in this shape:
 {{"steps": [{{"tool": "<name>", "args": {{...}}, "rationale": "<concept>"}}]}}
@@ -91,11 +95,30 @@ Findings + criteria + overrides (JSON):
 Overall context (Stage 2.1):
 {overall_context_json}
 
-Rules:
-- Reference concrete tables (table_id) and concepts you found.
+EVIDENCE CITATION CONTRACT (read carefully — narration is rejected if you violate this):
+- EVERY sentence that makes a claim about the workbook's content must
+  carry an evidence reference in parentheses.  Format:
+    * ``(Sheet!A1)``      — single cell
+    * ``(Sheet!A1:F30)``  — range
+  Use the ``coordinates`` map inside each finding (table_id → range)
+  to look up the right reference.  Each ``findings[concept]`` block
+  has ``tables_found: [...]`` and ``coordinates: {{table_id: "Sheet!A1:F30"}}``.
+- NEVER cite a bare ``table_id`` (e.g. ``(table_id: 9814fc...)``).
+  Cite the Excel range instead — readers want the cell address, not
+  the internal id.
+- A ``claim sentence`` describes the workbook's structure, content,
+  or values — e.g. "the model uses a 5-year time horizon", "drug
+  costs are itemised per cycle", "the headline result is ...".
+  These MUST carry a citation.
+- Sentences that describe THIS RUN itself (e.g. "the {stage} stage
+  ran complete with 4 of 4 concepts satisfied") do NOT need a
+  citation.
+
+Other rules:
 - Explicitly note concepts that remain un-satisfied (items_missing).
 - Be 2-3 paragraphs; no bullet lists.
-- If overrides_proposed is non-empty, mention each in one sentence.
+- If overrides_proposed is non-empty, mention each in one sentence
+  with the table's Excel range citation.
 
 Return JSON only:
 {{"prose": "...", "structured_extras": {{...}}}}
@@ -372,6 +395,7 @@ class ClassificationStageAgent(Pass2Agent):
             findings=findings,
             overrides_proposed=overrides,
             completion_status=completion_status,
+            final_map=getattr(ctx.tool_ctx, "final_map", None),
         )
         prompt = _NARRATION_PROMPT_TMPL.format(
             stage=self.stage_name,
@@ -398,6 +422,24 @@ class ClassificationStageAgent(Pass2Agent):
         full_extras = self._extras(criteria, findings)
         if extras:
             full_extras["llm_extras"] = extras
+        # D.1 — post-narration evidence check: count claim sentences
+        # missing an Excel-range citation.  Reported in extras for the
+        # orchestrator viewer; not a hard failure (the LLM did its
+        # job, we just want visibility).
+        try:
+            from xl_ontology.v1.evidence_check import check_narration_evidence
+            ec_report = check_narration_evidence(prose)
+            full_extras["evidence_check"] = {
+                "n_sentences": ec_report.n_sentences,
+                "n_claim_sentences": ec_report.n_claim_sentences,
+                "n_claim_with_citation": ec_report.n_claim_with_citation,
+                "claim_sentences_without_citation": (
+                    ec_report.claim_sentences_without_citation
+                ),
+                "all_claims_cited": ec_report.all_claims_cited,
+            }
+        except Exception:
+            pass
         return prose, full_extras, []
 
     # ----- helpers -----
@@ -760,6 +802,7 @@ class ReactClassificationStageAgent:
             findings=findings,
             overrides_proposed=overrides,
             completion_status=completion_status,
+            final_map=getattr(ctx.tool_ctx, "final_map", None),
         )
         # Include the running observation log + the agent's stop summary
         # in the narration payload.  The narrator sees what the agent
@@ -780,8 +823,18 @@ class ReactClassificationStageAgent:
             f"FINDINGS:\n{narration_payload}\n\n"
             f"OBSERVATIONS THE AGENT GATHERED:\n{observations_payload}\n\n"
             f"AGENT'S STOP SUMMARY: {self._stop_summary or '(stage hit iteration cap)'}\n\n"
-            "Rules:\n"
-            "- Reference concrete tables (table_id) and concepts you found.\n"
+            "EVIDENCE CITATION CONTRACT (read carefully):\n"
+            "- EVERY sentence describing the workbook's content must carry an\n"
+            "  Excel-range citation in parentheses.  Format: (Sheet!A1:F30)\n"
+            "  for ranges or (Sheet!A1) for single cells.  Use the\n"
+            "  `coordinates` map inside each finding (table_id → range)\n"
+            "  to look up the right reference.\n"
+            "- NEVER cite a bare table_id (e.g. (table_id: 9814fc...)).\n"
+            "  Cite the Excel range — readers want the cell address, not\n"
+            "  the internal id.\n"
+            "- Sentences that describe THIS RUN itself (e.g. \"Stage X ran\n"
+            "  complete with N concepts found\") do NOT need a citation.\n\n"
+            "Other rules:\n"
             "- Explicitly note un-satisfied criteria.\n"
             "- 2-3 paragraphs; no bullet lists.\n"
             "Return JSON only: {\"prose\": \"...\", \"structured_extras\": {...}}\n"
@@ -806,6 +859,22 @@ class ReactClassificationStageAgent:
         full_extras = self._react_extras(criteria, findings)
         if extras:
             full_extras["llm_extras"] = extras
+        # D.1 — post-narration evidence check (same as the legacy
+        # plan-execute narrate() path above, kept in sync).
+        try:
+            from xl_ontology.v1.evidence_check import check_narration_evidence
+            ec_report = check_narration_evidence(prose)
+            full_extras["evidence_check"] = {
+                "n_sentences": ec_report.n_sentences,
+                "n_claim_sentences": ec_report.n_claim_sentences,
+                "n_claim_with_citation": ec_report.n_claim_with_citation,
+                "claim_sentences_without_citation": (
+                    ec_report.claim_sentences_without_citation
+                ),
+                "all_claims_cited": ec_report.all_claims_cited,
+            }
+        except Exception:
+            pass
         return prose, full_extras, []
 
     def _react_extras(

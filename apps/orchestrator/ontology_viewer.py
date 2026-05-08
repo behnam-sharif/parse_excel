@@ -338,6 +338,39 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
         # When multiple LLMs fire per iteration (e.g. parse-retry path),
         # we just take the most recent one before the iteration's events.
 
+        # P2.F — helper: render the matching LLM call (prompt + raw
+        # response) for an iteration as a collapsible expander.  We
+        # only attach this once per iteration (on the first event we
+        # see for that iteration: thought / action / stop / failed).
+        rendered_llm_for_iter: set = set()
+
+        def _render_llm_expander_for_iter(iter_num: Optional[int], event_ts: Optional[str]) -> None:
+            if iter_num is None or iter_num in rendered_llm_for_iter:
+                return
+            # Find the most recent llm_call (any phase) on this stage at
+            # or before the event's ts.  Same heuristic as the failed-
+            # iteration renderer below.
+            matched = None
+            for cand in stage_llm_calls:
+                if (cand.get("ts") or "") <= (event_ts or ""):
+                    matched = cand
+                else:
+                    break
+            if matched is None:
+                return
+            with st.expander(
+                f"🤖 LLM call for iter {iter_num} "
+                f"(phase=`{matched.get('phase')}`, "
+                f"prompt_chars={matched.get('prompt_size_chars', 0)}, "
+                f"response_chars={matched.get('response_size_chars', 0)})",
+                expanded=False,
+            ):
+                st.markdown("**Prompt** (full):")
+                st.code(matched.get("prompt") or "", language="text")
+                st.markdown("**Response** (raw, after parsing):")
+                st.code(matched.get("response") or "", language="text")
+            rendered_llm_for_iter.add(iter_num)
+
         for e in stage_events:
             event_type = e.get("event")
             iteration = e.get("iteration")
@@ -349,6 +382,7 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                 thought = e.get("thought") or ""
                 st.markdown(f"💭 _{label}_  **{ts}**")
                 st.markdown(f"> {thought}")
+                _render_llm_expander_for_iter(iteration, ts)
             elif event_type == "pass2_react_action":
                 tool = e.get("tool")
                 rationale = e.get("rationale") or ""
@@ -359,11 +393,29 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                 )
                 if args:
                     st.code(json.dumps(args, indent=2), language="json")
+                _render_llm_expander_for_iter(iteration, ts)
             elif event_type == "pass2_react_observation":
                 tool = e.get("tool")
                 obs = e.get("observation_text") or ""
+                result_full = e.get("result_full")
                 st.markdown(f"👁️ _{label}_  **{ts}** — `{tool}`")
+                st.markdown("**Observation fed back to the agent (1-line summary):**")
                 st.code(obs, language="text")
+                # P2.F — full tool result (the actual data the tool
+                # returned).  Hidden behind an expander so the timeline
+                # stays scannable; rendered as JSON when possible.
+                if result_full:
+                    with st.expander(
+                        f"🔍 Tool result (full payload, "
+                        f"{len(result_full)} chars)",
+                        expanded=False,
+                    ):
+                        # Try to render as JSON; fall back to text.
+                        try:
+                            parsed = json.loads(result_full)
+                            st.json(parsed)
+                        except Exception:
+                            st.code(result_full, language="text")
             elif event_type == "pass2_react_stop":
                 summary = e.get("summary") or ""
                 thought = e.get("thought") or ""
@@ -372,12 +424,12 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                     st.markdown(f"> {thought}")
                 if summary:
                     st.markdown(f"**Summary:** {summary}")
+                _render_llm_expander_for_iter(iteration, ts)
             elif event_type == "pass2_tool_call_failed":
-                # NEW (P2.D viewer fix) — iterations that fail to parse
-                # used to be invisible.  Render them as ❌ blocks with
-                # the error type + the truncated raw response from the
-                # message field.  Optionally pull the matching
-                # llm_call's full prompt + response into an expander.
+                # P2.D — iterations that fail to parse / call an
+                # unknown tool.  Render the error inline; the shared
+                # LLM expander shows the raw prompt + response so the
+                # user can see exactly what the LLM emitted.
                 tool = e.get("tool", "<unknown>")
                 error_type = e.get("error_type", "Error")
                 message = e.get("message") or ""
@@ -385,30 +437,9 @@ def _render_trace(events: List[Dict[str, Any]]) -> None:
                     f"❌ _{label}_  **{ts}** — `{tool}` failed: "
                     f"`{error_type}`"
                 )
-                # Truncated message goes inline.
                 short_msg = message if len(message) <= 800 else (message[:800] + "...")
                 st.code(short_msg, language="text")
-
-                # Try to surface the matching llm_call.  Heuristic:
-                # find the most recent llm_call (any phase) on the same
-                # agent before this event's ts.
-                matched_call = None
-                for cand in stage_llm_calls:
-                    if (cand.get("ts") or "") <= (ts or ""):
-                        matched_call = cand
-                    else:
-                        break
-                if matched_call is not None:
-                    with st.expander(
-                        f"Raw LLM call (phase=`{matched_call.get('phase')}`, "
-                        f"prompt_chars={matched_call.get('prompt_size_chars', 0)}, "
-                        f"response_chars={matched_call.get('response_size_chars', 0)})",
-                        expanded=False,
-                    ):
-                        st.markdown("**Prompt** (full):")
-                        st.code(matched_call.get("prompt") or "", language="text")
-                        st.markdown("**Response** (raw, may be truncated by the model):")
-                        st.code(matched_call.get("response") or "", language="text")
+                _render_llm_expander_for_iter(iteration, ts)
             elif event_type == "pass2_stage_complete":
                 status = e.get("completion_status")
                 iters = e.get("iterations_run")

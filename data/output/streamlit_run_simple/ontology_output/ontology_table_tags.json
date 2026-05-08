@@ -1,18 +1,18 @@
 {
   "model_id": "streamlit_run_simple",
   "ontology_id": "bim_v0",
-  "run_timestamp": "2026-05-06T19:27:44.961Z",
+  "run_timestamp": "2026-05-08T00:02:25.094Z",
   "tables": [
     {
       "table_id": "262a4c0f1d47d09d",
       "sheet": "Results",
-      "title": "Results (input table)",
+      "title": "result_budget impact with and without by year",
       "upstream_node_type": "input",
       "ontology_role": "result",
       "ontology_subtype": "incremental_budget_impact",
       "node_type_override_proposed": true,
       "in_top_candidates": true,
-      "confidence": 0.44000000000000006,
+      "confidence": 0.55,
       "evidence_quality": "partial",
       "agent_owner": "results",
       "applied_heuristics": [],
@@ -36,15 +36,15 @@
     {
       "table_id": "47ecc07e130eef5f_b10",
       "sheet": "Results",
-      "title": "Results (input table)",
+      "title": "result_total costs by cost component",
       "upstream_node_type": "input",
-      "ontology_role": "unclassified",
-      "ontology_subtype": null,
-      "node_type_override_proposed": false,
-      "in_top_candidates": false,
-      "confidence": null,
-      "evidence_quality": null,
-      "agent_owner": null,
+      "ontology_role": "calculation",
+      "ontology_subtype": "total_cost_with",
+      "node_type_override_proposed": true,
+      "in_top_candidates": true,
+      "confidence": 0.55,
+      "evidence_quality": "partial",
+      "agent_owner": "calculations",
       "applied_heuristics": [],
       "flags": []
     },
@@ -324,10 +324,10 @@
       "title": "Drug costs",
       "upstream_node_type": "input",
       "ontology_role": "calculation",
-      "ontology_subtype": "total_cost_with",
+      "ontology_subtype": "structural_calc",
       "node_type_override_proposed": true,
       "in_top_candidates": true,
-      "confidence": 0.385,
+      "confidence": 0.55,
       "evidence_quality": "partial",
       "agent_owner": "calculations",
       "applied_heuristics": [],
@@ -428,7 +428,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_t17_b8__core1",
       "sheet": "Calculations",
-      "title": "2024",
+      "title": "input_population_by year",
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -488,7 +488,7 @@
     {
       "table_id": "1f634d7d13c5e37c_t57_t25_b17__core1",
       "sheet": "Calculations",
-      "title": "2024",
+      "title": null,
       "upstream_node_type": "input",
       "ontology_role": "unclassified",
       "ontology_subtype": null,
@@ -1944,11 +1944,11 @@
   "tag_summary": {
     "total_tables": 129,
     "classified_input": 13,
-    "classified_calculation": 17,
+    "classified_calculation": 18,
     "classified_result": 1,
     "classified_overall_evidence": 0,
-    "unclassified": 95,
+    "unclassified": 94,
     "out_of_scope_for_pass_1": 3,
-    "node_type_overrides_proposed": 27
+    "node_type_overrides_proposed": 28
   }
 }

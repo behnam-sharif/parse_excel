@@ -734,6 +734,12 @@ class StageOutputBase(_Strict):
     prose: str = ""
     overrides_proposed: List[Pass2OverrideProposed] = Field(default_factory=list)
     applied_heuristics: List[str] = Field(default_factory=list)
+    # D.1 — post-narration evidence audit.  ``None`` when the stage
+    # didn't run a narrator (e.g. pre_overall).  When present, carries:
+    #   {n_sentences, n_claim_sentences, n_claim_with_citation,
+    #    claim_sentences_without_citation: List[str],
+    #    all_claims_cited: bool}
+    evidence_check: Optional[Dict[str, Any]] = None
 
 
 class Stage21Output(StageOutputBase):
@@ -846,6 +852,13 @@ class Pass2ToolCall(_TraceBase):
     tool: str
     args_summary: Dict[str, Any] = Field(default_factory=dict)
     result_summary: Optional[str] = None
+    # Full JSON-serialised tool result (capped — see runner).  Useful
+    # for debugging the agent's view: the LLM only sees the 1-line
+    # summary in ``result_summary`` / ``observation_text``, but the
+    # viewer can render the full payload so the user can see exactly
+    # what the tool returned.  None on error / unknown-tool / duplicate
+    # paths.
+    result_full: Optional[str] = None
 
 
 class Pass2ToolCallFailed(_TraceBase):
@@ -895,13 +908,21 @@ class Pass2ReactAction(_TraceBase):
 
 class Pass2ReactObservation(_TraceBase):
     """One-line summary of what the tool returned, fed back into the
-    next iteration's prompt as the agent's observation."""
+    next iteration's prompt as the agent's observation.
+
+    ``result_full`` carries the full JSON-serialised tool result
+    (capped — see runner for the size cap).  The agent only sees
+    ``observation_text`` in its ReAct prompt; ``result_full`` is for
+    the orchestrator viewer / debug trace so the user can audit what
+    the tool actually returned.
+    """
 
     event: Literal["pass2_react_observation"] = "pass2_react_observation"
     stage: Pass2StageName
     iteration: int
     tool: str
     observation_text: str
+    result_full: Optional[str] = None
 
 
 class Pass2ReactStop(_TraceBase):

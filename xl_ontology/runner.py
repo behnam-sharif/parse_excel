@@ -281,6 +281,32 @@ def run_ontology(
             # build_errors.jsonl exists too (created on writer open).
             artifacts.append(get_ontology_build_errors_path(run_id, output_base))
 
+            # ----- B.1 — fold Pass-1 verdicts into in-memory final_map.
+            # Tools called by Pass-2 (read_table_full_content, list_*) read
+            # entry.node_type directly; without this fold-back they see
+            # V6's mistakes (e.g. "mixed" for a clear input table) and
+            # mislead the LLM.  Mutation is in-memory only — the on-disk
+            # final_table_map_repaired.json is preserved unchanged.
+            from xl_ontology.v1.pass1_apply import (
+                apply_pass1_node_types_to_final_map,
+            )
+            fold_report = apply_pass1_node_types_to_final_map(final_map, tags)
+            trace.emit(
+                WarningEvent(
+                    ts=_TraceBase.now_ts(),
+                    category="pass1_fold_back",
+                    message=(
+                        f"Pass-1 fold-back overwrote node_type on "
+                        f"{fold_report['n_overwritten']}/"
+                        f"{fold_report['n_total_entries']} entries "
+                        f"(no_tag={fold_report['n_unchanged_no_tag']}, "
+                        f"non_foldable={fold_report['n_unchanged_non_foldable_role']}, "
+                        f"already_match={fold_report['n_unchanged_already_match']})."
+                    ),
+                    file_path=None,
+                )
+            )
+
             # ----- Pass 2 (comprehension layer) -----
             pass2_skipped = False
             pass2_skip_reason: Optional[str] = None

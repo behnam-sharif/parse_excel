@@ -225,6 +225,9 @@ def _stage_result_to_output(result: StageResult):
         prose=result.prose,
         overrides_proposed=result.overrides_proposed,
         applied_heuristics=result.applied_heuristics,
+        # D.1 — pass through the evidence-citation audit if narrate()
+        # produced one.  None when the stage skipped narration.
+        evidence_check=result.extras.get("evidence_check"),
     )
     if result.stage == "overall":
         return Stage21Output(

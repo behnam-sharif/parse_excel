@@ -45,6 +45,17 @@ class XlQcRepairConfig:
     qc_repair_synthesis_max_neighbour_titles: int = 4
     qc_repair_synthesis_max_representative_formulas: int = 2
 
+    # QC.B — synthesise-title content grounding.  When title_missing
+    # fires, the LLM also gets a top-left sample of the core's actual
+    # cell values (NUMBERS / FORMULAS / labels) plus up to N other
+    # tables on the same sheet that already have a title.  These let
+    # the LLM ground the synthesised title in real cell content +
+    # match the naming pattern of named siblings, instead of just
+    # paraphrasing one upstream neighbour's title.
+    qc_repair_synthesis_core_value_rows: int = 6
+    qc_repair_synthesis_core_value_cols: int = 6
+    qc_repair_synthesis_max_sibling_titles: int = 2
+
     # Above-cell scan depth.  When ``qc_repair_scan_to_prev_table`` is
     # on, we scan up to the previous table's r2 (or sheet top), capped
     # by ``qc_repair_above_scan_max_rows``.

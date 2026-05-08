@@ -35,6 +35,36 @@ _LOCATION_WEIGHT = {
 }
 
 
+# C.1 — explicit map from expected-concept names → set of valid
+# ontology_subtype values.  The classifier emits short subtype names
+# (``total_cost_with`` / ``total_cost_without`` / ``cost_component`` /
+# ``patient_flow`` / ``aggregator``) whose names don't always match
+# their concept names verbatim, so the validator needs an explicit
+# bridge.  Critically: ``total_cost_with_intervention`` and
+# ``total_cost_without_intervention`` were previously conflated by a
+# lenient ``startswith("total_cost")`` rule — both subtypes start with
+# the same prefix, so finding either landed both as ``found``.  An
+# explicit mapping kills the conflation.
+_EXPECTED_CONCEPT_SUBTYPES: Dict[str, set] = {
+    "total_cost_with_intervention":    {"total_cost_with"},
+    "total_cost_without_intervention": {"total_cost_without"},
+    "patient_flow":                    {"patient_flow"},
+    "aggregator":                      {"aggregator"},
+    "cost_component_calc":             {"cost_component"},
+    # ``scenario_calc`` has no canonical subtype yet — fall through to
+    # exact-match on the concept name itself.
+}
+
+
+def _concept_found(concept: str, candidate_subtypes: set) -> bool:
+    """True iff at least one candidate carries one of the subtypes
+    that satisfies ``concept``.  Falls back to exact-match on the
+    concept name for concepts not explicitly mapped above.
+    """
+    valid = _EXPECTED_CONCEPT_SUBTYPES.get(concept, {concept})
+    return bool(valid & candidate_subtypes)
+
+
 class CalculationsAgent(OntologyAgent):
     node_name: ClassVar[NodeName] = "calculations"
 
@@ -234,13 +264,12 @@ class CalculationsAgent(OntologyAgent):
         node.summary_source = "template"
         node.evidence_quality = "high" if candidates else "absent"
         node.present = bool(candidates)
+        candidate_subtypes = {
+            cand.ontology_subtype for cand in candidates if cand.ontology_subtype
+        }
         for c in self.state.expected_concepts:
             node.expected_concepts_status[c] = (
-                "found" if any(
-                    (cand.ontology_subtype == c)
-                    or (c.startswith("total_cost") and cand.ontology_subtype and cand.ontology_subtype.startswith("total_cost"))
-                    for cand in candidates
-                ) else "absent"
+                "found" if _concept_found(c, candidate_subtypes) else "absent"
             )
         found = [c for c, st in node.expected_concepts_status.items() if st == "found"]
         absent = [c for c, st in node.expected_concepts_status.items() if st == "absent"]

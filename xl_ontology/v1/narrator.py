@@ -5,18 +5,52 @@ calls the LLM, parses the JSON response into ``prose`` and structured
 extras. This module provides shared parse + prompt helpers; the actual
 prompt templates live in each stage's module so they can mention
 stage-specific concepts.
+
+D.1 — narration must cite by Excel range (``Sheet!A1`` /
+``Sheet!A1:F30``), not bare ``table_id``.  ``build_narration_payload``
+optionally takes a ``final_map`` and emits a ``coordinates`` map
+(``{table_id: "Sheet!A1:F30"}``) inside ``findings`` so the LLM has
+the Excel range right next to the table_id.  The narration prompt
+then instructs the LLM to cite the range, not the id.  See
+``evidence_check.py`` for the post-narration validator that flags
+un-cited claim sentences.
 """
 
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from xl_ontology.schemas import (
     CompletionCriterion,
     Pass2OverrideProposed,
     StageFinding,
 )
+
+
+def _resolve_coordinates(
+    table_ids: List[str],
+    final_map: Optional[Any],
+) -> Dict[str, str]:
+    """Resolve each ``table_id`` to its Excel range
+    (``Sheet!A1:F30``).  Tables missing from ``final_map`` are
+    omitted from the result.  Returns ``{}`` when ``final_map`` is
+    ``None`` so legacy callers without the index keep working.
+    """
+    if final_map is None:
+        return {}
+    out: Dict[str, str] = {}
+    for tid in table_ids:
+        try:
+            entry = final_map.get(tid)
+        except Exception:
+            entry = None
+        if entry is None:
+            continue
+        coords = getattr(entry, "coordinates", None)
+        if coords:
+            out[tid] = str(coords)
+    return out
 
 
 def build_narration_payload(
@@ -26,8 +60,39 @@ def build_narration_payload(
     findings: Dict[str, StageFinding],
     overrides_proposed: List[Pass2OverrideProposed],
     completion_status: str,
+    final_map: Optional[Any] = None,
 ) -> str:
-    """Stage-agnostic JSON payload that goes into the narration prompt."""
+    """Stage-agnostic JSON payload that goes into the narration prompt.
+
+    When ``final_map`` is supplied (D.1), each finding's
+    ``tables_found`` list is paired with a ``coordinates`` map
+    (``{table_id: "Sheet!A1:F30"}``) so the LLM cites by Excel range.
+    Same map is emitted for ``overrides_proposed``.
+    """
+    findings_payload: Dict[str, Any] = {}
+    for k, v in findings.items():
+        coords_map = _resolve_coordinates(list(v.tables_found), final_map)
+        findings_payload[k] = {
+            "tables_found": v.tables_found,
+            "coordinates": coords_map,
+            "items_satisfied": v.items_satisfied,
+            "items_missing": v.items_missing,
+            "notes": v.notes,
+        }
+
+    overrides_payload: List[Dict[str, Any]] = []
+    for o in overrides_proposed:
+        coord_for_override = _resolve_coordinates([o.table_id], final_map).get(
+            o.table_id
+        )
+        overrides_payload.append({
+            "table_id": o.table_id,
+            "coordinates": coord_for_override,
+            "new_role": o.new_role,
+            "new_subtype": o.new_subtype,
+            "rationale": o.rationale,
+        })
+
     return json.dumps(
         {
             "stage": stage,
@@ -40,24 +105,8 @@ def build_narration_payload(
                 }
                 for k, v in completion_criteria.items()
             },
-            "findings": {
-                k: {
-                    "tables_found": v.tables_found,
-                    "items_satisfied": v.items_satisfied,
-                    "items_missing": v.items_missing,
-                    "notes": v.notes,
-                }
-                for k, v in findings.items()
-            },
-            "overrides_proposed": [
-                {
-                    "table_id": o.table_id,
-                    "new_role": o.new_role,
-                    "new_subtype": o.new_subtype,
-                    "rationale": o.rationale,
-                }
-                for o in overrides_proposed
-            ],
+            "findings": findings_payload,
+            "overrides_proposed": overrides_payload,
         },
         indent=2,
     )

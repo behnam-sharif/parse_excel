@@ -99,6 +99,60 @@ class TestReactParser(unittest.TestCase):
         step = parse_react_step(text)
         self.assertIsInstance(step, ReactParseError)
 
+    def test_prose_then_json_is_extracted(self) -> None:
+        """P2.E — the LLM frequently prefaces a JSON block with prose
+        despite "JSON ONLY" instructions.  Parser should pull the first
+        balanced ``{...}`` block out and parse that.
+        """
+        text = (
+            'Hmm, I need to verify the inputs for the "population" concept. '
+            "I'll call read_table_full_content for the population.\n\n"
+            '{\n'
+            '  "thought": "verify population data",\n'
+            '  "action": {\n'
+            '    "tool": "read_table_full_content",\n'
+            '    "args": {"table_id": "T1"},\n'
+            '    "rationale": "population"\n'
+            '  }\n'
+            '}'
+        )
+        step = parse_react_step(text)
+        self.assertIsInstance(step, ReactActionStep)
+        self.assertEqual(step.tool_step.tool, "read_table_full_content")
+        self.assertEqual(step.tool_step.args, {"table_id": "T1"})
+
+    def test_prose_then_compact_json_is_extracted(self) -> None:
+        """Compact (single-line) JSON after prose still works."""
+        text = (
+            "Hmm, I need to verify. "
+            '{"thought":"x","action":{"tool":"list_sheets","args":{},"rationale":"r"}}'
+        )
+        step = parse_react_step(text)
+        self.assertIsInstance(step, ReactActionStep)
+        self.assertEqual(step.tool_step.tool, "list_sheets")
+
+    def test_json_with_string_containing_braces_is_extracted(self) -> None:
+        """Brace-balance scanner must skip braces inside string literals."""
+        text = (
+            "Some preface...\n"
+            '{"thought": "complex {nested} note", '
+            '"action": {"tool": "list_sheets", "args": {}, "rationale": "r"}}'
+        )
+        step = parse_react_step(text)
+        self.assertIsInstance(step, ReactActionStep)
+        self.assertEqual(step.tool_step.tool, "list_sheets")
+        self.assertIn("nested", step.thought)
+
+    def test_prose_then_stop_json(self) -> None:
+        """Stop turns wrapped in prose are also extracted cleanly."""
+        text = (
+            "I think I have enough.\n\n"
+            '{"thought": "done", "stop": true, "summary": "found 3 tables"}'
+        )
+        step = parse_react_step(text)
+        self.assertIsInstance(step, ReactStopStep)
+        self.assertEqual(step.summary, "found 3 tables")
+
 
 # ---------------------------------------------------------------------------
 # Loop integration with a synthetic ReAct agent
@@ -315,6 +369,166 @@ class TestReactLoopTermination(unittest.TestCase):
             finally:
                 _close(bundle)
             self.assertEqual(result.completion_status, "partial")
+
+
+class TestSparseChildrenPromptRule(unittest.TestCase):
+    """A.3 — the ReAct prompt must warn the agent that child slots are
+    sparse and ids must be copied verbatim, so it stops inventing
+    ``_childN`` ids that hit ``unknown_table_id`` errors.
+    """
+
+    def test_react_prompt_carries_sparse_children_rule(self) -> None:
+        from xl_ontology.v1.react import build_react_prompt
+
+        prompt = build_react_prompt(
+            stage="inputs",
+            iteration=1,
+            max_iterations=8,
+            overall_context={},
+            criteria={"population": {"required_items": ["count"]}},
+            observations=[],
+        )
+        # The rule's exact phrases must appear so the LLM treats them
+        # as a hard rule, not a hint.
+        self.assertIn("TABLE-ID RULES", prompt)
+        self.assertIn("sparse", prompt.lower())
+        self.assertIn("never guess", prompt.lower())
+        self.assertIn("verbatim", prompt.lower())
+        self.assertIn("unknown_table_id", prompt)
+
+
+class TestFormatObservation(unittest.TestCase):
+    """A.1 — format_observation should lift summary_for_llm when the
+    tool returned one, instead of the generic dict-keys preview.
+    """
+
+    def test_dict_with_summary_for_llm_uses_it(self) -> None:
+        from xl_ontology.v1.react import format_observation
+
+        result = {
+            "table_id": "T1",
+            "summary_for_llm": (
+                "Table 'Patient population' at Inputs!B4:F6. "
+                "1 header row(s), 2 row name(s). "
+                "Core region: 6 cells — mixed (2 values, 2 formulas). "
+                "Pass-1 node_type: input."
+            ),
+            "core_cells": [{"x": 1}],
+            "headers": [["a", "b"]],
+        }
+        obs = format_observation("read_table_full_content", result)
+        self.assertIn("Patient population", obs)
+        self.assertIn("Inputs!B4:F6", obs)
+        # Generic dict-keys fallback must NOT fire when summary_for_llm is present.
+        self.assertNotIn("dict keys=", obs)
+
+    def test_dict_without_summary_for_llm_falls_back_to_keys(self) -> None:
+        from xl_ontology.v1.react import format_observation
+
+        result = {"a": 1, "b": 2, "c": 3}
+        obs = format_observation("some_tool", result)
+        self.assertIn("dict keys=", obs)
+
+    def test_dict_with_empty_summary_for_llm_falls_back_to_keys(self) -> None:
+        from xl_ontology.v1.react import format_observation
+
+        result = {"summary_for_llm": "   ", "a": 1}
+        obs = format_observation("some_tool", result)
+        self.assertIn("dict keys=", obs)
+
+    def test_dict_with_non_string_summary_for_llm_falls_back(self) -> None:
+        from xl_ontology.v1.react import format_observation
+
+        # Non-string summary_for_llm should NOT crash and should fall back.
+        result = {"summary_for_llm": ["not", "a", "string"], "a": 1}
+        obs = format_observation("some_tool", result)
+        self.assertIn("dict keys=", obs)
+
+    def test_list_result_unaffected(self) -> None:
+        from xl_ontology.v1.react import format_observation
+
+        result = [1, 2, 3, 4, 5]
+        obs = format_observation("list_tool", result)
+        self.assertIn("list[5]", obs)
+
+
+class TestP2FResultFullInTrace(unittest.TestCase):
+    """P2.F — the full tool result (JSON) lands on Pass2ToolCall +
+    Pass2ReactObservation events so the orchestrator viewer can show
+    the user what the agent actually received from each tool call.
+    """
+
+    def test_observation_carries_full_tool_result(self) -> None:
+        action = json.dumps({
+            "thought": "let me look at the Inputs sheet tables",
+            "action": {
+                "tool": "list_tables_on_sheet",
+                "args": {"sheet_name": "S1"},
+                "rationale": "discover tables",
+            },
+        })
+        stop = json.dumps({
+            "thought": "done",
+            "stop": True,
+            "summary": "saw the tables",
+        })
+
+        with tempfile.TemporaryDirectory() as tmp:
+            llm, _seen = _scripted_llm([action, stop])
+            ctx, bundle = _make_pass2_ctx(Path(tmp), llm)
+            try:
+                agent = _RecordingReactAgent()
+                _result = agent.run(ctx)
+            finally:
+                _close(bundle)
+
+            # Walk ontology_trace.jsonl to verify result_full lands on
+            # Pass2ReactObservation + Pass2ToolCall.
+            trace_path = Path(tmp) / "ontology_output" / "ontology_trace.jsonl"
+            self.assertTrue(trace_path.exists(),
+                            f"trace not at {trace_path}")
+            obs_with_full = []
+            tool_call_with_full = []
+            for line in trace_path.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(line)
+                except Exception:
+                    continue
+                if e.get("event") == "pass2_react_observation":
+                    if e.get("result_full"):
+                        obs_with_full.append(e)
+                elif e.get("event") == "pass2_tool_call":
+                    if e.get("result_full"):
+                        tool_call_with_full.append(e)
+            self.assertGreaterEqual(len(obs_with_full), 1,
+                "Pass2ReactObservation should carry result_full on the "
+                "successful list_sheets call.")
+            self.assertGreaterEqual(len(tool_call_with_full), 1,
+                "Pass2ToolCall should carry result_full on the successful "
+                "list_sheets call.")
+            # Verify the payload is parseable JSON.
+            payload = obs_with_full[0]["result_full"]
+            parsed = json.loads(payload)
+            self.assertIsNotNone(parsed)
+
+    def test_serialize_helper_truncates_oversize_payloads(self) -> None:
+        """The trace cap protects ontology_trace.jsonl from huge tool
+        results — should append a clear TRUNCATED marker."""
+        from xl_ontology.v1.react_base import (
+            _MAX_RESULT_FULL_CHARS,
+            _serialize_tool_result_for_trace,
+        )
+
+        big = {"key": "x" * (_MAX_RESULT_FULL_CHARS * 2)}
+        s = _serialize_tool_result_for_trace(big)
+        self.assertIsNotNone(s)
+        self.assertLessEqual(len(s), _MAX_RESULT_FULL_CHARS + 200)
+        self.assertIn("TRUNCATED", s)
+
+    def test_serialize_helper_handles_none(self) -> None:
+        from xl_ontology.v1.react_base import _serialize_tool_result_for_trace
+
+        self.assertIsNone(_serialize_tool_result_for_trace(None))
 
 
 if __name__ == "__main__":

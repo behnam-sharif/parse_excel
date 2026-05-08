@@ -99,15 +99,60 @@ def _strip_code_fence(s: str) -> str:
     return s
 
 
+def _extract_json_object(s: str) -> str:
+    """Extract the first balanced ``{...}`` block from ``s``.
+
+    LLMs frequently emit prose then JSON despite "JSON ONLY" instructions
+    (e.g. ``"Hmm, I need to ... {\\"thought\\": ..., \\"action\\": ...}"``).
+    Returns the substring from the first ``{`` to its matching ``}``,
+    skipping over braces inside string literals.  Returns the input
+    unchanged if no balanced block is found.
+    """
+    if not s:
+        return s
+    # Fast path: already starts with `{`.
+    if s.lstrip().startswith("{"):
+        return s
+    start = s.find("{")
+    if start < 0:
+        return s
+    depth = 0
+    in_str = False
+    escape = False
+    for i in range(start, len(s)):
+        ch = s[i]
+        if in_str:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return s[start:i + 1]
+    # Unbalanced — give the original; the JSON parser will raise a
+    # clearer error than silently returning a truncated slice.
+    return s
+
+
 def parse_react_step(text: str):  # type: ignore[no-untyped-def]
     """Return ``ReactActionStep`` | ``ReactStopStep`` | ``ReactParseError``.
 
     Tolerant: accepts the two canonical shapes, plus ``{"action": {...}}``
-    without a ``thought`` (treated as ``thought=""``).  Any other shape
-    becomes a ``ReactParseError`` so the loop can re-prompt.
+    without a ``thought`` (treated as ``thought=""``), plus prose-then-JSON
+    responses where the LLM disregards the "JSON ONLY" instruction.  Any
+    other shape becomes a ``ReactParseError`` so the loop can re-prompt.
     """
     raw = text or ""
     cleaned = _strip_code_fence(raw)
+    cleaned = _extract_json_object(cleaned)
     try:
         data = json.loads(cleaned)
     except json.JSONDecodeError as exc:
@@ -152,11 +197,23 @@ def format_observation(tool: str, result: Any, *, max_chars: int = 600) -> str:
 
     Compact enough to keep the prompt bounded; informative enough that the
     agent can decide its next move.
+
+    Tool-author convention: if a tool's result is a dict that carries a
+    server-generated ``summary_for_llm`` field (a paragraph the tool's
+    author wrote specifically for the LLM to quote / reason over), use
+    that as the observation directly — the agent gets a structured
+    one-line debrief instead of a generic ``dict keys=[...]`` preview.
+    Falls back to the keys-preview for dicts that don't carry the
+    convention.  Errors / lists / scalars retain their original shape.
     """
     if result is None:
         return f"[{tool}] returned None"
     try:
-        if isinstance(result, list):
+        if isinstance(result, dict) and isinstance(
+            result.get("summary_for_llm"), str
+        ) and result["summary_for_llm"].strip():
+            text = f"[{tool}] {result['summary_for_llm'].strip()}"
+        elif isinstance(result, list):
             n = len(result)
             preview = json.dumps(result[:3], default=str, ensure_ascii=False)
             text = f"[{tool}] list[{n}] preview={preview}"
@@ -338,6 +395,21 @@ shapes (e.g. ``List[str]`` means a list of strings).  Tools that take
 ``sheet_name`` / ``sheets`` need real sheet names from the workbook —
 look at upstream context or prior observations to find them.
 {tools_json}
+
+TABLE-ID RULES (read carefully — wrong ids waste iterations):
+- Always copy ``table_id`` values VERBATIM from one of: the
+  ``UPSTREAM CONTEXT`` section above, a prior ``observation`` in this
+  loop, or a ``list_tables_on_sheet`` result.
+- Child slots inside a parent table are SPARSE.  V6 finalize numbers
+  surviving children with arbitrary suffixes — e.g. a parent's children
+  may be ``..._child2``, ``..._child4``, ``..._child5``, ``..._child7``,
+  ``..._child8`` with NO ``_child1``, ``_child3``, or ``_child6``.
+  NEVER guess ``_childN`` from a sequence — only use ids you have
+  literally seen in the upstream context, an observation, or a tool
+  result.  An invented id will return ``error: unknown_table_id`` and
+  burn an iteration.
+- A ``_t...`` / ``_b...`` segment encodes the V3a hierarchy path; never
+  edit those segments either.
 
 WHEN TO STOP:
 - You have enough information to write a 2-3 paragraph narrative

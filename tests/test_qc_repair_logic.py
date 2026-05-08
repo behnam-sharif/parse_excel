@@ -686,6 +686,178 @@ class TestSynthesisContext(unittest.TestCase):
         self.assertIsNone(ctx)
 
 
+class _FakeCell:
+    def __init__(self, value, bold=False):
+        self.value = value
+        self.font = type("F", (), {"bold": bold})()
+
+
+class _FakeWS:
+    """Minimal openpyxl-worksheet stand-in for build_bundle tests.
+
+    1-indexed ``.cell(row, column)`` interface like real openpyxl.
+    Backed by a {(r0, c0): (value, bold)} grid (0-indexed keys).
+    """
+    def __init__(self, grid):
+        self._grid = grid
+
+    def cell(self, row, column):
+        v, bold = self._grid.get((row - 1, column - 1), (None, False))
+        return _FakeCell(v, bold)
+
+
+class _FakeAccessor:
+    def __init__(self, sheets):
+        self._sheets = sheets  # {sheet_name: _FakeWS}
+
+    def get_worksheet(self, sheet_name):
+        return self._sheets.get(sheet_name)
+
+    def is_formula(self, sheet_name, r, c):
+        return False
+
+
+class TestQcBPromptBundle(unittest.TestCase):
+    """QC.B — bundle for the LLM:
+       (a) v6_state must NOT carry node_type (LLM is supposed to
+           infer the role itself from sheet + DAG fanout + content).
+       (b) When title_missing fires, v6_state.core_values is populated
+           with a top-left sample of cells inside the core region.
+       (c) v6_state.siblings_with_title carries up to N other titled
+           tables on the same sheet so the LLM can match the local
+           naming pattern.
+    """
+
+    def _build(self, *, leaf, sheet_leaves, grid, config_override=None):
+        from xl_qc_repair.candidate_detector import build_bundle
+        ws = _FakeWS(grid)
+        accessor = _FakeAccessor({leaf["sheet_name"]: ws})
+        config = XlQcRepairConfig()
+        if config_override:
+            for k, v in config_override.items():
+                setattr(config, k, v)
+        return build_bundle(
+            leaf, sheet_leaves,
+            trigger="title_missing",
+            triggers=["title_missing"],
+            config=config,
+            accessor=accessor,
+        )
+
+    def test_v6_state_omits_node_type(self) -> None:
+        leaf = {
+            "table_id": "T", "sheet_name": "Results",
+            "title": None, "headers": [["Year", "Without InO", "With InO", "Budget impact"]],
+            "row_names": ["2020", "2021", "Total"],
+            "core_region": {"r1": 4, "c1": 2, "r2": 6, "c2": 4},
+            "bbox": {"r1": 3, "c1": 1, "r2": 6, "c2": 4},
+            "node_type": "input",  # finalize tagged it wrong; LLM mustn't see it
+            "parent_path": ["Results"],
+            "source_flags": ["title_missing"],
+        }
+        bundle = self._build(leaf=leaf, sheet_leaves=[leaf], grid={})
+        self.assertNotIn("node_type", bundle.v6_state,
+                         "LLM bundle leaks node_type — finalize's role tag is unreliable, "
+                         "the LLM must infer the role itself.")
+        # Sanity: other v6_state fields still present.
+        for required in ("title", "headers", "row_names", "core_region",
+                         "bbox", "parent_path", "source_flags",
+                         "core_values", "siblings_with_title"):
+            self.assertIn(required, bundle.v6_state)
+
+    def test_core_values_sample_top_left(self) -> None:
+        # Core spans rows 4-6 cols 2-4 (0-indexed); we plant 3x3 of
+        # values + a 2 BUDGET headers row above; the sample should
+        # capture only the in-core values, top-left anchored.
+        leaf = {
+            "table_id": "T", "sheet_name": "Results",
+            "title": None, "headers": [["Year", "Without InO", "With InO", "Budget impact"]],
+            "row_names": ["2020", "2021", "Total"],
+            "core_region": {"r1": 4, "c1": 2, "r2": 6, "c2": 4},
+            "bbox": {"r1": 3, "c1": 1, "r2": 6, "c2": 4},
+            "node_type": "input",
+            "parent_path": ["Results"],
+            "source_flags": ["title_missing"],
+        }
+        # In-core grid (0-indexed): rows 4-6, cols 2-4.
+        grid = {
+            (4, 2): (1900000, False), (4, 3): (2300000, False), (4, 4): (400000, False),
+            (5, 2): (1922000, False), (5, 3): (2368000, False), (5, 4): (446000, False),
+            (6, 2): (9616000, True),  (6, 3): (11844000, True), (6, 4): (2228000, True),
+        }
+        bundle = self._build(leaf=leaf, sheet_leaves=[leaf], grid=grid)
+        cv = bundle.v6_state["core_values"]
+        # 3 rows of 3 columns, all non-None, in document order.
+        self.assertEqual(len(cv), 3)
+        for row in cv:
+            self.assertEqual(len(row), 3)
+        # Top-left value matches the planted (4,2) → "1900000".
+        self.assertEqual(cv[0][0], "1900000")
+        # Bottom-right Total row.
+        self.assertEqual(cv[2][2], "2228000")
+
+    def test_siblings_with_title_capped_and_filtered(self) -> None:
+        leaf = {
+            "table_id": "T_LEAF", "sheet_name": "Results",
+            "title": None, "headers": [["Year", "Budget impact"]],
+            "row_names": ["2020"],
+            "core_region": {"r1": 4, "c1": 2, "r2": 4, "c2": 3},
+            "bbox": {"r1": 3, "c1": 1, "r2": 4, "c2": 3},
+            "node_type": "input",
+            "parent_path": ["Results"],
+            "source_flags": ["title_missing"],
+        }
+        sib_titled_1 = {
+            "table_id": "T_SIB1", "sheet_name": "Results",
+            "title": "Budget impact summary",
+            "headers": [["Year", "Total"]], "row_names": ["2020", "2021"],
+            "bbox": {"r1": 10, "c1": 1, "r2": 14, "c2": 3},
+        }
+        sib_titled_2 = {
+            "table_id": "T_SIB2", "sheet_name": "Results",
+            "title": "ICER by scenario",
+            "headers": [["Scenario", "ICER"]], "row_names": ["Base", "PSA"],
+            "bbox": {"r1": 16, "c1": 1, "r2": 19, "c2": 3},
+        }
+        sib_titled_3 = {
+            "table_id": "T_SIB3", "sheet_name": "Results",
+            "title": "Per-cycle costs",
+            "headers": [["Cycle", "Cost"]], "row_names": ["1", "2"],
+            "bbox": {"r1": 21, "c1": 1, "r2": 24, "c2": 3},
+        }
+        sib_untitled = {
+            "table_id": "T_SIB4", "sheet_name": "Results",
+            "title": None,  # filtered out — no title to learn from
+            "headers": [], "row_names": [],
+            "bbox": {"r1": 26, "c1": 1, "r2": 27, "c2": 2},
+        }
+        sib_other_sheet = {
+            "table_id": "T_SIB5", "sheet_name": "Inputs",
+            "title": "Drug costs",  # filtered — wrong sheet
+            "headers": [["Cost"]], "row_names": ["InO"],
+            "bbox": {"r1": 0, "c1": 0, "r2": 1, "c2": 1},
+        }
+
+        bundle = self._build(
+            leaf=leaf,
+            sheet_leaves=[leaf, sib_titled_1, sib_titled_2, sib_titled_3,
+                          sib_untitled, sib_other_sheet],
+            grid={},
+        )
+        sibs = bundle.v6_state["siblings_with_title"]
+        # Default cap is 2; first two same-sheet titled siblings only.
+        self.assertEqual(len(sibs), 2)
+        self.assertEqual(sibs[0]["table_id"], "T_SIB1")
+        self.assertEqual(sibs[0]["title"], "Budget impact summary")
+        self.assertEqual(sibs[0]["headers_first_row"], ["Year", "Total"])
+        self.assertEqual(sibs[0]["row_names_first_2"], ["2020", "2021"])
+        self.assertEqual(sibs[1]["table_id"], "T_SIB2")
+        # Untitled / other-sheet siblings are excluded.
+        sib_ids = [s["table_id"] for s in sibs]
+        self.assertNotIn("T_SIB4", sib_ids)
+        self.assertNotIn("T_SIB5", sib_ids)
+
+
 class TestRunnerSignature(unittest.TestCase):
     def test_run_qc_repair_accepts_target_sheets(self) -> None:
         import inspect
