@@ -1,0 +1,12 @@
+{
+  "concept_id": "inputs.epidemiology",
+  "terms": [
+    "incidence",
+    "prevalence",
+    "mortality",
+    "progression rate",
+    "hazard",
+    "risk",
+    "transition"
+  ]
+}

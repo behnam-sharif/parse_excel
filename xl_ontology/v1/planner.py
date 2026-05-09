@@ -32,7 +32,7 @@ from xl_ontology.tools.discovery import (
     list_tables_on_sheet,
     read_table_full_content,
 )
-from xl_ontology.tools.lexicon import search_workbook_lexicon
+from xl_ontology.tools.lexicon import search_concept, search_workbook_lexicon
 from xl_ontology.v1.agent_base import ToolStep
 
 
@@ -44,6 +44,7 @@ ToolFn = Callable[..., Any]
 
 PASS2_TOOL_REGISTRY: Dict[str, ToolFn] = {
     "search_workbook_lexicon": search_workbook_lexicon,
+    "search_concept": search_concept,           # F.2 — concept-driven search
     "find_overview_sheets": find_overview_sheets,
     "read_sheets": read_sheets,
     "extract_currency_symbols": extract_currency_symbols,

@@ -77,7 +77,11 @@ class CalculationsAgent(OntologyAgent):
         }
         # D. CROSS-CHECK BY EXPECTED CONCEPT — lexicon (whole_table)
         for concept in self.state.expected_concepts:
-            terms = CALCULATIONS_LEXICON.get(concept, [concept.replace("_", " ")])
+            # F.2 — terms come from the loaded pack via concept_terms.
+            from xl_ontology.concept_terms import get_concept_terms
+            terms = get_concept_terms(self.ctx.pack, f"calculations.{concept}")
+            if not terms or terms == [concept.replace("_", " ")]:
+                terms = CALCULATIONS_LEXICON.get(concept, [concept.replace("_", " ")])
             self._track_tool("search_workbook_lexicon")
             hits = search_workbook_lexicon(self.ctx, terms, "whole_table")
             if not hits:

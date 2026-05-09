@@ -1,7 +1,16 @@
-"""Lexicon search tools (REVISION 2 added the whole_table scope)."""
+"""Lexicon search tools (REVISION 2 added the whole_table scope).
+
+F.2 added text normalization: lowercase + strip punctuation + replace
+hyphens / unicode dashes with spaces + collapse whitespace + simple
+plural fold.  Without normalization, lexicon term ``"end of life"``
+misses cell text ``"end-of-life"`` and term ``"population"`` misses
+``"populations"``.  Both fixed.
+"""
 
 from __future__ import annotations
 
+import re
+import unicodedata
 from dataclasses import dataclass
 from typing import Iterable, List, Literal, Optional, Tuple
 
@@ -52,19 +61,124 @@ def _excel_cell(row_0: int, col_0: int) -> str:
     return f"{_col_to_letters(col_0 + 1)}{row_0 + 1}"
 
 
+# F.2 — text normalization shared by terms + cell content.
+
+# Unicode dash characters (en-dash, em-dash, minus, hyphen-minus, etc.)
+# all collapse to a regular space so "end-of-life" matches "end of life".
+_DASH_CHARS = "-‐‑‒–—―−﹘﹣－"
+_DASH_RE = re.compile(f"[{re.escape(_DASH_CHARS)}]")
+_PUNCT_RE = re.compile(r"[^\w\s]")  # strip everything that's not word/space
+_WS_RE = re.compile(r"\s+")
+
+
+def _normalize_text(s: str) -> str:
+    """Normalize cell text or a lexicon term for matching.
+
+    Pipeline: NFKC unicode fold → lowercase → unicode-dash → space →
+    strip punctuation → collapse whitespace → strip → simple plural
+    fold (drop trailing ``s`` / ``es`` from the LAST whitespace token,
+    so ``"populations"`` collapses to ``"population"`` for matching but
+    ``"AE rates"`` collapses to ``"ae rate"``).
+
+    The plural fold only fires when the last token is ≥4 chars to avoid
+    over-folding short words like ``"AE"`` or ``"OS"``.
+    """
+    if not s:
+        return ""
+    s = unicodedata.normalize("NFKC", str(s))
+    s = s.lower()
+    s = _DASH_RE.sub(" ", s)
+    s = _PUNCT_RE.sub(" ", s)
+    s = _WS_RE.sub(" ", s).strip()
+    if not s:
+        return ""
+    parts = s.split(" ")
+    last = parts[-1]
+    if len(last) >= 4:
+        # "studies" → "study"; "therapies" → "therapy"; "categories" → "category".
+        if last.endswith("ies") and len(last) > 4:
+            parts[-1] = last[:-3] + "y"
+        # "watches" → "watch"; "boxes" → "box"; "losses" → "loss".
+        # The Latinate -es plural fires when the stem already ends in
+        # a sibilant ([sxz] / ch / sh).
+        elif (
+            (last.endswith("ses") or last.endswith("xes")
+             or last.endswith("zes") or last.endswith("ches")
+             or last.endswith("shes"))
+            and len(last) > 4
+        ):
+            parts[-1] = last[:-2]
+        # Plain -s plural ("rates" → "rate"; "populations" → "population").
+        # Avoid stripping when the word ends in "ss" (loss / boss) — those
+        # are singular.
+        elif (
+            last.endswith("s")
+            and not last.endswith("ss")
+            and len(last) > 4
+        ):
+            parts[-1] = last[:-1]
+    return " ".join(parts)
+
+
 def _normalised_terms(terms: Iterable[str]) -> List[str]:
-    return [t.lower() for t in (terms or []) if t]
+    """Apply ``_normalize_text`` to a list of lexicon terms, keeping
+    only non-empty results."""
+    out: List[str] = []
+    seen: set = set()
+    for t in (terms or []):
+        n = _normalize_text(t)
+        if n and n not in seen:
+            seen.add(n)
+            out.append(n)
+    return out
 
 
 def _match_term(text: Optional[str], terms: List[str]) -> Optional[str]:
-    """Return the first matching term (substring, case-insensitive) or None."""
+    """Return the first matching normalised term (substring) or None.
+
+    Both ``text`` and ``terms`` are normalised before comparison so
+    case / dash / punctuation / plural variants in either land on the
+    same canonical form.  Returns the matched term in its NORMALISED
+    form (callers that need the raw cell text use ``Hit.snippet``
+    which preserves the original).
+    """
     if text is None:
         return None
-    text_lower = str(text).lower()
+    text_norm = _normalize_text(str(text))
+    if not text_norm:
+        return None
     for t in terms:
-        if t in text_lower:
+        if t in text_norm:
             return t
     return None
+
+
+def search_concept(ctx: ToolContext, concept_id: str) -> List[Hit]:
+    """F.2 — concept-driven lexicon search.
+
+    Resolves the concept's lexicon terms from the loaded pack
+    (``ctx.pack.concepts[concept_id].lexicon_terms``) and runs them
+    through ``search_workbook_lexicon`` with ``scope="whole_table"``.
+
+    Args:
+      concept_id: ``<branch>.<concept_name>`` (e.g.
+        ``inputs.market_share``, ``calculations.aggregator``,
+        ``results.budget_impact_total``).
+
+    Returns:
+      List of ``Hit`` records.  Empty when ``ctx.pack`` is None,
+      when the concept_id is unknown, or when no cells match.
+
+    The Pass-2 ReAct agent should call this instead of crafting term
+    lists by hand — it removes "did the LLM remember the right
+    synonyms?" from the LLM's job and makes it the pack's job.
+    """
+    from xl_ontology.concept_terms import get_concept_terms
+
+    terms = get_concept_terms(ctx.pack, concept_id)
+    if not terms:
+        return []
+    return search_workbook_lexicon(ctx, terms, "whole_table")
 
 
 def search_workbook_lexicon(

@@ -3,7 +3,7 @@
   "ontology_id": "bim_v0",
   "ontology_version": "0.2",
   "schema_version": "v0",
-  "seed_timestamp": "2026-05-08T00:02:25.094Z",
+  "seed_timestamp": "2026-05-08T22:59:15.414Z",
   "last_enriched_timestamp": null,
   "workbook_file_hash": "sha256:e36fd9a35578e5a66d95721723803f48666266cbf9ddd2f3cbcbea4718d4d49d",
   "overall_model": {
@@ -422,11 +422,16 @@
       {
         "table_id": "9814fc53f594ba29_b118",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_end_of_life",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in title for concept 'end_of_life'",
         "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "End-of-life costs",
+            "matched_term": "end of life"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -455,11 +460,16 @@
       {
         "table_id": "1f634d7d13c5e37c_t57_t25_t17_t8",
         "ontology_role": "input",
-        "ontology_subtype": "structural_input",
+        "ontology_subtype": "structural_input_drug_cost",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "phase B: anchor-sheet sibling, no concept lexicon fired",
+        "why_selected": "phase B: anchor-sheet sibling, secondary lexicon match in header for concept 'drug_cost'",
         "evidence_signals": [
+          {
+            "type": "format_match",
+            "value": "DVP-Asp",
+            "matched_term": "asp"
+          },
           {
             "type": "dag_fanin",
             "value": 0,
@@ -500,59 +510,21 @@
   "calculations": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "18 main calculation tables identified (structural_calc, total_cost_with). 0 aggregators.",
+    "summary": "17 main calculation tables identified (cost_component, structural_calc). 0 aggregators.",
     "summary_source": "template",
     "candidate_tables": [
       {
-        "table_id": "47ecc07e130eef5f_b10",
+        "table_id": "47ecc07e130eef5f_t10",
         "ontology_role": "calculation",
-        "ontology_subtype": "total_cost_with",
+        "ontology_subtype": "cost_component",
         "confidence": 0.55,
         "evidence_quality": "partial",
-        "why_selected": "lexicon match in title for concept 'total_cost_with_intervention'",
+        "why_selected": "lexicon match in title for concept 'cost_component_calc'",
         "evidence_signals": [
           {
             "type": "title_match",
-            "value": "result_total costs by cost component",
-            "matched_term": "total cost"
-          }
-        ],
-        "upstream_node_type": "input",
-        "node_type_override_proposed": true,
-        "parent_table_id": null,
-        "parent_path": [
-          "Results"
-        ],
-        "sibling_count": 0,
-        "parent_split_appears_artificial": false,
-        "applied_heuristics": [],
-        "extracted_payload": {
-          "time_indexed": false,
-          "time_columns": null,
-          "treatment_dimension": "n/a",
-          "key_formulas": [],
-          "feeds_into": [],
-          "fed_by": []
-        },
-        "flags": []
-      },
-      {
-        "table_id": "47ecc07e130eef5f_t10",
-        "ontology_role": "calculation",
-        "ontology_subtype": "structural_calc",
-        "confidence": 0.55,
-        "evidence_quality": "partial",
-        "why_selected": "structural sanity: high formula density + non-zero fan-in/out — calculation fingerprint despite upstream label",
-        "evidence_signals": [
-          {
-            "type": "formula_density",
-            "value": 0.7727272727272727,
-            "matched_term": null
-          },
-          {
-            "type": "dag_fanout",
-            "value": 1,
-            "matched_term": null
+            "value": "Budget impact breakdown by cost component",
+            "matched_term": "cost component"
           }
         ],
         "upstream_node_type": "input",
@@ -1200,9 +1172,9 @@
     ],
     "parent_groups": [],
     "expected_concepts_status": {
-      "total_cost_with_intervention": "found",
+      "total_cost_with_intervention": "absent",
       "total_cost_without_intervention": "absent",
-      "cost_component_calc": "absent",
+      "cost_component_calc": "found",
       "patient_flow": "absent",
       "scenario_calc": "absent",
       "aggregator": "absent"
@@ -1212,7 +1184,7 @@
   "results": {
     "present": true,
     "evidence_quality": "high",
-    "summary": "1 result table identified (incremental_budget_impact). Incremental row present.",
+    "summary": "2 result tables identified (incremental_budget_impact, total_cost_summary). Incremental row present.",
     "summary_source": "template",
     "candidate_tables": [
       {
@@ -1246,12 +1218,44 @@
           "fed_by": []
         },
         "flags": []
+      },
+      {
+        "table_id": "47ecc07e130eef5f_b10",
+        "ontology_role": "result",
+        "ontology_subtype": "total_cost_summary",
+        "confidence": 0.55,
+        "evidence_quality": "partial",
+        "why_selected": "lexicon match in title for concept 'total_cost_summary'",
+        "evidence_signals": [
+          {
+            "type": "title_match",
+            "value": "result_total costs by cost component",
+            "matched_term": "total cost"
+          }
+        ],
+        "upstream_node_type": "input",
+        "node_type_override_proposed": true,
+        "parent_table_id": null,
+        "parent_path": [
+          "Results"
+        ],
+        "sibling_count": 0,
+        "parent_split_appears_artificial": false,
+        "applied_heuristics": [],
+        "extracted_payload": {
+          "time_indexed": false,
+          "time_columns": null,
+          "has_cumulative_column": false,
+          "result_metrics": [],
+          "fed_by": []
+        },
+        "flags": []
       }
     ],
     "parent_groups": [],
     "expected_concepts_status": {
       "incremental_budget_impact": "found",
-      "total_cost_summary": "absent",
+      "total_cost_summary": "found",
       "per_patient_impact": "absent",
       "annual_impact": "absent",
       "multi_year_impact": "absent",

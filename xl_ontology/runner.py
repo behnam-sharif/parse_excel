@@ -228,6 +228,7 @@ def run_ontology(
                 override_writer=overrides,
                 build_errors=errors,
                 llm_complete=effective_llm,
+                pack=pack,                       # F.2 — used by search_concept + get_concept_terms
             )
 
             # --- agents (sequential per plan §7.1) ---

@@ -371,3 +371,21 @@ UI: `streamlit` (orchestrator)
 7. **Deterministic first, LLM optional** -- V6 runs heuristics deterministically; LLM fires only when `enable_llm=true` and at least one LLM-gate trigger fires (or when optional metadata-resolution LLM is enabled).
 8. **V3a hierarchy preserved** -- V6 respects parent/child relationships from V3a; ResolvedTable merges for consumers
 9. **Single `xl_sheetagent` package** -- legacy `xl_sheetagent_v4` / `xl_sheetagent_v5` / `xl_sheetagent_v6` names are removed; V3a ships in `xl_sheetagent/xl_sheetagent/`, V6 at package root (`v6_models.py`, `runner.py`, …).
+
+## Active plans
+
+- **`plan_ontology_refactor.md`** (root) — F.1 → F.8 phased refactor of `xl_ontology` to deliver an xl_ask-ready ontology tree. Pack refactor (concept-folder layout), Pass-1 multi-tag, Pass-2 golden tables, OverallAgent two-tier + concept table + sheet categorization, Pass-3 (Calculation / Default / Setting agents), pack versioning (bim_v0 → bim_v1), parallelism. **Read this before touching `xl_ontology/`** — it locks in 9 design decisions (multi-tag = Option B one-row-per-table, stable `concept_id` across regenerations, sequential Pass-1 precedence input→calc→result, 7 sheet types, etc.) that earlier sessions converged on. Phase status table at the bottom of the plan.
+- **`plan_xl_user_feedback.md`** (root) — design plan for the future `xl_user_feedback` stage (right-bottom CHERI comments panel ↔ ontology corrections round-trip). Not started; tracked for ordering after the ontology refactor lands.
+
+## Companion specs
+
+- **`cheri_v1.md`** (root) — UI contract + integration spec for the CHERI v1 frontend. Describes Mode A (ontology tabs) vs Mode B (chat), the `highlightRange()` cell-citation API, the 9 xlgen→CHERI endpoints, evidence-required narration, range-coordinate citations.
+- **`cheri_v1_docs/*.schema.ts`** — TypeScript contract types CHERI consumes. Mirror the Pydantic shapes in xlgen exactly. When changing an output schema, update both Python and TS in one PR.
+- **`xl_ask_approach.md`** + **`ontologyTree.md`** + **`question_queryPlan.md`** (root) — design briefs for the future `xl_ask` repo. The ontology refactor plan above is built to satisfy the contract these docs declare.
+
+## Key naming conventions (post-refactor — see plan_ontology_refactor.md for full transition)
+
+- `xl_ontology/agents/` is being renamed to `xl_ontology/pass1_tag_agents/` in F.1. Pass-1 tag agents (Inputs / Calculations / Results) live there; Pass-2 ReAct stages live in `xl_ontology/v1/stages/`; Pass-3 agents will live in `xl_ontology/v1/pass3/` after F.6.
+- Pack content moves from a flat 13-file layout to a concept-id-keyed directory tree under `xl_ontology/packs/bim_v0/ontology_bim_concepts/{branch}/{concept}/{lexicon.json, rules_pass1.md, rules_pass2.md}` plus `xl_ontology/packs/bim_v0/ontology_bim_sheets/{type}/{lexicon.json, context.md}`. Each concept folder maps 1:1 to xl_ask's stable `concept_id` (e.g. `inputs/market_share/` ⇒ `inputs.market_share`).
+- `ontology_table_tags.json` schema changes in F.3: `ontology_subtypes: List[OntologySubtype]` becomes a ranked list (one row per table; CHERI's `summaryModel.schema.ts` updated in same PR).
+- `model_understanding.json:stages` gains new entries in F.5 (`sheet_categorization`) and F.6 (`calculation_chains`, `defaults`, `settings`).

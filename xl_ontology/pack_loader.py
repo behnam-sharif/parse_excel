@@ -36,6 +36,7 @@ import yaml
 
 from xl_ontology.agents.base import TRIGGER_REGISTRY
 from xl_ontology.schemas import (
+    ConceptPackEntry,
     Heuristic,
     NodeIdentity,
     NodeName,
@@ -43,6 +44,7 @@ from xl_ontology.schemas import (
     OntologyPack,
     PackBudgets,
     PackWarning,
+    SheetPackEntry,
 )
 
 
@@ -146,6 +148,11 @@ def load_pack(packs_root: Path | str, pack_name: str) -> OntologyPack:
     # §5.1 step 4 — surface unknown extra files as PackWarnings (the
     # runner converts them into WarningEvent trace entries; plan §5.7
     # makes the warning policy explicit instead of "log a warning").
+    # F.1 — the new layout adds bim.txt + ontology_bim_concepts/ +
+    # ontology_bim_sheets/ at pack root.  Only the file is surfaced
+    # at the pack root level (the iteration below skips directories);
+    # whitelist bim.txt so it's not flagged.
+    expected_files.add(_BIM_OVERVIEW_FILENAME)
     warnings: List[PackWarning] = []
     for entry in pack_dir.iterdir():
         if entry.is_file() and entry.name not in expected_files:
@@ -175,6 +182,12 @@ def load_pack(packs_root: Path | str, pack_name: str) -> OntologyPack:
     # iteration; for v0 we keep it derived (plan §2.12 default).
     pack_version = _max_version_string([n.identity.version for n in nodes.values()])
 
+    # F.1 — load new directory-keyed concept + sheet trees.  Empty dicts
+    # when the new layout isn't present; legacy packs continue to work.
+    concepts = _load_concept_tree(pack_dir)
+    sheets = _load_sheet_tree(pack_dir)
+    bim_overview_text = _load_bim_overview(pack_dir)
+
     return OntologyPack(
         id=pack_name,
         version=pack_version,
@@ -183,7 +196,121 @@ def load_pack(packs_root: Path | str, pack_name: str) -> OntologyPack:
         budgets=budgets,
         nodes=nodes,
         warnings=warnings,
+        concepts=concepts,
+        sheets=sheets,
+        bim_overview_text=bim_overview_text,
     )
+
+
+# ---------------------------------------------------------------------------
+# F.1 — directory-walker loaders for the new layout
+# (ontology_bim_concepts/, ontology_bim_sheets/, bim.txt)
+# ---------------------------------------------------------------------------
+
+_CONCEPT_TREE_DIRNAME = "ontology_bim_concepts"
+_SHEET_TREE_DIRNAME = "ontology_bim_sheets"
+_BIM_OVERVIEW_FILENAME = "bim.txt"
+_CONCEPT_BRANCHES: Tuple[str, ...] = ("inputs", "calculations", "results")
+
+
+def _load_concept_tree(pack_dir: Path) -> Dict[str, ConceptPackEntry]:
+    """Walk ``ontology_bim_concepts/{branch}/{concept}/`` and load each
+    concept's ``lexicon.json`` + ``rules_pass1.md`` + ``rules_pass2.md``
+    into a ``ConceptPackEntry``.  Returns ``{}`` when the tree doesn't
+    exist (legacy packs)."""
+    tree_root = pack_dir / _CONCEPT_TREE_DIRNAME
+    if not tree_root.is_dir():
+        return {}
+
+    out: Dict[str, ConceptPackEntry] = {}
+    import json as _json
+    for branch_name in _CONCEPT_BRANCHES:
+        branch_dir = tree_root / branch_name
+        if not branch_dir.is_dir():
+            continue
+        for concept_dir in sorted(branch_dir.iterdir()):
+            if not concept_dir.is_dir():
+                continue
+            concept_id = f"{branch_name}.{concept_dir.name}"
+            lexicon_path = concept_dir / "lexicon.json"
+            rules_pass1_path = concept_dir / "rules_pass1.md"
+            rules_pass2_path = concept_dir / "rules_pass2.md"
+            terms: List[str] = []
+            if lexicon_path.is_file():
+                try:
+                    data = _json.loads(lexicon_path.read_text(encoding="utf-8"))
+                    raw_terms = data.get("terms") if isinstance(data, dict) else None
+                    if isinstance(raw_terms, list):
+                        terms = [str(t) for t in raw_terms]
+                except Exception:
+                    # Malformed lexicon.json — leave empty; F.2 will tighten this.
+                    terms = []
+            rules_p1 = (
+                rules_pass1_path.read_text(encoding="utf-8")
+                if rules_pass1_path.is_file() else ""
+            )
+            rules_p2 = (
+                rules_pass2_path.read_text(encoding="utf-8")
+                if rules_pass2_path.is_file() else ""
+            )
+            out[concept_id] = ConceptPackEntry(
+                concept_id=concept_id,
+                branch=branch_name,
+                concept_name=concept_dir.name,
+                folder_path=concept_dir,
+                lexicon_terms=terms,
+                rules_pass1_md=rules_p1,
+                rules_pass2_md=rules_p2,
+            )
+    return out
+
+
+def _load_sheet_tree(pack_dir: Path) -> Dict[str, SheetPackEntry]:
+    """Walk ``ontology_bim_sheets/{type}/`` and load each sheet type's
+    ``lexicon.json`` + ``context.md`` into a ``SheetPackEntry``.
+    Returns ``{}`` when the tree doesn't exist (legacy packs)."""
+    tree_root = pack_dir / _SHEET_TREE_DIRNAME
+    if not tree_root.is_dir():
+        return {}
+
+    out: Dict[str, SheetPackEntry] = {}
+    import json as _json
+    for sheet_dir in sorted(tree_root.iterdir()):
+        if not sheet_dir.is_dir():
+            continue
+        sheet_type = sheet_dir.name
+        lexicon_path = sheet_dir / "lexicon.json"
+        context_path = sheet_dir / "context.md"
+        terms: List[str] = []
+        if lexicon_path.is_file():
+            try:
+                data = _json.loads(lexicon_path.read_text(encoding="utf-8"))
+                raw_terms = data.get("terms") if isinstance(data, dict) else None
+                if isinstance(raw_terms, list):
+                    terms = [str(t) for t in raw_terms]
+            except Exception:
+                terms = []
+        context_text = (
+            context_path.read_text(encoding="utf-8")
+            if context_path.is_file() else ""
+        )
+        out[sheet_type] = SheetPackEntry(
+            sheet_type=sheet_type,
+            folder_path=sheet_dir,
+            lexicon_terms=terms,
+            context_md=context_text,
+        )
+    return out
+
+
+def _load_bim_overview(pack_dir: Path) -> str:
+    """Read ``bim.txt`` at pack root.  Empty string when absent (legacy
+    packs); F.1 created this from a verbatim copy of
+    ``pack_overview.context.md``."""
+    p = pack_dir / _BIM_OVERVIEW_FILENAME
+    if not p.is_file():
+        return ""
+    return p.read_text(encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------

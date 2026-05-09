@@ -1,0 +1,14 @@
+{
+  "concept_id": "inputs.dosing",
+  "terms": [
+    "dose",
+    "dosing",
+    "regimen",
+    "schedule",
+    "mg/kg",
+    "mg/m2",
+    "cycles",
+    "duration",
+    "frequency"
+  ]
+}

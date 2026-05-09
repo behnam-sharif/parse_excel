@@ -158,7 +158,16 @@ class InputsAgent(OntologyAgent):
         if not hasattr(self, "_anchor_hits_cache"):
             self._anchor_hits_cache: Dict[str, Hit] = {}
 
-        terms = INPUTS_LEXICON.get(concept, [concept.replace("_", " ")])
+        # F.2 — read terms from the loaded pack via concept_terms.
+        # Falls back to INPUTS_LEXICON only if pack lookup returns
+        # nothing (legacy ctx without pack, or unknown concept).
+        from xl_ontology.concept_terms import get_concept_terms
+        terms = get_concept_terms(self.ctx.pack, f"inputs.{concept}")
+        if not terms or terms == [concept.replace("_", " ")]:
+            # Pack didn't carry this concept — keep the legacy dict
+            # as a backup so removing a concept folder mid-run doesn't
+            # silently drop matches.
+            terms = INPUTS_LEXICON.get(concept, [concept.replace("_", " ")])
         self._track_tool("search_workbook_lexicon")
         hits = search_workbook_lexicon(self.ctx, terms, "whole_table")
         # Best lexicon hit per table_id
@@ -252,8 +261,15 @@ class InputsAgent(OntologyAgent):
         fanout_lo, fanout_hi = (min(anchor_fanouts), max(anchor_fanouts)) if anchor_fanouts else (0, 0)
 
         # Pre-run lexicon searches once per secondary concept; group by table_id.
+        # F.2 — terms come from the loaded pack via concept_terms;
+        # SECONDARY_INPUT_LEXICON is the fallback when pack lookup
+        # returns nothing.
+        from xl_ontology.concept_terms import get_concept_terms
         concept_hits_by_table: Dict[str, List[tuple[str, Hit]]] = {}
-        for concept, terms in SECONDARY_INPUT_LEXICON.items():
+        for concept, fallback_terms in SECONDARY_INPUT_LEXICON.items():
+            terms = get_concept_terms(self.ctx.pack, f"inputs.{concept}")
+            if not terms or terms == [concept.replace("_", " ")]:
+                terms = fallback_terms
             self._track_tool("search_workbook_lexicon")
             for h in search_workbook_lexicon(self.ctx, terms, "whole_table"):
                 if not h.table_id:

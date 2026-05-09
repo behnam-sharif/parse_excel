@@ -104,6 +104,37 @@ class PackWarning(_Strict):
     file_path: Optional[str] = None  # absolute or relative path string
 
 
+class ConceptPackEntry(_Strict):
+    """F.1 — one concept_id's pack content (e.g. ``inputs.market_share``).
+
+    Loaded from the ``ontology_bim_concepts/{branch}/{concept}/`` folder
+    by the directory walker.  Co-exists with legacy ``OntologyNode``
+    during the F.1 → F.6 transition; F.2 onward agents read from this.
+    """
+
+    concept_id: str                  # e.g. "inputs.market_share"
+    branch: str                      # "inputs" | "calculations" | "results"
+    concept_name: str                # leaf folder name, e.g. "market_share"
+    folder_path: Path
+    lexicon_terms: List[str] = Field(default_factory=list)
+    rules_pass1_md: str = ""
+    rules_pass2_md: str = ""
+
+
+class SheetPackEntry(_Strict):
+    """F.1 — one sheet-type's pack content (e.g. ``intro``).
+
+    Loaded from the ``ontology_bim_sheets/{type}/`` folder.  Used by
+    F.3's sheet-ontology classifier and F.5's sheet categorization
+    step.
+    """
+
+    sheet_type: str                  # "intro" | "input" | "calculation" | ...
+    folder_path: Path
+    lexicon_terms: List[str] = Field(default_factory=list)
+    context_md: str = ""
+
+
 class OntologyPack(_Strict):
     """Top-level loaded pack."""
 
@@ -114,6 +145,13 @@ class OntologyPack(_Strict):
     budgets: PackBudgets
     nodes: Dict[NodeName, OntologyNode]
     warnings: List[PackWarning] = Field(default_factory=list)
+    # F.1 — new directory-keyed accessors.  Populated when the new
+    # ``ontology_bim_concepts/`` and ``ontology_bim_sheets/`` trees are
+    # present (always for bim_v0+ packs).  Empty dicts otherwise so
+    # legacy packs continue to load.
+    concepts: Dict[str, ConceptPackEntry] = Field(default_factory=dict)
+    sheets: Dict[str, SheetPackEntry] = Field(default_factory=dict)
+    bim_overview_text: str = ""      # F.1 — verbatim bim.txt content
 
 
 # ---------------------------------------------------------------------------
