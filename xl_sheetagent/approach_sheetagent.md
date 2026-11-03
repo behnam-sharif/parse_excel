@@ -11,7 +11,7 @@ If you want the *whats* and *whys* of the package as a whole, read this file fir
 
 ## 1. What `xl_sheetagent` is
 
-`xl_sheetagent` is the **semantic-enrichment stage** of the xlgen_v3 pipeline. It turns the structural table candidates produced by `xl_parse` / `xl_table` into **fully described tables** that downstream consumers (the v7 DAG builder, xl_ask, Cheri viewers) can attach to without re-reading the workbook.
+`xl_sheetagent` is the **semantic-enrichment stage** of the parse_excel pipeline. It turns the structural table candidates produced by `xl_parse` / `xl_table` into **fully described tables** that downstream consumers (the v7 DAG builder, xl_ask, Cheri viewers) can attach to without re-reading the workbook.
 
 The package ships **two coexisting pipelines** under one Python package:
 

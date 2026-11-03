@@ -1,5 +1,5 @@
 """
-xlgen_v3 Streamlit orchestrator — thin UI over stage entry points.
+parse_excel Streamlit orchestrator — thin UI over stage entry points.
 
 Run from repo root:
     streamlit run apps/orchestrator/app.py
@@ -208,8 +208,8 @@ def _harvest_future() -> None:
 
 
 def app() -> None:
-    st.set_page_config(page_title="xlgen_v3 — Orchestrator", layout="wide")
-    st.title("xlgen_v3 — Excel pipeline orchestrator")
+    st.set_page_config(page_title="parse_excel — Orchestrator", layout="wide")
+    st.title("parse_excel — Excel pipeline orchestrator")
     _default_session()
     _harvest_future()
 

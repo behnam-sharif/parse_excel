@@ -105,7 +105,7 @@ def main(
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="python -m xl_table.run",
-        description="xl_table — structural table detection (Stage 3 of xlgen_v3).",
+        description="xl_table — structural table detection (Stage 3 of parse_excel).",
     )
     p.add_argument(
         "--workbook", required=True,

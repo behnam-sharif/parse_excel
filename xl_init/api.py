@@ -77,9 +77,18 @@ def run_xl_init(
     abs_path = _validate_workbook(workbook_path)
 
     # -- Stage 2: VBA Cleaning --
+    cleaned_path = None
     if config.run_vba_cleaning:
-        cleaned_path = _run_vba_cleaning(abs_path, out_dir)
-    else:
+        try:
+            cleaned_path = _run_vba_cleaning(abs_path, out_dir)
+        except Exception as exc:  # xlwings needs a local Microsoft Excel install
+            logger.warning(
+                "Stage 2: VBA cleaning failed (%s). Microsoft Excel is required for this step "
+                "(via xlwings). Continuing with an uncleaned copy of the workbook; "
+                "pass --no-vba-cleaning to skip this step explicitly.",
+                exc,
+            )
+    if cleaned_path is None:
         import shutil
 
         cleaned_path = os.path.join(out_dir, "cleaned_workbook.xlsx")

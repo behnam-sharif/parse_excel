@@ -35,7 +35,7 @@ def main() -> int:
     if not key or not key.strip():
         print(
             "FAIL: OPENAI_API_KEY is empty.\n"
-            "  Use xlgen_v3/.env, xl_sheetagent/.env, data/.env, or ../xlgen_v2/.env (see core/env_bootstrap.py).\n"
+            "  Use parse_excel/.env, xl_sheetagent/.env, data/.env, or ../xlgen_v2/.env (see core/env_bootstrap.py).\n"
             "  If you set it only in the shell, ensure no typo and restart the terminal."
         )
         return 1

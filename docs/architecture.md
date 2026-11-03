@@ -1,4 +1,4 @@
-# xlgen_v3 architecture
+# parse_excel architecture
 
 ## Stages
 

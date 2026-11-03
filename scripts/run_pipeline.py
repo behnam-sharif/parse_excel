@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""CLI wrapper for the full xlgen_v3 pipeline: init -> parse -> table [-> image]."""
+"""CLI wrapper for the full parse_excel pipeline: init -> parse -> table [-> image]."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ from core.paths import (
 
 
 def main():
-    parser = argparse.ArgumentParser(description="xlgen_v3 full pipeline")
+    parser = argparse.ArgumentParser(description="parse_excel full pipeline")
     parser.add_argument("--input", required=True, help="Path to the input Excel workbook")
     parser.add_argument("--run-id", required=True, help="Run identifier")
     parser.add_argument("--output-base", default="data/output", help="Base output directory")

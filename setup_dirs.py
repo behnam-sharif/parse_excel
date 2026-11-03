@@ -1,7 +1,7 @@
-"""Run this script to create the xlgen_v3 directory structure."""
+"""Run this script to create the parse_excel directory structure."""
 import os
 
-base = r"C:\Users\behnamsharif\Documents\xlgen_v3"
+base = r"C:\Users\behnamsharif\Documents\parse_excel"
 dirs = [
     "apps/orchestrator",
     "scripts",

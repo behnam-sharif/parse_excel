@@ -145,7 +145,7 @@ files live under `xl_ontology/spec/ontalogy_bim_docs/` (note the typo
   /some/user/dir` causes the loader to look for `pack_name` under that
   directory instead. Useful for: pack authors iterating on a working
   copy outside the repo; downstream consumers shipping their own
-  packs without forking xlgen_v3.
+  packs without forking parse_excel.
 - **Resolution rule:** the loader resolves `pack_dir = packs_root /
   pack_name`. If the resolved directory does not contain
   `pack_overview.context.md`, raise `PackNotFound` with the attempted
@@ -293,7 +293,7 @@ across the pack's `<node>.txt` files. Default `0.2` for current state.
 
 ## 3. Module / file layout
 
-Flat package layout, mirroring xlgen_v3's stage convention. Subpackages
+Flat package layout, mirroring parse_excel's stage convention. Subpackages
 only where they earn their keep.
 
 ```

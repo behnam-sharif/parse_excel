@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-**xlgen_v3** is a monorepo Excel-to-Structural-Table pipeline for health economics and financial modeling. It deterministically converts multi-sheet Excel workbooks into structured table data for downstream ML/LLM processing.
+**parse_excel** is a monorepo Excel-to-Structural-Table pipeline for health economics and financial modeling. It deterministically converts multi-sheet Excel workbooks into structured table data for downstream ML/LLM processing.
 
 **Pipeline stages:** `xl_init` -> `xl_parse` -> `xl_table` -> `xl_image` (optional) -> `xl_sheetagent` (optional: V3a via `run_sheetagent`, V6 enricher via `run_v6_analysis`) -> `xl_dag` (optional: v7 DAG via `run_dag_analysis`)
 
@@ -32,40 +32,40 @@ The string `xl_kg` must not appear in any `.py` file under the stage directories
 pip install -r requirements.txt
 
 # CLI (individual stages)
-py -3 scripts/run_init.py --input path/to/workbook.xlsx --run-id myrun --no-interactive
-py -3 scripts/run_parse.py --run-id myrun
-py -3 scripts/run_table.py --run-id myrun
+python scripts/run_init.py --input path/to/workbook.xlsx --run-id myrun --no-interactive
+python scripts/run_parse.py --run-id myrun
+python scripts/run_table.py --run-id myrun
 
 # Full pipeline
-py -3 scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun
+python scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun
 
 # Full pipeline including image stage
-py -3 scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-image
+python scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-image
 
 # Full pipeline including sheetagent
-py -3 scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-sheetagent
+python scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-sheetagent
 
 # Full pipeline including xl_dag (v7 DAG build; requires v6 finalize output)
-py -3 scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-sheetagent --with-dag
+python scripts/run_pipeline.py --input path/to/workbook.xlsx --run-id myrun --with-sheetagent --with-dag
 
 # xl_dag alone (after v6 finalize artifacts exist)
-py -3 scripts/run_dag.py --run-id myrun
+python scripts/run_dag.py --run-id myrun
 
 # Image stage alone (after parse/table artifacts exist)
-py -3 scripts/run_image.py --run-id myrun
+python scripts/run_image.py --run-id myrun
 
 # Sheet agent (V3a — LLM-driven)
-py -3 scripts/run_sheetagent.py --run-id myrun --v3a
+python scripts/run_sheetagent.py --run-id myrun --v3a
 
 # Sheet agent (V6 — core-first + LLM gate)
-py -3 scripts/run_sheetagent.py --run-id myrun --v6
+python scripts/run_sheetagent.py --run-id myrun --v6
 
 # Streamlit orchestrator
-py -3 -m streamlit run apps/orchestrator/app.py
+python -m streamlit run apps/orchestrator/app.py
 
 # Tests
-py -3 -m pytest tests/
-py -3 -m pytest tests/test_smoke.py::TestImports   # single test class
+python -m pytest tests/
+python -m pytest tests/test_smoke.py::TestImports   # single test class
 ```
 
 ## Architecture
@@ -333,7 +333,7 @@ UI: `streamlit` (orchestrator)
 
 ## Test Infrastructure
 
-- `conftest.py` at repo root adds xlgen_v3 to `sys.path`
+- `conftest.py` at repo root adds parse_excel to `sys.path`
 - `tests/test_smoke.py` validates: stage imports work (including V6), YAML loads into dataclasses, no `xl_kg` substring in source files
 - `tests/test_v6_core.py` -- V6 P0: package skeleton, core region detection
 - `tests/test_v6_core_validator.py` -- V6 P1: core region validation (top/bottom row checks)
@@ -358,7 +358,7 @@ UI: `streamlit` (orchestrator)
 - `tests/test_dag_summary.py` -- xl_dag Phase 4: `dag_summary.json` aggregates + warnings, sheet_edge_bundles, node_index round-trip, formulas.json serialization
 - `tests/test_dag_pipeline_e2e.py` -- xl_dag Phase 5: end-to-end on real fixture; asserts all 5 artifacts exist with required TS-declared keys
 - `xl_sheetagent/xl_sheetagent/tests/` -- internal V3a / legacy sheetagent tests (section assignment, tree assembly, coordinator, step3 row headers, scoring, viewer loads, e2e deterministic, v1d regression)
-- No pytest.ini -- run with `py -3 -m pytest tests/`
+- No pytest.ini -- run with `python -m pytest tests/`
 
 ## Design Principles
 

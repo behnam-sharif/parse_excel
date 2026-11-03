@@ -1,7 +1,7 @@
 """
 Stage UIs were consolidated into the monorepo orchestrator.
 
-From the xlgen_v3 repository root, run:
+From the parse_excel repository root, run:
 
     streamlit run apps/orchestrator/app.py
 
@@ -14,7 +14,7 @@ from __future__ import annotations
 
 def main() -> None:
     print(
-        "The Streamlit UI for xlgen_v3 lives at apps/orchestrator/app.py.\n"
+        "The Streamlit UI for parse_excel lives at apps/orchestrator/app.py.\n"
         "Run: streamlit run apps/orchestrator/app.py"
     )
 

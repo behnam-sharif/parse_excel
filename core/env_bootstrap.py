@@ -2,11 +2,11 @@
 Load environment variables from .env files.
 
 Order (each call uses override=False so existing os.environ wins):
-1. This repo's .env at project root (xlgen_v3)
+1. This repo's .env at project root (parse_excel)
 2. Sibling repo xlgen_v2/.env — fills vars still unset after (1)
 3. xl_sheetagent/xl_sheetagent/.env — fills vars still unset after (1)–(2)
 
-Root is loaded before v2 so a key in xlgen_v3/.env wins over an older key in xlgen_v2/.env.
+Root is loaded before v2 so a key in parse_excel/.env wins over an older key in xlgen_v2/.env.
 
 Call load_project_dotenv() early in entry points (e.g. load_config, run_xl_init).
 """

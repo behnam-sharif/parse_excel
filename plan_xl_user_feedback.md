@@ -461,7 +461,7 @@ Until then: this document is the design. Read, critique, refine before implement
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│                          xlgen_v3 pipeline                            │
+│                          parse_excel pipeline                            │
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                       │
 │   Workbook ingest:    xl_init → xl_parse → xl_table                  │

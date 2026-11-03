@@ -1,23 +1,28 @@
-#!/bin/bash
-# Setup script for xlgen_v3 virtual environment
+#!/usr/bin/env bash
+# Create a virtual environment for parse_excel and install dependencies.
+# Usage:  bash setup_venv.sh
+set -euo pipefail
 
-echo "Creating virtual environment..."
-py -3 -m venv venv
+cd "$(dirname "$0")"
 
-echo "Activating virtual environment..."
-source venv/bin/activate
+PY=python3
+command -v "$PY" >/dev/null 2>&1 || PY=python
 
-echo "Upgrading pip..."
-pip install --upgrade pip
+echo "Creating virtual environment in .venv ..."
+"$PY" -m venv .venv
 
-echo "Installing requirements..."
-pip install -r requirements.txt
+# shellcheck disable=SC1091
+if [ -f .venv/bin/activate ]; then
+  source .venv/bin/activate          # macOS / Linux
+else
+  source .venv/Scripts/activate      # Windows (Git Bash)
+fi
 
-echo ""
-echo "Setup complete!"
-echo ""
-echo "To activate the virtual environment in future sessions, run:"
-echo "  source venv/bin/activate"
-echo ""
-echo "To run the Streamlit orchestrator:"
-echo "  py -3 -m streamlit run apps/orchestrator/app.py"
+echo "Installing dependencies ..."
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+echo
+echo "Done. Activate the environment with:"
+echo "  source .venv/bin/activate        # macOS / Linux"
+echo "  .venv\\Scripts\\activate           # Windows"

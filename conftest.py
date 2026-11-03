@@ -1,4 +1,4 @@
-"""Root conftest.py — adds xlgen_v3 root to sys.path for test discovery."""
+"""Root conftest.py — adds parse_excel root to sys.path for test discovery."""
 
 import sys
 from pathlib import Path

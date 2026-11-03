@@ -1,7 +1,7 @@
 import openpyxl
 from openpyxl.utils import get_column_letter
 
-path = r"c:\Users\behnamsharif\Documents\xlgen_v3\data\output\streamlit_run_enco\init_output\cleaned_workbook.xlsx"
+path = r"c:\Users\behnamsharif\Documents\parse_excel\data\output\streamlit_run_enco\init_output\cleaned_workbook.xlsx"
 wb = openpyxl.load_workbook(path, data_only=False)
 ws = None
 sn = None
