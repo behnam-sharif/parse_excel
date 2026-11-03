@@ -80,3 +80,6 @@ neo4j_data/
 
 #data folders
 /cheri_v1_docs
+
+# Data folder (inputs, cleaned workbooks, run outputs)
+/data/
